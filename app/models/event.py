@@ -142,9 +142,6 @@ class EventRegistration(BaseModel):
 
     # 关联信息
     event_id = Column(Integer, ForeignKey("event.id"), nullable=False, comment="活动ID")
-    user_id = Column(
-        Integer, ForeignKey("user.id"), nullable=True, comment="关联用户ID(可选)"
-    )
 
     # 报名编号
     registration_number = Column(
@@ -228,7 +225,6 @@ class EventRegistration(BaseModel):
 
     # 关系
     event = relationship("Event", back_populates="registrations")
-    user = relationship("User", backref="event_registrations")
 
     def __repr__(self):
         return f"<EventRegistration {self.registration_number} for {self.attendee_name}>"

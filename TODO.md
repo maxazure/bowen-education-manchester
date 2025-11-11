@@ -2,6 +2,96 @@
 
 ## ✅ 已完成
 
+### [2025-11-11] 代码模块优化
+- [x] 删除未使用的数据库模块 - 完成时间: 2025-11-11 - 负责人: maxazure
+  - 通过分析数据库使用情况，识别并删除未使用的模块
+  - **数据库分析结果**:
+    - 实际使用的栏目类型仅4种：SINGLE_PAGE(10), CUSTOM(9), POST(5), PRODUCT(1)
+    - 发现30+个空表（记录数为0），涉及预订、餐厅、作品集、用户等模块
+  - **删除的模型文件**（5个）:
+    - app/models/booking.py
+    - app/models/user.py
+    - app/models/file_download.py
+    - app/models/custom_field.py
+    - app/models/video.py
+  - **删除的服务文件**（4个）:
+    - app/services/booking_service.py
+    - app/services/user_service.py
+    - app/services/file_download_service.py
+    - app/services/video_service.py
+  - **更新的文件**:
+    - app/models/__init__.py - 移除未使用模块的导入，保留10个核心模型
+    - app/services/__init__.py - 移除未使用服务的导入，保留7个核心服务
+    - app/models/event.py - 移除对已删除User模型的引用
+  - **代码优化统计**:
+    - 模型文件: 15 → 10 (减少33%)
+    - 服务文件: 13 → 7 (减少46%)
+    - 代码库更精简，维护性更好
+  - **验证结果**:
+    - 应用成功启动在端口 8000 ✅
+    - 所有核心路由测试通过 (/, /about, /contact) ✅
+    - 无导入错误，无关系错误 ✅
+
+- [x] 清理数据库中未使用的表 - 完成时间: 2025-11-11 - 负责人: maxazure
+  - 创建数据库清理工具 tools/clean_database_tables.py
+  - 分析50个数据库表，识别30个未使用的表
+  - **删除的表**（30个）:
+    - booking 模块：booking, booking_service, booking_time_slot
+    - user 模块：user
+    - file_download 模块：file_download, file_download_log, file_category
+    - video 模块：video, video_category, video_playlist, video_playlist_link
+    - custom_field 模块：custom_field_def, custom_field_option, product_custom_field_value
+    - cart 模块：cart, cart_item
+    - order 模块：order, order_item
+    - portfolio 模块：portfolio, portfolio_category, portfolio_category_link, portfolio_image
+    - restaurant 模块：restaurant_order, restaurant_order_item, menu_category, menu_item
+    - newsletter 模块：newsletter_campaign, newsletter_subscriber
+    - 其他：review, comment
+  - **保留的表**（20个）:
+    - alembic_version（数据库版本）
+    - contact_message（联系消息）
+    - event, event_registration, event_ticket_type（活动）
+    - faq, faq_category（FAQ）
+    - gallery, gallery_image（图库）
+    - media_file（媒体文件）
+    - post, post_category, post_category_link（文章）
+    - product, product_category, product_category_link（产品/课程）
+    - single_page（单页）
+    - site_column, site_setting（站点设置）
+    - team_member（团队成员）
+  - **数据库优化统计**:
+    - 表数量: 50 → 20 (减少60%)
+    - 文件大小: 508KB → 324KB (减少36%)
+    - 执行 VACUUM 命令回收空间
+  - **验证结果**:
+    - 应用运行正常 ✅
+    - 所有核心功能测试通过 ✅
+    - 数据完整性保持 ✅
+
+- [x] 删除清理过程中的临时文件 - 完成时间: 2025-11-11 - 负责人: maxazure
+  - 删除临时检查脚本：/tmp/check_tables.sh
+  - 删除数据库清理工具：tools/clean_database_tables.py（已完成使命）
+  - **保留的工具文件**:
+    - tools/generate_images.py（图片生成工具）
+    - tools/README.md（工具说明文档）
+  - **清理原因**: 这些临时文件仅用于一次性清理任务，已无保留价值
+
+- [x] 重新导出清理后的数据库 SQL - 完成时间: 2025-11-11 - 负责人: maxazure
+  - 使用 sqlite3 .dump 命令导出完整数据库
+  - 覆盖现有的 database_backup.sql 文件
+  - **导出统计**:
+    - 包含表数量: 20 个
+    - CREATE TABLE 语句: 20 条
+    - INSERT INTO 语句: 144 条
+    - 文件行数: 507 行
+    - 文件大小: 224K → 219K（减少 5K）
+  - **验证结果**:
+    - SQL 语法正确 ✅
+    - 可成功导入新数据库 ✅
+    - 所有20个核心表完整导出 ✅
+    - 数据完整性保持 ✅
+  - **用途**: 用于数据库恢复、迁移或部署新环境
+
 ### [2025-11-11] 项目文件清理与整理
 - [x] 清理临时文件和阶段性报告 - 完成时间: 2025-11-11 - 负责人: maxazure
   - 删除阶段性报告文档（3个）：
@@ -236,6 +326,21 @@
 
 ## 📚 学习笔记
 
+### SQLite 数据库优化经验
+- **表清理策略**: 分析实际使用情况，删除零记录表
+- **SQL关键字处理**: "order" 等关键字需要用引号转义 `"order"`
+- **VACUUM命令**: 删除表后必须执行 VACUUM 回收空间
+- **效果显著**: 本次优化减少60%的表，数据库文件减少36%
+- **清理工具**: 创建自动化脚本提高效率和安全性
+- **验证流程**: 清理后必须验证应用运行和数据完整性
+
+### 代码模块清理最佳实践
+- **从数据库反推**: 通过数据库使用情况识别未使用模块
+- **逐步删除**: 先删除模型文件，再删除服务文件
+- **处理关系**: 注意 ForeignKey 和 relationship 的依赖关系
+- **更新导入**: 及时更新 __init__.py 中的导入语句
+- **完整测试**: 每次删除后验证应用启动和核心功能
+
 ### Zhipu AI CogView-3-Flash 使用经验
 - **模型特点**: 快速图片生成，质量高，适合批量生成
 - **API 限制**: 需要设置请求间隔（建议2秒）避免限流
@@ -262,5 +367,5 @@
 
 ---
 
-**最后更新**: 2025-11-11 21:22
-**当前状态**: 项目已成功启动并运行在 http://localhost:8000，README 已添加 GitHub 仓库地址
+**最后更新**: 2025-11-12 08:30
+**当前状态**: 项目优化全部完成 - 代码模块精简、数据库优化、SQL导出更新，应用运行正常在 http://localhost:8000
