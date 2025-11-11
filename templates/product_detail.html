@@ -6,47 +6,24 @@
 
 {% block content %}
 
-<!-- Hero Section with Cover Image -->
-<section class="hero hero--content hero--product-detail" style="{% if product.cover_media %}background-image: url('{{ product.cover_media.path_medium or product.cover_media.path_original }}');{% else %}background-image: url('/static/images/hero-default.jpg');{% endif %}">
-    <div class="hero__overlay"></div>
-    <div class="container">
-        <div class="hero__content hero__content--narrow">
-            <!-- Breadcrumb -->
-            <nav class="breadcrumb" data-aos="fade-up">
-                <a href="/">首页</a>
-                <span class="breadcrumb__separator">›</span>
-                <a href="/{{ column.slug }}">{{ column.name }}</a>
-                <span class="breadcrumb__separator">›</span>
-                <span class="breadcrumb__current">{{ product.name }}</span>
-            </nav>
-
-            <h1 class="hero__title hero__title--product" data-aos="fade-up" data-aos-delay="100">
-                {{ product.name }}
-            </h1>
-
-            <!-- Product Meta -->
-            <div class="product-meta" data-aos="fade-up" data-aos-delay="200">
-                {% if product.price_text %}
-                <span class="product-meta__price">
-                    <i class="fas fa-pound-sign"></i>
-                    {{ product.price_text }}
-                </span>
-                {% endif %}
-                <span class="product-meta__status">
-                    <i class="fas fa-check-circle"></i>
-                    现正报名
-                </span>
-            </div>
-        </div>
-    </div>
-</section>
+<!-- Hero Section -->
+{% set hero_title = product.name %}
+{% set hero_subtitle = product.summary %}
+{% set hero_image = product.cover_media.path_original if product.cover_media else None %}
+{% include 'components/hero_standard.html' %}
 
 <!-- Product Content Section -->
 <section class="section section--product-content">
     <div class="container">
-        <div class="row">
-            <!-- Main Content -->
-            <div class="col-lg-8">
+        <!-- Two-column layout with left sidebar -->
+        <div class="page-layout">
+            <!-- Left Sidebar Navigation -->
+            <aside class="page-layout__sidebar">
+                {% include 'components/sidebar_nav.html' %}
+            </aside>
+
+            <!-- Right Main Content -->
+            <div class="page-layout__main">
                 <article class="product-content" data-aos="fade-up">
                     <!-- Course Description -->
                     <div class="product-section">
@@ -217,112 +194,6 @@
                     </div>
                 </article>
             </div>
-
-            <!-- Sidebar -->
-            <div class="col-lg-4">
-                <aside class="product-sidebar" data-aos="fade-left">
-                    <!-- Quick Enrollment -->
-                    <div class="sidebar-card sidebar-cta">
-                        <h3 class="sidebar-card__title">
-                            <i class="fas fa-rocket"></i>
-                            快速报名
-                        </h3>
-                        <p class="sidebar-card__text">
-                            填写报名表，开始您的中文学习之旅
-                        </p>
-                        <a href="/contact" class="btn btn-primary btn-block">
-                            <i class="fas fa-edit"></i>
-                            填写报名表
-                        </a>
-                        <a href="tel:01619693071" class="btn btn-outline-primary btn-block">
-                            <i class="fas fa-phone"></i>
-                            电话咨询
-                        </a>
-                    </div>
-
-                    <!-- Course Information -->
-                    <div class="sidebar-card">
-                        <h3 class="sidebar-card__title">
-                            <i class="fas fa-info-circle"></i>
-                            课程信息
-                        </h3>
-                        <div class="course-info">
-                            <div class="info-item">
-                                <span class="info-label">
-                                    <i class="fas fa-users"></i>
-                                    班级规模：
-                                </span>
-                                <span class="info-value">6-12人</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">
-                                    <i class="fas fa-clock"></i>
-                                    课程时长：
-                                </span>
-                                <span class="info-value">每节3小时</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">
-                                    <i class="fas fa-language"></i>
-                                    教学语言：
-                                </span>
-                                <span class="info-value">中文为主，英文辅助</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="info-label">
-                                    <i class="fas fa-certificate"></i>
-                                    证书：
-                                </span>
-                                <span class="info-value">结业证书</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Contact Information -->
-                    <div class="sidebar-card">
-                        <h3 class="sidebar-card__title">
-                            <i class="fas fa-phone-alt"></i>
-                            联系我们
-                        </h3>
-                        <div class="contact-info">
-                            <div class="contact-item">
-                                <i class="fas fa-phone"></i>
-                                <a href="tel:01619693071">0161 969 3071</a>
-                            </div>
-                            <div class="contact-item">
-                                <i class="fas fa-envelope"></i>
-                                <a href="mailto:info@boweneducation.org">info@boweneducation.org</a>
-                            </div>
-                            <div class="contact-item">
-                                <i class="fab fa-weixin"></i>
-                                BowenEducation
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Related Courses -->
-                    {% if related_products %}
-                    <div class="sidebar-card">
-                        <h3 class="sidebar-card__title">
-                            <i class="fas fa-book-open"></i>
-                            相关课程
-                        </h3>
-                        <div class="related-courses">
-                            {% for related in related_products[:3] %}
-                            <div class="related-course-item">
-                                <a href="/{{ column.slug }}/{{ related.slug }}" class="related-course-link">
-                                    <h4>{{ related.name }}</h4>
-                                    {% if related.price_text %}
-                                    <p class="related-course-price">{{ related.price_text }}</p>
-                                    {% endif %}
-                                </a>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    {% endif %}
-                </aside>
-            </div>
         </div>
     </div>
 </section>
@@ -370,44 +241,24 @@
 <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 <style>
-/* Product Detail Page Styles */
-.hero--product-detail {
-    min-height: 500px;
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
-}
-
-.hero__title--product {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: white;
-    text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
-}
-
-.product-meta {
+/* Page Layout */
+.page-layout {
     display: flex;
-    gap: 1.5rem;
-    align-items: center;
-    margin-top: 1rem;
+    gap: 2rem;
+    align-items: flex-start;
+    position: relative;
 }
 
-.product-meta__price {
-    background: rgba(255,255,255,0.2);
-    color: white;
-    padding: 0.5rem 1rem;
-    border-radius: 25px;
-    font-weight: 600;
-    font-size: 1.1rem;
+.page-layout__sidebar {
+    flex: 0 0 280px;
+    min-width: 280px;
+    max-width: 280px;
 }
 
-.product-meta__status {
-    background: rgba(16,185,129,0.2);
-    color: #10b981;
-    padding: 0.5rem 1rem;
-    border-radius: 25px;
-    font-weight: 600;
-    font-size: 0.9rem;
+.page-layout__main {
+    flex: 1;
+    min-width: 0;
+    max-width: 100%;
 }
 
 /* Product Content */
@@ -675,177 +526,6 @@
     transform: translateY(-2px);
 }
 
-/* Sidebar */
-.product-sidebar {
-    position: sticky;
-    top: 2rem;
-}
-
-.sidebar-card {
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-    border: 1px solid rgba(0,82,204,0.1);
-}
-
-.sidebar-cta {
-    background: linear-gradient(135deg, #0052cc, #0066ff);
-    color: white;
-    border: none;
-}
-
-.sidebar-card__title {
-    font-size: 1.2rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.sidebar-cta .sidebar-card__title {
-    color: white;
-}
-
-.sidebar-cta .sidebar-card__text {
-    color: rgba(255,255,255,0.9);
-    margin-bottom: 1.5rem;
-}
-
-.sidebar-cta .btn-primary {
-    background: white;
-    color: #0052cc;
-    border: 2px solid white;
-}
-
-.sidebar-cta .btn-primary:hover {
-    background: #f8fafc;
-}
-
-.sidebar-cta .btn-outline-primary {
-    background: transparent;
-    color: white;
-    border: 2px solid white;
-}
-
-.sidebar-cta .btn-outline-primary:hover {
-    background: rgba(255,255,255,0.1);
-}
-
-/* Course Info */
-.course-info {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.info-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-.info-item:last-child {
-    border-bottom: none;
-}
-
-.info-label {
-    flex: 0 0 auto;
-    font-weight: 600;
-    color: #1a202c;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.info-label i {
-    color: #0052cc;
-    width: 20px;
-}
-
-.info-value {
-    color: #4a5568;
-    flex: 1;
-    text-align: right;
-}
-
-/* Contact Info */
-.contact-info {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.contact-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.5rem 0;
-}
-
-.contact-item i {
-    color: #0052cc;
-    width: 20px;
-}
-
-.contact-item a {
-    color: #4a5568;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.contact-item a:hover {
-    color: #0052cc;
-}
-
-/* Related Courses */
-.related-courses {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.related-course-item {
-    border-bottom: 1px solid #e5e7eb;
-    padding: 0.75rem 0;
-}
-
-.related-course-item:last-child {
-    border-bottom: none;
-}
-
-.related-course-link {
-    text-decoration: none;
-    color: #4a5568;
-    display: block;
-}
-
-.related-course-link:hover {
-    color: #0052cc;
-}
-
-.related-course-link h4 {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-    color: #1a202c;
-}
-
-.related-course-link:hover h4 {
-    color: #0052cc;
-}
-
-.related-course-price {
-    font-size: 0.9rem;
-    color: #0052cc;
-    font-weight: 600;
-    margin: 0;
-}
-
 /* Related Courses Section */
 .section--related-courses {
     padding: 4rem 0;
@@ -920,6 +600,15 @@
 
 /* Responsive */
 @media (max-width: 992px) {
+    .page-layout {
+        gap: 1.5rem;
+    }
+
+    .page-layout__sidebar {
+        flex: 0 0 240px;
+        min-width: 240px;
+    }
+
     .course-features {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     }
@@ -935,14 +624,20 @@
 }
 
 @media (max-width: 768px) {
-    .hero__title--product {
-        font-size: 2rem;
+    .page-layout {
+        flex-direction: column;
+        gap: 1.5rem;
     }
 
-    .product-meta {
-        flex-direction: column;
-        gap: 0.75rem;
-        align-items: flex-start;
+    .page-layout__sidebar {
+        flex: none;
+        width: 100%;
+        min-width: 100%;
+        order: -1;
+    }
+
+    .page-layout__main {
+        width: 100%;
     }
 
     .schedule-item {
@@ -968,10 +663,6 @@
 }
 
 @media (max-width: 576px) {
-    .hero--product-detail {
-        min-height: 400px;
-    }
-
     .product-content {
         padding: 1.5rem;
     }
@@ -979,20 +670,6 @@
     .feature-item {
         flex-direction: column;
         text-align: center;
-    }
-
-    .sidebar-card {
-        padding: 1rem;
-    }
-
-    .info-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.25rem;
-    }
-
-    .info-value {
-        text-align: left;
     }
 }
 </style>

@@ -7,36 +7,9 @@
 {% block content %}
 
 <!-- Hero Section -->
-<section class="hero hero--content" aria-labelledby="page-title">
-    <div class="hero__overlay" aria-hidden="true"></div>
-    {% set hero_image = '/static/images/hero-main-brand.jpg' %}
-    {% if parent_column %}
-        {% if parent_column.slug == 'chess' %}
-            {% set hero_image = '/static/images/hero-chess-club.jpg' %}
-        {% elif parent_column.slug == 'school' %}
-            {% set hero_image = '/static/images/hero-chinese-school.jpg' %}
-        {% elif parent_column.slug == 'badminton' %}
-            {% set hero_image = '/static/images/hero-event-placeholder.jpg' %}
-        {% endif %}
-    {% endif %}
-    <div class="hero__background"
-         role="img"
-         aria-label="{{ column.name }}"
-         style="background-image: url('{{ hero_image }}');"
-         loading="lazy"></div>
-    <div class="container">
-        <div class="hero__content">
-            <h1 id="page-title" class="hero__title" data-aos="fade-up">
-                <span lang="zh-CN">{{ column.name }}</span>
-            </h1>
-            {% if column.description %}
-            <p class="hero__subtitle" data-aos="fade-up" data-aos-delay="100">
-                <span lang="zh-CN">{{ column.description }}</span>
-            </p>
-            {% endif %}
-        </div>
-    </div>
-</section>
+{% set hero_title = column.name %}
+{% set hero_subtitle = column.description %}
+{% include 'components/hero_standard.html' %}
 
 <!-- Content Section with Sidebar -->
 <section class="section section--content">
@@ -160,60 +133,6 @@
 </section>
 
 <style>
-/* Hero Banner - 与 single_page.html 一致 */
-.hero--content {
-    position: relative;
-    min-height: 250px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    margin-bottom: 0;
-}
-
-.hero__background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-}
-
-.hero__overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(0, 82, 204, 0.85) 0%, rgba(0, 51, 128, 0.75) 100%);
-}
-
-.hero__content {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    color: white;
-    padding: 2.5rem 1rem;
-}
-
-.hero__title {
-    font-size: 2.25rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.hero__subtitle {
-    font-size: 1.125rem;
-    font-weight: 400;
-    max-width: 800px;
-    margin: 0 auto;
-    opacity: 0.95;
-}
-
 /* 页面布局系统 - 与 single_page.html 一致 */
 .section--content {
     padding: 3rem 0;
@@ -488,15 +407,6 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    /* Hero响应式 */
-    .hero__title {
-        font-size: 2rem;
-    }
-
-    .hero__subtitle {
-        font-size: 1.125rem;
-    }
-
     /* 页面布局响应式 - 与 single_page.html 一致 */
     .page-layout {
         flex-direction: column;
@@ -561,14 +471,6 @@
 }
 
 @media (max-width: 576px) {
-    .hero__content {
-        padding: 3rem 1rem;
-    }
-
-    .hero__title {
-        font-size: 1.75rem;
-    }
-
     .post-item {
         padding: 1rem;
     }

@@ -2,6 +2,83 @@
 
 ## ✅ 已完成
 
+### [2025-11-12] 统一所有模板的 Hero 和侧边栏布局
+- [x] 添加栏目级别 Hero 背景图片支持 - 完成时间: 2025-11-12 - 负责人: maxazure
+  - 创建数据库迁移脚本 tools/add_column_hero_fields.sql
+  - 为 site_column 表添加两个新字段：
+    - description (TEXT): 栏目描述，用作 Hero 副标题
+    - hero_media_id (INTEGER): Hero 背景图片ID（外键关联 media_file）
+  - 成功执行 SQL 迁移，字段添加成功
+  - 相关文件：tools/add_column_hero_fields.sql
+
+- [x] 更新 SiteColumn 模型支持 Hero 配置 - 完成时间: 2025-11-12 - 负责人: maxazure
+  - 修改 app/models/site.py 中的 SiteColumn 类
+  - 添加模型字段定义：
+    - description = Column(Text, nullable=True, comment="栏目描述（Hero副标题）")
+    - hero_media_id = Column(Integer, ForeignKey("media_file.id"), nullable=True)
+    - hero_media = relationship("MediaFile", foreign_keys=[hero_media_id])
+  - SQLAlchemy 关系配置正确
+  - 相关文件：app/models/site.py
+
+- [x] 创建统一 Hero 组件 - 完成时间: 2025-11-12 - 负责人: maxazure
+  - 创建 templates/components/hero_standard.html 组件
+  - **核心特性**:
+    - 支持 page 和 column 两种上下文（使用 `is defined` 检查）
+    - 自动选择标题：hero_title → page.title → column.name
+    - 自动选择副标题：hero_subtitle → page.subtitle → column.description
+    - 自动选择背景图：hero_image → page.hero_media → column.hero_media → 默认图
+    - 包含完整 CSS 样式（400px 高度，蓝色渐变叠加层）
+  - **修复的问题**:
+    - 初始版本在列表页报错 `'page' is undefined`
+    - 使用 Jinja2 条件表达式修复：`if page is defined else`
+  - 适用于所有页面类型：单页、列表页、详情页
+  - 相关文件：templates/components/hero_standard.html
+
+- [x] 更新侧边栏注册按钮为可选 - 完成时间: 2025-11-12 - 负责人: maxazure
+  - 修改 templates/components/sidebar_nav.html
+  - **修改内容**:
+    - 注册按钮改为条件显示：`{% if show_register_button and parent_column %}`
+    - 不再自动为 chess 栏目显示
+    - 需要在模板中显式传递 show_register_button 变量
+    - 按钮文本、URL、副文本均可自定义：
+      - register_button_text (默认: "立即报名")
+      - register_button_url (默认: "/contact")
+      - register_button_subtext (默认: "联系我们")
+  - **设计原因**: 根据用户要求，默认不显示注册按钮
+  - 相关文件：templates/components/sidebar_nav.html
+
+- [x] 批量更新模板使用统一 Hero 和侧边栏 - 完成时间: 2025-11-12 - 负责人: maxazure
+  - 使用 Task subagent 更新4个模板文件
+  - **更新的模板**:
+    - templates/post_list_universal.html
+    - templates/post_detail.html
+    - templates/product_list.html
+    - templates/product_detail.html
+  - **统一的修改**:
+    - 使用 `{% include 'components/hero_standard.html' %}` 替代硬编码 Hero
+    - 使用左侧边栏布局（280px sidebar + flex main）
+    - 移除重复的 Hero CSS（组件自带）
+    - 移除重复的面包屑 CSS（组件自带）
+    - 保持 CTA 区块样式一致
+  - 所有页面视觉风格统一
+
+- [x] 验证所有更新页面正常运行 - 完成时间: 2025-11-12 - 负责人: maxazure
+  - **测试结果**:
+    - /chess-news (列表页) - HTTP 200 ✅
+    - /chess-events (列表页) - HTTP 200 ✅
+    - /chess-news/chess-tactics-double-attack (详情页) - HTTP 200 ✅
+    - /tuition (产品列表) - HTTP 200 ✅
+  - **Hero 组件验证**:
+    - 列表页正确显示栏目名称和描述 ✅
+    - 详情页正确显示页面标题和副标题 ✅
+    - 未定义 page 变量不会报错 ✅
+    - Hero 背景图支持从数据库配置 ✅
+  - **侧边栏验证**:
+    - 左侧边栏导航正常显示 ✅
+    - 注册按钮默认不显示 ✅
+    - 页面布局响应式正常 ✅
+  - **总结**: 所有页面（除首页和 CUSTOM 类型）现已使用统一的 Hero 和侧边栏布局
+
 ### [2025-11-12] 象棋俱乐部POST栏目添加左侧导航
 - [x] 为chess-events和chess-news添加左侧导航菜单 - 完成时间: 2025-11-12 - 负责人: maxazure
   - 修改 app/routes/frontend.py 路由配置
@@ -506,5 +583,5 @@
 
 ---
 
-**最后更新**: 2025-11-12 09:45
-**当前状态**: 象棋俱乐部栏目重组完成 - 5个子栏目、注册表单、侧边栏按钮全部就绪，应用运行正常在 http://localhost:8000
+**最后更新**: 2025-11-12 10:15
+**当前状态**: 所有模板统一 Hero 和侧边栏布局完成 - 支持数据库配置 Hero 背景图，注册按钮可选，所有页面视觉风格统一，应用运行正常在 http://localhost:8000

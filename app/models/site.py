@@ -63,8 +63,15 @@ class SiteColumn(BaseModel):
     )
     is_enabled = Column(Boolean, default=True, nullable=False, comment="是否启用")
 
+    # Hero区域相关字段
+    description = Column(Text, nullable=True, comment="栏目描述（Hero副标题）")
+    hero_media_id = Column(
+        Integer, ForeignKey("media_file.id"), nullable=True, comment="Hero背景图片ID"
+    )
+
     # 关系
     parent = relationship("SiteColumn", remote_side="SiteColumn.id", backref="children")
+    hero_media = relationship("MediaFile", foreign_keys=[hero_media_id])
 
 
 class SinglePage(BaseModel):

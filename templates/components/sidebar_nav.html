@@ -58,10 +58,10 @@
     </nav>
     {% endif %}
 
-    <!-- Registration Button for Chess Club -->
-    {% if parent_column and parent_column.slug == 'chess' %}
+    <!-- Registration Button (only show if explicitly passed show_register_button variable) -->
+    {% if show_register_button and parent_column %}
     <div class="sidebar-cta">
-        <a href="/chess-courses#registration-form" class="sidebar-register-btn">
+        <a href="{{ register_button_url or ('/contact') }}" class="sidebar-register-btn">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                 <circle cx="8.5" cy="7" r="4"></circle>
@@ -69,8 +69,8 @@
                 <line x1="23" y1="11" x2="17" y2="11"></line>
             </svg>
             <div class="sidebar-register-text">
-                <strong>注册象棋俱乐部</strong>
-                <small>成为新会员</small>
+                <strong>{{ register_button_text or '立即报名' }}</strong>
+                <small>{{ register_button_subtext or '联系我们' }}</small>
             </div>
         </a>
     </div>
