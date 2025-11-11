@@ -87,6 +87,17 @@
   - **文档规模**: 500 行
   - **相关文件**: README.md
 
+- [x] 添加 GitHub 仓库地址 - 完成时间: 2025-11-11 - 负责人: maxazure
+  - 在 README.md 添加 GitHub 仓库链接
+  - **更新内容**:
+    - 在文档开头添加仓库地址展示
+    - 更新克隆命令为实际仓库地址
+    - 更新技术支持部分的 GitHub Issues 链接
+    - 更新联系邮箱为实际邮箱
+  - **仓库地址**: https://github.com/maxazure/bowen-education-manchester
+  - **Issues**: https://github.com/maxazure/bowen-education-manchester/issues
+  - **相关文件**: README.md
+
 ### [2025-11-08] 中文学校栏目测试与优化
 - [x] 运行网站并使用 Chrome DevTools 测试中文学校栏目 - 完成时间: 2025-11-07 - 负责人: maxazure
   - 测试了5个页面：/school, /school-curriculum/, /school-curriculum/primary-mandarin, /school-term-dates/, /school-pta/
@@ -251,5 +262,5 @@
 
 ---
 
-**最后更新**: 2025-11-11 21:19
-**当前状态**: 项目已成功启动并运行在 http://localhost:8000，README 文档已更新至最新状态 (v1.1.0)
+**最后更新**: 2025-11-11 21:22
+**当前状态**: 项目已成功启动并运行在 http://localhost:8000，README 已添加 GitHub 仓库地址

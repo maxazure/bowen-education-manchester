@@ -9,6 +9,8 @@ Official website for Bowen Education Group (博文集团) - Manchester's premier
 
 **官方网站** - 曼彻斯特领先的中文学校
 
+**🔗 Repository / 仓库地址**: https://github.com/maxazure/bowen-education-manchester
+
 ---
 
 ## 🌟 Features / 功能特性
@@ -43,8 +45,8 @@ Official website for Bowen Education Group (博文集团) - Manchester's premier
 ### Installation / 安装
 
 ```bash
-# 1. 克隆项目 (如果从Git)
-git clone <repository-url>
+# 1. 克隆项目
+git clone https://github.com/maxazure/bowen-education-manchester.git
 cd bowen-education-manchester
 
 # 2. 创建虚拟环境
@@ -490,8 +492,8 @@ ls -la upload/
 ## 📮 Support / 技术支持
 
 For technical support / 技术支持:
-- Create an issue on GitHub
-- Email: developer@example.com (待配置)
+- **GitHub Issues**: https://github.com/maxazure/bowen-education-manchester/issues
+- **Email**: info@boweneducation.co.uk
 
 ---
 
