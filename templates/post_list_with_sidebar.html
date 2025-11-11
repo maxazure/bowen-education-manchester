@@ -17,15 +17,11 @@
     <div class="container">
         <div class="hero__content">
             <h1 id="page-title" class="hero__title" data-aos="fade-up">
-                <span lang="zh-CN">{{ column.name }} Curriculum</span>
+                <span lang="zh-CN">{{ column.name }}</span>
             </h1>
             {% if column.description %}
             <p class="hero__subtitle" data-aos="fade-up" data-aos-delay="100">
                 <span lang="zh-CN">{{ column.description }}</span>
-            </p>
-            {% else %}
-            <p class="hero__subtitle" data-aos="fade-up" data-aos-delay="100">
-                <span lang="zh-CN">博文中文学校提供从启蒙到高级的全方位中文课程体系</span>
             </p>
             {% endif %}
         </div>
@@ -44,8 +40,8 @@
             <!-- Right Main Content -->
             <div class="page-layout__main">
 
-                <!-- Course System Overview -->
-                {% if posts %}
+                <!-- Course System Overview (Only for School Curriculum) -->
+                {% if posts and parent_column and parent_column.slug == 'school' %}
                 <div class="course-system-intro" data-aos="fade-up">
                     <h2 class="section-title">课程体系 Curriculum System</h2>
                     <p class="section-subtitle">博文中文学校为不同年龄段的学生提供完整的中文学习路径，从幼儿启蒙到GCSE、A-Level考试准备，帮助学生系统地掌握中文听、说、读、写技能。</p>

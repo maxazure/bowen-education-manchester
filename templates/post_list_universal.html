@@ -1,0 +1,590 @@
+{% extends "base.html" %}
+
+{% block title %}{{ column.name }} - Bowen Education Group{% endblock %}
+
+{% block meta_description %}{{ column.description or (column.name ~ ' - 博文教育集团') }}{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero hero--content" aria-labelledby="page-title">
+    <div class="hero__overlay" aria-hidden="true"></div>
+    {% set hero_image = '/static/images/hero-main-brand.jpg' %}
+    {% if parent_column %}
+        {% if parent_column.slug == 'chess' %}
+            {% set hero_image = '/static/images/hero-chess-club.jpg' %}
+        {% elif parent_column.slug == 'school' %}
+            {% set hero_image = '/static/images/hero-chinese-school.jpg' %}
+        {% elif parent_column.slug == 'badminton' %}
+            {% set hero_image = '/static/images/hero-event-placeholder.jpg' %}
+        {% endif %}
+    {% endif %}
+    <div class="hero__background"
+         role="img"
+         aria-label="{{ column.name }}"
+         style="background-image: url('{{ hero_image }}');"
+         loading="lazy"></div>
+    <div class="container">
+        <div class="hero__content">
+            <h1 id="page-title" class="hero__title" data-aos="fade-up">
+                <span lang="zh-CN">{{ column.name }}</span>
+            </h1>
+            {% if column.description %}
+            <p class="hero__subtitle" data-aos="fade-up" data-aos-delay="100">
+                <span lang="zh-CN">{{ column.description }}</span>
+            </p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Content Section with Sidebar -->
+<section class="section section--content">
+    <div class="container">
+        <div class="page-layout">
+            <!-- Left Sidebar Navigation -->
+            <aside class="page-layout__sidebar">
+                {% include 'components/sidebar_nav.html' %}
+            </aside>
+
+            <!-- Right Main Content -->
+            <div class="page-layout__main">
+
+                <!-- Column Title Section -->
+                {% if column.name %}
+                <div class="content-header" data-aos="fade-up">
+                    <h2 class="content-title">{{ column.name }}</h2>
+                    {% if column.description %}
+                    <p class="content-description">{{ column.description }}</p>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                <!-- Posts List -->
+                {% if posts %}
+                <div class="post-list">
+                    {% for post in posts %}
+                    <article class="post-item" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 50 }}">
+                        <!-- Post Image -->
+                        {% if post.cover_media %}
+                        <div class="post-item__image">
+                            <a href="/{{ column.slug }}/{{ post.slug }}">
+                                <img src="{{ post.cover_media.file_url or post.cover_media.path_original }}"
+                                     alt="{{ post.title }}"
+                                     loading="lazy">
+                            </a>
+                            {% if post.is_recommended %}
+                            <span class="post-badge post-badge--featured">推荐</span>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+
+                        <!-- Post Content -->
+                        <div class="post-item__content">
+                            <!-- Post Meta -->
+                            <div class="post-meta">
+                                {% if post.published_at %}
+                                <span class="post-date">
+                                    <i class="far fa-calendar"></i>
+                                    {{ post.published_at.strftime('%Y-%m-%d') }}
+                                </span>
+                                {% endif %}
+                                {% if post.is_recommended %}
+                                <span class="post-label post-label--recommended">推荐</span>
+                                {% endif %}
+                            </div>
+
+                            <!-- Post Title -->
+                            <h3 class="post-item__title">
+                                <a href="/{{ column.slug }}/{{ post.slug }}">{{ post.title }}</a>
+                            </h3>
+
+                            <!-- Post Summary -->
+                            {% if post.summary %}
+                            <p class="post-item__summary">{{ post.summary }}</p>
+                            {% elif post.content_html %}
+                            <p class="post-item__summary">{{ post.content_html|striptags|truncate(150) }}</p>
+                            {% endif %}
+
+                            <!-- Post Actions -->
+                            <div class="post-item__actions">
+                                <a href="/{{ column.slug }}/{{ post.slug }}" class="btn btn-text">
+                                    阅读更多 <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state" data-aos="fade-up">
+                    <div class="empty-state__icon">📄</div>
+                    <h3 class="empty-state__title">暂无内容</h3>
+                    <p class="empty-state__text">内容正在更新中，敬请期待。</p>
+                    <a href="/" class="btn btn-primary">返回首页</a>
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section section--cta" aria-labelledby="cta-title">
+    <div class="container text-center" data-aos="fade-up">
+        <h2 id="cta-title" class="section__title">
+            <span lang="en-GB">Ready to Join Our Community?</span>
+        </h2>
+        <h3 class="section__title-chinese">
+            <span lang="zh-CN">准备加入我们的大家庭？</span>
+        </h3>
+        <p class="section__subtitle">
+            <span lang="en-GB">Discover how we can help you achieve your language learning goals</span>
+        </p>
+        <div class="cta-buttons" role="group" aria-label="Contact actions">
+            <a href="/contact"
+               class="btn btn-primary btn-lg"
+               aria-label="Book a visit to Bowen Education Group">
+                <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                <span lang="en-GB">Book a Visit</span>
+            </a>
+            <a href="tel:01619693071"
+               class="btn btn-outline-primary btn-lg"
+               aria-label="Call Bowen Education Group at 0161 969 3071">
+                <i class="fas fa-phone" aria-hidden="true"></i>
+                <span>0161 969 3071</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Hero Banner - 与 single_page.html 一致 */
+.hero--content {
+    position: relative;
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
+.hero__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.hero__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0, 82, 204, 0.85) 0%, rgba(0, 51, 128, 0.75) 100%);
+}
+
+.hero__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+    padding: 2.5rem 1rem;
+}
+
+.hero__title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero__subtitle {
+    font-size: 1.125rem;
+    font-weight: 400;
+    max-width: 800px;
+    margin: 0 auto;
+    opacity: 0.95;
+}
+
+/* 页面布局系统 - 与 single_page.html 一致 */
+.section--content {
+    padding: 3rem 0;
+    background: linear-gradient(to bottom, #ffffff 0%, #f7fafc 100%);
+}
+
+.page-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    position: relative;
+}
+
+.page-layout__sidebar {
+    flex: 0 0 280px;
+    min-width: 280px;
+    max-width: 280px;
+}
+
+.page-layout__main {
+    flex: 1;
+    min-width: 0;
+    max-width: 100%;
+}
+
+/* CTA Section - 与 single_page.html 一致 */
+.section--cta {
+    background: linear-gradient(135deg, #0052cc 0%, #003d99 100%);
+    padding: 4rem 0;
+    color: white;
+}
+
+.section--cta .section__title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: white;
+}
+
+.section--cta .section__title-chinese {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    opacity: 0.95;
+    color: white;
+}
+
+.section--cta .section__subtitle {
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+    color: white;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+    min-width: 200px;
+}
+
+.btn-primary {
+    background: white;
+    color: #0052cc;
+    border: 2px solid white;
+}
+
+.btn-primary:hover {
+    background: #f7fafc;
+    color: #003d99;
+}
+
+.btn-outline-primary {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+}
+
+.btn-outline-primary:hover {
+    background: white;
+    color: #0052cc;
+}
+
+/* Content Header */
+.content-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--color-gray-200, #e2e8f0);
+}
+
+.content-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--color-gray-900, #1a202c);
+    margin: 0 0 0.5rem 0;
+}
+
+.content-description {
+    font-size: 1rem;
+    color: var(--color-gray-600, #718096);
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Post List - Horizontal Layout (Image Left + Content Right) */
+.post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.post-item {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: var(--color-white, #ffffff);
+    border-radius: var(--radius-lg, 0.75rem);
+    box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1));
+    transition: all var(--transition-base, 0.3s ease);
+}
+
+.post-item:hover {
+    box-shadow: var(--shadow-md, 0 4px 6px rgba(0, 0, 0, 0.1));
+    transform: translateY(-2px);
+}
+
+.post-item__image {
+    flex-shrink: 0;
+    width: 280px;
+    height: 180px;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-md, 0.5rem);
+}
+
+.post-item__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-base, 0.3s ease);
+}
+
+.post-item:hover .post-item__image img {
+    transform: scale(1.05);
+}
+
+.post-badge {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: var(--radius-sm, 0.25rem);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.post-item__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.post-date {
+    font-size: 0.875rem;
+    color: var(--color-gray-500, #a0aec0);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.post-label {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm, 0.25rem);
+    font-weight: 600;
+}
+
+.post-label--recommended {
+    background: rgba(16, 185, 129, 0.1);
+    color: #059669;
+}
+
+.post-item__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 0.75rem 0;
+    line-height: 1.4;
+}
+
+.post-item__title a {
+    color: var(--color-gray-900, #1a202c);
+    text-decoration: none;
+    transition: color var(--transition-fast, 0.2s ease);
+}
+
+.post-item__title a:hover {
+    color: var(--color-primary, #0052cc);
+}
+
+.post-item__summary {
+    font-size: 0.9375rem;
+    color: var(--color-gray-600, #718096);
+    line-height: 1.6;
+    margin: 0 0 1rem 0;
+    flex: 1;
+}
+
+.post-item__actions {
+    margin-top: auto;
+}
+
+.btn-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    color: var(--color-primary, #0052cc);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    transition: all var(--transition-fast, 0.2s ease);
+}
+
+.btn-text:hover {
+    gap: 0.75rem;
+    color: var(--color-primary-dark, #003d99);
+}
+
+.btn-text i {
+    font-size: 0.875rem;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.empty-state__icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.empty-state__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-gray-700, #4a5568);
+    margin: 0 0 0.5rem 0;
+}
+
+.empty-state__text {
+    font-size: 1rem;
+    color: var(--color-gray-500, #a0aec0);
+    margin: 0 0 1.5rem 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    /* Hero响应式 */
+    .hero__title {
+        font-size: 2rem;
+    }
+
+    .hero__subtitle {
+        font-size: 1.125rem;
+    }
+
+    /* 页面布局响应式 - 与 single_page.html 一致 */
+    .page-layout {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .page-layout__sidebar {
+        flex: 0 0 auto;
+        min-width: 100%;
+        max-width: 100%;
+        position: static;
+    }
+
+    .page-layout__main {
+        width: 100%;
+    }
+
+    /* 文章列表响应式 */
+    .post-item {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .post-item__image {
+        width: 100%;
+        height: 200px;
+    }
+
+    .content-header {
+        margin-bottom: 1.5rem;
+    }
+
+    .content-title {
+        font-size: 1.5rem;
+    }
+
+    .post-list {
+        gap: 1.5rem;
+    }
+
+    /* CTA响应式 */
+    .section__title {
+        font-size: 1.75rem;
+    }
+
+    .section__title-chinese {
+        font-size: 1.5rem;
+    }
+
+    .section__subtitle {
+        font-size: 1rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-lg {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero__content {
+        padding: 3rem 1rem;
+    }
+
+    .hero__title {
+        font-size: 1.75rem;
+    }
+
+    .post-item {
+        padding: 1rem;
+    }
+
+    .post-item__title {
+        font-size: 1.125rem;
+    }
+
+    .post-item__summary {
+        font-size: 0.875rem;
+    }
+
+    .section--cta {
+        padding: 3rem 0;
+    }
+}
+</style>
+
+{% endblock %}

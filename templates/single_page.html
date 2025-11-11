@@ -71,10 +71,22 @@
 <!-- Hero Section -->
 <section class="hero hero--content" aria-labelledby="page-title">
     <div class="hero__overlay" aria-hidden="true"></div>
+    {% set hero_image = '/static/images/hero-main-brand.jpg' %}
+    {% if page.hero_media %}
+        {% set hero_image = page.hero_media.path_original %}
+    {% elif parent_column %}
+        {% if parent_column.slug == 'chess' %}
+            {% set hero_image = '/static/images/hero-chess-club.jpg' %}
+        {% elif parent_column.slug == 'school' %}
+            {% set hero_image = '/static/images/hero-chinese-school.jpg' %}
+        {% elif parent_column.slug == 'badminton' %}
+            {% set hero_image = '/static/images/hero-event-placeholder.jpg' %}
+        {% endif %}
+    {% endif %}
     <div class="hero__background"
          role="img"
          aria-label="{{ page.title }}"
-         style="background-image: url('{{ page.hero_media.path_original if page.hero_media else '/static/images/hero-default.jpg' }}');"
+         style="background-image: url('{{ hero_image }}');"
          loading="lazy"></div>
     <div class="container">
         <div class="hero__content">
@@ -160,9 +172,19 @@
 </noscript>
 <style>
 /* Hero Banner 优化 */
+.hero--content {
+    position: relative;
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
 .hero--page {
     position: relative;
-    min-height: 400px;
+    min-height: 250px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -195,18 +217,18 @@
     z-index: 2;
     text-align: center;
     color: white;
-    padding: 4rem 1rem;
+    padding: 2.5rem 1rem;
 }
 
 .hero__title {
-    font-size: 3rem;
+    font-size: 2.25rem;
     font-weight: 700;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .hero__subtitle {
-    font-size: 1.5rem;
+    font-size: 1.125rem;
     font-weight: 400;
     max-width: 800px;
     margin: 0 auto;

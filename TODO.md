@@ -2,6 +2,119 @@
 
 ## ✅ 已完成
 
+### [2025-11-12] 象棋俱乐部POST栏目添加左侧导航
+- [x] 为chess-events和chess-news添加左侧导航菜单 - 完成时间: 2025-11-12 - 负责人: maxazure
+  - 修改 app/routes/frontend.py 路由配置
+  - **列表页修改**:
+    - 在POST类型路由处理中已有parent_column和sibling_columns支持
+    - 添加chess-events和chess-news到特殊模板处理列表
+    - 使用post_list_with_sidebar.html模板（与school-curriculum相同）
+  - **详情页修改**:
+    - 修改post_detail.html模板，添加条件布局
+    - 有parent_column时使用左侧导航栏布局
+    - 无parent_column时保持传统右侧边栏布局
+    - 在两个详情路由函数中添加parent_column和sibling_columns上下文
+  - **CSS样式**:
+    - 添加page-layout相关CSS类（280px左侧栏 + 弹性主内容）
+    - 响应式支持：移动端自动纵向堆叠
+  - **测试验证**:
+    - /chess-events 列表页 - HTTP 200 ✅
+    - /chess-news 列表页 - HTTP 200 ✅
+    - /chess-events/autumn-chess-tournament-2024 详情页 - 左侧导航显示 ✅
+    - /chess-news/chess-tactics-double-attack 详情页 - 左侧导航显示 ✅
+    - 注册按钮在所有页面正确显示 ✅
+  - **修改的文件**:
+    - app/routes/frontend.py (3处修改)
+    - templates/post_detail.html (布局和CSS)
+  - **功能特性**:
+    - 左侧导航显示5个象棋俱乐部子栏目
+    - 当前页面高亮显示
+    - 底部显示绿色注册按钮（仅chess栏目）
+    - 移动端响应式友好
+
+### [2025-11-12] 象棋俱乐部栏目重组
+- [x] 收集英国国际象棋学习资源 - 完成时间: 2025-11-12 - 负责人: maxazure
+  - 使用 WebSearch 搜索英国本地象棋资源
+  - **收集的资源**（20+项）:
+    - 官方组织：ECF (English Chess Federation), Chess in Schools and Communities
+    - 在线平台：Lichess.org, Chess.com, ChessTempo, LearningChess.net UK
+    - 教练服务：UK Chess Academy, Chess Rising Stars, First Move Chess
+    - 学习材料：Irving Chernev 书籍, ChessBase 软件
+    - 视频资源：ChessNetwork, John Bartholomew, GothamChess 等 YouTube 频道
+  - 所有资源附带详细描述和直接链接
+  - 相关文件：tools/reorganize_chess_club.sql
+
+- [x] 创建象棋俱乐部重组 SQL 脚本 - 完成时间: 2025-11-12 - 负责人: maxazure
+  - 创建 tools/reorganize_chess_club.sql（2000+行）
+  - **栏目结构**（5个子栏目）:
+    - 俱乐部简介 (chess-about, SINGLE_PAGE, sort_order=1)
+    - 课程设置 (chess-courses, SINGLE_PAGE, sort_order=2)
+    - 活动与赛事 (chess-events, POST, sort_order=3) - 从原"我们的比赛"更新
+    - 学习资源 (chess-resources, SINGLE_PAGE, sort_order=4)
+    - 新闻与精彩回顾 (chess-news, POST, sort_order=5)
+  - **内容创建**:
+    - 3个 single_page 记录（俱乐部简介、课程设置、学习资源）
+    - 3个 post 记录（新闻文章）
+    - 课程设置包含完整的 HTML 注册表单，带客户端验证
+    - 学习资源整合了所有收集的英国象棋资源
+  - **修复的问题**:
+    - 列名错误：is_visible → show_in_nav + is_enabled
+    - 使用 sed 命令批量替换修复
+  - 相关文件：tools/reorganize_chess_club.sql
+
+- [x] 执行 SQL 脚本重组数据库 - 完成时间: 2025-11-12 - 负责人: maxazure
+  - 执行 reorganize_chess_club.sql 脚本
+  - **数据库更新**:
+    - 创建4个新栏目（id: 26, 27, 28, 29）
+    - 更新1个现有栏目（id: 16 - 活动与赛事）
+    - 删除2个旧栏目（id: 17 - 棋手信息, id: 18 - 相册）
+    - 插入3条 single_page 内容（id: 19, 20, 21）
+    - 插入3条 post 新闻文章（id: 19, 20, 21）
+  - **验证结果**:
+    - 所有子栏目正确显示 ✅
+    - 排序顺序正确 ✅
+    - 导航菜单显示正确 ✅
+
+- [x] 修改侧边栏模板添加注册按钮 - 完成时间: 2025-11-12 - 负责人: maxazure
+  - 修改 templates/components/sidebar_nav.html
+  - **添加的功能**:
+    - 条件注册按钮（仅在象棋俱乐部页面显示）
+    - 检查条件：parent_column.slug == 'chess'
+    - 按钮链接：/chess-courses#registration-form
+    - SVG 图标：用户添加图标
+    - 双行文本：注册象棋俱乐部 / 成为新会员
+  - **CSS 样式**:
+    - 绿色渐变背景（#10b981 → #059669）
+    - 悬停效果：上升动画 + 阴影增强
+    - 响应式设计：移动端友好
+    - 分隔线：与菜单区域分隔
+    - 自动定位：margin-top: auto 推到底部
+  - **代码统计**:
+    - HTML：16行（lines 62-77）
+    - CSS：47行（lines 181-227）
+  - 相关文件：templates/components/sidebar_nav.html
+
+- [x] 验证所有更新 - 完成时间: 2025-11-12 - 负责人: maxazure
+  - **页面可访问性测试**:
+    - /chess-about - HTTP 200 ✅
+    - /chess-courses - HTTP 200 ✅
+    - /chess-resources - HTTP 200 ✅
+    - /chess-news - HTTP 200 ✅
+  - **侧边栏注册按钮验证**:
+    - 按钮HTML正确渲染 ✅
+    - CSS样式正确应用 ✅
+    - 出现在所有象棋俱乐部页面 ✅
+    - 链接指向正确位置 ✅
+  - **数据库验证**:
+    - 5个子栏目正确创建 ✅
+    - 3个单页内容存在 ✅
+    - 3篇新闻文章存在 ✅
+    - 排序顺序正确 ✅
+  - **应用运行状态**:
+    - FastAPI 成功重载 ✅
+    - 无错误或警告 ✅
+    - 端口 8000 正常运行 ✅
+
 ### [2025-11-11] 代码模块优化
 - [x] 删除未使用的数据库模块 - 完成时间: 2025-11-11 - 负责人: maxazure
   - 通过分析数据库使用情况，识别并删除未使用的模块
@@ -365,7 +478,33 @@
 - format="jpeg" + quality=60 平衡质量与文件大小
 - 自动化测试流程提高测试效率
 
+### 内容管理系统栏目重组经验
+- **资源收集**：使用 WebSearch 工具收集特定地域的在线资源
+- **内容结构设计**：
+  - 单页内容（SINGLE_PAGE）适合固定内容：简介、课程、资源
+  - 列表内容（POST）适合动态更新：新闻、活动、赛事
+  - 合理使用 sort_order 控制显示顺序
+- **SQL 脚本编写**：
+  - 注意列名准确性（show_in_nav, is_enabled）
+  - 使用事务确保数据一致性
+  - 先更新再删除，避免外键冲突
+  - 使用 sed 批量修复列名错误
+- **条件组件显示**：
+  - 使用 Jinja2 条件判断（{% if parent_column.slug == 'chess' %}）
+  - 实现特定栏目的定制化功能
+  - CSS 类名要语义化（sidebar-cta, sidebar-register-btn）
+- **表单设计**：
+  - HTML5 表单验证（required, type="email", pattern）
+  - JavaScript 客户端验证增强用户体验
+  - 锚点链接（#registration-form）实现页面内跳转
+
+### Jinja2 模板条件渲染技巧
+- 使用对象属性判断：parent_column.slug == 'value'
+- 条件块包裹可选内容：{% if condition %} ... {% endif %}
+- CSS 类结合条件判断实现不同页面的差异化显示
+- margin-top: auto 配合 flexbox 实现底部对齐
+
 ---
 
-**最后更新**: 2025-11-12 08:30
-**当前状态**: 项目优化全部完成 - 代码模块精简、数据库优化、SQL导出更新，应用运行正常在 http://localhost:8000
+**最后更新**: 2025-11-12 09:45
+**当前状态**: 象棋俱乐部栏目重组完成 - 5个子栏目、注册表单、侧边栏按钮全部就绪，应用运行正常在 http://localhost:8000

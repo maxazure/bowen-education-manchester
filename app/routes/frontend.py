@@ -218,6 +218,8 @@ async def column_page(
             return templates.TemplateResponse("post_list_with_sidebar.html", context)
         elif column_slug == "news":
             return templates.TemplateResponse("post_list_with_sidebar_news.html", context)
+        elif column_slug in ["chess-events", "chess-news"]:
+            return templates.TemplateResponse("post_list_universal.html", context)
 
         # Check for custom template
         try:
@@ -360,6 +362,17 @@ async def item_detail_page_short(
                 db, category_id=post.categories[0].id, limit=3
             )
 
+        # Add parent column and sibling columns for sidebar navigation
+        if column.parent_id:
+            parent_column = db.query(SiteColumn).filter(
+                SiteColumn.id == column.parent_id
+            ).first()
+            context["parent_column"] = parent_column
+
+            # Get sibling columns (including current column)
+            sibling_columns = site_service.get_child_columns(db, column.parent_id)
+            context["sibling_columns"] = sibling_columns
+
         return templates.TemplateResponse("post_detail.html", context)
 
 
@@ -406,6 +419,17 @@ async def item_detail_page(
             context["related_posts"] = post_service.get_posts(
                 db, category_id=post.categories[0].id, limit=3
             )
+
+        # Add parent column and sibling columns for sidebar navigation
+        if column.parent_id:
+            parent_column = db.query(SiteColumn).filter(
+                SiteColumn.id == column.parent_id
+            ).first()
+            context["parent_column"] = parent_column
+
+            # Get sibling columns (including current column)
+            sibling_columns = site_service.get_child_columns(db, column.parent_id)
+            context["sibling_columns"] = sibling_columns
 
         return templates.TemplateResponse("post_detail.html", context)
 

@@ -44,9 +44,16 @@
 <!-- Post Content Section -->
 <section class="section section--post-content">
     <div class="container">
-        <div class="row">
-            <!-- Main Content -->
-            <div class="col-lg-8">
+        {% if parent_column %}
+        <!-- Two-column layout with left sidebar navigation -->
+        <div class="page-layout">
+            <!-- Left Sidebar Navigation -->
+            <aside class="page-layout__sidebar">
+                {% include 'components/sidebar_nav.html' %}
+            </aside>
+
+            <!-- Right Main Content -->
+            <div class="page-layout__main">
                 <article class="post-content" data-aos="fade-up">
                     <!-- Summary -->
                     {% if post.summary %}
@@ -87,12 +94,63 @@
                     <!-- Navigation -->
                     <div class="post-navigation">
                         <a href="/{{ column.slug }}" class="btn btn--secondary">
+                            <i class="icon-arrow-left"></i> 返回列表
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </div>
+        {% else %}
+        <!-- Traditional layout with right sidebar -->
+        <div class="row">
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                <article class="post-content" data-aos="fade-up">
+                    <!-- Summary -->
+                    {% if post.summary %}
+                    <div class="post-summary">
+                        <p class="lead">{{ post.summary }}</p>
+                    </div>
+                    {% endif %}
+
+                    <!-- Main Content -->
+                    <div class="post-body">
+                        {{ post.content_html|safe }}
+                    </div>
+
+                    <!-- Tags -->
+                    {% if post.categories %}
+                    <div class="post-tags">
+                        <strong>标签：</strong>
+                        {% for category in post.categories %}
+                        <a href="/{{ column.slug }}?category={{ category.id }}" class="tag">{{ category.name }}</a>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <!-- Share Buttons -->
+                    <div class="post-share">
+                        <strong>分享：</strong>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.url }}" target="_blank" class="share-btn share-btn--facebook" title="分享到Facebook">
+                            <i class="icon-facebook"></i>
+                        </a>
+                        <a href="https://twitter.com/intent/tweet?url={{ request.url }}&text={{ post.title }}" target="_blank" class="share-btn share-btn--twitter" title="分享到Twitter">
+                            <i class="icon-twitter"></i>
+                        </a>
+                        <a href="mailto:?subject={{ post.title }}&body=查看这篇文章：{{ request.url }}" class="share-btn share-btn--email" title="通过邮件分享">
+                            <i class="icon-mail"></i>
+                        </a>
+                    </div>
+
+                    <!-- Navigation -->
+                    <div class="post-navigation">
+                        <a href="/{{ column.slug }}" class="btn btn--secondary">
                             <i class="icon-arrow-left"></i> 返回新闻列表
                         </a>
                     </div>
                 </article>
             </div>
-            
+
             <!-- Sidebar -->
             <div class="col-lg-4">
                 <aside class="sidebar" data-aos="fade-up" data-aos-delay="100">
@@ -144,10 +202,31 @@
                 </aside>
             </div>
         </div>
+        {% endif %}
     </div>
 </section>
 
 <style>
+/* Page Layout - Two-column with left sidebar */
+.page-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    position: relative;
+}
+
+.page-layout__sidebar {
+    flex: 0 0 280px;
+    min-width: 280px;
+    max-width: 280px;
+}
+
+.page-layout__main {
+    flex: 1;
+    min-width: 0;
+    max-width: 100%;
+}
+
 /* Post Detail Styles */
 .hero--post-detail {
     min-height: 400px;
@@ -458,7 +537,16 @@
     .hero__title--post {
         font-size: 2rem;
     }
-    
+
+    .page-layout {
+        gap: 1.5rem;
+    }
+
+    .page-layout__sidebar {
+        flex: 0 0 240px;
+        min-width: 240px;
+    }
+
     .sidebar {
         position: static;
         margin-top: 3rem;
@@ -469,15 +557,31 @@
     .hero__title--post {
         font-size: 1.75rem;
     }
-    
+
+    .page-layout {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .page-layout__sidebar {
+        flex: none;
+        width: 100%;
+        min-width: 100%;
+        order: -1;
+    }
+
+    .page-layout__main {
+        width: 100%;
+    }
+
     .post-content {
         padding: 1.5rem;
     }
-    
+
     .post-body {
         font-size: 1rem;
     }
-    
+
     .post-meta {
         flex-direction: column;
         gap: 0.75rem;
