@@ -1,0 +1,28 @@
+[Unit]
+Description=Bowen Education Manchester Website
+After=network.target
+
+[Service]
+Type=notify
+User=maxazure
+Group=maxazure
+WorkingDirectory=/home/maxazure/projects/bowen-education-manchester
+Environment="PATH=/home/maxazure/projects/bowen-education-manchester/venv/bin"
+Environment="APP_ENV=production"
+Environment="DEBUG=False"
+ExecStart=/home/maxazure/projects/bowen-education-manchester/venv/bin/gunicorn app.main:app \
+    --workers 4 \
+    --worker-class uvicorn.workers.UvicornWorker \
+    --bind 0.0.0.0:10034 \
+    --access-logfile /home/maxazure/projects/bowen-education-manchester/logs/access.log \
+    --error-logfile /home/maxazure/projects/bowen-education-manchester/logs/error.log \
+    --log-level info
+ExecReload=/bin/kill -s HUP $MAINPID
+KillMode=mixed
+TimeoutStopSec=5
+PrivateTmp=true
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
