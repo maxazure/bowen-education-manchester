@@ -1,0 +1,14 @@
+available_themes:
+- default
+base_dir: .
+cache_ttl: 300
+database_url: sqlite:///./instance/database.db
+enable_cache: true
+log_level: INFO
+media_dir: ./instance/media
+site_description: A professional website for Bowen-Education-Manchester
+site_name: Bowen-Education-Manchester
+site_url: https://example.com
+static_dir: ./templates/static
+template_dir: ./templates
+theme: default

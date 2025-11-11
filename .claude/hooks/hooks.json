@@ -1,0 +1,21 @@
+{
+  "description": "Claude Code Hooks Configuration for Bowen Education Project",
+  "hooks": {
+    "PostToolUse:TodoWrite": {
+      "description": "Auto-continue to next pending task after task completion",
+      "command": "python .claude/hooks/auto_continue.py TodoWrite '{\"todos\": $TOOL_ARGS}'",
+      "blocking": false,
+      "enabled": true
+    },
+    "PostToolUse:Bash": {
+      "description": "Test checker for Python projects",
+      "command": "python .claude/hooks/test_checker.py",
+      "blocking": false,
+      "enabled": true
+    }
+  },
+  "settings": {
+    "auto_continue_todos": true,
+    "verbose_logging": false
+  }
+}

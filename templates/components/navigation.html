@@ -1,0 +1,256 @@
+<!--
+  Navigation Component
+  可复用的导航菜单组件，支持二级下拉菜单
+  使用Alpine.js管理交互状态
+-->
+
+<nav
+    x-data="navigationMenu()"
+    class="main-nav"
+    role="navigation"
+    aria-label="Main navigation"
+>
+    <!-- Desktop Navigation -->
+    <ul class="nav-menu desktop-nav">
+        {% for item in navigation %}
+            {% if not item.parent_id %}
+                {% set has_children = navigation|selectattr('parent_id', 'equalto', item.id)|list %}
+                <li
+                    class="nav-item{% if has_children %} has-dropdown{% endif %}"
+                    {% if has_children %}
+                    x-data="{ open: false, closeTimeout: null }"
+                    @mouseenter="clearTimeout(closeTimeout); open = true"
+                    @mouseleave="closeTimeout = setTimeout(() => { open = false }, 600)"
+                    {% endif %}
+                >
+                    <a
+                        href="/{{ item.slug }}/"
+                        class="nav-link{% if column and column.id == item.id %} active{% endif %}"
+                        {% if has_children %}
+                        :aria-expanded="open.toString()"
+                        {% endif %}
+                    >
+                        <span class="nav-link-chinese">{{ item.name }}</span>
+                        {% if has_children %}
+                        <svg
+                            class="dropdown-icon"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            :class="{ 'rotate-180': open }"
+                            style="transition: transform 0.2s;"
+                        >
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                        {% endif %}
+                    </a>
+                    {% if has_children %}
+                    <ul
+                        class="dropdown-menu"
+                        x-show="open"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-95"
+                        @click.away="open = false"
+                        style="display: none;"
+                        x-cloak
+                    >
+                        {% for child in has_children %}
+                        <li>
+                            <a href="/{{ child.slug }}/" class="dropdown-item">
+                                {{ child.name }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+
+    <!-- Mobile Menu Toggle -->
+    <button
+        class="mobile-menu-toggle"
+        @click="toggleMobileMenu()"
+        :aria-expanded="mobileMenuOpen.toString()"
+        aria-label="Menu"
+    >
+        <span class="hamburger-line" :class="{ 'active': mobileMenuOpen }"></span>
+        <span class="hamburger-line" :class="{ 'active': mobileMenuOpen }"></span>
+        <span class="hamburger-line" :class="{ 'active': mobileMenuOpen }"></span>
+    </button>
+
+    <!-- Mobile Menu -->
+    <div
+        class="mobile-menu"
+        x-show="mobileMenuOpen"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 transform translate-x-full"
+        x-transition:enter-end="opacity-100 transform translate-x-0"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100 transform translate-x-0"
+        x-transition:leave-end="opacity-0 transform translate-x-full"
+        style="display: none;"
+        x-cloak
+    >
+        <div class="mobile-nav">
+            <ul class="mobile-nav-menu">
+                {% for item in navigation %}
+                    {% if not item.parent_id %}
+                        {% set has_children = navigation|selectattr('parent_id', 'equalto', item.id)|list %}
+                        <li
+                            class="mobile-nav-item{% if has_children %} has-submenu{% endif %}"
+                            x-data="{ submenuOpen: false }"
+                        >
+                            {% if has_children %}
+                            <button
+                                class="mobile-nav-toggle"
+                                @click="submenuOpen = !submenuOpen"
+                                :aria-expanded="submenuOpen.toString()"
+                            >
+                                <span><span class="nav-chinese">{{ item.name }}</span></span>
+                                <svg
+                                    class="toggle-icon"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    :class="{ 'rotate-180': submenuOpen }"
+                                    style="transition: transform 0.2s;"
+                                >
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <ul
+                                class="mobile-submenu"
+                                x-show="submenuOpen"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 max-h-0"
+                                x-transition:enter-end="opacity-100 max-h-96"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 max-h-96"
+                                x-transition:leave-end="opacity-0 max-h-0"
+                                style="display: none; overflow: hidden;"
+                                x-cloak
+                            >
+                                <!-- Link to parent overview page -->
+                                <li>
+                                    <a href="/{{ item.slug }}/" class="mobile-submenu-link parent-link">
+                                        <strong>查看所有 {{ item.name }}</strong>
+                                    </a>
+                                </li>
+                                {% for child in has_children %}
+                                <li>
+                                    <a href="/{{ child.slug }}/" class="mobile-submenu-link">
+                                        {{ child.name }}
+                                    </a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% else %}
+                            <a href="/{{ item.slug }}/" class="mobile-nav-link">
+                                <span class="nav-chinese">{{ item.name }}</span>
+                            </a>
+                            {% endif %}
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <div class="mobile-nav-footer">
+                <a href="/contact/" class="btn btn-primary btn-block">联系我们</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<script>
+/**
+ * Navigation Menu Alpine.js Component
+ * 管理导航菜单的状态和交互
+ */
+function navigationMenu() {
+    return {
+        // 移动菜单开关状态
+        mobileMenuOpen: false,
+
+        /**
+         * 切换移动菜单
+         */
+        toggleMobileMenu() {
+            this.mobileMenuOpen = !this.mobileMenuOpen;
+            // 切换body类来禁用滚动
+            document.body.classList.toggle('mobile-menu-open', this.mobileMenuOpen);
+        },
+
+        /**
+         * 关闭移动菜单
+         */
+        closeMobileMenu() {
+            this.mobileMenuOpen = false;
+            document.body.classList.remove('mobile-menu-open');
+        },
+
+        /**
+         * 初始化
+         */
+        init() {
+            // 监听ESC键关闭移动菜单
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && this.mobileMenuOpen) {
+                    this.closeMobileMenu();
+                }
+            });
+
+            // 监听路由变化关闭移动菜单
+            window.addEventListener('popstate', () => {
+                this.closeMobileMenu();
+            });
+        }
+    };
+}
+</script>
+
+<style>
+/* Alpine.js cloak - 防止内容闪烁 */
+[x-cloak] { display: none !important; }
+
+/* 下拉菜单动画辅助类 */
+.dropdown-menu {
+    transform-origin: top;
+}
+
+.mobile-submenu {
+    transform-origin: top;
+}
+
+/* 汉堡菜单动画 */
+.hamburger-line {
+    transition: all 0.3s ease;
+}
+
+.hamburger-line.active:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger-line.active:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-line.active:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* 禁用body滚动 */
+body.mobile-menu-open {
+    overflow: hidden;
+}
+</style>

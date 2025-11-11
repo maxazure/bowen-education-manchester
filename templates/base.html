@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="{% if lang %}{{ lang }}{% else %}en{% endif %}" class="no-js">
+<head>
+    <!-- Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}{{ site.description }}{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}{{ site.keywords }}{% endblock %}">
+    <title>{% block title %}{{ site.site_name }}{% endblock %} | Bowen Education Group</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/static/images/apple-touch-icon.png">
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="{% block og_title %}{{ site.site_name }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ site.description }}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ site.og_image }}{% endblock %}">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Bowen Education Group">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{{ site.site_name }}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{{ site.description }}{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{{ site.og_image }}{% endblock %}">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/static/css/main.css">
+    {% block extra_css %}{% endblock %}
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Analytics -->
+    {% if site.google_analytics_id %}
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics_id }}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{ site.google_analytics_id }}');
+    </script>
+    {% endif %}
+
+    <!-- Structured Data -->
+    {% block structured_data %}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "EducationalOrganization",
+        "name": "{{ site.site_name }}",
+        "alternateName": "{{ site.site_name_chinese }}",
+        "url": "{{ site.site_url if site.site_url else request.base_url }}",
+        "logo": "{{ site.logo if site.logo else '/static/images/logo.png' }}",
+        "description": "{{ site.description }}",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "{{ site.address }}",
+            "addressLocality": "{{ site.city }}",
+            "addressRegion": "{{ site.region }}",
+            "postalCode": "{{ site.postcode }}",
+            "addressCountry": "GB"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "{{ site.latitude }}",
+            "longitude": "{{ site.longitude }}"
+        },
+        "telephone": "{{ site.phone }}",
+        "email": "{{ site.email }}",
+        "sameAs": [
+            {% if site.facebook_url %}"{{ site.facebook_url }}",{% endif %}
+            {% if site.instagram_url %}"{{ site.instagram_url }}",{% endif %}
+            {% if site.twitter_url %}"{{ site.twitter_url }}"{% endif %}
+        ]
+    }
+    </script>
+    {% endblock %}
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+    <!-- Skip to main content (accessibility) -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header -->
+    {% include 'partials/header.html' %}
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-content" role="main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    {% include 'partials/footer.html' %}
+
+    <!-- Cookie Consent Banner -->
+    {% if show_cookie_banner %}
+    <div id="cookie-banner" class="cookie-banner" role="dialog" aria-labelledby="cookie-banner-title">
+        <div class="cookie-banner-content">
+            <h2 id="cookie-banner-title" class="cookie-banner-title">Cookie Notice</h2>
+            <p>We use cookies to improve your experience on our website. By continuing to browse, you agree to our use of cookies. <a href="{{ site.cookie_policy_url }}">Learn more</a></p>
+            <div class="cookie-banner-actions">
+                <button id="accept-cookies" class="btn btn-primary">Accept</button>
+                <button id="decline-cookies" class="btn btn-secondary">Decline</button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Scripts -->
+    <script src="/static/js/main.js"></script>
+    {% block extra_js %}{% endblock %}
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top" aria-label="Back to top" style="display: none;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+
+    <!-- JavaScript for Back to Top -->
+    <script>
+        // Back to top button
+        const backToTopButton = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.style.display = 'block';
+            } else {
+                backToTopButton.style.display = 'none';
+            }
+        });
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Cookie banner
+        const cookieBanner = document.getElementById('cookie-banner');
+        const acceptButton = document.getElementById('accept-cookies');
+        const declineButton = document.getElementById('decline-cookies');
+
+        if (cookieBanner && acceptButton && declineButton) {
+            acceptButton.addEventListener('click', () => {
+                localStorage.setItem('cookieConsent', 'accepted');
+                cookieBanner.style.display = 'none';
+            });
+
+            declineButton.addEventListener('click', () => {
+                localStorage.setItem('cookieConsent', 'declined');
+                cookieBanner.style.display = 'none';
+            });
+        }
+    </script>
+</body>
+</html>

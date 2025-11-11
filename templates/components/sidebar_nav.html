@@ -1,0 +1,172 @@
+<!--
+  Sidebar Navigation Component
+  显示父栏目和子栏目的侧边导航
+-->
+
+{% if parent_column %}
+<aside class="sidebar-nav">
+    <!-- Parent Column Link -->
+    <div class="sidebar-header">
+        <a href="/{{ parent_column.slug }}/" class="sidebar-parent-link">
+            <h3>{{ parent_column.name }}</h3>
+            <span class="sidebar-subtitle">全部内容</span>
+        </a>
+    </div>
+
+    <!-- Child Columns Navigation -->
+    {% if sibling_columns %}
+    <nav class="sidebar-menu">
+        <ul class="sidebar-menu-list">
+            {% for sibling in sibling_columns %}
+            <li class="sidebar-menu-item">
+                <a
+                    href="/{{ sibling.slug }}/"
+                    class="sidebar-menu-link{% if column and column.id == sibling.id %} active{% endif %}"
+                >
+                    <span class="sidebar-menu-icon">
+                        {% if sibling.column_type == 'POST' %}
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        {% elif sibling.column_type == 'PRODUCT' %}
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                        </svg>
+                        {% elif sibling.column_type == 'SINGLE_PAGE' %}
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                            <polyline points="13 2 13 9 20 9"></polyline>
+                        </svg>
+                        {% else %}
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                        {% endif %}
+                    </span>
+                    <span class="sidebar-menu-text">{{ sibling.name }}</span>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </nav>
+    {% endif %}
+</aside>
+{% endif %}
+
+<style>
+/* Sidebar Navigation Styles */
+.sidebar-nav {
+    width: 100%; /* 改为100%适应父容器 */
+    background: var(--color-white, #ffffff);
+    border-radius: var(--radius-lg, 0.75rem);
+    box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1));
+    overflow: hidden;
+    position: sticky;
+    top: 100px;
+    max-height: calc(100vh - 120px);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    padding: var(--spacing-lg, 1.5rem);
+    background: linear-gradient(135deg, #0052cc 0%, #0066ff 100%);
+    color: white;
+}
+
+.sidebar-parent-link {
+    text-decoration: none;
+    color: white;
+    display: block;
+}
+
+.sidebar-parent-link:hover h3 {
+    text-decoration: underline;
+}
+
+.sidebar-parent-link h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.sidebar-subtitle {
+    display: block;
+    font-size: 0.875rem;
+    opacity: 0.9;
+    margin-top: 0.25rem;
+}
+
+.sidebar-menu {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-sm, 1rem);
+}
+
+.sidebar-menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-menu-item {
+    margin-bottom: 0.25rem;
+}
+
+.sidebar-menu-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm, 0.75rem);
+    padding: var(--spacing-sm, 0.75rem) var(--spacing-md, 1rem);
+    color: var(--color-gray-700, #4a5568);
+    text-decoration: none;
+    border-radius: var(--radius-md, 0.5rem);
+    transition: all var(--transition-fast, 0.2s ease);
+    font-size: 0.95rem;
+}
+
+.sidebar-menu-link:hover {
+    background: var(--color-gray-50, #f7fafc);
+    color: var(--color-primary, #0052cc);
+}
+
+.sidebar-menu-link.active {
+    background: rgba(0, 82, 204, 0.1);
+    color: var(--color-primary, #0052cc);
+    font-weight: 600;
+    border-left: 3px solid var(--color-primary, #0052cc);
+}
+
+.sidebar-menu-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    opacity: 0.7;
+}
+
+.sidebar-menu-link.active .sidebar-menu-icon {
+    opacity: 1;
+}
+
+.sidebar-menu-text {
+    flex: 1;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .sidebar-nav {
+        width: 100%;
+        position: static;
+        margin-bottom: var(--spacing-lg);
+        max-height: none;
+    }
+}
+</style>

@@ -1,0 +1,1067 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} - 博文教育集团 Bowen Education Group{% endblock %}
+
+{% block meta_description %}{{ product.summary or (product.name ~ ' - ' ~ column.name ~ ' - 博文教育集团提供优质的中文教育课程') }}{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section with Cover Image -->
+<section class="hero hero--content hero--product-detail" style="{% if product.cover_media %}background-image: url('{{ product.cover_media.path_medium or product.cover_media.path_original }}');{% else %}background-image: url('/static/images/hero-default.jpg');{% endif %}">
+    <div class="hero__overlay"></div>
+    <div class="container">
+        <div class="hero__content hero__content--narrow">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb" data-aos="fade-up">
+                <a href="/">首页</a>
+                <span class="breadcrumb__separator">›</span>
+                <a href="/{{ column.slug }}">{{ column.name }}</a>
+                <span class="breadcrumb__separator">›</span>
+                <span class="breadcrumb__current">{{ product.name }}</span>
+            </nav>
+
+            <h1 class="hero__title hero__title--product" data-aos="fade-up" data-aos-delay="100">
+                {{ product.name }}
+            </h1>
+
+            <!-- Product Meta -->
+            <div class="product-meta" data-aos="fade-up" data-aos-delay="200">
+                {% if product.price_text %}
+                <span class="product-meta__price">
+                    <i class="fas fa-pound-sign"></i>
+                    {{ product.price_text }}
+                </span>
+                {% endif %}
+                <span class="product-meta__status">
+                    <i class="fas fa-check-circle"></i>
+                    现正报名
+                </span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Product Content Section -->
+<section class="section section--product-content">
+    <div class="container">
+        <div class="row">
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                <article class="product-content" data-aos="fade-up">
+                    <!-- Course Description -->
+                    <div class="product-section">
+                        <h2 class="product-section__title">
+                            <i class="fas fa-info-circle"></i>
+                            课程介绍
+                        </h2>
+                        <div class="product-description">
+                            {{ product.description_html|safe }}
+                        </div>
+                    </div>
+
+                    <!-- Course Features -->
+                    <div class="product-section">
+                        <h2 class="product-section__title">
+                            <i class="fas fa-star"></i>
+                            课程特色
+                        </h2>
+                        <div class="course-features">
+                            <div class="feature-item">
+                                <i class="fas fa-users feature-icon"></i>
+                                <div class="feature-content">
+                                    <h4>小班教学</h4>
+                                    <p>每班最多12名学生，确保个性化关注</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-graduation-cap feature-icon"></i>
+                                <div class="feature-content">
+                                    <h4>专业师资</h4>
+                                    <p>经验丰富的资深教师团队</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-certificate feature-icon"></i>
+                                <div class="feature-content">
+                                    <h4>权威认证</h4>
+                                    <p>符合英国教育标准，证书权威认可</p>
+                                </div>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-book feature-icon"></i>
+                                <div class="feature-content">
+                                    <h4>优质教材</h4>
+                                    <p>采用最新权威教材，内容丰富实用</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Course Schedule -->
+                    <div class="product-section">
+                        <h2 class="product-section__title">
+                            <i class="fas fa-calendar-alt"></i>
+                            课程安排
+                        </h2>
+                        <div class="course-schedule">
+                            <div class="schedule-item">
+                                <div class="schedule-time">
+                                    <strong>上课时间：</strong>
+                                </div>
+                                <div class="schedule-detail">
+                                    周末班：周六/周日 9:00-12:00 或 14:00-17:00<br>
+                                    平日班：周三/周五 18:30-20:30
+                                </div>
+                            </div>
+                            <div class="schedule-item">
+                                <div class="schedule-time">
+                                    <strong>课程时长：</strong>
+                                </div>
+                                <div class="schedule-detail">
+                                    每学期12周，全年3学期
+                                </div>
+                            </div>
+                            <div class="schedule-item">
+                                <div class="schedule-time">
+                                    <strong>开课日期：</strong>
+                                </div>
+                                <div class="schedule-detail">
+                                    2025年春季学期：1月11日开课<br>
+                                    2025年夏季学期：4月19日开课<br>
+                                    2025年秋季学期：9月6日开课
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Section -->
+                    <div class="product-section">
+                        <h2 class="product-section__title">
+                            <i class="fas fa-question-circle"></i>
+                            常见问题
+                        </h2>
+                        <div class="product-faq">
+                            <div class="faq-item">
+                                <h4 class="faq-question">
+                                    <i class="fas fa-question"></i>
+                                    适合什么年龄段的学生？
+                                </h4>
+                                <div class="faq-answer">
+                                    <p>我们的课程根据不同年龄段设计，包括：</p>
+                                    <ul>
+                                        <li>幼儿班：4-6岁</li>
+                                        <li>初级班：7-9岁</li>
+                                        <li>中级班：10-12岁</li>
+                                        <li>高级班：13-15岁</li>
+                                        <li>GCSE/A-Level班：15-18岁</li>
+                                        <li>成人班：18岁以上</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <h4 class="faq-question">
+                                    <i class="fas fa-question"></i>
+                                    可以免费试听吗？
+                                </h4>
+                                <div class="faq-answer">
+                                    <p>是的！我们为新学生提供免费试听课。您可以预约试听，了解我们的教学环境和老师的教学风格。</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <h4 class="faq-question">
+                                    <i class="fas fa-question"></i>
+                                    如何评估孩子的中文水平？
+                                </h4>
+                                <div class="faq-answer">
+                                    <p>我们会为孩子进行免费的中文水平评估，包括听说读写四个方面的测试，帮助孩子选择最适合的课程级别。</p>
+                                </div>
+                            </div>
+
+                            <div class="faq-item">
+                                <h4 class="faq-question">
+                                    <i class="fas fa-question"></i>
+                                    学费包括哪些内容？
+                                </h4>
+                                <div class="faq-answer">
+                                    <p>学费包括：</p>
+                                    <ul>
+                                        <li>课程教材和学习资料</li>
+                                        <li>课堂教学</li>
+                                        <li>作业批改和反馈</li>
+                                        <li>期中和期末评估</li>
+                                        <li>结业证书</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA Button -->
+                    <div class="product-section">
+                        <div class="course-cta">
+                            <h3>准备好开始学习了吗？</h3>
+                            <p>立即报名或预约免费试听课</p>
+                            <div class="cta-buttons">
+                                <a href="/contact" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-user-plus"></i>
+                                    立即报名
+                                </a>
+                                <a href="/booking" class="btn btn-outline-primary btn-lg">
+                                    <i class="fas fa-calendar-check"></i>
+                                    预约试听
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <aside class="product-sidebar" data-aos="fade-left">
+                    <!-- Quick Enrollment -->
+                    <div class="sidebar-card sidebar-cta">
+                        <h3 class="sidebar-card__title">
+                            <i class="fas fa-rocket"></i>
+                            快速报名
+                        </h3>
+                        <p class="sidebar-card__text">
+                            填写报名表，开始您的中文学习之旅
+                        </p>
+                        <a href="/contact" class="btn btn-primary btn-block">
+                            <i class="fas fa-edit"></i>
+                            填写报名表
+                        </a>
+                        <a href="tel:01619693071" class="btn btn-outline-primary btn-block">
+                            <i class="fas fa-phone"></i>
+                            电话咨询
+                        </a>
+                    </div>
+
+                    <!-- Course Information -->
+                    <div class="sidebar-card">
+                        <h3 class="sidebar-card__title">
+                            <i class="fas fa-info-circle"></i>
+                            课程信息
+                        </h3>
+                        <div class="course-info">
+                            <div class="info-item">
+                                <span class="info-label">
+                                    <i class="fas fa-users"></i>
+                                    班级规模：
+                                </span>
+                                <span class="info-value">6-12人</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">
+                                    <i class="fas fa-clock"></i>
+                                    课程时长：
+                                </span>
+                                <span class="info-value">每节3小时</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">
+                                    <i class="fas fa-language"></i>
+                                    教学语言：
+                                </span>
+                                <span class="info-value">中文为主，英文辅助</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">
+                                    <i class="fas fa-certificate"></i>
+                                    证书：
+                                </span>
+                                <span class="info-value">结业证书</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div class="sidebar-card">
+                        <h3 class="sidebar-card__title">
+                            <i class="fas fa-phone-alt"></i>
+                            联系我们
+                        </h3>
+                        <div class="contact-info">
+                            <div class="contact-item">
+                                <i class="fas fa-phone"></i>
+                                <a href="tel:01619693071">0161 969 3071</a>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <a href="mailto:info@boweneducation.org">info@boweneducation.org</a>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fab fa-weixin"></i>
+                                BowenEducation
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Related Courses -->
+                    {% if related_products %}
+                    <div class="sidebar-card">
+                        <h3 class="sidebar-card__title">
+                            <i class="fas fa-book-open"></i>
+                            相关课程
+                        </h3>
+                        <div class="related-courses">
+                            {% for related in related_products[:3] %}
+                            <div class="related-course-item">
+                                <a href="/{{ column.slug }}/{{ related.slug }}" class="related-course-link">
+                                    <h4>{{ related.name }}</h4>
+                                    {% if related.price_text %}
+                                    <p class="related-course-price">{{ related.price_text }}</p>
+                                    {% endif %}
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </aside>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Related Courses Section -->
+{% if related_products %}
+<section class="section section--related-courses bg-light">
+    <div class="container">
+        <div class="section__header text-center" data-aos="fade-up">
+            <h2 class="section__title">推荐课程</h2>
+            <h3 class="section__title-chinese">可能感兴趣的课程</h3>
+            <p class="section__subtitle">探索更多适合您的课程选择</p>
+        </div>
+
+        <div class="related-courses-grid">
+            {% for related in related_products %}
+            <div class="related-course-card" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
+                {% if related.cover_media %}
+                <div class="related-course-image">
+                    <img src="{{ related.cover_media.path_thumb or related.cover_media.path_original }}" alt="{{ related.name }}">
+                </div>
+                {% endif %}
+                <div class="related-course-content">
+                    <h4>{{ related.name }}</h4>
+                    {% if related.summary %}
+                    <p>{{ related.summary|truncate(100) }}</p>
+                    {% endif %}
+                    {% if related.price_text %}
+                    <p class="related-course-price">{{ related.price_text }}</p>
+                    {% endif %}
+                    <a href="/{{ column.slug }}/{{ related.slug }}" class="btn btn-outline-primary btn-sm">
+                        了解详情
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<style>
+/* Product Detail Page Styles */
+.hero--product-detail {
+    min-height: 500px;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.hero__title--product {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
+}
+
+.product-meta {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.product-meta__price {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.product-meta__status {
+    background: rgba(16,185,129,0.2);
+    color: #10b981;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Product Content */
+.section--product-content {
+    padding: 4rem 0;
+    background: linear-gradient(to bottom, #ffffff 0%, #f8fafc 100%);
+}
+
+.product-content {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    margin-bottom: 2rem;
+}
+
+.product-section {
+    margin-bottom: 3rem;
+}
+
+.product-section:last-child {
+    margin-bottom: 0;
+}
+
+.product-section__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #0052cc;
+}
+
+.product-section__title i {
+    color: #0052cc;
+}
+
+.product-description {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #4a5568;
+}
+
+.product-description h2,
+.product-description h3 {
+    color: #1a202c;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.product-description ul,
+.product-description ol {
+    margin: 1rem 0;
+    padding-left: 2rem;
+}
+
+.product-description li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+/* Course Features */
+.course-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.feature-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    border-left: 4px solid #0052cc;
+    transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.feature-icon {
+    width: 40px;
+    height: 40px;
+    background: #0052cc;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.feature-content h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+}
+
+.feature-content p {
+    color: #6b7280;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Course Schedule */
+.course-schedule {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 1.5rem;
+    border-left: 4px solid #0052cc;
+}
+
+.schedule-item {
+    display: flex;
+    padding: 1rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.schedule-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.schedule-item:first-child {
+    padding-top: 0;
+}
+
+.schedule-time {
+    flex: 0 0 120px;
+    font-weight: 600;
+    color: #1a202c;
+}
+
+.schedule-detail {
+    flex: 1;
+    color: #4a5568;
+    line-height: 1.6;
+}
+
+/* FAQ Section */
+.product-faq {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.faq-item {
+    background: white;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+}
+
+.faq-item:hover {
+    border-color: #0052cc;
+    box-shadow: 0 2px 8px rgba(0,82,204,0.1);
+}
+
+.faq-question {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1a202c;
+    padding: 1.2rem 1.5rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: #f8fafc;
+    cursor: pointer;
+    user-select: none;
+}
+
+.faq-question i {
+    color: #0052cc;
+    font-size: 1rem;
+}
+
+.faq-answer {
+    padding: 0 1.5rem 1.5rem 3rem;
+    color: #4a5568;
+    line-height: 1.6;
+}
+
+.faq-answer p {
+    margin-bottom: 1rem;
+}
+
+.faq-answer ul {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+.faq-answer li {
+    margin-bottom: 0.5rem;
+}
+
+/* Course CTA */
+.course-cta {
+    background: linear-gradient(135deg, #0052cc, #0066ff);
+    color: white;
+    border-radius: 12px;
+    padding: 2.5rem;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0,82,204,0.2);
+}
+
+.course-cta h3 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.course-cta p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.cta-buttons .btn {
+    min-width: 180px;
+    padding: 1rem 2rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.cta-buttons .btn-primary {
+    background: white;
+    color: #0052cc;
+    border: 2px solid white;
+}
+
+.cta-buttons .btn-primary:hover {
+    background: #f8fafc;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255,255,255,0.3);
+}
+
+.cta-buttons .btn-outline-primary {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+}
+
+.cta-buttons .btn-outline-primary:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateY(-2px);
+}
+
+/* Sidebar */
+.product-sidebar {
+    position: sticky;
+    top: 2rem;
+}
+
+.sidebar-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,82,204,0.1);
+}
+
+.sidebar-cta {
+    background: linear-gradient(135deg, #0052cc, #0066ff);
+    color: white;
+    border: none;
+}
+
+.sidebar-card__title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sidebar-cta .sidebar-card__title {
+    color: white;
+}
+
+.sidebar-cta .sidebar-card__text {
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 1.5rem;
+}
+
+.sidebar-cta .btn-primary {
+    background: white;
+    color: #0052cc;
+    border: 2px solid white;
+}
+
+.sidebar-cta .btn-primary:hover {
+    background: #f8fafc;
+}
+
+.sidebar-cta .btn-outline-primary {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+}
+
+.sidebar-cta .btn-outline-primary:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+/* Course Info */
+.course-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    flex: 0 0 auto;
+    font-weight: 600;
+    color: #1a202c;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.info-label i {
+    color: #0052cc;
+    width: 20px;
+}
+
+.info-value {
+    color: #4a5568;
+    flex: 1;
+    text-align: right;
+}
+
+/* Contact Info */
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0;
+}
+
+.contact-item i {
+    color: #0052cc;
+    width: 20px;
+}
+
+.contact-item a {
+    color: #4a5568;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.contact-item a:hover {
+    color: #0052cc;
+}
+
+/* Related Courses */
+.related-courses {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.related-course-item {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 0.75rem 0;
+}
+
+.related-course-item:last-child {
+    border-bottom: none;
+}
+
+.related-course-link {
+    text-decoration: none;
+    color: #4a5568;
+    display: block;
+}
+
+.related-course-link:hover {
+    color: #0052cc;
+}
+
+.related-course-link h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: #1a202c;
+}
+
+.related-course-link:hover h4 {
+    color: #0052cc;
+}
+
+.related-course-price {
+    font-size: 0.9rem;
+    color: #0052cc;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Related Courses Section */
+.section--related-courses {
+    padding: 4rem 0;
+    background: #f8fafc;
+}
+
+.related-courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.related-course-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.related-course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+}
+
+.related-course-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.related-course-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.related-course-card:hover .related-course-image img {
+    transform: scale(1.05);
+}
+
+.related-course-content {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.related-course-content h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+}
+
+.related-course-content p {
+    color: #6b7280;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    flex: 1;
+}
+
+.related-course-price {
+    color: #0052cc;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .course-features {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cta-buttons .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero__title--product {
+        font-size: 2rem;
+    }
+
+    .product-meta {
+        flex-direction: column;
+        gap: 0.75rem;
+        align-items: flex-start;
+    }
+
+    .schedule-item {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .schedule-time {
+        flex: none;
+    }
+
+    .course-cta {
+        padding: 2rem 1.5rem;
+    }
+
+    .course-cta h3 {
+        font-size: 1.5rem;
+    }
+
+    .related-courses-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero--product-detail {
+        min-height: 400px;
+    }
+
+    .product-content {
+        padding: 1.5rem;
+    }
+
+    .feature-item {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .sidebar-card {
+        padding: 1rem;
+    }
+
+    .info-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+
+    .info-value {
+        text-align: left;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    // Initialize AOS
+    AOS.init({
+        duration: 800,
+        easing: 'ease-in-out',
+        once: true,
+        offset: 100
+    });
+
+    // FAQ Accordion
+    document.addEventListener('DOMContentLoaded', function() {
+        const faqItems = document.querySelectorAll('.faq-item');
+
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            const answer = item.querySelector('.faq-answer');
+
+            // Initially hide answers
+            answer.style.display = 'none';
+
+            question.addEventListener('click', function() {
+                const isVisible = answer.style.display === 'block';
+
+                // Toggle current answer
+                answer.style.display = isVisible ? 'none' : 'block';
+
+                // Animate the toggle
+                if (!isVisible) {
+                    answer.style.animation = 'slideDown 0.3s ease-out';
+                }
+            });
+        });
+
+        // Add slide down animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideDown {
+                from {
+                    opacity: 0;
+                    transform: translateY(-10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

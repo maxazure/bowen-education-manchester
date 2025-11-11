@@ -1,0 +1,488 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} - 博文新闻 - Bowen Education Group{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section with Cover Image -->
+<section class="hero hero--content hero--post-detail" style="{% if post.cover_media %}background-image: url('{{ post.cover_media.file_url or post.cover_media.path_original }}');{% else %}background-image: url('/static/images/news/news-hero-background.jpg');{% endif %}">
+    <div class="hero__overlay"></div>
+    <div class="container">
+        <div class="hero__content hero__content--narrow">
+            <!-- Breadcrumb -->
+            <nav class="breadcrumb" data-aos="fade-up">
+                <a href="/">首页</a>
+                <span class="breadcrumb__separator">›</span>
+                <a href="/{{ column.slug }}">{{ column.name }}</a>
+                <span class="breadcrumb__separator">›</span>
+                <span class="breadcrumb__current">{{ post.title }}</span>
+            </nav>
+            
+            <h1 class="hero__title hero__title--post" data-aos="fade-up" data-aos-delay="100">
+                {{ post.title }}
+            </h1>
+            
+            <!-- Post Meta -->
+            <div class="post-meta" data-aos="fade-up" data-aos-delay="200">
+                <span class="post-meta__item">
+                    <i class="icon-calendar"></i>
+                    {{ post.published_at.strftime('%Y年%m月%d日') if post.published_at else post.created_at.strftime('%Y年%m月%d日') }}
+                </span>
+                {% if post.categories %}
+                <span class="post-meta__item">
+                    <i class="icon-tag"></i>
+                    {% for category in post.categories %}
+                    <a href="/{{ column.slug }}?category={{ category.id }}" class="post-meta__category">{{ category.name }}</a>{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Post Content Section -->
+<section class="section section--post-content">
+    <div class="container">
+        <div class="row">
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                <article class="post-content" data-aos="fade-up">
+                    <!-- Summary -->
+                    {% if post.summary %}
+                    <div class="post-summary">
+                        <p class="lead">{{ post.summary }}</p>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Main Content -->
+                    <div class="post-body">
+                        {{ post.content_html|safe }}
+                    </div>
+                    
+                    <!-- Tags -->
+                    {% if post.categories %}
+                    <div class="post-tags">
+                        <strong>标签：</strong>
+                        {% for category in post.categories %}
+                        <a href="/{{ column.slug }}?category={{ category.id }}" class="tag">{{ category.name }}</a>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Share Buttons -->
+                    <div class="post-share">
+                        <strong>分享：</strong>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.url }}" target="_blank" class="share-btn share-btn--facebook" title="分享到Facebook">
+                            <i class="icon-facebook"></i>
+                        </a>
+                        <a href="https://twitter.com/intent/tweet?url={{ request.url }}&text={{ post.title }}" target="_blank" class="share-btn share-btn--twitter" title="分享到Twitter">
+                            <i class="icon-twitter"></i>
+                        </a>
+                        <a href="mailto:?subject={{ post.title }}&body=查看这篇文章：{{ request.url }}" class="share-btn share-btn--email" title="通过邮件分享">
+                            <i class="icon-mail"></i>
+                        </a>
+                    </div>
+                    
+                    <!-- Navigation -->
+                    <div class="post-navigation">
+                        <a href="/{{ column.slug }}" class="btn btn--secondary">
+                            <i class="icon-arrow-left"></i> 返回新闻列表
+                        </a>
+                    </div>
+                </article>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <aside class="sidebar" data-aos="fade-up" data-aos-delay="100">
+                    <!-- Contact CTA -->
+                    <div class="sidebar-widget sidebar-widget--cta">
+                        <h3 class="sidebar-widget__title">了解更多</h3>
+                        <p>对我们的课程或活动感兴趣？</p>
+                        <a href="/contact" class="btn btn--primary btn--block">联系我们</a>
+                    </div>
+                    
+                    <!-- Related Posts -->
+                    {% if related_posts %}
+                    <div class="sidebar-widget">
+                        <h3 class="sidebar-widget__title">相关新闻</h3>
+                        <div class="related-posts">
+                            {% for related_post in related_posts %}
+                            <article class="related-post">
+                                {% if related_post.cover_media %}
+                                <a href="/{{ column.slug }}/{{ related_post.slug }}" class="related-post__image">
+                                    <img src="{{ related_post.cover_media.file_url or related_post.cover_media.path_original }}" alt="{{ related_post.title }}">
+                                </a>
+                                {% endif %}
+                                <div class="related-post__content">
+                                    <h4 class="related-post__title">
+                                        <a href="/{{ column.slug }}/{{ related_post.slug }}">{{ related_post.title }}</a>
+                                    </h4>
+                                    <time class="related-post__date">
+                                        {{ related_post.published_at.strftime('%Y-%m-%d') if related_post.published_at else related_post.created_at.strftime('%Y-%m-%d') }}
+                                    </time>
+                                </div>
+                            </article>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Categories -->
+                    {% if column.post_categories %}
+                    <div class="sidebar-widget">
+                        <h3 class="sidebar-widget__title">新闻分类</h3>
+                        <ul class="category-list">
+                            <li><a href="/{{ column.slug }}">全部新闻</a></li>
+                            {% for category in column.post_categories %}
+                            <li><a href="/{{ column.slug }}?category={{ category.id }}">{{ category.name }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </aside>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Post Detail Styles */
+.hero--post-detail {
+    min-height: 400px;
+    background-size: cover;
+    background-position: center;
+}
+
+.hero__content--narrow {
+    max-width: 800px;
+}
+
+.hero__title--post {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.breadcrumb {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.breadcrumb a {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+}
+
+.breadcrumb a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.breadcrumb__separator {
+    margin: 0 0.5rem;
+}
+
+.breadcrumb__current {
+    color: #fff;
+}
+
+.post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.post-meta__item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.post-meta__category {
+    color: rgba(255, 255, 255, 0.9);
+    text-decoration: none;
+}
+
+.post-meta__category:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.section--post-content {
+    padding: 4rem 0;
+}
+
+.post-content {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.post-summary {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-left: 4px solid #1e3a8a;
+    border-radius: 4px;
+}
+
+.post-summary .lead {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: #495057;
+    margin: 0;
+}
+
+.post-body {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #333;
+}
+
+.post-body h2 {
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e9ecef;
+    color: #1e3a8a;
+    font-size: 1.75rem;
+}
+
+.post-body h3 {
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+    color: #1e3a8a;
+    font-size: 1.4rem;
+}
+
+.post-body ul, .post-body ol {
+    margin: 1.5rem 0;
+    padding-left: 2rem;
+}
+
+.post-body li {
+    margin-bottom: 0.75rem;
+}
+
+.post-body blockquote {
+    margin: 2rem 0;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-left: 4px solid #dc2626;
+    font-style: italic;
+    color: #495057;
+}
+
+.post-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+}
+
+.post-tags {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e9ecef;
+}
+
+.tag {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    margin: 0 0.5rem 0.5rem 0;
+    background: #e9ecef;
+    color: #495057;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+}
+
+.tag:hover {
+    background: #1e3a8a;
+    color: #fff;
+}
+
+.post-share {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.share-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: #fff;
+    text-decoration: none;
+    transition: transform 0.3s;
+}
+
+.share-btn:hover {
+    transform: translateY(-3px);
+}
+
+.share-btn--facebook {
+    background: #1877f2;
+}
+
+.share-btn--twitter {
+    background: #1da1f2;
+}
+
+.share-btn--email {
+    background: #6c757d;
+}
+
+.post-navigation {
+    margin-top: 2rem;
+}
+
+/* Sidebar */
+.sidebar {
+    position: sticky;
+    top: 2rem;
+}
+
+.sidebar-widget {
+    background: #fff;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar-widget--cta {
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+    color: #fff;
+}
+
+.sidebar-widget--cta p {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.sidebar-widget__title {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: #1e3a8a;
+}
+
+.sidebar-widget--cta .sidebar-widget__title {
+    color: #fff;
+}
+
+.related-post {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.related-post:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.related-post__image {
+    flex-shrink: 0;
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.related-post__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.related-post__content {
+    flex: 1;
+}
+
+.related-post__title {
+    font-size: 1rem;
+    margin: 0 0 0.5rem;
+}
+
+.related-post__title a {
+    color: #333;
+    text-decoration: none;
+}
+
+.related-post__title a:hover {
+    color: #1e3a8a;
+}
+
+.related-post__date {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.category-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category-list li {
+    margin-bottom: 0.75rem;
+}
+
+.category-list a {
+    color: #495057;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.category-list a:hover {
+    color: #1e3a8a;
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+    .hero__title--post {
+        font-size: 2rem;
+    }
+    
+    .sidebar {
+        position: static;
+        margin-top: 3rem;
+    }
+}
+
+@media (max-width: 767px) {
+    .hero__title--post {
+        font-size: 1.75rem;
+    }
+    
+    .post-content {
+        padding: 1.5rem;
+    }
+    
+    .post-body {
+        font-size: 1rem;
+    }
+    
+    .post-meta {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+}
+</style>
+
+{% endblock %}

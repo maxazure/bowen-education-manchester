@@ -1,0 +1,429 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Bowen Education Group | Manchester Chinese School{% endblock %}
+
+{% block meta_description %}Bowen Education Group - Premier Chinese language school in Manchester offering Foundation to A-Level Mandarin courses, academic tutoring, and cultural programmes.{% endblock %}
+
+{% block meta_keywords %}Chinese school Manchester, Mandarin classes, GCSE Chinese, A-Level Chinese, HSK preparation, YCT, Cantonese lessons, Chinese tuition Manchester{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero hero--home">
+    <div class="hero__overlay"></div>
+    <div class="hero__background" style="background-image: url('/static/images/hero-chinese-school.jpg');"></div>
+
+    <div class="container">
+        <div class="hero__content">
+            <h1 class="hero__title" data-aos="fade-up">
+                <span class="hero__title-main">Bowen Education Group</span>
+                <span class="hero__title-chinese">博文集团</span>
+            </h1>
+
+            <p class="hero__subtitle" data-aos="fade-up" data-aos-delay="100">
+                Bridging East and West Through Education
+            </p>
+            <p class="hero__subtitle-chinese" data-aos="fade-up" data-aos-delay="150">
+                中西融汇，博学致远
+            </p>
+
+            <div class="hero__buttons" data-aos="fade-up" data-aos-delay="200">
+                <a href="/school/" class="btn btn--primary btn--large">
+                    探索课程
+                </a>
+                <a href="/contact/" class="btn btn--secondary btn--large">
+                    预约试听
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="hero__scroll-indicator">
+        <span>Scroll to explore</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M12 5v14M19 12l-7 7-7-7"/>
+        </svg>
+    </div>
+</section>
+
+<!-- Introduction Section -->
+<section class="section section--intro">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6" data-aos="fade-right">
+                <div class="intro__content">
+                    <span class="section__label">About Us / 关于我们</span>
+                    <h2 class="section__title">
+                        Leading Chinese Education in Manchester
+                    </h2>
+                    <p class="section__description">
+                        Bowen Education Group is a registered educational institution in Manchester, UK,
+                        offering comprehensive Chinese language programmes from Foundation to A-Level,
+                        academic tutoring, chess club, badminton club, and government-funded community programmes.
+                    </p>
+                    <p class="section__description">
+                        博文集团是位于曼彻斯特的注册教育机构，提供从基础到A-Level的全方位中文课程、
+                        学科辅导、国际象棋俱乐部、羽毛球俱乐部以及政府资助的社区项目。
+                    </p>
+
+                    <div class="intro__stats">
+                        <div class="stat">
+                            <div class="stat__number">2018</div>
+                            <div class="stat__label">成立年份</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat__number">500+</div>
+                            <div class="stat__label">在读学生</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat__number">100%</div>
+                            <div class="stat__label">GCSE通过率</div>
+                        </div>
+                    </div>
+
+                    <a href="/about/" class="btn btn--outline">
+                        了解更多
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-6" data-aos="fade-left">
+                <div class="intro__image">
+                    <img src="/static/images/hero-chinese-new-year.jpg"
+                         alt="Bowen Education Group - Chinese New Year Celebration"
+                         loading="lazy">
+                    <div class="intro__image-badge">
+                        <span>Registered Education Provider</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Courses Section -->
+<section class="section section--courses bg-light">
+    <div class="container">
+        <div class="section__header text-center" data-aos="fade-up">
+            <span class="section__label">Our Programmes / 课程项目</span>
+            <h2 class="section__title">Comprehensive Chinese Language Programmes</h2>
+            <p class="section__description">
+                From beginner to advanced, we offer structured pathways for all age groups
+            </p>
+        </div>
+
+        <div class="courses-grid">
+            <!-- Course Card: Foundation -->
+            <div class="course-card" data-aos="fade-up" data-aos-delay="0">
+                <div class="course-card__image">
+                    <img src="/static/images/course-foundation-mandarin.jpg"
+                         alt="Foundation Mandarin for Young Learners"
+                         loading="lazy">
+                    <span class="course-card__badge">Ages 5-7</span>
+                </div>
+                <div class="course-card__content">
+                    <h3 class="course-card__title">Foundation Mandarin</h3>
+                    <p class="course-card__description">
+                        Playful introduction to Mandarin through songs, games, and stories
+                    </p>
+                    <div class="course-card__meta">
+                        <span class="course-card__price">£180/term</span>
+                        <span class="course-card__duration">12 weeks</span>
+                    </div>
+                    <a href="/school/foundation-mandarin/" class="btn btn--small btn--primary-outline">
+                        了解详情 →
+                    </a>
+                </div>
+            </div>
+
+            <!-- Course Card: GCSE -->
+            <div class="course-card course-card--featured" data-aos="fade-up" data-aos-delay="100">
+                <div class="course-card__featured-badge">Most Popular</div>
+                <div class="course-card__image">
+                    <img src="/static/images/course-gcse-chinese.jpg"
+                         alt="GCSE Chinese Examination Preparation"
+                         loading="lazy">
+                    <span class="course-card__badge">Ages 14-16</span>
+                </div>
+                <div class="course-card__content">
+                    <h3 class="course-card__title">GCSE Chinese</h3>
+                    <p class="course-card__description">
+                        Comprehensive GCSE preparation aligned with AQA/Edexcel specifications
+                    </p>
+                    <div class="course-card__meta">
+                        <span class="course-card__price">£240/term</span>
+                        <span class="course-card__duration">12 weeks</span>
+                    </div>
+                    <a href="/school/gcse-chinese/" class="btn btn--small btn--primary">
+                        了解详情 →
+                    </a>
+                </div>
+            </div>
+
+            <!-- Course Card: A-Level -->
+            <div class="course-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="course-card__image">
+                    <img src="/static/images/course-a-level-chinese.jpg"
+                         alt="A-Level Chinese Language and Literature"
+                         loading="lazy">
+                    <span class="course-card__badge">Ages 16-18</span>
+                </div>
+                <div class="course-card__content">
+                    <h3 class="course-card__title">A-Level Chinese</h3>
+                    <p class="course-card__description">
+                        Advanced Chinese language and literature for university-bound students
+                    </p>
+                    <div class="course-card__meta">
+                        <span class="course-card__price">£280/term</span>
+                        <span class="course-card__duration">12 weeks</span>
+                    </div>
+                    <a href="/school/a-level-chinese/" class="btn btn--small btn--primary-outline">
+                        了解详情 →
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4" data-aos="fade-up">
+            <a href="/school/" class="btn btn--large btn--primary">
+                查看所有课程
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Partnerships Section -->
+<section class="section section--partnership">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6" data-aos="fade-right">
+                <div class="partnership__image">
+                    <img src="/static/images/hero-henan-university.jpg"
+                         alt="Partnership with Henan University"
+                         loading="lazy">
+                </div>
+            </div>
+
+            <div class="col-lg-6" data-aos="fade-left">
+                <div class="partnership__content">
+                    <span class="section__label">Partnerships / 合作伙伴</span>
+                    <h2 class="section__title">
+                        Strategic Partnership with Henan University
+                    </h2>
+                    <p class="section__description">
+                        We are proud to partner with Henan University, one of China's leading
+                        institutions for teacher training, bringing authentic Chinese teaching
+                        resources and methodologies to Manchester.
+                    </p>
+                    <p class="section__description">
+                        我们与中国顶尖师范院校河南大学建立战略合作伙伴关系，为曼彻斯特带来
+                        正宗的中文教学资源和方法。
+                    </p>
+                    <ul class="partnership__benefits">
+                        <li>✓ Authentic teaching materials from China</li>
+                        <li>✓ Teacher exchange programmes</li>
+                        <li>✓ Cultural immersion opportunities</li>
+                        <li>✓ Access to Chinese educational resources</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Community Programmes Section -->
+<section class="section section--community bg-light">
+    <div class="container">
+        <div class="section__header text-center" data-aos="fade-up">
+            <span class="section__label">Community / 社区项目</span>
+            <h2 class="section__title">Serving the Manchester Community</h2>
+            <p class="section__description">
+                Government-funded programmes and cultural activities for all
+            </p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="0">
+                <div class="community-card">
+                    <div class="community-card__icon">
+                        <svg width="48" height="48" fill="none" stroke="currentColor">
+                            <rect x="8" y="8" width="32" height="32" rx="4"/>
+                            <path d="M24 16v16M16 24h16"/>
+                        </svg>
+                    </div>
+                    <h3 class="community-card__title">HAF Programme</h3>
+                    <p class="community-card__description">
+                        Holiday Activities and Food scheme providing enriching experiences
+                        during school holidays
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+                <div class="community-card">
+                    <div class="community-card__icon">
+                        <svg width="48" height="48" fill="none" stroke="currentColor">
+                            <circle cx="24" cy="24" r="16"/>
+                            <path d="M24 12v12l8 4"/>
+                        </svg>
+                    </div>
+                    <h3 class="community-card__title">Chess Club</h3>
+                    <p class="community-card__description">
+                        ECF registered chess club developing strategic thinking
+                        and problem-solving skills
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
+                <div class="community-card">
+                    <div class="community-card__icon">
+                        <svg width="48" height="48" fill="none" stroke="currentColor">
+                            <path d="M24 8v8M24 32v8M32 16l-8 8M16 32l8-8M32 32l-8-8M16 16l8 8"/>
+                        </svg>
+                    </div>
+                    <h3 class="community-card__title">Badminton Club</h3>
+                    <p class="community-card__description">
+                        Professional coaching promoting physical fitness and
+                        sportsmanship values
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
+                <div class="community-card">
+                    <div class="community-card__icon">
+                        <svg width="48" height="48" fill="none" stroke="currentColor">
+                            <path d="M12 20h8M12 24h16M12 28h12"/>
+                            <rect x="8" y="8" width="32" height="32" rx="2"/>
+                        </svg>
+                    </div>
+                    <h3 class="community-card__title">Cultural Events</h3>
+                    <p class="community-card__description">
+                        Chinese New Year celebrations, heritage trips, and
+                        cultural performances
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Team Section -->
+<section class="section section--team">
+    <div class="container">
+        <div class="section__header text-center" data-aos="fade-up">
+            <span class="section__label">Our Team / 我们的团队</span>
+            <h2 class="section__title">Expert Educators from UK and China</h2>
+            <p class="section__description">
+                Qualified teachers with extensive experience in Chinese language education
+            </p>
+        </div>
+
+        <div class="team-grid">
+            {% if team_members %}
+                {% for member in team_members[:3] %}
+                <div class="team-card" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
+                    <div class="team-card__image">
+                        {% if member.photo_media %}
+                        <img src="{{ member.photo_media.path_medium }}"
+                             alt="{{ member.name }}"
+                             loading="lazy">
+                        {% else %}
+                        <div class="team-card__placeholder">
+                            <span>{{ member.name[0] }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="team-card__content">
+                        <h3 class="team-card__name">{{ member.name }}</h3>
+                        <p class="team-card__title">{{ member.title }}</p>
+                        <p class="team-card__bio">{{ member.bio[:150] }}...</p>
+                        <a href="/about/#team" class="team-card__link">
+                            查看资料 →
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="text-center mt-4" data-aos="fade-up">
+            <a href="/about/#team" class="btn btn--outline">
+                认识团队
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section section--cta">
+    <div class="container">
+        <div class="cta-box" data-aos="zoom-in">
+            <div class="cta-box__content">
+                <h2 class="cta-box__title">
+                    准备好开始中文学习之旅了吗？
+                </h2>
+                <p class="cta-box__description">
+                    预约免费试听课，体验我们的创新教学方法
+                </p>
+                <div class="cta-box__buttons">
+                    <a href="/contact/" class="btn btn--primary btn--large">
+                        预约免费试听
+                    </a>
+                    <a href="tel:+441616672668" class="btn btn--secondary btn--large">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" style="margin-right: 8px;">
+                            <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+                        </svg>
+                        电话咨询: (0161) 667 2668
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section (Optional) -->
+{% if testimonials %}
+<section class="section section--testimonials bg-light">
+    <div class="container">
+        <div class="section__header text-center" data-aos="fade-up">
+            <span class="section__label">Testimonials / 学生评价</span>
+            <h2 class="section__title">What Our Students Say</h2>
+        </div>
+
+        <div class="testimonials-slider">
+            {% for testimonial in testimonials %}
+            <div class="testimonial-card">
+                <div class="testimonial-card__content">
+                    <p class="testimonial-card__text">{{ testimonial.content }}</p>
+                </div>
+                <div class="testimonial-card__author">
+                    <div class="testimonial-card__author-image">
+                        <img src="{{ testimonial.photo }}" alt="{{ testimonial.name }}">
+                    </div>
+                    <div class="testimonial-card__author-info">
+                        <h4>{{ testimonial.name }}</h4>
+                        <p>{{ testimonial.role }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<!-- AOS (Animate On Scroll) Library -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 800,
+        easing: 'ease-in-out',
+        once: true,
+        offset: 100
+    });
+</script>
+{% endblock %}
