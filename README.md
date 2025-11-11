@@ -1,8 +1,8 @@
 # Bowen Education Group Website / 博文集团网站
 
-[![Test Status](https://img.shields.io/badge/tests-100%25%20passing-brightgreen)](WEBSITE_TEST_REPORT.md)
-[![Python](https://img.shields.io/badge/python-3.11-blue)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/python-3.13.2-blue)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.109.0-009688)](https://fastapi.tiangolo.com/)
+[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0.44-red)](https://www.sqlalchemy.org/)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 Official website for Bowen Education Group (博文集团) - Manchester's premier Chinese language school.
@@ -36,9 +36,9 @@ Official website for Bowen Education Group (博文集团) - Manchester's premier
 
 ### Prerequisites / 前置要求
 
-- Python 3.11+
+- Python 3.13+
 - SQLite 3
-- Virtual Environment
+- Virtual Environment (venv)
 
 ### Installation / 安装
 
@@ -65,7 +65,7 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ### Access / 访问
 
 - **Local**: http://localhost:8000
-- **LAN**: http://192.168.31.205:8002
+- **Network**: http://0.0.0.0:8000
 
 ---
 
@@ -90,15 +90,29 @@ bowen-education-manchester/
 │   ├── partials/             # 模板片段
 │   │   ├── header.html       # 头部
 │   │   └── footer.html       # 页脚
-│   └── static/               # 静态文件
+│   └── static/               # 静态文件 (所有静态资源)
 │       ├── css/
 │       │   └── main.css      # 主样式表 (900+ lines)
-│       └── images/           # 图片 (10张)
+│       ├── js/               # JavaScript 文件
+│       └── images/           # 图片资源 (91张图片)
+│           ├── courses/      # 课程图片 (33张)
+│           ├── teachers/     # 教师照片 (19张)
+│           ├── heroes/       # Hero 背景图
+│           ├── news/         # 新闻图片
+│           └── services/     # 服务图片
 ├── instance/                  # 实例文件夹
-│   └── database.db           # SQLite 数据库
-├── migrations/               # Alembic 迁移
-├── tests/                    # 测试文件
+│   └── database.db           # SQLite 数据库 (508KB)
+├── upload/                    # 用户上传文件目录
+│   └── .gitkeep              # 保持目录结构
+├── migrations/               # Alembic 数据库迁移
+├── config/                   # 配置文件
+├── tools/                    # 工具脚本
+│   └── generate_images.py   # AI 图片生成工具
+├── logs/                     # 日志文件
+├── venv/                     # Python 虚拟环境
+├── .gitignore                # Git 忽略配置
 ├── requirements.txt          # Python 依赖
+├── TODO.md                   # 任务清单
 └── README.md                 # 本文件
 ```
 
@@ -127,9 +141,10 @@ bowen-education-manchester/
 
 - **Tables**: 50
 - **Records**: 45+ seed data
-- **Images**: 10 media files (1.21 MB)
-- **Courses**: 7 products
-- **Team Members**: 3
+- **Database Size**: 508KB
+- **Static Images**: 91 files (~3.7MB)
+- **Courses**: 7 courses with cover images
+- **Team Members**: 19 teacher photos
 - **Articles**: 2 posts
 - **Events**: 2
 - **FAQs**: 3
@@ -159,38 +174,12 @@ bowen-education-manchester/
 
 ---
 
-## 🧪 Testing / 测试
-
-### Test Results / 测试结果
-
-✅ **100% Pass Rate** (45/45 tests passing)
-
-```bash
-# 运行功能测试
-python test_website_functional.py
-```
-
-### Test Coverage / 测试覆盖
-
-- ✅ Page Accessibility (页面可访问性)
-- ✅ Content Integrity (内容完整性)
-- ✅ Bilingual Support (双语支持)
-- ✅ Static Resources (静态资源)
-- ✅ HTTP Headers (响应头)
-- ✅ SEO Meta Tags (SEO标签)
-- ✅ Navigation (导航系统)
-- ✅ Forms (表单功能)
-- ✅ Performance (性能)
-- ✅ Error Handling (错误处理)
-
-详细报告: [WEBSITE_TEST_REPORT.md](WEBSITE_TEST_REPORT.md)
-
----
-
 ## 📊 Performance / 性能
 
 - **Page Load Time**: < 1 second (优秀)
 - **Page Size**: ~43 KB (合理)
+- **Static Resources**: 91 images (~3.7MB)
+- **Database Size**: 508KB
 - **Image Loading**: Lazy loading enabled
 - **CSS Size**: 900+ lines, optimized
 
@@ -201,20 +190,34 @@ python test_website_functional.py
 ### Development / 开发环境
 
 ```bash
+# 激活虚拟环境
+source venv/bin/activate
+
+# 启动开发服务器（支持热重载）
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
 ### Production / 生产环境
 
 ```bash
-# 使用 Gunicorn
+# 使用 Gunicorn + Uvicorn Worker
 gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
 
 # 或使用 systemd service
-# 参见 DEPLOYMENT.md
+# 创建服务文件 /etc/systemd/system/bowen-education.service
 ```
 
-详细部署指南: [DEPLOYMENT.md](DEPLOYMENT.md) (待创建)
+### Environment Variables / 环境变量
+
+可选的环境变量配置：
+
+```bash
+# .env 文件示例
+DATABASE_URL=sqlite:///./instance/database.db
+APP_ENV=development
+DEBUG=True
+SITE_NAME=Bowen-Education-Manchester
+```
 
 ---
 
@@ -275,6 +278,40 @@ post = Post(
 )
 db.add(post)
 db.commit()
+```
+
+---
+
+## 📁 Static Resources & Upload / 静态资源与上传
+
+### Static Files / 静态文件
+
+所有静态资源统一存放在 `templates/static/` 目录：
+
+- **CSS**: `templates/static/css/` - 样式文件
+- **JavaScript**: `templates/static/js/` - 脚本文件
+- **Images**: `templates/static/images/` - 图片资源
+  - `courses/` - 课程封面和图库 (33张)
+  - `teachers/` - 教师照片 (19张)
+  - `heroes/` - Hero 背景图
+  - `news/` - 新闻配图
+  - `services/` - 服务图标
+
+### Upload Directory / 上传目录
+
+用户上传文件存储在 `upload/` 目录：
+
+- 配置文件: `app/config.py`
+- 上传路径: `UPLOAD_DIR = BASE_DIR / "upload"`
+- Git 配置: `upload/*` 已添加到 `.gitignore`
+
+### Media Configuration / 媒体配置
+
+```python
+# app/config.py
+UPLOAD_DIR = BASE_DIR / "upload"  # 用户上传目录
+STATIC_DIR = TEMPLATE_DIR / "static"  # 静态资源目录
+MEDIA_DIR = UPLOAD_DIR  # 兼容性别名
 ```
 
 ---
@@ -354,11 +391,8 @@ Copyright © 2025 Bowen Education Group. All rights reserved.
 
 ## 📚 Documentation / 文档
 
-- [Testing Report / 测试报告](WEBSITE_TEST_REPORT.md)
-- [Phase 6 Report / Phase 6报告](PHASE6_TEST_REPORT.md)
-- [Phase 7 Report / Phase 7报告](PHASE7_COMPLETION_REPORT.md)
-- [Architecture / 架构文档](.claude/ARCHITECTURE.md)
-- [Agent Summary / 代理总结](.claude/AGENT_SUMMARY.md)
+- [TODO.md](TODO.md) - 项目任务清单和开发历史
+- [REQUIREMENTS.md](REQUIREMENTS.md) - 项目需求文档
 
 ---
 
@@ -409,17 +443,45 @@ ls -la templates/
 cat app/config.py | grep template
 ```
 
+#### 5. Static files not loading
+
+```bash
+# 检查静态文件目录
+ls -la templates/static/
+
+# 确认图片目录
+ls -la templates/static/images/
+```
+
+#### 6. Upload directory issues
+
+```bash
+# 创建上传目录（如果不存在）
+mkdir -p upload
+
+# 检查权限
+ls -la upload/
+```
+
 ---
 
 ## 🔄 Updates / 更新
 
 ### Version History / 版本历史
 
+- **v1.1.0** (2025-11-11) - Project cleanup and optimization
+  - ✅ 项目文件整理，删除 13 个临时文件
+  - ✅ 静态资源统一到 templates/static/ 目录
+  - ✅ 上传目录从 instance/media 迁移到 upload/
+  - ✅ 添加 .gitignore 文件
+  - ✅ 更新 Python 到 3.13.2
+  - ✅ 图片资源扩充至 91 张
+  - ✅ 项目成功运行在 8000 端口
+
 - **v1.0.0** (2025-11-04) - Initial release
   - ✅ 3 main pages (Home, About, Contact)
   - ✅ 14 modules enabled
   - ✅ 45 database records
-  - ✅ 100% test coverage
   - ✅ Bilingual support
   - ✅ Responsive design
 
