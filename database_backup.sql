@@ -113,21 +113,21 @@ INSERT INTO site_column VALUES('图库','gallery','CUSTOM',NULL,NULL,9,0,1,9,'20
 INSERT INTO site_column VALUES('常见问题','faq','SINGLE_PAGE',NULL,NULL,10,0,1,10,'2025-11-04 21:58:23.384987','2025-11-07 06:48:05.038682','FOOTER',NULL,NULL);
 INSERT INTO site_column VALUES('联系我们','contact','SINGLE_PAGE',NULL,NULL,10,1,1,11,'2025-11-04 21:58:23.384988','2025-11-05 01:09:49.165359','HEADER',NULL,NULL);
 INSERT INTO site_column VALUES('羽毛球俱乐部','badminton','CUSTOM',NULL,NULL,7,1,1,12,'2025-11-05 01:09:49.166605','2025-11-05 02:27:32.968284','HEADER','专业羽毛球训练，培养运动技能',31);
-INSERT INTO site_column VALUES('课程设置','school-curriculum','POST',3,NULL,1,0,1,13,'2025-11-05 06:02:28.512109','2025-11-05 06:02:28.512112','HEADER',NULL,NULL);
-INSERT INTO site_column VALUES('学期日期','school-term-dates','SINGLE_PAGE',3,NULL,2,0,1,14,'2025-11-05 06:02:28.513188','2025-11-05 06:02:28.513190','HEADER',NULL,NULL);
-INSERT INTO site_column VALUES('PTA家长教师协会','school-pta','SINGLE_PAGE',3,NULL,3,0,1,15,'2025-11-05 06:02:28.513956','2025-11-05 06:02:28.513957','HEADER',NULL,NULL);
-INSERT INTO site_column VALUES('活动与赛事','chess-events','POST',5,NULL,3,0,1,16,'2025-11-05 06:02:28.514732','2025-11-05 06:02:28.514733','HEADER',NULL,NULL);
-INSERT INTO site_column VALUES('赛事活动','badminton-events','POST',12,NULL,1,0,1,19,'2025-11-05 06:02:28.516923','2025-11-05 06:02:28.516924','HEADER',NULL,NULL);
-INSERT INTO site_column VALUES('训练时间表','badminton-schedule','SINGLE_PAGE',12,NULL,2,0,1,20,'2025-11-05 06:02:28.517638','2025-11-05 06:02:28.517639','HEADER',NULL,NULL);
-INSERT INTO site_column VALUES('精彩瞬间','badminton-gallery','CUSTOM',12,NULL,3,0,1,21,'2025-11-05 06:02:28.518324','2025-11-07 19:57:00.647038','HEADER',NULL,NULL);
-INSERT INTO site_column VALUES('HAF项目','programmes-haf','SINGLE_PAGE',6,NULL,1,0,1,22,'2025-11-05 06:02:28.519031','2025-11-05 06:02:28.519033','HEADER',NULL,NULL);
-INSERT INTO site_column VALUES('公园活动','programmes-parks','POST',6,NULL,2,0,1,23,'2025-11-05 06:02:28.519708','2025-11-05 06:02:28.519709','HEADER',NULL,NULL);
-INSERT INTO site_column VALUES('河南大学合作','events-henan','SINGLE_PAGE',7,NULL,1,0,1,24,'2025-11-05 06:02:28.520273','2025-11-05 06:02:28.520274','HEADER',NULL,NULL);
-INSERT INTO site_column VALUES('博文集团','about-company','SINGLE_PAGE',2,NULL,1,1,1,25,'2025-11-07 02:35:49','2025-11-07 02:35:49','HEADER',NULL,NULL);
-INSERT INTO site_column VALUES('俱乐部简介','chess-about','SINGLE_PAGE',5,NULL,1,1,1,26,'2025-11-11 21:38:57','2025-11-11 21:38:57','BOTH',NULL,NULL);
-INSERT INTO site_column VALUES('课程设置','chess-courses','SINGLE_PAGE',5,NULL,2,1,1,27,'2025-11-11 21:38:57','2025-11-11 21:38:57','BOTH',NULL,NULL);
-INSERT INTO site_column VALUES('学习资源','chess-resources','SINGLE_PAGE',5,NULL,4,1,1,28,'2025-11-11 21:38:57','2025-11-11 21:38:57','BOTH',NULL,NULL);
-INSERT INTO site_column VALUES('新闻与精彩回顾','chess-news','POST',5,NULL,5,1,1,29,'2025-11-11 21:38:57','2025-11-11 21:38:57','BOTH',NULL,NULL);
+INSERT INTO site_column VALUES('课程设置','school-curriculum','POST',3,NULL,1,0,1,13,'2025-11-05 06:02:28.512109','2025-11-05 06:02:28.512112','HEADER','系统的中文课程体系',8);
+INSERT INTO site_column VALUES('学期日期','school-term-dates','SINGLE_PAGE',3,NULL,2,0,1,14,'2025-11-05 06:02:28.513188','2025-11-05 06:02:28.513190','HEADER','查看学校开学与放假时间安排',8);
+INSERT INTO site_column VALUES('PTA家长教师协会','school-pta','SINGLE_PAGE',3,NULL,3,0,1,15,'2025-11-05 06:02:28.513956','2025-11-05 06:02:28.513957','HEADER','家长教师协会，共同关心孩子成长',8);
+INSERT INTO site_column VALUES('活动与赛事','chess-events','POST',5,NULL,3,0,1,16,'2025-11-05 06:02:28.514732','2025-11-05 06:02:28.514733','HEADER','精彩的赛事与活动',6);
+INSERT INTO site_column VALUES('赛事活动','badminton-events','POST',12,NULL,1,0,1,19,'2025-11-05 06:02:28.516923','2025-11-05 06:02:28.516924','HEADER','羽毛球赛事活动',31);
+INSERT INTO site_column VALUES('训练时间表','badminton-schedule','SINGLE_PAGE',12,NULL,2,0,1,20,'2025-11-05 06:02:28.517638','2025-11-05 06:02:28.517639','HEADER','训练时间与场地安排',31);
+INSERT INTO site_column VALUES('精彩瞬间','badminton-gallery','CUSTOM',12,NULL,3,0,1,21,'2025-11-05 06:02:28.518324','2025-11-07 19:57:00.647038','HEADER','精彩瞬间回顾',31);
+INSERT INTO site_column VALUES('HAF项目','programmes-haf','SINGLE_PAGE',6,NULL,1,0,1,22,'2025-11-05 06:02:28.519031','2025-11-05 06:02:28.519033','HEADER','Holiday Activities and Food Programme',9);
+INSERT INTO site_column VALUES('公园活动','programmes-parks','POST',6,NULL,2,0,1,23,'2025-11-05 06:02:28.519708','2025-11-05 06:02:28.519709','HEADER','Parks Programme - 公园活动项目',9);
+INSERT INTO site_column VALUES('河南大学合作','events-henan','SINGLE_PAGE',7,NULL,1,0,1,24,'2025-11-05 06:02:28.520273','2025-11-05 06:02:28.520274','HEADER','河南大学艺术学院交流活动',10);
+INSERT INTO site_column VALUES('博文集团','about-company','SINGLE_PAGE',2,NULL,1,1,1,25,'2025-11-07 02:35:49','2025-11-07 02:35:49','HEADER','了解博文教育集团的发展历程与服务',30);
+INSERT INTO site_column VALUES('俱乐部简介','chess-about','SINGLE_PAGE',5,NULL,1,1,1,26,'2025-11-11 21:38:57','2025-11-11 21:38:57','BOTH','了解国际象棋俱乐部',6);
+INSERT INTO site_column VALUES('课程设置','chess-courses','SINGLE_PAGE',5,NULL,2,1,1,27,'2025-11-11 21:38:57','2025-11-11 21:38:57','BOTH','系统的国际象棋课程',6);
+INSERT INTO site_column VALUES('学习资源','chess-resources','SINGLE_PAGE',5,NULL,4,1,1,28,'2025-11-11 21:38:57','2025-11-11 21:38:57','BOTH','丰富的学习资源与资料',6);
+INSERT INTO site_column VALUES('新闻与精彩回顾','chess-news','POST',5,NULL,5,1,1,29,'2025-11-11 21:38:57','2025-11-11 21:38:57','BOTH','最新的俱乐部动态',6);
 CREATE TABLE site_setting (
 	setting_key VARCHAR(100) NOT NULL, 
 	value_text TEXT NOT NULL, 
