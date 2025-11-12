@@ -469,6 +469,37 @@
     - update_course_images.py
     - COURSE_IMAGES_GENERATION_REPORT.md
 
+## ✅ 已完成
+
+### [2025-11-12] 修复 About 页面时间线样式问题
+- [x] 修复年份徽章遮挡文字的问题 - 完成时间: 2025-11-12 - 负责人: maxazure
+  - 问题页面：http://localhost:8000/about
+  - **问题分析**：
+    - 时间线部分的年份徽章（2018、2019、2020等）遮挡了下方的文字内容
+    - 原因是年份徽章 z-index: 2，而内容卡片没有设置 z-index
+    - 年份徽章使用绝对定位，位于中间线上，导致与内容卡片重叠
+  - **修复方案**：
+    - 将 .timeline-item__year 的 z-index 从 2 改为 1（降低层级）
+    - 为 .timeline-item__content 添加 position: relative 和 z-index: 2（提高层级）
+    - 确保内容卡片始终显示在年份徽章上方
+  - **测试验证**：
+    - 桌面视图（1920x1080）- 年份不再遮挡文字 ✅
+    - 移动视图（375x667）- 布局正常，年份位于左侧 ✅
+    - 所有时间线条目（2018、2019、2020、2021-2025）均正常显示 ✅
+  - **修改的文件**：
+    - templates/about.html（第1132-1158行）
+  - **CSS 修改**：
+    ```css
+    .timeline-item__year {
+        z-index: 1;  /* 从 2 改为 1 */
+    }
+    .timeline-item__content {
+        position: relative;  /* 新增 */
+        z-index: 2;  /* 新增 */
+    }
+    ```
+  - **效果**：页面美观度提升，用户体验改善，桌面和移动端均完美显示
+
 ## 📋 待办事项
 
 ### 图片生成与优化
