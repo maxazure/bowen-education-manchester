@@ -292,6 +292,16 @@ async def column_page(
                 logger.warning("events.html template not found")
                 # Continue to default handling
 
+        # Special handling for main column pages with custom templates (school, chess, badminton, etc.)
+        # These pages have child columns but use custom templates instead of overview.html
+        main_column_pages = ["school", "chess", "badminton", "programmes", "contact"]
+        if column_slug in main_column_pages:
+            try:
+                return templates.TemplateResponse(f"{column_slug}.html", context)
+            except TemplateNotFound:
+                logger.warning(f"Custom template {column_slug}.html not found for main column page")
+                # Continue to default handling
+
         # Check if this is an overview page (has child columns)
         child_columns = site_service.get_child_columns(db, column.id)
         if child_columns:

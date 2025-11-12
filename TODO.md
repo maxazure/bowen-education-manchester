@@ -2,6 +2,62 @@
 
 ## ✅ 已完成
 
+### [2025-11-12] 创建统一的主栏目 Hero 组件
+- [x] 为主栏目创建统一 Hero 组件系统 - 完成时间: 2025-11-12 - 负责人: maxazure
+  - **数据库扩展**:
+    - 创建迁移脚本 tools/add_main_column_hero_fields.sql
+    - 为 site_column 表添加5个新字段：
+      - hero_title (TEXT): Hero主标题（中文）
+      - hero_title_en (TEXT): Hero英文副标题
+      - hero_tagline (TEXT): Hero标语/口号
+      - hero_cta_text (TEXT): CTA按钮文字（可选）
+      - hero_cta_url (TEXT): CTA按钮链接（可选）
+    - 已有字段：description, hero_media_id
+  - **模型更新**:
+    - 更新 app/models/site.py 中的 SiteColumn 模型
+    - 添加全部新字段的 Column 定义和注释
+  - **创建 hero_main_column.html 组件**:
+    - 路径：templates/components/hero_main_column.html
+    - 支持双语标题结构（中文主标题 + 英文副标题）
+    - 支持 tagline/标语
+    - 支持可选的 CTA 按钮
+    - 有动画效果（使用 data-aos 属性）
+    - 背景图从 column.hero_media 读取
+    - 不包含统计数据栏
+    - 响应式设计（450px → 350px → 300px）
+  - **配置主栏目数据**:
+    - 创建脚本 tools/configure_main_column_hero.sql
+    - 为6个主栏目配置 Hero 数据：
+      - school: 博文中文学校 / Bowen Chinese School
+      - chess: 博文国际象棋俱乐部 / Bowen Chess Club
+      - badminton: 博文羽毛球俱乐部 / Bowen Badminton Club
+      - programmes: 政府项目 / Government Programmes
+      - events: 博文活动 / Bowen Events
+      - contact: 联系我们 / Contact Us
+  - **更新模板文件**（6个）:
+    - templates/school.html - 使用新组件 + 保留统计数据栏
+    - templates/chess.html - 使用新组件 + 保留统计数据栏
+    - templates/badminton.html - 使用新组件
+    - templates/events.html - 使用新组件
+    - templates/programmes.html - 使用新组件
+    - templates/contact.html - 使用新组件
+    - 删除重复的 Hero CSS 代码
+    - school 和 chess 保留独立的统计数据区域
+  - **验证结果**:
+    - /school - HTTP 200 ✅
+    - /chess - HTTP 200 ✅
+    - /badminton - HTTP 200 ✅
+    - /programmes - HTTP 200 ✅
+    - /events - HTTP 200 ✅
+    - /contact - HTTP 200 ✅
+  - **相关文件**:
+    - tools/add_main_column_hero_fields.sql
+    - tools/configure_main_column_hero.sql
+    - app/models/site.py
+    - templates/components/hero_main_column.html
+    - templates/school.html, chess.html, badminton.html
+    - templates/events.html, programmes.html, contact.html
+
 ### [2025-11-12] 统一所有模板的 Hero 和侧边栏布局
 - [x] 添加栏目级别 Hero 背景图片支持 - 完成时间: 2025-11-12 - 负责人: maxazure
   - 创建数据库迁移脚本 tools/add_column_hero_fields.sql

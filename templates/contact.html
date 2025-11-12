@@ -7,24 +7,7 @@
 {% block content %}
 
 <!-- Hero Section -->
-<section class="hero hero--content hero--contact">
-    <div class="hero__overlay"></div>
-    <div class="hero__background" style="background-image: url('/static/images/hero-chinese-school.jpg');"></div>
-    <div class="container">
-        <div class="hero__content">
-            <h1 class="hero__title" data-aos="fade-up">
-                <span class="hero__title-main">Contact Us</span>
-                <span class="hero__title-chinese">联系我们</span>
-            </h1>
-            <p class="hero__subtitle" data-aos="fade-up" data-aos-delay="100">
-                We're Here to Help You Start Your Learning Journey
-            </p>
-            <p class="hero__subtitle-chinese" data-aos="fade-up" data-aos-delay="150">
-                我们在此帮助您开启学习之旅
-            </p>
-        </div>
-    </div>
-</section>
+{% include 'components/hero_main_column.html' %}
 
 <!-- Contact Info Section -->
 <section class="section section--contact-info bg-light">

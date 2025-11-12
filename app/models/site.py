@@ -68,6 +68,11 @@ class SiteColumn(BaseModel):
     hero_media_id = Column(
         Integer, ForeignKey("media_file.id"), nullable=True, comment="Hero背景图片ID"
     )
+    hero_title = Column(Text, nullable=True, comment="Hero主标题（中文）")
+    hero_title_en = Column(Text, nullable=True, comment="Hero英文副标题")
+    hero_tagline = Column(Text, nullable=True, comment="Hero标语/口号")
+    hero_cta_text = Column(Text, nullable=True, comment="CTA按钮文字")
+    hero_cta_url = Column(Text, nullable=True, comment="CTA按钮链接")
 
     # 关系
     parent = relationship("SiteColumn", remote_side="SiteColumn.id", backref="children")
