@@ -118,14 +118,14 @@
         });
     }
 
-    // Sticky header on scroll
+    // Enhanced shadow on scroll for fixed header
     const header = document.querySelector('.site-header');
     let lastScrollTop = 0;
 
     window.addEventListener('scroll', () => {
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-        if (scrollTop > 100) {
+        if (scrollTop > 50) {
             header.classList.add('sticky');
         } else {
             header.classList.remove('sticky');
