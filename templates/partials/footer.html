@@ -4,7 +4,7 @@
         <div class="footer__main">
             <div class="row">
                 <!-- About Column -->
-                <div class="col-lg-4 mb-4">
+                <div class="col-lg-3 col-md-6 mb-4">
                     <div class="footer__section">
                         <h3 class="footer__heading">Bowen Education Group</h3>
                         <h4 class="footer__heading-chinese">博文教育集团</h4>
@@ -17,30 +17,54 @@
                     </div>
                 </div>
 
-                <!-- Quick Links -->
-                <div class="col-lg-3 mb-4">
+                <!-- Our Services -->
+                <div class="col-lg-2 col-md-6 mb-4">
                     <div class="footer__section">
-                        <h3 class="footer__heading">Quick Links / 快速链接</h3>
+                        <h3 class="footer__heading">Our Services</h3>
+                        <h4 class="footer__heading-chinese">我们的服务</h4>
                         <ul class="footer__links">
-                            {% if navigation %}
-                                {% for column in navigation[:6] %}
-                                <li><a href="/{{ column.slug }}">{{ column.name }}</a></li>
-                                {% endfor %}
-                            {% endif %}
-                            {# Footer-specific navigation items #}
-                            {% if footer_navigation %}
-                                {% for column in footer_navigation %}
-                                <li><a href="/{{ column.slug }}">{{ column.name }}</a></li>
-                                {% endfor %}
-                            {% endif %}
+                            <li><a href="/school">中文学校</a></li>
+                            <li><a href="/chess">国际象棋俱乐部</a></li>
+                            <li><a href="/badminton">羽毛球俱乐部</a></li>
+                            <li><a href="/tuition">补习中心</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <div class="footer__section">
+                        <h3 class="footer__heading">Quick Links</h3>
+                        <h4 class="footer__heading-chinese">快速链接</h4>
+                        <ul class="footer__links">
+                            <li><a href="/home">首页</a></li>
+                            <li><a href="/about">关于我们</a></li>
+                            <li><a href="/programmes">政府项目</a></li>
+                            <li><a href="/events">博文活动</a></li>
+                            <li><a href="/contact">联系我们</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Legal & Policies -->
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <div class="footer__section">
+                        <h3 class="footer__heading">Legal</h3>
+                        <h4 class="footer__heading-chinese">法律条款</h4>
+                        <ul class="footer__links">
+                            <li><a href="/privacy-policy">隐私政策</a></li>
+                            <li><a href="/terms-of-service">使用条款</a></li>
+                            <li><a href="/cookie-policy">Cookie政策</a></li>
+                            <li><a href="/safeguarding">儿童保护政策</a></li>
                         </ul>
                     </div>
                 </div>
 
                 <!-- Contact Info -->
-                <div class="col-lg-5 mb-4">
+                <div class="col-lg-3 col-md-12 mb-4">
                     <div class="footer__section">
-                        <h3 class="footer__heading">Contact Us / 联系我们</h3>
+                        <h3 class="footer__heading">Contact Us</h3>
+                        <h4 class="footer__heading-chinese">联系我们</h4>
                         <ul class="footer__contact">
                             <li>
                                 <i class="fas fa-map-marker-alt"></i>
@@ -58,7 +82,7 @@
                             </li>
                             <li>
                                 <i class="fas fa-clock"></i>
-                                <span>Mon-Fri: 9:00-18:00 | Sat: 9:00-17:00</span>
+                                <span>Mon-Fri: 9:00-18:00<br>Sat: 9:00-17:00</span>
                             </li>
                         </ul>
                     </div>

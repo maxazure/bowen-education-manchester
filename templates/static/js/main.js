@@ -92,38 +92,7 @@
     }
 
     // ============================================================
-    // 3. STICKY HEADER - 固定导航栏
-    // ============================================================
-    function initStickyHeader() {
-        const header = document.querySelector('.site-header');
-        if (!header) return;
-
-        let lastScrollTop = 0;
-        let scrollThreshold = 100;
-
-        window.addEventListener('scroll', function() {
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-
-            if (scrollTop > scrollThreshold) {
-                header.classList.add('sticky');
-
-                // Hide on scroll down, show on scroll up
-                if (scrollTop > lastScrollTop) {
-                    header.classList.add('header-hidden');
-                } else {
-                    header.classList.remove('header-hidden');
-                }
-            } else {
-                header.classList.remove('sticky');
-                header.classList.remove('header-hidden');
-            }
-
-            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
-        });
-    }
-
-    // ============================================================
-    // 4. FORM VALIDATION - 表单验证
+    // 3. FORM VALIDATION - 表单验证
     // ============================================================
     function initFormValidation() {
         const forms = document.querySelectorAll('form[data-validate]');
@@ -240,7 +209,7 @@
     }
 
     // ============================================================
-    // 5. LAZY LOADING IMAGES - 图片懒加载
+    // 4. LAZY LOADING IMAGES - 图片懒加载
     // ============================================================
     function initLazyLoading() {
         const images = document.querySelectorAll('img[data-src]');
@@ -260,31 +229,7 @@
     }
 
     // ============================================================
-    // 6. BACK TO TOP BUTTON - 返回顶部按钮
-    // ============================================================
-    function initBackToTop() {
-        const backToTopBtn = document.querySelector('.back-to-top');
-        if (!backToTopBtn) return;
-
-        window.addEventListener('scroll', function() {
-            if (window.pageYOffset > 300) {
-                backToTopBtn.classList.add('show');
-            } else {
-                backToTopBtn.classList.remove('show');
-            }
-        });
-
-        backToTopBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    }
-
-    // ============================================================
-    // 7. ACCORDION - 手风琴
+    // 5. ACCORDION - 手风琴
     // ============================================================
     function initAccordion() {
         const accordionHeaders = document.querySelectorAll('.accordion-header');
@@ -312,7 +257,7 @@
     }
 
     // ============================================================
-    // 8. TABS - 选项卡
+    // 6. TABS - 选项卡
     // ============================================================
     function initTabs() {
         const tabButtons = document.querySelectorAll('.tab-button');
@@ -341,7 +286,7 @@
     }
 
     // ============================================================
-    // 9. ANIMATION ON SCROLL (AOS) - 滚动动画
+    // 7. ANIMATION ON SCROLL (AOS) - 滚动动画
     // ============================================================
     function initScrollAnimations() {
         if (typeof AOS !== 'undefined') {
@@ -355,7 +300,7 @@
     }
 
     // ============================================================
-    // 10. MODAL - 模态框
+    // 8. MODAL - 模态框
     // ============================================================
     function initModals() {
         const modalTriggers = document.querySelectorAll('[data-modal-trigger]');
@@ -396,7 +341,7 @@
     }
 
     // ============================================================
-    // 11. COOKIE CONSENT - Cookie 同意
+    // 9. COOKIE CONSENT - Cookie 同意
     // ============================================================
     function initCookieConsent() {
         const cookieBanner = document.querySelector('.cookie-consent');
@@ -426,10 +371,8 @@
         // Initialize all features
         initSmoothScrolling();
         initDropdownMenus();
-        initStickyHeader();
         initFormValidation();
         initLazyLoading();
-        initBackToTop();
         initAccordion();
         initTabs();
         initScrollAnimations();
