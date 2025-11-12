@@ -228,6 +228,19 @@ async def column_page(
             )
             return templates.TemplateResponse("post_list.html", context)
 
+    elif column.column_type == ColumnType.GALLERY:
+        # Gallery column type - display photos/media files
+        from app.models.media import MediaFile
+
+        # Get media files associated with this gallery
+        # For now, we'll fetch media files that might be associated with gallery items
+        # You may need to implement a proper gallery_media relationship
+        media_files = []
+
+        context["media_files"] = media_files
+
+        return templates.TemplateResponse("gallery.html", context)
+
     elif column.column_type == ColumnType.CUSTOM:
         # For custom columns like Home, try to render custom template
         # If home slug, redirect to homepage

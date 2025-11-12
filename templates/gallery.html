@@ -1,78 +1,240 @@
 {% extends "base.html" %}
 
-{% block title %}{{ gallery.title }} | {{ site_name }}{% endblock %}
+{% block title %}{{ column.name }} | 博文教育集团 Bowen Education Group{% endblock %}
 
-{% block seo_title %}{{ gallery.seo_title or gallery.title }} | {{ site_name }}{% endblock %}
-{% block seo_description %}{{ gallery.seo_description or gallery.description }}{% endblock %}
+{% block meta_description %}{{ column.seo_description or (column.name ~ ' - 博文教育集团相册') }}{% endblock %}
+
+{% block meta_keywords %}{{ column.seo_keywords or '博文教育集团,相册,活动照片' }}{% endblock %}
+
+{% block og_title %}{{ column.name }} | 博文教育集团 Bowen Education Group{% endblock %}
+
+{% block og_description %}{{ column.seo_description or (column.name ~ ' - 博文教育集团相册') }}{% endblock %}
+
+{% block og_image %}{% if column.hero_media %}{{ column.hero_media.path_original }}{% else %}/static/images/hero-default.jpg{% endif %}{% endblock %}
+
+{% block structured_data %}
+{{ super() }}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "ImageGallery",
+    "name": "{{ column.name }}",
+    "description": "{{ column.seo_description or column.name }}",
+    "url": "{{ request.url }}",
+    "inLanguage": ["en-GB", "zh-CN"],
+    "isPartOf": {
+        "@type": "WebSite",
+        "name": "Bowen Education Group",
+        "alternateName": "博文教育集团",
+        "url": "{{ request.base_url }}"
+    },
+    "publisher": {
+        "@type": "EducationalOrganization",
+        "name": "Bowen Education Group",
+        "alternateName": "博文教育集团"
+    },
+    "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "首页",
+                "item": "{{ request.base_url }}"
+            }{% if parent_column %},
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "{{ parent_column.name }}",
+                "item": "{{ request.base_url }}{{ parent_column.slug }}"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "{{ column.name }}",
+                "item": "{{ request.url }}"
+            }{% else %},
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "{{ column.name }}",
+                "item": "{{ request.url }}"
+            }{% endif %}
+        ]
+    }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+{% include 'components/hero_main_column.html' %}
+
+<!-- Gallery Section -->
+<section class="section section--gallery">
+    <div class="container">
+        {% if parent_column %}
+        <!-- Two-column layout with sidebar -->
+        <div class="page-layout">
+            <!-- Left Sidebar Navigation -->
+            <aside class="page-layout__sidebar">
+                {% include 'components/sidebar_nav.html' %}
+            </aside>
+
+            <!-- Right Main Content -->
+            <div class="page-layout__main">
+                <!-- Gallery Description -->
+                {% if column.content_html %}
+                <div class="gallery-description" data-aos="fade-up">
+                    {{ column.content_html|safe }}
+                </div>
+                {% endif %}
+
+                <!-- Gallery Grid -->
+                <div class="gallery-grid" data-aos="fade-up" data-aos-delay="100">
+                    {% if media_files and media_files|length > 0 %}
+                        {% for media in media_files %}
+                        <div class="gallery-item">
+                            <a href="{{ media.path_original }}" class="gallery-item__link" data-lightbox="gallery" data-title="{{ media.alt_text or column.name }}">
+                                <div class="gallery-item__image-wrapper">
+                                    <img
+                                        src="{{ media.path_thumb or media.path_medium or media.path_original }}"
+                                        alt="{{ media.alt_text or column.name }}"
+                                        class="gallery-item__image"
+                                        loading="lazy"
+                                    >
+                                    <div class="gallery-item__overlay">
+                                        <i class="fas fa-search-plus"></i>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="gallery-empty">
+                            <i class="fas fa-images"></i>
+                            <p>暂无照片，敬请期待</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <!-- Single column layout without sidebar -->
+        <div class="page-layout page-layout--single">
+            <!-- Gallery Description -->
+            {% if column.content_html %}
+            <div class="gallery-description" data-aos="fade-up">
+                {{ column.content_html|safe }}
+            </div>
+            {% endif %}
+
+            <!-- Gallery Grid -->
+            <div class="gallery-grid gallery-grid--full" data-aos="fade-up" data-aos-delay="100">
+                {% if media_files and media_files|length > 0 %}
+                    {% for media in media_files %}
+                    <div class="gallery-item">
+                        <a href="{{ media.path_original }}" class="gallery-item__link" data-lightbox="gallery" data-title="{{ media.alt_text or column.name }}">
+                            <div class="gallery-item__image-wrapper">
+                                <img
+                                    src="{{ media.path_thumb or media.path_medium or media.path_original }}"
+                                    alt="{{ media.alt_text or column.name }}"
+                                    class="gallery-item__image"
+                                    loading="lazy"
+                                >
+                                <div class="gallery-item__overlay">
+                                    <i class="fas fa-search-plus"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="gallery-empty">
+                        <i class="fas fa-images"></i>
+                        <p>暂无照片，敬请期待</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}
 
 {% block extra_css %}
 <style>
-/* 相册样式 */
-.gallery-header {
-    text-align: center;
-    padding: 4rem 0 2rem;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    margin-bottom: 3rem;
+/* ========================================
+   Gallery Styles
+======================================== */
+
+.section--gallery {
+    padding: 4rem 0;
+    background: #f8f9fa;
 }
 
-.gallery-header h1 {
-    font-size: 2.5rem;
+.gallery-description {
+    margin-bottom: 3rem;
+    padding: 2rem;
+    background: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.gallery-description h2 {
+    font-size: 1.75rem;
     font-weight: 700;
+    color: #1e3a8a;
     margin-bottom: 1rem;
 }
 
-.gallery-header .description {
-    font-size: 1.2rem;
-    opacity: 0.9;
-    max-width: 800px;
-    margin: 0 auto;
+.gallery-description p {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: #4b5563;
 }
 
-.gallery-info {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    margin-top: 1.5rem;
-    font-size: 0.95rem;
-}
-
-.gallery-info-item {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-/* 网格布局样式 */
+/* Gallery Grid */
 .gallery-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
-    padding: 2rem 0;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.gallery-grid--full {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
 }
 
 .gallery-item {
     position: relative;
+    border-radius: 0.5rem;
     overflow: hidden;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    transition: all 0.3s ease;
     background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .gallery-item:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-.gallery-item-image {
+.gallery-item__link {
+    display: block;
+    text-decoration: none;
+}
+
+.gallery-item__image-wrapper {
     position: relative;
-    padding-top: 75%; /* 4:3 比例 */
+    width: 100%;
+    padding-bottom: 75%; /* 4:3 aspect ratio */
     overflow: hidden;
-    background: #f0f0f0;
 }
 
-.gallery-item-image img {
+.gallery-item__image {
     position: absolute;
     top: 0;
     left: 0;
@@ -82,330 +244,115 @@
     transition: transform 0.3s ease;
 }
 
-.gallery-item:hover .gallery-item-image img {
-    transform: scale(1.05);
+.gallery-item:hover .gallery-item__image {
+    transform: scale(1.1);
 }
 
-.gallery-item-overlay {
+.gallery-item__overlay {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    display: flex;
-    align-items: flex-end;
-    padding: 1.5rem;
-    color: white;
-}
-
-.gallery-item:hover .gallery-item-overlay {
-    opacity: 1;
-}
-
-.gallery-item-info {
-    padding: 1rem;
-}
-
-.gallery-item-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: #333;
-}
-
-.gallery-item-caption {
-    font-size: 0.9rem;
-    color: #666;
-    line-height: 1.5;
-}
-
-/* Masonry 布局样式 */
-.gallery-masonry {
-    column-count: 3;
-    column-gap: 2rem;
-}
-
-@media (max-width: 992px) {
-    .gallery-masonry {
-        column-count: 2;
-    }
-}
-
-@media (max-width: 576px) {
-    .gallery-masonry {
-        column-count: 1;
-    }
-}
-
-.gallery-masonry .gallery-item {
-    break-inside: avoid;
-    margin-bottom: 2rem;
-}
-
-.gallery-masonry .gallery-item-image {
-    padding-top: 0;
-}
-
-.gallery-masonry .gallery-item-image img {
-    position: relative;
-    width: 100%;
-    height: auto;
-}
-
-/* Lightbox 样式 */
-.lightbox {
-    display: none;
-    position: fixed;
-    z-index: 9999;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.95);
-}
-
-.lightbox.active {
+    background: rgba(0, 82, 204, 0.8);
     display: flex;
     align-items: center;
     justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-.lightbox-content {
-    position: relative;
-    max-width: 90%;
-    max-height: 90%;
+.gallery-item:hover .gallery-item__overlay {
+    opacity: 1;
 }
 
-.lightbox-content img {
-    max-width: 100%;
-    max-height: 90vh;
-    object-fit: contain;
-}
-
-.lightbox-close {
-    position: absolute;
-    top: 20px;
-    right: 30px;
-    font-size: 40px;
-    font-weight: bold;
+.gallery-item__overlay i {
+    font-size: 2rem;
     color: white;
-    cursor: pointer;
-    z-index: 10000;
 }
 
-.lightbox-nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 40px;
-    font-weight: bold;
-    color: white;
-    cursor: pointer;
-    padding: 20px;
-    user-select: none;
-}
-
-.lightbox-prev {
-    left: 20px;
-}
-
-.lightbox-next {
-    right: 20px;
-}
-
-.lightbox-caption {
-    position: absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: white;
-    text-align: center;
-    padding: 10px 20px;
-    background: rgba(0, 0, 0, 0.7);
-    border-radius: 5px;
-    max-width: 80%;
-}
-
-/* 空状态 */
+/* Empty State */
 .gallery-empty {
+    grid-column: 1 / -1;
     text-align: center;
-    padding: 4rem 0;
-    color: #999;
+    padding: 4rem 2rem;
+    color: #9ca3af;
 }
 
 .gallery-empty i {
     font-size: 4rem;
     margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.gallery-empty p {
+    font-size: 1.25rem;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 1.25rem;
+    }
+
+    .gallery-description {
+        padding: 1.5rem;
+    }
+
+    .gallery-description h2 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .section--gallery {
+        padding: 3rem 0;
+    }
+
+    .gallery-grid,
+    .gallery-grid--full {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .gallery-description {
+        padding: 1.25rem;
+        margin-bottom: 2rem;
+    }
+
+    .gallery-description h2 {
+        font-size: 1.375rem;
+    }
+
+    .gallery-description p {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .gallery-grid,
+    .gallery-grid--full {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 0.75rem;
+    }
+
+    .gallery-item__overlay i {
+        font-size: 1.5rem;
+    }
 }
 </style>
 {% endblock %}
 
-{% block content %}
-<!-- 相册头部 -->
-<div class="gallery-header">
-    <div class="container">
-        <h1>{{ gallery.title }}</h1>
-        {% if gallery.description %}
-        <p class="description">{{ gallery.description }}</p>
-        {% endif %}
-
-        <div class="gallery-info">
-            <div class="gallery-info-item">
-                <i class="fas fa-images"></i>
-                <span>{{ gallery.image_count }} 张照片</span>
-            </div>
-            {% if gallery.category %}
-            <div class="gallery-info-item">
-                <i class="fas fa-folder"></i>
-                <span>{{ gallery.category }}</span>
-            </div>
-            {% endif %}
-            <div class="gallery-info-item">
-                <i class="fas fa-eye"></i>
-                <span>{{ gallery.view_count }} 次浏览</span>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- 相册内容 -->
-<div class="container">
-    {% if images %}
-    <div class="gallery-{{ gallery.display_mode or 'grid' }}" id="galleryContainer">
-        {% for image in images %}
-        <div class="gallery-item" data-index="{{ loop.index0 }}">
-            <div class="gallery-item-image" data-lightbox="true">
-                <img src="/static/{{ image.media.path_medium or image.media.path_original }}"
-                     alt="{{ image.alt_text or image.title }}"
-                     data-full="/static/{{ image.media.path_original }}"
-                     loading="lazy">
-                {% if image.title or image.caption %}
-                <div class="gallery-item-overlay">
-                    <div>
-                        {% if image.title %}
-                        <div class="fw-bold mb-1">{{ image.title }}</div>
-                        {% endif %}
-                        {% if image.caption %}
-                        <div class="small">{{ image.caption }}</div>
-                        {% endif %}
-                    </div>
-                </div>
-                {% endif %}
-            </div>
-            {% if image.title or image.caption %}
-            <div class="gallery-item-info">
-                {% if image.title %}
-                <div class="gallery-item-title">{{ image.title }}</div>
-                {% endif %}
-                {% if image.caption %}
-                <div class="gallery-item-caption">{{ image.caption }}</div>
-                {% endif %}
-            </div>
-            {% endif %}
-        </div>
-        {% endfor %}
-    </div>
-    {% else %}
-    <div class="gallery-empty">
-        <i class="fas fa-images"></i>
-        <h3>暂无照片</h3>
-        <p>该相册还没有上传照片，敬请期待。</p>
-    </div>
-    {% endif %}
-</div>
-
-<!-- Lightbox -->
-<div class="lightbox" id="lightbox">
-    <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
-    <span class="lightbox-nav lightbox-prev" onclick="changeImage(-1)">&#10094;</span>
-    <span class="lightbox-nav lightbox-next" onclick="changeImage(1)">&#10095;</span>
-    <div class="lightbox-content">
-        <img id="lightboxImage" src="" alt="">
-        <div class="lightbox-caption" id="lightboxCaption"></div>
-    </div>
-</div>
-{% endblock %}
-
 {% block extra_js %}
+<!-- Lightbox2 for image viewing -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
 <script>
-// Lightbox 功能
-let currentImageIndex = 0;
-const images = [
-    {% for image in images %}
-    {
-        full: "/static/{{ image.media.path_original }}",
-        title: "{{ image.title or '' }}",
-        caption: "{{ image.caption or '' }}"
-    }{% if not loop.last %},{% endif %}
-    {% endfor %}
-];
-
-// 点击图片打开 lightbox
-document.querySelectorAll('[data-lightbox="true"]').forEach((item, index) => {
-    item.addEventListener('click', function() {
-        currentImageIndex = index;
-        openLightbox();
+    lightbox.option({
+        'resizeDuration': 200,
+        'wrapAround': true,
+        'albumLabel': '图片 %1 / %2'
     });
-});
-
-function openLightbox() {
-    const lightbox = document.getElementById('lightbox');
-    const img = document.getElementById('lightboxImage');
-    const caption = document.getElementById('lightboxCaption');
-
-    img.src = images[currentImageIndex].full;
-
-    let captionText = '';
-    if (images[currentImageIndex].title) {
-        captionText += '<div class="fw-bold">' + images[currentImageIndex].title + '</div>';
-    }
-    if (images[currentImageIndex].caption) {
-        captionText += '<div>' + images[currentImageIndex].caption + '</div>';
-    }
-    caption.innerHTML = captionText;
-
-    lightbox.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeLightbox() {
-    const lightbox = document.getElementById('lightbox');
-    lightbox.classList.remove('active');
-    document.body.style.overflow = 'auto';
-}
-
-function changeImage(direction) {
-    currentImageIndex += direction;
-    if (currentImageIndex < 0) {
-        currentImageIndex = images.length - 1;
-    } else if (currentImageIndex >= images.length) {
-        currentImageIndex = 0;
-    }
-    openLightbox();
-}
-
-// 键盘导航
-document.addEventListener('keydown', function(e) {
-    const lightbox = document.getElementById('lightbox');
-    if (lightbox.classList.contains('active')) {
-        if (e.key === 'Escape') {
-            closeLightbox();
-        } else if (e.key === 'ArrowLeft') {
-            changeImage(-1);
-        } else if (e.key === 'ArrowRight') {
-            changeImage(1);
-        }
-    }
-});
-
-// 点击背景关闭
-document.getElementById('lightbox').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeLightbox();
-    }
-});
 </script>
 {% endblock %}

@@ -23,6 +23,7 @@ class ColumnType(str, enum.Enum):
     SINGLE_PAGE = "SINGLE_PAGE"  # 单页
     POST = "POST"  # 文章栏目
     PRODUCT = "PRODUCT"  # 产品栏目
+    GALLERY = "GALLERY"  # 相册模块
     CUSTOM = "CUSTOM"  # 自定义模块
 
 
