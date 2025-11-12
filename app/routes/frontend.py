@@ -216,7 +216,7 @@ async def column_page(
         # Special template handling for pages with sidebar navigation
         if column_slug == "school-curriculum":
             return templates.TemplateResponse("post_list_with_sidebar.html", context)
-        elif column_slug in ["chess-events", "chess-news", "news"]:
+        elif column_slug in ["chess-events", "chess-news", "news", "badminton-events"]:
             return templates.TemplateResponse("post_list_universal.html", context)
 
         # Check for custom template
