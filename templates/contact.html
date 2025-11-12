@@ -556,6 +556,54 @@
     box-shadow: 0 8px 25px rgba(0,82,204,0.25);
 }
 
+.contact-form .btn-primary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Form Message Styles */
+.form-message {
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1rem;
+    font-weight: 500;
+    animation: slideDown 0.3s ease;
+    transition: opacity 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-message i {
+    font-size: 1.25rem;
+}
+
+.form-message--success {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    border-left: 4px solid #047857;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.form-message--error {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    border-left: 4px solid #b91c1c;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
 /* Enhanced FAQ Section */
 .faq-item {
     background: white;
@@ -704,14 +752,85 @@
         offset: 100
     });
 
-    // Form validation
-    document.getElementById('contactForm').addEventListener('submit', function(e) {
+    // Form validation and AJAX submission
+    document.getElementById('contactForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
         const consent = document.getElementById('consent');
         if (!consent.checked) {
-            e.preventDefault();
-            alert('Please consent to our data storage policy before submitting.');
+            showMessage('Please consent to our data storage policy before submitting.', 'error');
             return false;
         }
+
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
+
+        try {
+            // Disable submit button and show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending... / 发送中...';
+
+            // Get form data
+            const formData = new FormData(this);
+
+            // Submit form via AJAX
+            const response = await fetch('/contact/submit', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Show success message
+                showMessage(result.message || 'Your message has been sent successfully! / 您的消息已成功发送！', 'success');
+                // Reset form
+                this.reset();
+            } else {
+                // Show error message
+                showMessage(result.message || 'Sorry, there was an error. Please try again. / 抱歉，发生错误。请重试。', 'error');
+            }
+
+        } catch (error) {
+            console.error('Form submission error:', error);
+            showMessage('Sorry, there was an error sending your message. Please try again later. / 抱歉，发送消息时出错。请稍后再试。', 'error');
+        } finally {
+            // Re-enable submit button
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+        }
     });
+
+    // Show message function
+    function showMessage(message, type) {
+        // Remove existing message if any
+        const existingMsg = document.querySelector('.form-message');
+        if (existingMsg) {
+            existingMsg.remove();
+        }
+
+        // Create message element
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `form-message form-message--${type}`;
+        messageDiv.innerHTML = `
+            <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+            <span>${message}</span>
+        `;
+
+        // Insert message before form
+        const form = document.getElementById('contactForm');
+        form.parentNode.insertBefore(messageDiv, form);
+
+        // Scroll to message
+        messageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // Auto-hide success message after 5 seconds
+        if (type === 'success') {
+            setTimeout(() => {
+                messageDiv.style.opacity = '0';
+                setTimeout(() => messageDiv.remove(), 300);
+            }, 5000);
+        }
+    }
 </script>
 {% endblock %}
