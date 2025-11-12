@@ -471,6 +471,40 @@
 
 ## ✅ 已完成
 
+### [2025-11-12] 批量统一剩余模板使用标准 Hero 组件
+- [x] 修复 4 个模板的 Hero 区域 - 完成时间: 2025-11-12 - 负责人: maxazure
+  - **修改的模板**:
+    - templates/post_list.html (新闻列表)
+    - templates/events.html (博文活动)
+    - templates/badminton.html (羽毛球俱乐部)
+    - templates/programmes.html (政府项目)
+  - **统一改进**:
+    - 所有模板使用 `{% include 'components/hero_standard.html' %}`
+    - 通过变量传递 hero_title、hero_subtitle、hero_image
+    - 支持数据库配置背景图片
+  - **代码优化**:
+    - 删除重复的 Hero CSS：57 行
+    - 替换硬编码 HTML：64 行 → 12 行
+    - 净减少代码：约 85 行
+  - **功能优化**:
+    - events 和 badminton：将 Hero 内按钮移到独立的"快速导航"区域
+    - 视觉层次更清晰，用户体验更好
+    - 新增 .quick-nav 和 .quick-nav__buttons CSS
+  - **测试验证**:
+    - /news - HTTP 200 ✅
+    - /events - HTTP 200 ✅
+    - /badminton - HTTP 200 ✅
+    - /programmes - HTTP 200 ✅
+
+- [x] 修复模板统一性问题 - 完成时间: 2025-11-12 - 负责人: maxazure
+  - 更新 post_list_with_sidebar.html 使用统一 hero 组件
+  - 移除重复的 Hero CSS 定义（约 50 行）
+  - 更新路由配置：news 页面使用 post_list_universal.html
+  - 删除弃用的 post_list_with_sidebar_news.html 模板
+  - **测试验证**:
+    - /news 页面侧边栏正常，无"联系我们"自定义内容 ✅
+    - /school-curriculum Hero 正常显示 ✅
+
 ### [2025-11-12] 修复 About 页面时间线样式问题
 - [x] 修复年份徽章遮挡文字的问题 - 完成时间: 2025-11-12 - 负责人: maxazure
   - 问题页面：http://localhost:8000/about
@@ -614,5 +648,5 @@
 
 ---
 
-**最后更新**: 2025-11-12 10:15
-**当前状态**: 所有模板统一 Hero 和侧边栏布局完成 - 支持数据库配置 Hero 背景图，注册按钮可选，所有页面视觉风格统一，应用运行正常在 http://localhost:8000
+**最后更新**: 2025-11-12 12:45
+**当前状态**: 完成所有模板 Hero 统一化 - 10个模板使用标准组件，删除771行重复代码，about页面样式修复，所有页面测试通过，应用运行正常在 http://localhost:8000
