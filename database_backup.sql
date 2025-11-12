@@ -83,6 +83,8 @@ INSERT INTO media_file VALUES('post-a-level-chinese.jpg','image/jpeg',97658,1024
 INSERT INTO media_file VALUES('post-hsk-preparation.jpg','image/jpeg',96794,1024,1024,'/static/images/courses/post-hsk-preparation.jpg','/static/images/courses/post-hsk-preparation.jpg','/static/images/courses/post-hsk-preparation.jpg',27,'2025-11-08 09:15:01.434264','2025-11-08 09:15:01.434264');
 INSERT INTO media_file VALUES('post-beginner-cantonese.jpg','image/jpeg',106780,1024,1024,'/static/images/courses/post-beginner-cantonese.jpg','/static/images/courses/post-beginner-cantonese.jpg','/static/images/courses/post-beginner-cantonese.jpg',28,'2025-11-08 09:15:01.434438','2025-11-08 09:15:01.434438');
 INSERT INTO media_file VALUES('post-gcse-cantonese.jpg','image/jpeg',88137,1024,1024,'/static/images/courses/post-gcse-cantonese.jpg','/static/images/courses/post-gcse-cantonese.jpg','/static/images/courses/post-gcse-cantonese.jpg',29,'2025-11-08 09:15:01.434467','2025-11-08 09:15:01.434467');
+INSERT INTO media_file VALUES('hero-main-brand.jpg','image/jpeg',101164,NULL,NULL,'/static/images/hero-main-brand.jpg',NULL,NULL,30,'2025-11-12 00:30:36','2025-11-12 00:30:36');
+INSERT INTO media_file VALUES('hero-event-placeholder.jpg','image/jpeg',134263,NULL,NULL,'/static/images/hero-event-placeholder.jpg',NULL,NULL,31,'2025-11-12 00:30:36','2025-11-12 00:30:36');
 CREATE TABLE site_column (
 	name VARCHAR(100) NOT NULL, 
 	slug VARCHAR(100) NOT NULL, 
@@ -100,17 +102,17 @@ CREATE TABLE site_column (
 	UNIQUE (slug)
 );
 INSERT INTO site_column VALUES('首页','home','CUSTOM',NULL,NULL,1,1,1,1,'2025-11-04 21:58:23.384980','2025-11-05 02:27:06.860060','HEADER',NULL,NULL);
-INSERT INTO site_column VALUES('关于博文','about','SINGLE_PAGE',NULL,NULL,2,1,1,2,'2025-11-04 21:58:23.384983','2025-11-04 21:58:23.384983','HEADER',NULL,NULL);
-INSERT INTO site_column VALUES('中文学校','school','CUSTOM',NULL,NULL,4,1,1,3,'2025-11-04 21:58:23.384984','2025-11-05 06:02:28.491805','HEADER',NULL,NULL);
+INSERT INTO site_column VALUES('关于博文','about','SINGLE_PAGE',NULL,NULL,2,1,1,2,'2025-11-04 21:58:23.384983','2025-11-04 21:58:23.384983','HEADER','为您提供优质的教育服务',30);
+INSERT INTO site_column VALUES('中文学校','school','CUSTOM',NULL,NULL,4,1,1,3,'2025-11-04 21:58:23.384984','2025-11-05 06:02:28.491805','HEADER','传承中华文化，培养双语人才',8);
 INSERT INTO site_column VALUES('补习中心','tuition','PRODUCT',NULL,NULL,5,1,1,4,'2025-11-04 21:58:23.384984','2025-11-05 02:27:32.968280','HEADER',NULL,NULL);
-INSERT INTO site_column VALUES('国际象棋俱乐部','chess','CUSTOM',NULL,NULL,6,1,1,5,'2025-11-04 21:58:23.384985','2025-11-05 02:27:32.968280','HEADER',NULL,NULL);
+INSERT INTO site_column VALUES('国际象棋俱乐部','chess','CUSTOM',NULL,NULL,6,1,1,5,'2025-11-04 21:58:23.384985','2025-11-05 02:27:32.968280','HEADER','培养逻辑思维，提升战略眼光',6);
 INSERT INTO site_column VALUES('政府项目','programmes','CUSTOM',NULL,NULL,8,1,1,6,'2025-11-04 21:58:23.384985','2025-11-05 02:27:32.968281','HEADER',NULL,NULL);
-INSERT INTO site_column VALUES('博文活动','events','CUSTOM',NULL,NULL,9,1,1,7,'2025-11-04 21:58:23.384986','2025-11-05 02:27:32.968283','HEADER',NULL,NULL);
-INSERT INTO site_column VALUES('博文新闻','news','POST',2,NULL,3,1,1,8,'2025-11-04 21:58:23.384986','2025-11-05 02:27:32.968284','HEADER',NULL,NULL);
+INSERT INTO site_column VALUES('博文活动','events','CUSTOM',NULL,NULL,9,1,1,7,'2025-11-04 21:58:23.384986','2025-11-05 02:27:32.968283','HEADER','丰富多彩的文化活动与专业培训',31);
+INSERT INTO site_column VALUES('博文新闻','news','POST',2,NULL,3,1,1,8,'2025-11-04 21:58:23.384986','2025-11-05 02:27:32.968284','HEADER','了解博文教育集团最新动态与活动资讯',15);
 INSERT INTO site_column VALUES('图库','gallery','CUSTOM',NULL,NULL,9,0,1,9,'2025-11-04 21:58:23.384987','2025-11-07 08:11:45.437356','FOOTER',NULL,NULL);
 INSERT INTO site_column VALUES('常见问题','faq','SINGLE_PAGE',NULL,NULL,10,0,1,10,'2025-11-04 21:58:23.384987','2025-11-07 06:48:05.038682','FOOTER',NULL,NULL);
 INSERT INTO site_column VALUES('联系我们','contact','SINGLE_PAGE',NULL,NULL,10,1,1,11,'2025-11-04 21:58:23.384988','2025-11-05 01:09:49.165359','HEADER',NULL,NULL);
-INSERT INTO site_column VALUES('羽毛球俱乐部','badminton','CUSTOM',NULL,NULL,7,1,1,12,'2025-11-05 01:09:49.166605','2025-11-05 02:27:32.968284','HEADER',NULL,NULL);
+INSERT INTO site_column VALUES('羽毛球俱乐部','badminton','CUSTOM',NULL,NULL,7,1,1,12,'2025-11-05 01:09:49.166605','2025-11-05 02:27:32.968284','HEADER','专业羽毛球训练，培养运动技能',31);
 INSERT INTO site_column VALUES('课程设置','school-curriculum','POST',3,NULL,1,0,1,13,'2025-11-05 06:02:28.512109','2025-11-05 06:02:28.512112','HEADER',NULL,NULL);
 INSERT INTO site_column VALUES('学期日期','school-term-dates','SINGLE_PAGE',3,NULL,2,0,1,14,'2025-11-05 06:02:28.513188','2025-11-05 06:02:28.513190','HEADER',NULL,NULL);
 INSERT INTO site_column VALUES('PTA家长教师协会','school-pta','SINGLE_PAGE',3,NULL,3,0,1,15,'2025-11-05 06:02:28.513956','2025-11-05 06:02:28.513957','HEADER',NULL,NULL);

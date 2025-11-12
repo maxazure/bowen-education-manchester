@@ -7,9 +7,8 @@
 {% block content %}
 
 <!-- Hero Section -->
-{% set hero_title = "博文活动" %}
-{% set hero_subtitle = "丰富多彩的文化活动 · 专业培训课程 · 体育竞技比赛" %}
-{% set hero_image = "/static/images/events/events-hero.jpg" %}
+{% set hero_title = column.name %}
+{% set hero_subtitle = column.description %}
 {% include 'components/hero_standard.html' %}
 
 <!-- Quick Navigation -->
