@@ -3,7 +3,7 @@
 
 from typing import List, Optional
 
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from app.models import SinglePage, SiteColumn, SiteSetting, MenuLocation
 from app.utils.cache import cache_navigation, cache_settings
@@ -54,6 +54,7 @@ def get_column_by_slug(db: Session, slug: str) -> Optional[SiteColumn]:
     """
     return (
         db.query(SiteColumn)
+        .options(joinedload(SiteColumn.hero_media))
         .filter(SiteColumn.slug == slug, SiteColumn.is_enabled == True)
         .first()
     )

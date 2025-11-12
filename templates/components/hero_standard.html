@@ -5,7 +5,16 @@
 
 {% set hero_title = hero_title or (page.title if page is defined else column.name) %}
 {% set hero_subtitle = hero_subtitle or (page.subtitle if page is defined else (column.description if column is defined else none)) %}
-{% set hero_image = hero_image or ((page.hero_media.path_original if page.hero_media else '/static/images/hero-default.jpg') if page is defined else ((column.hero_media.path_original if column.hero_media else '/static/images/hero-default.jpg') if column is defined else '/static/images/hero-default.jpg')) %}
+{# 背景图片优先级: 明确传入的 hero_image > page.hero_media > column.hero_media > 默认图片 #}
+{% if not hero_image %}
+    {% if page is defined and page.hero_media %}
+        {% set hero_image = page.hero_media.path_original %}
+    {% elif column is defined and column.hero_media %}
+        {% set hero_image = column.hero_media.path_original %}
+    {% else %}
+        {% set hero_image = '/static/images/hero-default.jpg' %}
+    {% endif %}
+{% endif %}
 
 <section class="hero hero--content" aria-labelledby="page-title">
     <div class="hero__overlay" aria-hidden="true"></div>
