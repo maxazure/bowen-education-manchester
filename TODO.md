@@ -89,6 +89,92 @@
     - templates/school.html, chess.html, badminton.html
     - templates/events.html, programmes.html, contact.html
 
+### [2025-11-12] 相册模块（Gallery）开发
+- [x] 创建相册模块类型 - 完成时间: 2025-11-12 - 负责人: maxazure
+  - **数据库扩展**:
+    - 在 app/models/site.py 的 ColumnType 枚举中添加 GALLERY 类型
+    - 用于展示照片相册的栏目类型
+  - **模板创建**:
+    - 创建 templates/gallery.html 模板
+    - 使用 hero_standard.html 组件（与 chess-about 相同）
+    - 支持左侧边栏导航（当有父栏目时）
+    - 响应式网格布局展示照片
+    - 集成 Lightbox2 实现全屏图片查看
+    - 空状态提示："暂无照片，敬请期待"
+  - **路由配置**:
+    - 在 app/routes/frontend.py 添加 GALLERY 类型处理
+    - 使用 GalleryService 获取相册数据
+    - 加载相册图片并过滤可见项
+    - 增加浏览计数
+  - **栏目转换**:
+    - 将 badminton-gallery 栏目从 CUSTOM 改为 GALLERY 类型
+    - 配置 Hero 数据：标题"精彩瞬间"，副标题"记录羽毛球俱乐部的精彩时刻"
+    - 关联 hero_media_id = 35
+  - **相关文件**:
+    - app/models/site.py
+    - templates/gallery.html
+    - app/routes/frontend.py
+    - Commit: cbe653b, fcb030c
+
+- [x] 生成羽毛球俱乐部相册照片 - 完成时间: 2025-11-12 - 负责人: maxazure
+  - **使用工具**: Image Generator Service (CogView-4)
+  - **生成参数**:
+    - 尺寸: 1920 × 1088 (16:9)
+    - 格式: JPG
+    - 质量: HIGH_COMMERCIAL (¥0.06/张)
+    - 类别: ILLUSTRATION
+    - 风格: 写实摄影
+  - **生成的照片**（4张）:
+    - badminton-001.jpg (180KB) - 儿童专注击球瞬间
+    - badminton-002.jpg (175KB) - 教练指导训练
+    - badminton-003.jpg (145KB) - 双打比赛
+    - badminton-004.jpg (253KB) - 训练后的欢乐时刻
+  - **存储位置**: templates/static/images/gallery/
+  - **数据库更新**:
+    - media_file 表: 添加 4 条记录 (ID: 41-44)
+    - gallery_image 表: 添加 4 条记录，关联 gallery_id=2
+    - 每张照片包含：title, caption, alt_text, tags, location
+    - 更新 gallery.image_count = 4
+  - **生成统计**:
+    - 总耗时: 约 40 秒
+    - 总成本: ¥0.24 (4张 × ¥0.06)
+    - 成功率: 100% (4/4)
+  - **Prompt 设计**:
+    - 真实感照片风格
+    - Manchester 地区儿童羽毛球训练场景
+    - 专业室内羽毛球场馆背景
+    - 明亮、积极向上的氛围
+  - **相关文件**:
+    - templates/static/images/gallery/badminton-*.jpg
+    - Commit: a7ab553
+
+- [x] 测试并修复相册页面 - 完成时间: 2025-11-12 - 负责人: maxazure
+  - **测试页面**: http://localhost:8000/badminton-gallery
+  - **发现的问题**:
+    - 页面显示"暂无照片，敬请期待"
+    - 4张照片已在数据库中，但未显示
+  - **问题原因**:
+    - GALLERY 路由处理器中 media_files 初始化为空数组
+    - 未调用 GalleryService 获取相册图片
+    - 未从 gallery_image 表读取数据
+  - **修复方案**:
+    - 导入并使用 GalleryService
+    - 通过 slug 获取 gallery 对象
+    - 调用 get_gallery_images() 获取图片列表
+    - 过滤 is_visible=True 的图片
+    - 增加 gallery 浏览计数
+    - 将 media_files 传递到模板上下文
+  - **测试验证**:
+    - 使用 Chrome DevTools 重新加载页面 ✅
+    - 4张照片正确显示在响应式网格中 ✅
+    - Lightbox2 全屏查看功能正常 ✅
+    - 左侧边栏导航正常 ✅
+    - Hero 区域显示正确 ✅
+  - **修改的文件**:
+    - app/routes/frontend.py (lines 231-256)
+    - Commit: ebb8f5e
+  - **最终状态**: 相册页面完全正常，所有功能测试通过
+
 ### [2025-11-12] 统一所有模板的 Hero 和侧边栏布局
 - [x] 添加栏目级别 Hero 背景图片支持 - 完成时间: 2025-11-12 - 负责人: maxazure
   - 创建数据库迁移脚本 tools/add_column_hero_fields.sql

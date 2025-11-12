@@ -177,6 +177,28 @@
     background: #f8f9fa;
 }
 
+/* Two-column layout with sidebar */
+.page-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    position: relative;
+}
+
+/* 左侧边栏 - 固定宽度 */
+.page-layout__sidebar {
+    flex: 0 0 280px;
+    min-width: 280px;
+    max-width: 280px;
+}
+
+/* 右侧主内容区 - 自适应宽度 */
+.page-layout__main {
+    flex: 1;
+    min-width: 0; /* 防止flex子元素溢出 */
+    max-width: 100%; /* 确保不超出容器 */
+}
+
 .gallery-description {
     margin-bottom: 3rem;
     padding: 2rem;
