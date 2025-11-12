@@ -69,7 +69,9 @@
 {% block content %}
 
 <!-- Hero Section -->
-{% include 'components/hero_main_column.html' %}
+{% set hero_title = column.name %}
+{% set hero_subtitle = column.hero_tagline %}
+{% include 'components/hero_standard.html' %}
 
 <!-- Gallery Section -->
 <section class="section section--gallery">
