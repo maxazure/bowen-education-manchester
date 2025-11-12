@@ -230,14 +230,28 @@ async def column_page(
 
     elif column.column_type == ColumnType.GALLERY:
         # Gallery column type - display photos/media files
-        from app.models.media import MediaFile
+        from app.services.gallery_service import GalleryService
 
-        # Get media files associated with this gallery
-        # For now, we'll fetch media files that might be associated with gallery items
-        # You may need to implement a proper gallery_media relationship
-        media_files = []
+        gallery_service = GalleryService(db)
 
-        context["media_files"] = media_files
+        # Get gallery by slug
+        gallery = gallery_service.get_gallery_by_slug(column_slug)
+
+        if gallery:
+            # Get images for this gallery
+            images = gallery_service.get_gallery_images(gallery.id)
+
+            # Increment view count
+            gallery_service.increment_view_count(gallery.id)
+
+            # Extract media files from images
+            media_files = [img.media for img in images if img.media and img.is_visible]
+
+            context["gallery"] = gallery
+            context["images"] = images
+            context["media_files"] = media_files
+        else:
+            context["media_files"] = []
 
         return templates.TemplateResponse("gallery.html", context)
 
