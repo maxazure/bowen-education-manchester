@@ -7,20 +7,9 @@
 {% block content %}
 
 <!-- Hero Section -->
-<section class="hero hero--content">
-    <div class="hero__overlay"></div>
-    <div class="hero__background" style="background-image: url('/static/images/hero-default.jpg');"></div>
-    <div class="container">
-        <div class="hero__content">
-            <h1 class="hero__title" data-aos="fade-up">
-                <span class="hero__title-chinese">政府项目</span>
-            </h1>
-            <p class="hero__subtitle" data-aos="fade-up" data-aos-delay="100">
-                Government Programmes
-            </p>
-        </div>
-    </div>
-</section>
+{% set hero_title = "政府项目" %}
+{% set hero_subtitle = "Government Programmes" %}
+{% include 'components/hero_standard.html' %}
 
 <!-- Content Section -->
 <section class="section">

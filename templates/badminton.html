@@ -7,24 +7,20 @@
 {% block content %}
 
 <!-- Hero Section -->
-<section class="hero hero--content hero--badminton" style="background-image: url('/static/images/badminton/badminton-hero.jpg');">
-    <div class="hero__overlay"></div>
+{% set hero_title = "羽毛球俱乐部" %}
+{% set hero_subtitle = "专业羽毛球训练 · 培养运动技能 · 团队协作精神" %}
+{% set hero_image = "/static/images/badminton/badminton-hero.jpg" %}
+{% include 'components/hero_standard.html' %}
+
+<!-- Quick Navigation -->
+<div class="quick-nav">
     <div class="container">
-        <div class="hero__content">
-            <h1 class="hero__title" data-aos="fade-up">
-                <span class="hero__title-chinese">羽毛球俱乐部</span>
-                <span class="hero__title-english">Badminton Club</span>
-            </h1>
-            <p class="hero__subtitle" data-aos="fade-up" data-aos-delay="100">
-                专业羽毛球训练 · 培养运动技能 · 团队协作精神
-            </p>
-            <div class="hero__buttons" data-aos="fade-up" data-aos-delay="200">
-                <a href="#programs" class="btn btn--primary">了解课程</a>
-                <a href="#contact" class="btn btn--secondary">免费试课</a>
-            </div>
+        <div class="quick-nav__buttons">
+            <a href="#programs" class="btn btn--primary">了解课程</a>
+            <a href="#contact" class="btn btn--secondary">免费试课</a>
         </div>
     </div>
-</section>
+</div>
 
 <!-- Programs Section -->
 <section id="programs" class="section section--programs">
@@ -500,28 +496,14 @@
 <style>
 /* Badminton Club Page Styles */
 
-/* Hero Section */
-.hero--badminton {
-    background-size: cover;
-    background-position: center;
+/* Quick Navigation */
+.quick-nav {
+    padding: 1.5rem 0;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e5e7eb;
 }
 
-.hero__title-english {
-    display: block;
-    font-size: 1.2rem;
-    font-weight: 400;
-    margin-top: 0.5rem;
-    opacity: 0.9;
-}
-
-.hero__subtitle {
-    font-size: 1.1rem;
-    margin-top: 1rem;
-    color: rgba(255, 255, 255, 0.9);
-}
-
-.hero__buttons {
-    margin-top: 2rem;
+.quick-nav__buttons {
     display: flex;
     gap: 1rem;
     justify-content: center;
@@ -1181,7 +1163,7 @@
         gap: 1rem;
     }
 
-    .hero__buttons {
+    .quick-nav__buttons {
         flex-direction: column;
         align-items: center;
     }

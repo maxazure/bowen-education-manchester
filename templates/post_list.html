@@ -4,21 +4,11 @@
 
 {% block content %}
 
-<!-- Hero Section with Background Image -->
-<section class="hero hero--content hero--news" style="background-image: url('/static/images/news/news-hero-background.jpg');">
-    <div class="hero__overlay"></div>
-    <div class="container">
-        <div class="hero__content text-center">
-            <h1 class="hero__title" data-aos="fade-up">
-                <span class="hero__title-chinese">{{ column.name }}</span>
-                <span class="hero__title-english">News Center</span>
-            </h1>
-            <p class="hero__subtitle" data-aos="fade-up" data-aos-delay="100">
-                了解博文教育集团最新动态与活动资讯
-            </p>
-        </div>
-    </div>
-</section>
+<!-- Hero Section -->
+{% set hero_title = column.name %}
+{% set hero_subtitle = "了解博文教育集团最新动态与活动资讯" %}
+{% set hero_image = "/static/images/news/news-hero-background.jpg" %}
+{% include 'components/hero_standard.html' %}
 
 <!-- Posts List Section -->
 <section class="section section--news-list">
@@ -129,26 +119,6 @@
 
 <style>
 /* News List Page Styles */
-.hero--news {
-    background-size: cover;
-    background-position: center;
-    min-height: 400px;
-}
-
-.hero__title-english {
-    display: block;
-    font-size: 1.2rem;
-    font-weight: 400;
-    margin-top: 0.5rem;
-    opacity: 0.9;
-}
-
-.hero__subtitle {
-    font-size: 1.1rem;
-    margin-top: 1rem;
-    color: rgba(255, 255, 255, 0.9);
-}
-
 .section--news-list {
     padding: 4rem 0;
 }
@@ -407,18 +377,6 @@
 
 /* Responsive */
 @media (max-width: 767px) {
-    .hero--news {
-        min-height: 300px;
-    }
-
-    .hero__title-chinese {
-        font-size: 2rem;
-    }
-
-    .hero__title-english {
-        font-size: 1rem;
-    }
-
     .news-filters__inner {
         flex-direction: column;
         align-items: stretch;
