@@ -2,6 +2,37 @@
 
 ## ✅ 已完成
 
+### [2025-11-12] 生成主栏目 Hero 背景图片
+- [x] 为8个主栏目生成高质量 Hero 背景图片 - 完成时间: 2025-11-12 17:16 - 负责人: maxazure
+  - **生成脚本**:
+    - 创建 tools/generate_hero_images.py
+    - 使用 Image Generator Service 的 Python 客户端
+    - 每张图片规格: 1920 × 1088 (16:9, JPG 格式)
+    - 质量等级: HIGH_COMMERCIAL (0.06元/张)
+    - 用途类别: HERO_BG
+  - **生成的图片**（8张）:
+    - hero-school.jpg (173 KB) - 中文学校
+    - hero-chess.jpg (195 KB) - 国际象棋俱乐部
+    - hero-badminton.jpg (216 KB) - 羽毛球俱乐部
+    - hero-tuition.jpg (215 KB) - 补习中心
+    - hero-programmes.jpg (179 KB) - 政府项目
+    - hero-events.jpg (300 KB) - 博文活动
+    - hero-contact.jpg (169 KB) - 联系我们
+    - hero-about.jpg (234 KB) - 关于博文
+  - **数据库更新**:
+    - 添加 8 条 media_file 记录 (id: 33-40)
+    - 更新 8 个栏目的 hero_media_id 字段
+    - 所有图片尺寸: 1920 × 1088 ✓
+  - **生成统计**:
+    - 总耗时: 159.20 秒 (约 2.6 分钟)
+    - 总成本: ¥0.48 (8张 × ¥0.06)
+    - 成功率: 100% (8/8)
+  - **Prompt 设计**:
+    - 每个栏目的 prompt 包含: 主题、风格、色彩、光线、构图要求
+    - 统一使用蓝色系作为主色调（符合品牌色）
+    - 明亮、专业、积极向上的氛围
+    - 适合作为网站 hero banner 的构图
+
 ### [2025-11-12] 创建统一的主栏目 Hero 组件
 - [x] 为主栏目创建统一 Hero 组件系统 - 完成时间: 2025-11-12 - 负责人: maxazure
   - **数据库扩展**:
