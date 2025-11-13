@@ -1,0 +1,562 @@
+{% extends "base.html" %}
+
+{% block title %}媒体库 - 博文教育管理后台{% endblock %}
+
+{% block extra_css %}
+<style>
+/* 媒体库专用样式 */
+.media-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.media-card {
+    position: relative;
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background: white;
+    cursor: pointer;
+}
+
+.media-card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+.media-card.selected {
+    border-color: #c8102e;
+    box-shadow: 0 0 0 2px rgba(200, 16, 46, 0.2);
+}
+
+.media-thumbnail {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.media-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.media-thumbnail i {
+    font-size: 3rem;
+    color: #6c757d;
+}
+
+.media-info {
+    padding: 0.75rem;
+}
+
+.media-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.media-meta {
+    font-size: 0.75rem;
+    color: #6c757d;
+}
+
+.media-checkbox {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    z-index: 10;
+}
+
+.media-actions {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: none;
+}
+
+.media-card:hover .media-actions {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.folder-tree {
+    border-right: 1px solid #dee2e6;
+    padding: 1rem;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+
+.folder-item {
+    padding: 0.5rem 0.75rem;
+    margin: 0.25rem 0;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.folder-item:hover {
+    background-color: #f8f9fa;
+}
+
+.folder-item.active {
+    background-color: #c8102e;
+    color: white;
+}
+
+.folder-item i {
+    margin-right: 0.5rem;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- 页面标题 -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>媒体库</h2>
+            <p class="text-muted mb-0">管理网站的静态资源和媒体内容</p>
+        </div>
+        <div>
+            <a href="/admin/media/upload" class="btn btn-primary">
+                <i class="bi bi-cloud-upload"></i> 上传文件
+            </a>
+        </div>
+    </div>
+
+    <!-- 统计卡片 -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="stat-icon bg-primary bg-opacity-10 text-primary">
+                                <i class="bi bi-file-earmark"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="stat-label">总文件数</div>
+                            <div class="stat-value">{{ total_files }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="stat-icon bg-success bg-opacity-10 text-success">
+                                <i class="bi bi-image"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="stat-label">图片</div>
+                            <div class="stat-value">{{ total_images }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="stat-icon bg-warning bg-opacity-10 text-warning">
+                                <i class="bi bi-film"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="stat-label">视频</div>
+                            <div class="stat-value">{{ total_videos }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="stat-icon bg-info bg-opacity-10 text-info">
+                                <i class="bi bi-file-text"></i>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="stat-label">文档</div>
+                            <div class="stat-value">{{ total_documents }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 筛选和搜索 -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" action="/admin/media" class="row g-3">
+                <div class="col-md-3">
+                    <label class="form-label">文件类型</label>
+                    <select name="file_type" class="form-select" onchange="this.form.submit()">
+                        <option value="all" {% if current_file_type == 'all' %}selected{% endif %}>全部</option>
+                        <option value="image" {% if current_file_type == 'image' %}selected{% endif %}>图片</option>
+                        <option value="video" {% if current_file_type == 'video' %}selected{% endif %}>视频</option>
+                        <option value="document" {% if current_file_type == 'document' %}selected{% endif %}>文档</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">搜索</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        <input type="text" name="search" class="form-control"
+                               placeholder="搜索文件名..." value="{{ search }}">
+                        <button type="submit" class="btn btn-primary">搜索</button>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">&nbsp;</label>
+                    <div>
+                        <a href="/admin/media" class="btn btn-outline-secondary w-100">
+                            <i class="bi bi-arrow-clockwise"></i> 重置
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 主内容区域 -->
+    <div class="row">
+        <!-- 文件夹侧边栏 -->
+        <div class="col-md-2">
+            <div class="folder-tree">
+                <h6 class="text-muted mb-3">文件夹</h6>
+                <div class="folder-item {% if not current_folder_id %}active{% endif %}"
+                     onclick="location.href='/admin/media'">
+                    <i class="bi bi-folder"></i> 全部文件
+                </div>
+                {% for folder in folders %}
+                <div class="folder-item {% if current_folder_id == folder.id %}active{% endif %}"
+                     onclick="location.href='/admin/media?folder_id={{ folder.id }}'">
+                    <i class="bi bi-folder"></i> {{ folder.name }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- 文件列表 -->
+        <div class="col-md-10">
+            <!-- 批量操作栏 -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <button class="btn btn-sm btn-outline-secondary" id="selectAllBtn">
+                        <i class="bi bi-check-square"></i> 全选
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger" id="batchDeleteBtn" disabled>
+                        <i class="bi bi-trash"></i> 删除选中
+                    </button>
+                </div>
+                <div class="text-muted">
+                    <small>共 {{ total }} 个文件</small>
+                </div>
+            </div>
+
+            <!-- 文件网格 -->
+            {% if files %}
+            <div class="media-grid">
+                {% for file in files %}
+                <div class="media-card" data-id="{{ file.id }}">
+                    <input type="checkbox" class="media-checkbox form-check-input" value="{{ file.id }}">
+
+                    <div class="media-actions">
+                        <button class="btn btn-sm btn-light" onclick="viewFile({{ file.id }})" title="查看详情">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-light" onclick="deleteFile({{ file.id }})" title="删除">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+
+                    <div class="media-thumbnail" onclick="viewFile({{ file.id }})">
+                        {% if file.file_type == 'image' %}
+                            <img src="/{{ file.path_thumb or file.path_original }}"
+                                 alt="{{ file.filename_original }}"
+                                 onerror="this.src='/static/images/placeholder.png'">
+                        {% elif file.file_type == 'video' %}
+                            <i class="bi bi-film"></i>
+                        {% elif file.file_type == 'document' %}
+                            <i class="bi bi-file-text"></i>
+                        {% else %}
+                            <i class="bi bi-file"></i>
+                        {% endif %}
+                    </div>
+
+                    <div class="media-info">
+                        <div class="media-title" title="{{ file.filename_original }}">
+                            {{ file.filename_original }}
+                        </div>
+                        <div class="media-meta">
+                            {{ file.size_formatted }}
+                            {% if file.width and file.height %}
+                            · {{ file.width }}×{{ file.height }}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- 分页 -->
+            {% if total_pages > 1 %}
+            <nav class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page - 1 }}&file_type={{ current_file_type }}&search={{ search }}">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for p in range(1, total_pages + 1) %}
+                    <li class="page-item {% if p == page %}active{% endif %}">
+                        <a class="page-link" href="?page={{ p }}&file_type={{ current_file_type }}&search={{ search }}">
+                            {{ p }}
+                        </a>
+                    </li>
+                    {% endfor %}
+
+                    {% if page < total_pages %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page + 1 }}&file_type={{ current_file_type }}&search={{ search }}">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+
+            {% else %}
+            <div class="text-center py-5">
+                <i class="bi bi-inbox" style="font-size: 4rem; color: #dee2e6;"></i>
+                <p class="text-muted mt-3">暂无文件</p>
+                <a href="/admin/media/upload" class="btn btn-primary">
+                    <i class="bi bi-cloud-upload"></i> 立即上传
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- 文件详情模态框 -->
+<div class="modal fade" id="fileDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">文件详情</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="fileDetailContent">
+                    <div class="text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">加载中...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// 全选功能
+document.getElementById('selectAllBtn').addEventListener('click', function() {
+    const checkboxes = document.querySelectorAll('.media-checkbox');
+    const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+
+    checkboxes.forEach(cb => {
+        cb.checked = !allChecked;
+        if (cb.checked) {
+            cb.closest('.media-card').classList.add('selected');
+        } else {
+            cb.closest('.media-card').classList.remove('selected');
+        }
+    });
+
+    updateBatchActions();
+});
+
+// 单个复选框点击
+document.querySelectorAll('.media-checkbox').forEach(checkbox => {
+    checkbox.addEventListener('click', function(e) {
+        e.stopPropagation();
+        if (this.checked) {
+            this.closest('.media-card').classList.add('selected');
+        } else {
+            this.closest('.media-card').classList.remove('selected');
+        }
+        updateBatchActions();
+    });
+});
+
+// 更新批量操作按钮状态
+function updateBatchActions() {
+    const checkedCount = document.querySelectorAll('.media-checkbox:checked').length;
+    const batchDeleteBtn = document.getElementById('batchDeleteBtn');
+
+    if (checkedCount > 0) {
+        batchDeleteBtn.disabled = false;
+        batchDeleteBtn.textContent = `删除选中 (${checkedCount})`;
+    } else {
+        batchDeleteBtn.disabled = true;
+        batchDeleteBtn.innerHTML = '<i class="bi bi-trash"></i> 删除选中';
+    }
+}
+
+// 批量删除
+document.getElementById('batchDeleteBtn').addEventListener('click', function() {
+    const selectedIds = Array.from(document.querySelectorAll('.media-checkbox:checked'))
+        .map(cb => cb.value);
+
+    if (!confirm(`确定要删除选中的 ${selectedIds.length} 个文件吗？此操作不可恢复！`)) {
+        return;
+    }
+
+    fetch('/admin/media/batch-delete', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ media_ids: selectedIds })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('删除成功', 'success');
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showToast(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        showToast('删除失败', 'error');
+        console.error('Error:', error);
+    });
+});
+
+// 查看文件详情
+function viewFile(fileId) {
+    const modal = new bootstrap.Modal(document.getElementById('fileDetailModal'));
+    modal.show();
+
+    fetch(`/admin/media/${fileId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                displayFileDetail(data.file);
+            } else {
+                document.getElementById('fileDetailContent').innerHTML =
+                    '<div class="alert alert-danger">加载失败</div>';
+            }
+        })
+        .catch(error => {
+            document.getElementById('fileDetailContent').innerHTML =
+                '<div class="alert alert-danger">加载失败</div>';
+        });
+}
+
+// 显示文件详情
+function displayFileDetail(file) {
+    let previewHTML = '';
+
+    if (file.file_type === 'image') {
+        previewHTML = `<img src="/${file.url}" class="img-fluid mb-3" alt="${file.filename}">`;
+    } else if (file.file_type === 'video') {
+        previewHTML = `<video src="/${file.url}" controls class="w-100 mb-3"></video>`;
+    }
+
+    const html = `
+        ${previewHTML}
+        <table class="table">
+            <tr><th style="width: 150px;">文件名</th><td>${file.filename}</td></tr>
+            <tr><th>文件类型</th><td>${file.file_type}</td></tr>
+            <tr><th>MIME 类型</th><td>${file.mime_type}</td></tr>
+            <tr><th>文件大小</th><td>${file.size}</td></tr>
+            ${file.width ? `<tr><th>尺寸</th><td>${file.width} × ${file.height}</td></tr>` : ''}
+            <tr><th>上传时间</th><td>${new Date(file.created_at).toLocaleString('zh-CN')}</td></tr>
+            <tr><th>使用次数</th><td>${file.usage_count}</td></tr>
+            <tr><th>查看次数</th><td>${file.view_count}</td></tr>
+            <tr><th>下载次数</th><td>${file.download_count}</td></tr>
+        </table>
+    `;
+
+    document.getElementById('fileDetailContent').innerHTML = html;
+}
+
+// 删除单个文件
+function deleteFile(fileId) {
+    if (!confirm('确定要删除这个文件吗？此操作不可恢复！')) {
+        return;
+    }
+
+    fetch(`/admin/media/${fileId}`, {
+        method: 'DELETE'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('删除成功', 'success');
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showToast(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        showToast('删除失败', 'error');
+        console.error('Error:', error);
+    });
+}
+
+// Toast 提示
+function showToast(message, type = 'info') {
+    // 简单的 Toast 实现
+    const toast = document.createElement('div');
+    toast.className = `alert alert-${type === 'error' ? 'danger' : 'success'} position-fixed top-0 start-50 translate-middle-x mt-3`;
+    toast.style.zIndex = '9999';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+</script>
+{% endblock %}

@@ -1,0 +1,324 @@
+{% extends "base.html" %}
+
+{% block title %}上传文件 - 博文教育管理后台{% endblock %}
+
+{% block extra_css %}
+<!-- Dropzone CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dropzone@5.9.3/dist/dropzone.min.css">
+<style>
+.dropzone {
+    border: 2px dashed #dee2e6;
+    border-radius: 0.5rem;
+    background: white;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dropzone:hover {
+    border-color: #c8102e;
+    background-color: #f8f9fa;
+}
+
+.dropzone .dz-message {
+    margin: 2rem 0;
+}
+
+.dropzone .dz-message i {
+    font-size: 3rem;
+    color: #6c757d;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.upload-info {
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.file-type-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.file-type-badge.image {
+    background-color: #d1f4e0;
+    color: #10b981;
+}
+
+.file-type-badge.video {
+    background-color: #fef3c7;
+    color: #f59e0b;
+}
+
+.file-type-badge.document {
+    background-color: #dbeafe;
+    color: #3b82f6;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- 页面标题 -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2>上传文件</h2>
+            <p class="text-muted mb-0">上传图片、视频和文档到媒体库</p>
+        </div>
+        <div>
+            <a href="/admin/media" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> 返回媒体库
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <!-- 上传区域 -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body">
+                    <form action="/admin/media/upload"
+                          class="dropzone"
+                          id="mediaDropzone"
+                          method="post"
+                          enctype="multipart/form-data">
+                        <div class="dz-message">
+                            <i class="bi bi-cloud-upload"></i>
+                            <h5>拖拽文件到此处上传</h5>
+                            <p class="text-muted">或点击选择文件</p>
+                            <button type="button" class="btn btn-primary mt-2">
+                                选择文件
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 上传设置 -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">上传设置</h5>
+                </div>
+                <div class="card-body">
+                    <form id="uploadSettingsForm">
+                        <div class="mb-3">
+                            <label class="form-label">文件夹</label>
+                            <select class="form-select" id="folderId" name="folder_id">
+                                <option value="">选择文件夹</option>
+                                {% for folder in folders %}
+                                <option value="{{ folder.id }}">{{ folder.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">标题（可选）</label>
+                            <input type="text" class="form-control" id="title" name="title"
+                                   placeholder="为文件添加描述性标题">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Alt 文本（可选）</label>
+                            <input type="text" class="form-control" id="altText" name="alt_text"
+                                   placeholder="图片的替代文本（SEO优化）">
+                            <small class="form-text text-muted">
+                                用于提高可访问性和SEO效果
+                            </small>
+                        </div>
+
+                        <div class="mb-0">
+                            <label class="form-label">说明（可选）</label>
+                            <textarea class="form-control" id="caption" name="caption" rows="3"
+                                      placeholder="文件的详细说明"></textarea>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <!-- 上传信息 -->
+            <div class="upload-info">
+                <h6><i class="bi bi-info-circle"></i> 上传须知</h6>
+                <hr>
+                <p class="mb-2"><strong>支持的文件类型：</strong></p>
+                <div class="mb-3">
+                    <span class="file-type-badge image">图片</span>
+                    <span class="file-type-badge video">视频</span>
+                    <span class="file-type-badge document">文档</span>
+                </div>
+
+                <p class="mb-2"><strong>图片格式：</strong></p>
+                <p class="text-muted small">JPG, PNG, GIF, WebP, SVG</p>
+                <p class="mb-2"><strong>最大大小：</strong> 5MB</p>
+                <hr>
+
+                <p class="mb-2"><strong>视频格式：</strong></p>
+                <p class="text-muted small">MP4, WebM, OGG</p>
+                <p class="mb-2"><strong>最大大小：</strong> 50MB</p>
+                <hr>
+
+                <p class="mb-2"><strong>文档格式：</strong></p>
+                <p class="text-muted small">PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX</p>
+                <p class="mb-2"><strong>最大大小：</strong> 10MB</p>
+            </div>
+
+            <!-- 上传进度 -->
+            <div class="card border-0 shadow-sm" id="uploadProgressCard" style="display: none;">
+                <div class="card-header bg-white">
+                    <h6 class="mb-0">上传进度</h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span id="uploadStatus">正在上传...</span>
+                        <span id="uploadPercent">0%</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" id="uploadProgressBar"
+                             role="progressbar" style="width: 0%"></div>
+                    </div>
+                    <div class="mt-2">
+                        <small class="text-muted">
+                            <span id="uploadedCount">0</span> / <span id="totalCount">0</span> 个文件
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Dropzone JS -->
+<script src="https://cdn.jsdelivr.net/npm/dropzone@5.9.3/dist/dropzone.min.js"></script>
+<script>
+// 禁用 Dropzone 的自动发现
+Dropzone.autoDiscover = false;
+
+// 初始化 Dropzone
+const dropzone = new Dropzone("#mediaDropzone", {
+    url: "/admin/media/upload",
+    paramName: "file",
+    maxFilesize: 50, // MB
+    acceptedFiles: "image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx",
+    addRemoveLinks: true,
+    dictDefaultMessage: "",
+    dictRemoveFile: "删除",
+    dictCancelUpload: "取消",
+    dictMaxFilesExceeded: "超过最大文件数量",
+    parallelUploads: 3,
+    uploadMultiple: false,
+
+    // 在发送前添加额外参数
+    sending: function(file, xhr, formData) {
+        const folderId = document.getElementById('folderId').value;
+        const title = document.getElementById('title').value;
+        const altText = document.getElementById('altText').value;
+        const caption = document.getElementById('caption').value;
+
+        if (folderId) formData.append('folder_id', folderId);
+        if (title) formData.append('title', title);
+        if (altText) formData.append('alt_text', altText);
+        if (caption) formData.append('caption', caption);
+
+        // 显示进度卡片
+        document.getElementById('uploadProgressCard').style.display = 'block';
+        updateUploadProgress();
+    },
+
+    // 上传成功
+    success: function(file, response) {
+        console.log('Upload success:', response);
+        showToast('上传成功', 'success');
+        updateUploadProgress();
+
+        // 如果所有文件都上传完成，延迟跳转
+        setTimeout(() => {
+            const queued = dropzone.getQueuedFiles().length;
+            const uploading = dropzone.getUploadingFiles().length;
+
+            if (queued === 0 && uploading === 0) {
+                // 所有文件上传完成
+                setTimeout(() => {
+                    window.location.href = '/admin/media';
+                }, 1500);
+            }
+        }, 500);
+    },
+
+    // 上传失败
+    error: function(file, response) {
+        console.error('Upload error:', response);
+        const message = response.message || '上传失败';
+        showToast(message, 'error');
+        updateUploadProgress();
+    },
+
+    // 上传进度
+    uploadprogress: function(file, progress, bytesSent) {
+        updateUploadProgress();
+    },
+
+    // 文件被删除
+    removedfile: function(file) {
+        file.previewElement.remove();
+        updateUploadProgress();
+    }
+});
+
+// 更新上传进度
+function updateUploadProgress() {
+    const queuedFiles = dropzone.getQueuedFiles();
+    const uploadingFiles = dropzone.getUploadingFiles();
+    const completedFiles = dropzone.getFilesWithStatus(Dropzone.SUCCESS);
+    const totalFiles = dropzone.files.length;
+    const uploadedCount = completedFiles.length;
+
+    // 更新计数
+    document.getElementById('uploadedCount').textContent = uploadedCount;
+    document.getElementById('totalCount').textContent = totalFiles;
+
+    // 更新进度条
+    if (totalFiles > 0) {
+        const percent = Math.round((uploadedCount / totalFiles) * 100);
+        document.getElementById('uploadPercent').textContent = percent + '%';
+        document.getElementById('uploadProgressBar').style.width = percent + '%';
+
+        if (uploadingFiles.length > 0) {
+            document.getElementById('uploadStatus').textContent = '正在上传...';
+        } else if (queuedFiles.length > 0) {
+            document.getElementById('uploadStatus').textContent = '准备上传...';
+        } else {
+            document.getElementById('uploadStatus').textContent = '上传完成';
+        }
+    }
+}
+
+// Toast 提示
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `alert alert-${type === 'error' ? 'danger' : 'success'} position-fixed top-0 start-50 translate-middle-x mt-3`;
+    toast.style.zIndex = '9999';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
+// 页面加载完成后的提示
+window.addEventListener('load', function() {
+    // 可以在这里添加额外的初始化逻辑
+});
+</script>
+{% endblock %}
