@@ -61,8 +61,10 @@ class Post(BaseModel):
     cover_media_id = Column(
         Integer, ForeignKey("media_file.id"), nullable=True, comment="封面图ID"
     )
+    content_markdown = Column(Text, nullable=True, comment="Markdown原文")
     content_html = Column(Text, nullable=False, comment="文章内容HTML")
     is_recommended = Column(Boolean, default=False, nullable=False, comment="是否推荐")
+    is_pinned = Column(Boolean, default=False, nullable=False, comment="是否置顶")
     status = Column(
         Enum("draft", "published", "offline", name="post_status"),
         default="draft",

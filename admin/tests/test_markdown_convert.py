@@ -35,10 +35,14 @@ def hello():
 """
         html = markdown_to_html(markdown_text)
 
-        # 检查代码块是否正确转换 (bleach 会清理不在允许列表的属性,但标签应该保留)
-        assert "code" in html  # 更宽松的检查
+        # 检查代码块是否正确转换 (代码高亮后会被分割成多个 span 标签)
+        assert "code" in html
         assert "pre" in html
-        assert "def hello():" in html
+        # 检查关键字和内容是否存在（而不是完整字符串，因为会被高亮标签分割）
+        assert "def" in html
+        assert "hello" in html
+        assert "print" in html
+        assert "Hello, World!" in html
 
     def test_xss_prevention(self):
         """测试 XSS 防护"""

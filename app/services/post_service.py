@@ -28,7 +28,7 @@ def get_post_categories(
     query = db.query(PostCategory).filter(PostCategory.column_id == column_id)
 
     if visible_only:
-        query = query.filter(PostCategory.is_visible == True)
+        query = query.filter(PostCategory.is_visible.is_(True))
 
     return query.order_by(PostCategory.sort_order).all()
 
@@ -192,7 +192,7 @@ def get_category_stats(db: Session, column_id: Optional[int] = None) -> List[dic
         .join(PostCategoryLink, PostCategory.id == PostCategoryLink.category_id)
         .join(Post, Post.id == PostCategoryLink.post_id)
         .filter(Post.status == "published")
-        .filter(PostCategory.is_visible == True)
+        .filter(PostCategory.is_visible.is_(True))
     )
 
     if column_id:
@@ -249,3 +249,123 @@ def get_popular_tags(
     ]
 
     return default_tags[:limit]
+
+
+# ===== 管理后台功能 =====
+
+
+def generate_slug(title: str, db: Session, exclude_id: Optional[int] = None) -> str:
+    """
+    生成唯一的 slug
+
+    Args:
+        title: 文章标题
+        db: 数据库会话
+        exclude_id: 排除的文章 ID (用于更新时)
+
+    Returns:
+        唯一的 slug
+    """
+    from app.services.single_page_service import slugify
+
+    base_slug = slugify(title)
+
+    if not base_slug:
+        base_slug = "post"
+
+    # 检查 slug 是否已存在
+    query = db.query(Post).filter(Post.slug == base_slug)
+    if exclude_id:
+        query = query.filter(Post.id != exclude_id)
+
+    existing = query.first()
+
+    if not existing:
+        return base_slug
+
+    # 如果已存在,添加数字后缀
+    counter = 1
+    while True:
+        new_slug = f"{base_slug}-{counter}"
+        query = db.query(Post).filter(Post.slug == new_slug)
+        if exclude_id:
+            query = query.filter(Post.id != exclude_id)
+
+        if not query.first():
+            return new_slug
+
+        counter += 1
+
+
+def can_delete_post(db: Session, post_id: int) -> tuple[bool, str]:
+    """
+    检查文章是否可以删除
+
+    Args:
+        db: 数据库会话
+        post_id: 文章 ID
+
+    Returns:
+        (是否可以删除, 错误消息)
+    """
+    post = db.query(Post).filter(Post.id == post_id).first()
+
+    if not post:
+        return False, "文章不存在"
+
+    # 文章可以直接删除,无需特殊检查
+    # 如果将来有引用关系(如评论),可以在这里添加检查
+    return True, ""
+
+
+def publish_post(db: Session, post_id: int) -> tuple[bool, str]:
+    """
+    发布文章
+
+    Args:
+        db: 数据库会话
+        post_id: 文章 ID
+
+    Returns:
+        (是否成功, 消息)
+    """
+    from datetime import datetime
+
+    post = db.query(Post).filter(Post.id == post_id).first()
+
+    if not post:
+        return False, "文章不存在"
+
+    if post.status == "published":
+        return False, "文章已经是发布状态"
+
+    post.status = "published"
+    post.published_at = datetime.now()
+    db.commit()
+
+    return True, "发布成功"
+
+
+def unpublish_post(db: Session, post_id: int) -> tuple[bool, str]:
+    """
+    取消发布文章
+
+    Args:
+        db: 数据库会话
+        post_id: 文章 ID
+
+    Returns:
+        (是否成功, 消息)
+    """
+    post = db.query(Post).filter(Post.id == post_id).first()
+
+    if not post:
+        return False, "文章不存在"
+
+    if post.status == "draft":
+        return False, "文章已经是草稿状态"
+
+    post.status = "draft"
+    db.commit()
+
+    return True, "取消发布成功"

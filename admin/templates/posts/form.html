@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ '编辑' if post else '新建' }}文章 - 管理后台</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+</head>
+<body>
+    <h1>{{ '编辑' if post else '新建' }}文章</h1>
+    
+    <form id="postForm" method="POST" action="{{ action }}">
+        <div>
+            <label>标题:</label>
+            <input type="text" name="title" value="{{ post.title if post else '' }}" required>
+        </div>
+        
+        <div>
+            <label>Slug:</label>
+            <input type="text" name="slug" value="{{ post.slug if post else '' }}">
+        </div>
+        
+        <div>
+            <label>栏目:</label>
+            <select name="column_id" required>
+                {% for col in columns %}
+                <option value="{{ col.id }}" {% if post and col.id == post.column_id %}selected{% endif %}>
+                    {{ col.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div>
+            <label>摘要:</label>
+            <textarea name="summary" rows="3">{{ post.summary if post else '' }}</textarea>
+        </div>
+        
+        <div>
+            <label>内容 (Markdown):</label>
+            <textarea id="markdown-editor" name="content_markdown">{{ post.content_markdown if post else '' }}</textarea>
+        </div>
+        
+        <div>
+            <label>封面图ID:</label>
+            <input type="number" name="cover_media_id" value="{{ post.cover_media_id if post else '' }}">
+        </div>
+        
+        <div>
+            <label>分类 (逗号分隔ID):</label>
+            <input type="text" name="category_ids" 
+                value="{% if post %}{{ post.categories|map(attribute='id')|join(',') }}{% endif %}">
+        </div>
+        
+        <div>
+            <label>SEO标题:</label>
+            <input type="text" name="seo_title" value="{{ post.seo_title if post else '' }}">
+        </div>
+        
+        <div>
+            <label>SEO描述:</label>
+            <textarea name="seo_description" rows="2">{{ post.seo_description if post else '' }}</textarea>
+        </div>
+        
+        <div>
+            <label>
+                <input type="checkbox" name="is_recommended" value="1" 
+                    {% if post and post.is_recommended %}checked{% endif %}>
+                推荐
+            </label>
+            <label>
+                <input type="checkbox" name="is_pinned" value="1" 
+                    {% if post and post.is_pinned %}checked{% endif %}>
+                置顶
+            </label>
+        </div>
+        
+        <div>
+            <label>状态:</label>
+            <select name="status">
+                <option value="draft" {% if not post or post.status == 'draft' %}selected{% endif %}>草稿</option>
+                <option value="published" {% if post and post.status == 'published' %}selected{% endif %}>发布</option>
+                <option value="offline" {% if post and post.status == 'offline' %}selected{% endif %}>下线</option>
+            </select>
+        </div>
+        
+        <div>
+            <button type="submit">保存</button>
+            <a href="/admin/posts">返回列表</a>
+        </div>
+    </form>
+    
+    <script>
+    // 初始化 Markdown 编辑器
+    const easyMDE = new EasyMDE({
+        element: document.getElementById('markdown-editor'),
+        spellChecker: false,
+        autosave: {enabled: true, uniqueId: 'post-content'}
+    });
+    
+    // AJAX 提交表单
+    document.getElementById('postForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        
+        // 处理复选框
+        formData.set('is_recommended', document.querySelector('[name=is_recommended]').checked);
+        formData.set('is_pinned', document.querySelector('[name=is_pinned]').checked);
+        
+        fetch(this.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(r => r.json())
+        .then(d => {
+            alert(d.message);
+            if (d.success) window.location.href = '/admin/posts';
+        })
+        .catch(e => alert('提交失败: ' + e));
+    });
+    </script>
+</body>
+</html>

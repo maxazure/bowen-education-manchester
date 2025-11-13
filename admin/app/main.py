@@ -12,7 +12,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 
-from admin.app.routers import auth, media, columns, single_pages
+from admin.app.routers import auth, media, columns, single_pages, posts
 from admin.app.middleware import AdminAuthMiddleware
 
 # 获取admin目录的绝对路径
@@ -39,6 +39,7 @@ app.include_router(auth.router, prefix="/admin", tags=["auth"])
 app.include_router(media.router, prefix="/admin/media", tags=["media"])
 app.include_router(columns.router, prefix="/admin", tags=["columns"])
 app.include_router(single_pages.router, prefix="/admin", tags=["pages"])
+app.include_router(posts.router, prefix="/admin", tags=["posts"])
 
 # 挂载静态文件
 app.mount("/static", StaticFiles(directory=str(ADMIN_DIR / "static")), name="static")
