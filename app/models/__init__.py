@@ -16,6 +16,7 @@ from app.models.site import (
 )
 from app.models.media import (
     MediaFile,
+    MediaFolder,
 )
 from app.models.contact import (
     ContactMessage,
@@ -52,9 +53,17 @@ from app.models.gallery import (
     Gallery,
     GalleryImage,
 )
+from app.models.album import (
+    Album,
+    AlbumCategory,
+    AlbumPhoto,
+)
 
 __all__ = [
     "AdminUser",
+    "Album",
+    "AlbumCategory",
+    "AlbumPhoto",
     "BaseModel",
     "ColumnType",
     "ContactMessage",
@@ -66,6 +75,7 @@ __all__ = [
     "Gallery",
     "GalleryImage",
     "MediaFile",
+    "MediaFolder",
     "MenuLocation",
     "Post",
     "PostCategory",
