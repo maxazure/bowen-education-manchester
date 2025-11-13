@@ -1,6 +1,252 @@
 # TODO 任务列表
 
 ## ✅ 已完成
+### [2025-11-14] 产品列表页面 Bootstrap 5 迁移
+- [x] 将 products/list.html 迁移到 Bootstrap 5 UI - 完成时间: 2025-11-14 - 负责人: maxazure
+  - **迁移内容**:
+    - 继承 base.html 模板（Bootstrap 5）
+    - 完全移除内联 CSS，使用 admin.css 中的样式类
+    - 使用 Bootstrap 5 组件系统（卡片、表格、表单、分页、徽章、按钮）
+    - 实现批量操作栏（动画效果、响应式设计）
+    - 添加产品专用筛选器（栏目、状态、推荐、供货状态、关键词）
+  - **页面布局结构**:
+    - 页面头部：标题 + 副标题 + 新建按钮
+    - 统计卡片区域：4个卡片（总产品数、在线产品、下线产品、推荐产品）
+    - 筛选表单：5个筛选器（栏目、状态、推荐、供货状态、关键词）
+    - 批量操作栏：6个操作（上线、下线、推荐、取消推荐、删除、取消选择）
+    - 数据表格：11列（复选框、ID、封面、产品名称、栏目、价格、状态、推荐、浏览量、更新时间、操作）
+    - 分页组件：智能页码显示（省略号）
+  - **统计卡片**（4个）:
+    - 总产品数（蓝色）：显示总数量
+    - 在线产品（绿色）：统计在线产品
+    - 下线产品（黄色）：统计下线产品
+    - 推荐产品（红色）：统计推荐产品
+  - **筛选条件**（5个）:
+    - 栏目筛选（下拉框）：所有栏目 + 各个产品栏目
+    - 状态筛选（下拉框）：所有状态 / 草稿 / 在线 / 下线
+    - 推荐状态（下拉框）：全部 / 仅推荐 / 非推荐
+    - 供货状态（下拉框）：全部 / 有货 / 缺货 / 询价
+    - 关键词搜索（输入框）：搜索名称、摘要
+  - **表格列**（11列）:
+    - 复选框：用于批量操作
+    - ID：产品 ID
+    - 封面：产品封面缩略图（50x50px，悬停放大效果）
+    - 产品名称：带编辑链接
+    - 栏目：显示所属栏目（徽章）
+    - 价格：价格文本（绿色加粗）
+    - 状态：在线 / 草稿 / 下线（带图标徽章）
+    - 推荐：星标图标（填充/空心）
+    - 浏览量：眼睛图标 + 数量
+    - 更新时间：YYYY-MM-DD HH:MM 格式
+    - 操作：编辑、上线/下线、推荐/取消、删除（4个按钮）
+  - **批量操作**（6个）:
+    - 批量上线：将选中的草稿或下线产品上线
+    - 批量下线：将选中的在线产品下线
+    - 批量推荐：将选中的产品设为推荐
+    - 批量取消推荐：取消选中产品的推荐状态
+    - 批量删除：删除选中的产品（带确认）
+    - 取消选择：清除所有复选框
+  - **JavaScript 功能**:
+    - 全选/取消全选复选框
+    - 批量操作栏显示/隐藏（动态计数）
+    - 单个产品操作（上线、下线、推荐、删除）
+    - 批量操作（上线、下线、推荐、取消推荐、删除）
+    - 使用 base.html 提供的全局函数（showToast, confirmAction）
+    - Bootstrap Tooltip 初始化
+  - **代码复用统计**:
+    - 完全复用 posts/list.html 的布局结构（95%+）
+    - 模板代码：758 行（与文章列表相似度 95%）
+    - 差异点仅：封面图显示、价格显示、状态值（online vs published）
+    - 复用 admin.css 的所有列表样式（无需新增）
+  - **新增样式**（在 admin.css 第 27 节）:
+    - `.product-thumbnail` - 封面缩略图样式（50x50px、圆角、悬停放大效果）
+    - `.price-text` - 价格文本样式（绿色加粗）
+    - 响应式调整：移动端隐藏封面列和价格列
+  - **响应式设计**:
+    - 桌面端：完整显示所有列和功能
+    - 平板端（≤991px）：隐藏封面列
+    - 移动端（≤767px）：隐藏封面列和价格列
+  - **代码统计**:
+    - 模板文件：从 125 行增加到 758 行（+633 行）
+    - 无内联 CSS（0 行）
+    - admin.css：新增 44 行（27. 产品列表专用样式）
+    - JavaScript：346 行（全选、批量操作、单个操作、Toast、确认对话框）
+  - **兼容性**:
+    - Bootstrap 5.3.0+
+    - 浏览器支持：Chrome, Firefox, Safari, Edge
+    - 移动设备完全支持
+  - **相关文件**:
+    - admin/templates/products/list.html（完全重写）
+    - admin/static/css/admin.css（新增 27. 产品列表专用样式）
+
+
+### [2025-11-14] 文章列表页面 Bootstrap 5 迁移
+- [x] 将 posts/list.html 迁移到 Bootstrap 5 UI - 完成时间: 2025-11-14 - 负责人: maxazure
+  - **迁移内容**:
+    - 继承 base.html 模板（Bootstrap 5）
+    - 完全移除内联 CSS，使用 admin.css 中的样式类
+    - 使用 Bootstrap 5 组件系统（卡片、表格、表单、分页、徽章、按钮）
+    - 实现批量操作栏（动画效果、响应式设计）
+    - 添加文章专用筛选器（栏目、状态、推荐、置顶、关键词）
+  - **页面布局结构**:
+    - 页面头部：标题 + 副标题 + 新建按钮
+    - 统计卡片区域：4个卡片（总文章数、已发布、草稿、推荐文章）
+    - 筛选表单：5个筛选器（栏目、状态、推荐、置顶、关键词）
+    - 批量操作栏：6个操作（发布、草稿、推荐、取消推荐、删除、取消选择）
+    - 数据表格：10列（复选框、ID、标题、栏目、状态、推荐、置顶、浏览量、更新时间、操作）
+    - 分页组件：智能页码显示（省略号）
+  - **统计卡片**（4个）:
+    - 总文章数（蓝色）：显示总数量
+    - 已发布（绿色）：统计已发布文章
+    - 草稿（黄色）：统计草稿文章
+    - 推荐文章（红色）：统计推荐文章
+  - **筛选条件**（5个）:
+    - 栏目筛选（下拉框）：所有栏目 + 各个文章栏目
+    - 状态筛选（下拉框）：所有状态 / 草稿 / 已发布 / 已下线
+    - 推荐状态（下拉框）：全部 / 仅推荐 / 非推荐
+    - 置顶状态（下拉框）：全部 / 仅置顶 / 非置顶
+    - 关键词搜索（输入框）：搜索标题、摘要
+  - **表格列**（10列）:
+    - 复选框：用于批量操作
+    - ID：文章 ID
+    - 标题：带编辑链接 + 置顶图标
+    - 栏目：显示所属栏目（徽章）
+    - 状态：已发布 / 草稿 / 已下线（带图标徽章）
+    - 推荐：星标图标（填充/空心）
+    - 置顶：图钉图标（填充/空心）
+    - 浏览量：眼睛图标 + 数量
+    - 更新时间：YYYY-MM-DD HH:MM 格式
+    - 操作：编辑、发布/草稿、推荐/取消、删除（4-5个按钮）
+  - **批量操作**（6个）:
+    - 批量发布：将选中的草稿文章发布
+    - 批量草稿：将选中的已发布文章设为草稿
+    - 批量推荐：将选中的文章设为推荐
+    - 批量取消推荐：取消选中文章的推荐状态
+    - 批量删除：删除选中的文章（带确认）
+    - 取消选择：清除所有复选框
+  - **JavaScript 功能**:
+    - 全选/取消全选复选框
+    - 批量操作栏显示/隐藏（动态计数）
+    - 单个文章操作（发布、取消发布、推荐、删除）
+    - 批量操作（发布、草稿、推荐、取消推荐、删除）
+    - 使用 base.html 提供的全局函数（showToast, confirmAction）
+    - Bootstrap Tooltip 初始化
+  - **UI 组件使用**（复用 admin.css）:
+    - `.page-header`, `.page-title`, `.page-subtitle`, `.page-actions` - 页面头部
+    - `.stat-card`, `.stat-icon`, `.stat-value`, `.stat-label` - 统计卡片
+    - `.bg-info-light`, `.bg-success-light`, `.bg-warning-light`, `.bg-primary-light` - 渐变背景
+    - `.card`, `.card-body` - 内容卡片
+    - `.table`, `.table-hover` - 表格
+    - `.badge`, `.bg-success`, `.bg-warning`, `.bg-secondary` - 状态徽章
+    - `.btn`, `.btn-primary`, `.btn-success`, `.btn-warning`, `.btn-outline-danger` - 按钮
+    - `.pagination`, `.page-link`, `.page-item` - 分页组件
+    - `.form-label`, `.form-select`, `.form-control`, `.input-group` - 表单组件
+    - `.batch-actions-bar` - 批量操作栏（新增到 admin.css）
+    - `.empty-state` - 空状态提示
+  - **新增样式**（在 admin.css 第 26 节）:
+    - `.batch-actions-bar` - 批量操作栏样式（黄色背景、边框、圆角）
+    - `@keyframes slideDown` - 滑入动画
+    - 响应式调整（移动端纵向堆叠）
+  - **响应式设计**:
+    - 桌面端：完整显示所有列和功能
+    - 平板端：隐藏部分次要列
+    - 移动端：批量操作按钮纵向堆叠
+  - **代码统计**:
+    - 模板文件：从 92 行增加到 750 行（+658 行）
+    - 无内联 CSS（0 行）
+    - admin.css：新增 39 行（26. 批量操作栏样式）
+    - JavaScript：405 行（全选、批量操作、单个操作、Toast、确认对话框）
+  - **兼容性**:
+    - Bootstrap 5.3.0+
+    - 浏览器支持：Chrome, Firefox, Safari, Edge
+    - 移动设备完全支持
+  - **相关文件**:
+    - admin/templates/posts/list.html（完全重写）
+    - admin/static/css/admin.css（新增 26. 批量操作栏样式）
+
+### [2025-11-14] 站点设置页面 Bootstrap 5 迁移
+- [x] 将 settings/index.html 迁移到 Bootstrap 5 UI - 完成时间: 2025-11-14 - 负责人: maxazure
+  - **迁移内容**:
+    - 移除所有内联 CSS（136行）到 admin.css 统一管理
+    - 继承现有的 base.html 模板（Bootstrap 5）
+    - 使用 Bootstrap 5 标签页（Nav Tabs）组织设置项
+    - 4个标签页分组：基本信息、联系方式、社交媒体、高级设置
+    - 完全移除 `{% block extra_css %}`，使用 admin.css 中的样式类
+  - **样式系统升级**:
+    - 新增"25. 站点设置页面专用样式"到 admin.css（133行）
+    - Bootstrap Nav Tabs 自定义样式（中国红主题）
+    - 媒体选择器组件样式（图片预览、控制按钮）
+    - 表单分组样式（section-title, form-section）
+    - 固定底部保存按钮样式（sticky定位）
+    - Tab 内容区域样式（padding: 24px 0）
+  - **设置分组结构**:
+    1. **基本信息** (basic-tab):
+       - 站点名称、站点标语、站点描述
+       - 媒体资源：Logo、Favicon、默认封面图
+       - 媒体选择器组件：预览框 + 操作按钮
+    2. **联系方式** (contact-tab):
+       - 联系电话、联系邮箱、联系地址
+       - 工作时间（多行文本）
+       - 地图嵌入代码（支持 Google Maps）
+    3. **社交媒体** (social-tab):
+       - 微信二维码、微博、Facebook
+       - Twitter/X、LinkedIn、Instagram、YouTube
+       - 每个平台带品牌色图标
+    4. **高级设置** (advanced-tab):
+       - SEO 优化：关键词、描述（字符计数）
+       - 统计代码：Google Analytics、自定义代码
+       - 其他设置：版权信息、ICP备案号、维护模式开关
+  - **JavaScript 功能**:
+    - Bootstrap 5 Tab 切换（原生支持，无需额外代码）
+    - 表单验证（HTML5 + Bootstrap 5）
+    - AJAX 保存设置（FormData + Fetch API）
+    - Alert 提示（显示/自动关闭）
+    - 媒体选择器功能（selectMedia, removeMedia）
+    - 媒体预览更新（updateMediaPreview）
+    - SEO 描述字符计数（实时更新，颜色提示）
+    - 邮箱和 URL 字段验证（实时反馈）
+    - 表单重置功能（resetForm）
+  - **UI 组件使用**:
+    - `.nav`, `.nav-tabs`, `.nav-item`, `.nav-link` - 标签页导航
+    - `.tab-content`, `.tab-pane` - 标签页内容
+    - `.card`, `.card-header`, `.card-body` - 卡片布局
+    - `.form-label`, `.form-control`, `.form-select` - 表单组件
+    - `.form-check`, `.form-switch` - 复选框和开关
+    - `.btn btn-primary`, `.btn btn-success` - 按钮
+    - `.media-selector`, `.media-preview`, `.media-controls` - 媒体选择器
+    - `.form-section`, `.form-section-title` - 表单分组
+    - `.save-button-fixed` - 固定底部按钮
+  - **响应式设计**:
+    - 桌面端：完整显示所有标签页
+    - 移动端：标签页可滚动，媒体选择器纵向堆叠
+    - 表单元素在移动端全宽显示
+    - 媒体预览框：120px × 120px（桌面）→ 100px × 100px（移动）
+    - 标签页链接：12px × 24px（桌面）→ 10px × 16px（移动）
+  - **代码优化统计**:
+    - 模板文件：从 778 行减少到 642 行（减少 136 行，-17.5%）
+    - 内联 CSS：从 136 行减少到 0 行（-100%）
+    - admin.css：新增 133 行（25. 站点设置页面专用样式，可复用）
+    - 净代码减少：3 行（集中管理，易维护）
+  - **复用的样式类**（来自 admin.css）:
+    - 表单组件：`.form-label`, `.form-control`, `.form-select`, `.form-text`
+    - 按钮：`.btn`, `.btn-primary`, `.btn-success`, `.btn-outline-secondary`
+    - 卡片：`.card`, `.card-header`, `.card-body`, `.card-title`
+    - 验证：`.was-validated`, `.is-valid`, `.is-invalid`, `.invalid-feedback`
+    - 工具类：`.d-flex`, `.gap-2`, `.mb-3`, `.text-danger` 等
+  - **新增的样式类**（在 admin.css 第 25 节）:
+    - `.tab-pane` - Tab 内容区域
+    - `.media-selector`, `.media-preview`, `.media-preview-empty` - 媒体选择器
+    - `.media-controls` - 媒体控制按钮组
+    - `.save-button-fixed` - 固定底部保存按钮
+    - `.form-section`, `.form-section-title` - 表单分组
+    - `.nav-tabs`, `.nav-link`, `.nav-link.active` - 标签页样式
+  - **兼容性**:
+    - Bootstrap 5.3.0+（Nav Tabs 原生支持）
+    - 浏览器支持：Chrome, Firefox, Safari, Edge
+    - 移动设备完全支持
+  - **相关文件**:
+    - admin/templates/settings/index.html（优化）
+    - admin/static/css/admin.css（新增 25. 站点设置页面专用样式）
 
 ### [2025-11-14] 产品编辑页面 Bootstrap 5 迁移
 - [x] 将 products/form.html 迁移到 Bootstrap 5 UI - 完成时间: 2025-11-14 - 负责人: maxazure

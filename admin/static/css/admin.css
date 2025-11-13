@@ -1748,3 +1748,223 @@ a:hover {
     font-size: 11px;
   }
 }
+
+/* ====================================
+   25. 站点设置页面专用样式
+   ==================================== */
+
+/* Tab 内容区域样式 */
+.tab-pane {
+  padding: 24px 0;
+}
+
+/* 媒体选择器组件 */
+.media-selector {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.media-preview {
+  width: 120px;
+  height: 120px;
+  border: 2px dashed var(--bs-border-color);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background-color: var(--bg-light);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.media-preview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.media-preview-empty {
+  color: var(--bs-secondary-text);
+  font-size: 13px;
+  text-align: center;
+  padding: 10px;
+}
+
+.media-preview-empty i {
+  display: block;
+  font-size: 32px;
+  margin-bottom: 8px;
+  opacity: 0.5;
+}
+
+.media-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 固定底部保存按钮 */
+.save-button-fixed {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  border-top: 1px solid var(--bs-border-color);
+  padding: 16px 0;
+  margin: 24px 0 0 0;
+  z-index: 10;
+}
+
+/* 表单分组 */
+.form-section {
+  margin-bottom: 32px;
+}
+
+.form-section:last-child {
+  margin-bottom: 0;
+}
+
+.form-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--bs-dark);
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--bs-border-color);
+}
+
+/* Bootstrap Nav Tabs 自定义样式 */
+.nav-tabs {
+  border-bottom: 2px solid var(--bs-border-color);
+  margin-bottom: 0;
+}
+
+.nav-tabs .nav-link {
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--bs-secondary-text);
+  font-weight: 500;
+  padding: 12px 24px;
+  transition: all var(--transition-fast);
+  border-radius: 0;
+}
+
+.nav-tabs .nav-link:hover {
+  color: var(--bs-primary);
+  border-bottom-color: transparent;
+  background-color: rgba(200, 16, 46, 0.05);
+}
+
+.nav-tabs .nav-link.active {
+  color: var(--bs-primary);
+  border-bottom-color: var(--bs-primary);
+  background-color: transparent;
+}
+
+.nav-tabs .nav-link i {
+  margin-right: 6px;
+}
+
+/* 响应式调整 */
+@media (max-width: 767.98px) {
+  .media-selector {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .media-preview {
+    width: 100px;
+    height: 100px;
+  }
+
+  .nav-tabs .nav-link {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+}
+
+/* ====================================
+   26. 批量操作栏样式
+   ==================================== */
+.batch-actions-bar {
+  background-color: #fff3cd;
+  border: 1px solid #ffc107;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  display: none;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 响应式调整 */
+@media (max-width: 767.98px) {
+  .batch-actions-bar {
+    padding: 12px;
+  }
+
+  .batch-actions-bar .d-flex {
+    flex-direction: column;
+    gap: 12px !important;
+  }
+
+  .batch-actions-bar .btn {
+    width: 100%;
+  }
+}
+
+/* ====================================
+   27. 产品列表专用样式
+   ==================================== */
+
+/* 产品封面缩略图样式 */
+.product-thumbnail {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid var(--bs-border-color);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.product-thumbnail:hover {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* 价格文本样式 */
+.price-text {
+  font-weight: 500;
+  color: #059669;
+  font-size: 14px;
+}
+
+/* 响应式调整 - 产品列表 */
+@media (max-width: 991.98px) {
+  /* 移动端隐藏封面列 */
+  .table thead th:nth-child(3),
+  .table tbody td:nth-child(3) {
+    display: none;
+  }
+}
+
+@media (max-width: 767.98px) {
+  /* 移动端隐藏价格列 */
+  .table thead th:nth-child(6),
+  .table tbody td:nth-child(6) {
+    display: none;
+  }
+}
