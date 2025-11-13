@@ -4,275 +4,260 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
-<style>
-    .form-container {
-        max-width: 1400px;
-        margin: 0 auto;
-    }
-
-    .form-layout {
-        display: grid;
-        grid-template-columns: 1fr 380px;
-        gap: 24px;
-        margin-top: 24px;
-    }
-
-    .form-main-section {
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
-    }
-
-    .form-sidebar-section {
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
-    }
-
-    .sidebar-widget {
-        background: white;
-        border: 1px solid var(--bs-border-color);
-        border-radius: 12px;
-        overflow: hidden;
-    }
-
-    .sidebar-widget-header {
-        background-color: var(--bg-light);
-        border-bottom: 1px solid var(--bs-border-color);
-        padding: 16px 20px;
-    }
-
-    .sidebar-widget-title {
-        font-size: 15px;
-        font-weight: 600;
-        color: var(--bs-dark);
-        margin: 0;
-    }
-
-    .sidebar-widget-body {
-        padding: 20px;
-    }
-
-    .category-checkboxes {
-        max-height: 300px;
-        overflow-y: auto;
-    }
-
-    .category-checkboxes .form-check {
-        padding: 8px 0;
-    }
-
-    .category-checkboxes .form-check:not(:last-child) {
-        border-bottom: 1px solid var(--bg-light);
-    }
-
-    .form-actions {
-        position: sticky;
-        bottom: 0;
-        background: white;
-        padding: 16px 20px;
-        border-top: 1px solid var(--bs-border-color);
-        display: flex;
-        gap: 12px;
-        justify-content: flex-end;
-        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
-        margin: 24px -24px -24px -24px;
-        border-radius: 0 0 12px 12px;
-    }
-
-    .EasyMDEContainer {
-        margin-bottom: 0;
-    }
-
-    .EasyMDEContainer .CodeMirror {
-        height: 400px;
-        border-radius: 8px;
-    }
-
-    .price-preview {
-        padding: 12px;
-        background: var(--bg-light);
-        border: 1px solid var(--bs-border-color);
-        border-radius: 8px;
-        font-size: 13px;
-        color: var(--bs-secondary-text);
-        margin-top: 8px;
-    }
-
-    @media (max-width: 991.98px) {
-        .form-layout {
-            grid-template-columns: 1fr;
-        }
-    }
-</style>
 {% endblock %}
 
 {% block content %}
 <div class="form-container">
-    <!-- 页面标题 -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <!-- 页面头部 -->
+    <div class="page-header d-flex justify-content-between align-items-center">
         <div>
             <h1 class="page-title mb-1">
-                <i class="bi bi-box-seam me-2"></i>
+                <i class="bi bi-{% if product %}pencil-square{% else %}plus-circle{% endif %} me-2"></i>
                 {% if product %}编辑产品{% else %}新建产品{% endif %}
             </h1>
             <p class="page-subtitle mb-0">
                 {% if product %}
-                    修改产品信息并保存更改
+                更新产品信息和内容
                 {% else %}
-                    填写产品基本信息和详细内容
+                创建一个新的产品
                 {% endif %}
             </p>
         </div>
-        <a href="/admin/products" class="btn btn-outline-secondary">
-            <i class="bi bi-arrow-left me-2"></i>返回列表
-        </a>
+        <div>
+            <a href="/admin/products" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>返回列表
+            </a>
+        </div>
     </div>
 
-    <!-- 表单区域 -->
-    <form id="productForm" method="POST" action="{{ action }}">
+    <!-- 表单内容 -->
+    <form method="POST" action="{{ action }}" id="productForm" class="needs-validation" novalidate>
         <div class="form-layout">
             <!-- 左侧主要内容 -->
-            <div class="form-main-section">
-                <!-- 基本信息 -->
+            <div class="form-main">
+                <!-- 基本信息卡片 -->
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title">
+                        <h5 class="card-title mb-0">
                             <i class="bi bi-info-circle me-2"></i>基本信息
                         </h5>
                     </div>
                     <div class="card-body">
+                        <!-- 产品名称 -->
                         <div class="mb-3">
                             <label for="name" class="form-label">
                                 产品名称 <span class="text-danger">*</span>
                             </label>
-                            <input type="text" class="form-control" id="name" name="name"
-                                   value="{{ product.name if product else '' }}" required
-                                   placeholder="请输入产品名称">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="slug" class="form-label">URL Slug</label>
-                            <input type="text" class="form-control" id="slug" name="slug"
-                                   value="{{ product.slug if product else '' }}"
-                                   placeholder="留空自动生成，只能包含字母、数字和连字符">
-                            <div class="form-text">
-                                <i class="bi bi-info-circle me-1"></i>
-                                用于生成产品的 URL 地址，留空将根据产品名称自动生成
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="name"
+                                name="name"
+                                value="{{ product.name if product else '' }}"
+                                required
+                                placeholder="请输入产品名称">
+                            <div class="invalid-feedback">
+                                请输入产品名称
                             </div>
                         </div>
 
+                        <!-- Slug -->
                         <div class="mb-3">
-                            <label for="summary" class="form-label">产品卖点 / 简述</label>
-                            <textarea class="form-control" id="summary" name="summary"
-                                      rows="3" placeholder="请输入产品卖点或简短描述">{{ product.summary if product else '' }}</textarea>
-                            <div class="form-text">
-                                <i class="bi bi-info-circle me-1"></i>
-                                简短的产品描述，将显示在产品列表页
+                            <label for="slug" class="form-label">
+                                URL Slug
+                            </label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="slug"
+                                name="slug"
+                                value="{{ product.slug if product else '' }}"
+                                placeholder="留空自动生成">
+                            <div class="help-text">
+                                <i class="bi bi-info-circle"></i>
+                                <span>URL 友好的标识符，留空将根据产品名称自动生成</span>
+                            </div>
+                        </div>
+
+                        <!-- 产品卖点 -->
+                        <div class="mb-0">
+                            <label for="summary" class="form-label">
+                                产品卖点 / 简述
+                            </label>
+                            <textarea
+                                class="form-control"
+                                id="summary"
+                                name="summary"
+                                rows="3"
+                                placeholder="请输入产品卖点或简短描述">{{ product.summary if product else '' }}</textarea>
+                            <div class="help-text">
+                                <i class="bi bi-info-circle"></i>
+                                <span>简短描述产品特点，用于列表展示</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 详细内容 -->
+                <!-- 产品详情卡片 -->
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title">
-                            <i class="bi bi-file-text me-2"></i>详细说明
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-file-text me-2"></i>产品详情
                         </h5>
                     </div>
                     <div class="card-body">
-                        <label for="markdown-editor" class="form-label">
-                            产品详情 (Markdown)
-                        </label>
-                        <textarea id="markdown-editor" name="description_markdown">{{ product.description_html if product else '' }}</textarea>
-                        <div class="form-text mt-2">
-                            <i class="bi bi-info-circle me-1"></i>
-                            支持 Markdown 格式，可以插入图片、链接、表格等
+                        <div class="mb-0">
+                            <label for="description_markdown" class="form-label">
+                                产品详细说明 (Markdown) <span class="text-danger">*</span>
+                            </label>
+                            <textarea
+                                id="description_markdown"
+                                name="description_markdown"
+                                required>{{ product.description_html if product else '' }}</textarea>
+                            <div class="invalid-feedback">
+                                请输入产品详情
+                            </div>
+                            <div class="help-text">
+                                <i class="bi bi-markdown"></i>
+                                <span>支持 Markdown 格式编辑，实时预览内容效果</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 价格信息 -->
+                <!-- 价格信息卡片 -->
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title">
+                        <h5 class="card-title mb-0">
                             <i class="bi bi-currency-dollar me-2"></i>价格信息
                         </h5>
                     </div>
                     <div class="card-body">
+                        <!-- 价格文本 -->
                         <div class="mb-3">
-                            <label for="price_text" class="form-label">价格文本</label>
-                            <input type="text" class="form-control" id="price_text" name="price_text"
-                                   value="{{ product.price_text if product else '' }}"
-                                   placeholder="例如: ¥999 或 ¥1999 (原价 ¥2999)">
-                            <div class="form-text">
-                                <i class="bi bi-info-circle me-1"></i>
-                                灵活的价格展示文本，可以包含原价、优惠等信息
+                            <label for="price_text" class="form-label">
+                                价格文本
+                            </label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="price_text"
+                                name="price_text"
+                                value="{{ product.price_text if product else '' }}"
+                                placeholder="例如: ¥999 或 ¥1999 (原价 ¥2999)">
+                            <div class="help-text">
+                                <i class="bi bi-info-circle"></i>
+                                <span>灵活的价格展示文本，可以包含原价、优惠等信息</span>
                             </div>
                         </div>
 
+                        <!-- 供货状态 -->
                         <div class="mb-0">
-                            <label for="availability_status" class="form-label">供货状态</label>
+                            <label for="availability_status" class="form-label">
+                                供货状态
+                            </label>
                             <select class="form-select" id="availability_status" name="availability_status">
                                 <option value="in_stock" {% if not product or product.availability_status == 'in_stock' %}selected{% endif %}>
-                                    <i class="bi bi-check-circle"></i> 有货
+                                    有货
                                 </option>
                                 <option value="out_of_stock" {% if product and product.availability_status == 'out_of_stock' %}selected{% endif %}>
-                                    <i class="bi bi-x-circle"></i> 缺货
+                                    缺货
                                 </option>
                                 <option value="inquiry" {% if product and product.availability_status == 'inquiry' %}selected{% endif %}>
-                                    <i class="bi bi-chat-dots"></i> 询价
+                                    询价
                                 </option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-                <!-- SEO 设置 -->
+                <!-- SEO 设置卡片 -->
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="card-title">
+                        <h5 class="card-title mb-0">
                             <i class="bi bi-search me-2"></i>SEO 设置
                         </h5>
                     </div>
                     <div class="card-body">
+                        <!-- SEO 标题 -->
                         <div class="mb-3">
-                            <label for="seo_title" class="form-label">SEO 标题</label>
-                            <input type="text" class="form-control" id="seo_title" name="seo_title"
-                                   value="{{ product.seo_title if product else '' }}"
-                                   placeholder="留空将使用产品名称">
-                            <div class="form-text">
-                                <i class="bi bi-info-circle me-1"></i>
-                                在搜索引擎结果中显示的标题，建议 50-60 个字符
-                            </div>
+                            <label for="seo_title" class="form-label">
+                                SEO 标题
+                            </label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="seo_title"
+                                name="seo_title"
+                                value="{{ product.seo_title if product else '' }}"
+                                placeholder="留空使用产品名称">
                         </div>
 
+                        <!-- SEO 描述 -->
                         <div class="mb-0">
-                            <label for="seo_description" class="form-label">SEO 描述</label>
-                            <textarea class="form-control" id="seo_description" name="seo_description"
-                                      rows="3" placeholder="请输入 SEO 描述">{{ product.seo_description if product else '' }}</textarea>
-                            <div class="form-text">
-                                <i class="bi bi-info-circle me-1"></i>
-                                在搜索引擎结果中显示的描述，建议 150-160 个字符
+                            <label for="seo_description" class="form-label">
+                                SEO 描述
+                            </label>
+                            <textarea
+                                class="form-control"
+                                id="seo_description"
+                                name="seo_description"
+                                rows="3"
+                                placeholder="用于搜索引擎显示的描述">{{ product.seo_description if product else '' }}</textarea>
+                            <div class="help-text">
+                                <i class="bi bi-info-circle"></i>
+                                <span>建议长度 120-160 字符，用于搜索引擎结果展示</span>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <!-- 表单操作按钮 -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle me-2"></i>
+                        {% if product %}更新产品{% else %}创建产品{% endif %}
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="window.location.href='/admin/products'">
+                        <i class="bi bi-x-circle me-2"></i>
+                        取消
+                    </button>
+                </div>
             </div>
 
-            <!-- 右侧边栏 -->
-            <div class="form-sidebar-section">
+            <!-- 右侧侧边栏 -->
+            <div class="form-sidebar">
                 <!-- 发布设置 -->
-                <div class="sidebar-widget">
-                    <div class="sidebar-widget-header">
-                        <h6 class="sidebar-widget-title">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
                             <i class="bi bi-send me-2"></i>发布设置
-                        </h6>
+                        </h5>
                     </div>
-                    <div class="sidebar-widget-body">
-                        <div class="mb-3">
-                            <label for="status" class="form-label">发布状态</label>
+                    <div class="card-body">
+                        <div class="sidebar-section">
+                            <div class="sidebar-section-title">
+                                <i class="bi bi-journal-text"></i>
+                                <span>所属栏目</span>
+                            </div>
+                            <select class="form-select" id="column_id" name="column_id" required>
+                                <option value="">-- 选择栏目 --</option>
+                                {% for col in columns %}
+                                <option value="{{ col.id }}" {% if product and col.id == product.column_id %}selected{% endif %}>
+                                    {{ col.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">
+                                请选择产品所属栏目
+                            </div>
+                        </div>
+
+                        <div class="sidebar-section">
+                            <div class="sidebar-section-title">
+                                <i class="bi bi-toggle-on"></i>
+                                <span>状态</span>
+                            </div>
                             <select class="form-select" id="status" name="status">
                                 <option value="draft" {% if not product or product.status == 'draft' %}selected{% endif %}>
                                     草稿
@@ -286,113 +271,93 @@
                             </select>
                         </div>
 
-                        <div class="mb-0">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="is_recommended"
-                                       name="is_recommended" value="1"
-                                       {% if product and product.is_recommended %}checked{% endif %}>
-                                <label class="form-check-label" for="is_recommended">
-                                    <i class="bi bi-star me-1"></i>推荐产品
-                                </label>
+                        <div class="sidebar-section mb-0">
+                            <div class="sidebar-section-title">
+                                <i class="bi bi-star"></i>
+                                <span>特殊标记</span>
                             </div>
-                            <div class="form-text">
-                                推荐产品将在列表中优先显示
+
+                            <div class="form-check form-switch mb-0">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    id="is_recommended"
+                                    name="is_recommended"
+                                    value="1"
+                                    {% if product and product.is_recommended %}checked{% endif %}>
+                                <label class="form-check-label" for="is_recommended">
+                                    <i class="bi bi-heart text-danger me-1"></i>推荐产品
+                                </label>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 栏目设置 -->
-                <div class="sidebar-widget">
-                    <div class="sidebar-widget-header">
-                        <h6 class="sidebar-widget-title">
-                            <i class="bi bi-folder me-2"></i>所属栏目
-                        </h6>
-                    </div>
-                    <div class="sidebar-widget-body">
-                        <label for="column_id" class="form-label">
-                            选择栏目 <span class="text-danger">*</span>
-                        </label>
-                        <select class="form-select" id="column_id" name="column_id" required>
-                            <option value="">-- 请选择栏目 --</option>
-                            {% for col in columns %}
-                            <option value="{{ col.id }}" {% if product and col.id == product.column_id %}selected{% endif %}>
-                                {{ col.name }}
-                            </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-
                 <!-- 产品分类 -->
-                <div class="sidebar-widget">
-                    <div class="sidebar-widget-header">
-                        <h6 class="sidebar-widget-title">
-                            <i class="bi bi-tags me-2"></i>产品分类
-                        </h6>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-folder me-2"></i>产品分类
+                        </h5>
                     </div>
-                    <div class="sidebar-widget-body">
-                        <input type="hidden" id="category_ids" name="category_ids"
-                               value="{% if product %}{{ product.categories|map(attribute='id')|join(',') }}{% endif %}">
-
+                    <div class="card-body">
                         {% if categories %}
                         <div class="category-checkboxes">
                             {% for category in categories %}
                             <div class="form-check">
-                                <input class="form-check-input category-checkbox"
-                                       type="checkbox"
-                                       id="category_{{ category.id }}"
-                                       value="{{ category.id }}"
-                                       {% if product and category in product.categories %}checked{% endif %}>
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    name="category_checkbox"
+                                    value="{{ category.id }}"
+                                    id="category_{{ category.id }}"
+                                    {% if product and category in product.categories %}checked{% endif %}>
                                 <label class="form-check-label" for="category_{{ category.id }}">
                                     {{ category.name }}
                                 </label>
                             </div>
                             {% endfor %}
                         </div>
+                        <input type="hidden" name="category_ids" id="category_ids" value="{% if product %}{{ product.categories|map(attribute='id')|join(',') }}{% endif %}">
+                        <div class="help-text mt-2">
+                            <i class="bi bi-info-circle"></i>
+                            <span>可以选择多个分类</span>
+                        </div>
                         {% else %}
-                        <div class="alert alert-info mb-0">
-                            <i class="bi bi-info-circle me-2"></i>
-                            暂无可用分类
+                        <div class="empty-categories">
+                            <i class="bi bi-folder-x d-block"></i>
+                            <p class="mb-0">暂无分类</p>
                         </div>
                         {% endif %}
-
-                        <div class="form-text mt-2">
-                            <i class="bi bi-info-circle me-1"></i>
-                            可以选择多个分类
-                        </div>
                     </div>
                 </div>
 
-                <!-- 封面图设置 -->
-                <div class="sidebar-widget">
-                    <div class="sidebar-widget-header">
-                        <h6 class="sidebar-widget-title">
+                <!-- 封面图片 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
                             <i class="bi bi-image me-2"></i>封面图片
-                        </h6>
+                        </h5>
                     </div>
-                    <div class="sidebar-widget-body">
-                        <label for="cover_media_id" class="form-label">媒体库图片 ID</label>
-                        <input type="number" class="form-control" id="cover_media_id"
-                               name="cover_media_id"
-                               value="{{ product.cover_media_id if product else '' }}"
-                               placeholder="请输入图片 ID">
-                        <div class="form-text">
-                            <i class="bi bi-info-circle me-1"></i>
-                            从媒体库中选择图片的 ID
+                    <div class="card-body">
+                        <div class="sidebar-section mb-0">
+                            <div class="sidebar-section-title">
+                                <i class="bi bi-image"></i>
+                                <span>封面图片</span>
+                            </div>
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="cover_media_id"
+                                name="cover_media_id"
+                                value="{{ product.cover_media_id if product else '' }}"
+                                placeholder="输入媒体 ID">
+                            <div class="help-text">
+                                <i class="bi bi-info-circle"></i>
+                                <span>请输入媒体库中图片的 ID</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- 操作按钮 -->
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-primary flex-grow-1">
-                        <i class="bi bi-check-circle me-2"></i>
-                        {% if product %}更新产品{% else %}创建产品{% endif %}
-                    </button>
-                    <a href="/admin/products" class="btn btn-outline-secondary">
-                        <i class="bi bi-x-circle me-2"></i>取消
-                    </a>
                 </div>
             </div>
         </div>
@@ -408,13 +373,16 @@
 
     // 初始化 EasyMDE Markdown 编辑器
     const easyMDE = new EasyMDE({
-        element: document.getElementById('markdown-editor'),
+        element: document.getElementById('description_markdown'),
         spellChecker: false,
         autosave: {
             enabled: true,
-            uniqueId: 'product-description'
+            uniqueId: 'product-description-' + ({{ product.id if product else 0 }}),
+            delay: 5000,
         },
         placeholder: '请输入产品详细说明，支持 Markdown 格式...',
+        minHeight: '400px',
+        maxHeight: '600px',
         toolbar: [
             'bold', 'italic', 'heading', '|',
             'quote', 'unordered-list', 'ordered-list', '|',
@@ -422,11 +390,14 @@
             'preview', 'side-by-side', 'fullscreen', '|',
             'guide'
         ],
-        status: ['lines', 'words', 'cursor'],
+        status: ['autosave', 'lines', 'words', 'cursor'],
+        renderingConfig: {
+            codeSyntaxHighlighting: true,
+        }
     });
 
-    // 分类多选功能
-    const categoryCheckboxes = document.querySelectorAll('.category-checkbox');
+    // 分类复选框处理
+    const categoryCheckboxes = document.querySelectorAll('input[name="category_checkbox"]');
     const categoryIdsInput = document.getElementById('category_ids');
 
     function updateCategoryIds() {
@@ -440,104 +411,105 @@
         checkbox.addEventListener('change', updateCategoryIds);
     });
 
-    // 表单提交处理
-    const productForm = document.getElementById('productForm');
+    // Bootstrap 表单验证
+    const form = document.getElementById('productForm');
 
-    productForm.addEventListener('submit', function(e) {
-        e.preventDefault();
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        // 验证表单
+        if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            return;
+        }
+
+        // 提交表单
+        submitForm();
+    });
+
+    // AJAX 提交表单
+    function submitForm() {
+        const formData = new FormData(form);
+
+        // 处理复选框值（确保布尔值正确传递）
+        formData.set('is_recommended', document.getElementById('is_recommended').checked);
+
+        // 获取 Markdown 内容
+        formData.set('description_markdown', easyMDE.value());
 
         // 显示加载状态
-        const submitBtn = this.querySelector('button[type="submit"]');
-        const originalBtnText = submitBtn.innerHTML;
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>保存中...';
 
-        // 准备表单数据
-        const formData = new FormData(this);
-
-        // 处理复选框（is_recommended）
-        formData.set('is_recommended', document.getElementById('is_recommended').checked);
-
-        // 提交表单
-        fetch(this.action, {
+        fetch(form.action, {
             method: 'POST',
             body: formData
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // 显示成功提示
-                if (window.showToast) {
-                    window.showToast('success', data.message, '成功');
-                } else {
-                    alert(data.message);
-                }
+                showToast('success', data.message, '成功');
 
-                // 延迟跳转，让用户看到成功提示
+                // 延迟跳转到列表页
                 setTimeout(() => {
                     window.location.href = '/admin/products';
-                }, 1000);
+                }, 1500);
             } else {
-                // 显示错误提示
-                if (window.showToast) {
-                    window.showToast('danger', data.message, '错误');
-                } else {
-                    alert(data.message);
-                }
-
-                // 恢复按钮状态
+                showToast('danger', data.message, '错误');
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = originalBtnText;
+                submitBtn.innerHTML = originalText;
             }
         })
         .catch(error => {
             console.error('Error:', error);
-
-            // 显示错误提示
-            if (window.showToast) {
-                window.showToast('danger', '提交失败，请稍后重试', '错误');
-            } else {
-                alert('提交失败: ' + error);
-            }
-
-            // 恢复按钮状态
+            showToast('danger', '提交失败: ' + error.message, '错误');
             submitBtn.disabled = false;
-            submitBtn.innerHTML = originalBtnText;
-        });
-    });
-
-    // 价格预览功能（可选）
-    const priceInput = document.getElementById('price_text');
-    if (priceInput) {
-        priceInput.addEventListener('input', function() {
-            // 可以添加实时价格预览逻辑
+            submitBtn.innerHTML = originalText;
         });
     }
 
-    // 自动生成 slug（可选）
+    // 自动生成 Slug（可选功能）
     const nameInput = document.getElementById('name');
     const slugInput = document.getElementById('slug');
 
-    if (nameInput && slugInput && !slugInput.value) {
-        nameInput.addEventListener('blur', function() {
-            if (!slugInput.value && this.value) {
-                // 这里可以调用后端 API 生成 slug，或者在前端简单处理
-                // 目前保持为空，让后端自动生成
-            }
-        });
-    }
-
-    // 表单验证提示
-    productForm.addEventListener('invalid', function(e) {
-        e.preventDefault();
-        const firstInvalid = this.querySelector(':invalid');
-        if (firstInvalid) {
-            firstInvalid.focus();
-            if (window.showToast) {
-                window.showToast('warning', '请填写所有必填字段', '提示');
-            }
+    nameInput.addEventListener('blur', function() {
+        if (!slugInput.value && nameInput.value) {
+            // 简单的拼音转换（实际使用可能需要更复杂的处理）
+            const slug = nameInput.value
+                .toLowerCase()
+                .replace(/\s+/g, '-')
+                .replace(/[^a-z0-9-]/g, '');
+            slugInput.value = slug;
         }
-    }, true);
+    });
+
+    // 防止意外离开页面
+    let formChanged = false;
+
+    form.addEventListener('change', function() {
+        formChanged = true;
+    });
+
+    easyMDE.codemirror.on('change', function() {
+        formChanged = true;
+    });
+
+    window.addEventListener('beforeunload', function(e) {
+        if (formChanged) {
+            e.preventDefault();
+            e.returnValue = '';
+            return '';
+        }
+    });
+
+    // 表单提交后清除警告
+    form.addEventListener('submit', function() {
+        formChanged = false;
+    });
+
 })();
 </script>
 {% endblock %}

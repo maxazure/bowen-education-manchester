@@ -2,6 +2,66 @@
 
 ## ✅ 已完成
 
+### [2025-11-14] 产品编辑页面 Bootstrap 5 迁移
+- [x] 将 products/form.html 迁移到 Bootstrap 5 UI - 完成时间: 2025-11-14 - 负责人: maxazure
+  - **迁移内容**:
+    - 移除所有内联 CSS（107行）到 admin.css 统一管理
+    - 继承现有的 base.html 模板（Bootstrap 5）
+    - 使用 Bootstrap 5 表单组件和验证系统
+    - 保持两栏布局：左侧主表单（1fr）+ 右侧侧边栏（380px）
+    - 集成 EasyMDE Markdown 编辑器样式
+    - 响应式设计：移动端自动纵向堆叠
+  - **复用文章表单样式**:
+    - 复用 posts/form.html 的 90%+ 样式类
+    - `.form-container`, `.form-layout`, `.form-main`, `.form-sidebar`
+    - `.form-actions`, `.sidebar-section`, `.sidebar-section-title`
+    - `.EasyMDEContainer`, `.category-checkboxes`, `.help-text`
+    - `.form-check-input`, `.form-check-label`, `.empty-categories`
+    - 无需新增任何样式，完全复用现有样式系统
+  - **JavaScript 功能**:
+    - EasyMDE 初始化配置（自动保存、工具栏、预览）
+    - 分类复选框同步到隐藏字段
+    - Bootstrap 表单验证（HTML5 + Bootstrap）
+    - AJAX 提交表单（FormData + Fetch API）
+    - Slug 自动生成（从产品名称转换）
+    - 页面离开警告（防止丢失未保存内容）
+    - 使用 base.html 提供的全局函数（showToast, confirmAction）
+  - **表单字段**（产品专用）:
+    - 产品名称、Slug、产品卖点/简述（基本信息）
+    - Markdown 内容编辑器（产品详情说明）
+    - 价格文本（灵活展示，支持优惠等信息）
+    - 供货状态（有货/缺货/询价）
+    - SEO 标题和描述
+    - 所属栏目选择（下拉框，必填）
+    - 发布状态（草稿/上线/下线）
+    - 特殊标记（推荐产品开关）
+    - 封面图片 ID（数字输入框）
+    - 产品分类（多选复选框）
+  - **与文章表单的差异**:
+    - 页面标题：产品名称 vs 文章标题
+    - 内容字段：产品详情 vs 文章内容
+    - 新增价格信息卡片（价格文本、供货状态）
+    - 状态选项：上线/下线 vs 已发布/已下线
+    - 特殊标记：推荐产品 vs 推荐文章+置顶文章
+    - 栏目字段：在发布设置中 vs 独立卡片
+  - **响应式断点**:
+    - 桌面端（≥992px）：两栏布局，侧边栏固定定位
+    - 平板端（768px-991px）：纵向堆叠，侧边栏取消固定
+    - 移动端（<768px）：完全堆叠，按钮全宽显示
+  - **代码优化统计**:
+    - 模板文件：从 544 行减少到 515 行（减少 29 行，-5.3%）
+    - 内联 CSS：从 107 行减少到 0 行（-100%）
+    - 净代码减少：107 行（移除内联样式，复用 admin.css）
+    - 变更统计：303 行插入，331 行删除（净优化 28 行）
+  - **兼容性**:
+    - EasyMDE 编辑器：支持 Markdown 实时预览
+    - Bootstrap 5 表单验证：HTML5 + CSS
+    - 浏览器支持：Chrome, Firefox, Safari, Edge
+    - 移动设备完全支持
+  - **相关文件**:
+    - admin/templates/products/form.html（优化）
+    - admin/static/css/admin.css（复用现有样式）
+
 ### [2025-11-14] 文章编辑页面 Bootstrap 5 迁移
 - [x] 将 posts/form.html 迁移到 Bootstrap 5 UI - 完成时间: 2025-11-14 - 负责人: maxazure
   - **迁移内容**:

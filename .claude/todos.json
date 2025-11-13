@@ -1,21 +1,61 @@
 {
   "todos": [
     {
-      "content": "高优先级模板迁移 - 5个文件（posts/form.html, products/form.html, settings/index.html, columns/form.html, contacts/list.html）",
+      "content": "posts/form.html - 文章编辑页面迁移",
+      "status": "completed",
+      "activeForm": "完成 posts/form.html 迁移"
+    },
+    {
+      "content": "products/form.html - 产品编辑页面迁移",
       "status": "in_progress",
-      "activeForm": "规划高优先级模板迁移任务"
+      "activeForm": "迁移 products/form.html 到 Bootstrap 5"
     },
     {
-      "content": "中优先级模板迁移 - 4个文件（posts/list.html, products/list.html, columns/list.html, pages/list.html）",
+      "content": "settings/index.html - 站点设置页面迁移",
       "status": "pending",
-      "activeForm": "规划中优先级模板迁移任务"
+      "activeForm": "迁移 settings/index.html 到 Bootstrap 5"
     },
     {
-      "content": "新增页面开发 - 2个模块（媒体库管理界面、相册管理界面）",
+      "content": "columns/form.html - 栏目编辑页面迁移",
       "status": "pending",
-      "activeForm": "规划新增页面开发任务"
+      "activeForm": "迁移 columns/form.html 到 Bootstrap 5"
+    },
+    {
+      "content": "contacts/list.html - 留言管理页面迁移（已完成）",
+      "status": "completed",
+      "activeForm": "确认 contacts/list.html 迁移"
+    },
+    {
+      "content": "posts/list.html - 文章列表页面迁移",
+      "status": "pending",
+      "activeForm": "迁移 posts/list.html 到 Bootstrap 5"
+    },
+    {
+      "content": "products/list.html - 产品列表页面迁移",
+      "status": "pending",
+      "activeForm": "迁移 products/list.html 到 Bootstrap 5"
+    },
+    {
+      "content": "columns/list.html - 栏目列表页面迁移",
+      "status": "pending",
+      "activeForm": "迁移 columns/list.html 到 Bootstrap 5"
+    },
+    {
+      "content": "pages/list.html - 单页列表页面迁移",
+      "status": "pending",
+      "activeForm": "迁移 pages/list.html 到 Bootstrap 5"
+    },
+    {
+      "content": "新增：媒体库管理界面",
+      "status": "pending",
+      "activeForm": "开发媒体库管理界面"
+    },
+    {
+      "content": "新增：相册管理界面",
+      "status": "pending",
+      "activeForm": "开发相册管理界面"
     }
   ],
-  "lastUpdated": "2025-11-14T09:40:45.037649",
+  "lastUpdated": "2025-11-14T09:45:04.671676",
   "sessionId": "7ffe287b-c499-48da-8ead-e0ce1d537deb"
 }
