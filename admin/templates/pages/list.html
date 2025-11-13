@@ -2,216 +2,596 @@
 
 {% block title %}单页管理 - 博文教育管理后台{% endblock %}
 
-{% block extra_css %}
-<style>
-    .pages-container {
-        padding: 20px;
-        max-width: 1400px;
-        margin: 0 auto;
-    }
-
-    .page-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 30px;
-        padding-bottom: 20px;
-        border-bottom: 2px solid #e0e0e0;
-    }
-
-    .page-title {
-        font-size: 28px;
-        font-weight: 600;
-        color: #333;
-    }
-
-    .btn {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        transition: all 0.3s;
-        text-decoration: none;
-        display: inline-block;
-    }
-
-    .btn-primary {
-        background: #007bff;
-        color: white;
-    }
-
-    .btn-primary:hover {
-        background: #0056b3;
-    }
-
-    .btn-success {
-        background: #28a745;
-        color: white;
-    }
-
-    .btn-warning {
-        background: #ffc107;
-        color: #212529;
-    }
-
-    .btn-danger {
-        background: #dc3545;
-        color: white;
-    }
-
-    .btn-sm {
-        padding: 5px 10px;
-        font-size: 12px;
-    }
-
-    .pages-table {
-        width: 100%;
-        background: white;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .pages-table table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .pages-table th {
-        background: #f8f9fa;
-        padding: 15px;
-        text-align: left;
-        font-weight: 600;
-        color: #495057;
-        border-bottom: 2px solid #dee2e6;
-    }
-
-    .pages-table td {
-        padding: 15px;
-        border-bottom: 1px solid #dee2e6;
-    }
-
-    .pages-table tr:hover {
-        background: #f8f9fa;
-    }
-
-    .status-badge {
-        padding: 4px 12px;
-        border-radius: 12px;
-        font-size: 12px;
-        font-weight: 500;
-    }
-
-    .status-draft {
-        background: #fff3cd;
-        color: #856404;
-    }
-
-    .status-published {
-        background: #d4edda;
-        color: #155724;
-    }
-
-    .status-hidden {
-        background: #f8d7da;
-        color: #721c24;
-    }
-
-    .page-slug {
-        font-family: monospace;
-        color: #6c757d;
-        font-size: 13px;
-    }
-
-    .actions {
-        display: flex;
-        gap: 8px;
-    }
-
-    .empty-state {
-        text-align: center;
-        padding: 60px 20px;
-        color: #6c757d;
-        background: white;
-        border-radius: 8px;
-    }
-
-    .empty-state-icon {
-        font-size: 48px;
-        margin-bottom: 20px;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="pages-container">
-    <div class="page-header">
+<!-- 页面头部 -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
         <h1 class="page-title">单页管理</h1>
-        <a href="/admin/pages/new" class="btn btn-primary">+ 新建单页</a>
+        <p class="page-subtitle mb-0">管理网站的静态单页内容</p>
+    </div>
+    <div class="page-actions">
+        <a href="/admin/pages/new" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-2"></i>新建单页
+        </a>
+    </div>
+</div>
+
+<!-- 统计信息卡片 -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card bg-info-light">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon bg-info text-white me-3">
+                    <i class="bi bi-file-text"></i>
+                </div>
+                <div>
+                    <div class="stat-label">总单页数</div>
+                    <div class="stat-value text-info">{{ total }}</div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    {% if pages %}
-    <div class="pages-table">
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>标题</th>
-                    <th>Slug</th>
-                    <th>状态</th>
-                    <th>更新时间</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for page in pages %}
-                <tr data-page-id="{{ page.id }}">
-                    <td>{{ page.id }}</td>
-                    <td>
-                        <strong>{{ page.title }}</strong>
-                        {% if page.subtitle %}
-                        <br>
-                        <small style="color: #6c757d;">{{ page.subtitle }}</small>
-                        {% endif %}
-                    </td>
-                    <td class="page-slug">{{ page.slug }}</td>
-                    <td>
-                        {% if page.status == 'published' %}
-                        <span class="status-badge status-published">已发布</span>
-                        {% elif page.status == 'draft' %}
-                        <span class="status-badge status-draft">草稿</span>
-                        {% else %}
-                        <span class="status-badge status-hidden">隐藏</span>
-                        {% endif %}
-                    </td>
-                    <td>{{ page.updated_at.strftime('%Y-%m-%d %H:%M') if page.updated_at else '-' }}</td>
-                    <td>
-                        <div class="actions">
-                            <a href="/admin/pages/{{ page.id }}/edit" class="btn btn-sm btn-primary">编辑</a>
-                            {% if page.status == 'published' %}
-                            <button class="btn btn-sm btn-warning btn-publish" data-id="{{ page.id }}" data-status="published">取消发布</button>
-                            {% else %}
-                            <button class="btn btn-sm btn-success btn-publish" data-id="{{ page.id }}" data-status="draft">发布</button>
-                            {% endif %}
-                            <button class="btn btn-sm btn-danger btn-delete" data-id="{{ page.id }}">删除</button>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+    <div class="col-md-3">
+        <div class="card stat-card bg-success-light">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon bg-success text-white me-3">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+                <div>
+                    <div class="stat-label">已发布</div>
+                    <div class="stat-value text-success">{{ pages|selectattr('status', 'equalto', 'published')|list|length }}</div>
+                </div>
+            </div>
+        </div>
     </div>
-    {% else %}
-    <div class="empty-state">
-        <div class="empty-state-icon">📄</div>
-        <h3>还没有单页</h3>
-        <p>点击"新建单页"按钮创建第一个单页</p>
+
+    <div class="col-md-3">
+        <div class="card stat-card bg-warning-light">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon bg-warning text-white me-3">
+                    <i class="bi bi-file-earmark"></i>
+                </div>
+                <div>
+                    <div class="stat-label">草稿</div>
+                    <div class="stat-value text-warning">{{ pages|selectattr('status', 'equalto', 'draft')|list|length }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card stat-card bg-primary-light">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon bg-primary text-white me-3">
+                    <i class="bi bi-clock-history"></i>
+                </div>
+                <div>
+                    <div class="stat-label">最近更新</div>
+                    <div class="stat-value text-primary">{{ pages|selectattr('updated_at')|list|length }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 筛选表单 -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="GET" action="/admin/pages" class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">栏目筛选</label>
+                <select name="column_id" class="form-select">
+                    <option value="">所有栏目</option>
+                    {% for col in columns %}
+                    <option value="{{ col.id }}" {% if col.id == current_column_id %}selected{% endif %}>
+                        {{ col.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">状态筛选</label>
+                <select name="status_filter" class="form-select">
+                    <option value="">所有状态</option>
+                    <option value="draft" {% if current_status == 'draft' %}selected{% endif %}>草稿</option>
+                    <option value="published" {% if current_status == 'published' %}selected{% endif %}>已发布</option>
+                    <option value="offline" {% if current_status == 'offline' %}selected{% endif %}>已下线</option>
+                </select>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">关键词搜索</label>
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input type="text" name="keyword" class="form-control"
+                           value="{{ current_keyword or '' }}"
+                           placeholder="搜索标题、Slug">
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-funnel me-1"></i>筛选
+                </button>
+                {% if current_column_id or current_status or current_keyword %}
+                <a href="/admin/pages" class="btn btn-outline-secondary">
+                    <i class="bi bi-x-circle me-1"></i>清除筛选
+                </a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 批量操作栏 -->
+<div class="batch-actions-bar" id="batchActionsBar" style="display: none;">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <div>
+            <i class="bi bi-check-circle text-primary me-2"></i>
+            已选择 <strong id="selectedCount">0</strong> 个单页
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-success" onclick="batchPublish()">
+                <i class="bi bi-check-circle me-1"></i>批量发布
+            </button>
+            <button class="btn btn-sm btn-outline-secondary" onclick="batchDraft()">
+                <i class="bi bi-file-earmark me-1"></i>批量草稿
+            </button>
+            <button class="btn btn-sm btn-outline-danger" onclick="batchDelete()">
+                <i class="bi bi-trash me-1"></i>批量删除
+            </button>
+            <button class="btn btn-sm btn-outline-secondary" onclick="clearSelection()">
+                <i class="bi bi-x-circle me-1"></i>取消选择
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 单页列表卡片 -->
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th style="width: 50px;">
+                            <input type="checkbox" class="form-check-input" id="selectAll" onchange="toggleSelectAll()">
+                        </th>
+                        <th style="width: 60px;">ID</th>
+                        <th>标题</th>
+                        <th style="width: 120px;">栏目</th>
+                        <th style="width: 100px;">状态</th>
+                        <th style="width: 150px;">Slug</th>
+                        <th style="width: 150px;">更新时间</th>
+                        <th style="width: 180px;" class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if pages %}
+                    {% for page in pages %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="form-check-input page-checkbox"
+                                   value="{{ page.id }}" onchange="updateBatchActions()">
+                        </td>
+                        <td>{{ page.id }}</td>
+                        <td>
+                            <a href="/admin/pages/{{ page.id }}/edit" class="text-decoration-none text-dark fw-medium">
+                                {{ page.title }}
+                            </a>
+                            {% if page.subtitle %}
+                            <br>
+                            <small class="text-muted">{{ page.subtitle }}</small>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary-light">
+                                {{ page.column.name if page.column else '未分类' }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if page.status == 'published' %}
+                            <span class="badge bg-success">
+                                <i class="bi bi-check-circle me-1"></i>已发布
+                            </span>
+                            {% elif page.status == 'draft' %}
+                            <span class="badge bg-warning text-dark">
+                                <i class="bi bi-file-earmark me-1"></i>草稿
+                            </span>
+                            {% else %}
+                            <span class="badge bg-secondary">
+                                <i class="bi bi-x-circle me-1"></i>已下线
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <code class="text-muted small">{{ page.slug }}</code>
+                        </td>
+                        <td>
+                            <small class="text-muted">
+                                {{ page.updated_at.strftime('%Y-%m-%d %H:%M') if page.updated_at else '-' }}
+                            </small>
+                        </td>
+                        <td>
+                            <div class="d-flex gap-1 justify-content-center">
+                                <a href="/admin/pages/{{ page.id }}/edit"
+                                   class="btn btn-sm btn-primary"
+                                   data-bs-toggle="tooltip"
+                                   title="编辑单页">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                {% if page.status == 'draft' %}
+                                <button class="btn btn-sm btn-success"
+                                        onclick="publishPage({{ page.id }})"
+                                        data-bs-toggle="tooltip"
+                                        title="发布单页">
+                                    <i class="bi bi-check-circle"></i>
+                                </button>
+                                {% elif page.status == 'published' %}
+                                <button class="btn btn-sm btn-warning"
+                                        onclick="unpublishPage({{ page.id }})"
+                                        data-bs-toggle="tooltip"
+                                        title="设为草稿">
+                                    <i class="bi bi-file-earmark"></i>
+                                </button>
+                                {% endif %}
+                                <a href="/pages/{{ page.slug }}" target="_blank"
+                                   class="btn btn-sm btn-outline-info"
+                                   data-bs-toggle="tooltip"
+                                   title="预览单页">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <button class="btn btn-sm btn-outline-danger"
+                                        onclick="deletePage({{ page.id }})"
+                                        data-bs-toggle="tooltip"
+                                        title="删除单页">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="8">
+                            <div class="empty-state">
+                                <i class="bi bi-inbox"></i>
+                                <h3>暂无单页</h3>
+                                <p>当前没有符合条件的单页记录</p>
+                                <a href="/admin/pages/new" class="btn btn-primary">
+                                    <i class="bi bi-plus-lg me-2"></i>创建第一个单页
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 分页 -->
+    {% if total_pages > 1 %}
+    <div class="card-footer bg-light">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="text-muted">
+                <small>第 {{ page }} / {{ total_pages }} 页 (共 {{ total }} 个)</small>
+            </div>
+            <nav aria-label="单页分页">
+                <ul class="pagination mb-0">
+                    {% if page > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page - 1 }}{% if current_column_id %}&column_id={{ current_column_id }}{% endif %}{% if current_status %}&status_filter={{ current_status }}{% endif %}{% if current_keyword %}&keyword={{ current_keyword }}{% endif %}">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">
+                            <i class="bi bi-chevron-left"></i>
+                        </span>
+                    </li>
+                    {% endif %}
+
+                    <!-- 显示页码 -->
+                    {% set start_page = [1, page - 2]|max %}
+                    {% set end_page = [total_pages, page + 2]|min %}
+
+                    {% if start_page > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1{% if current_column_id %}&column_id={{ current_column_id }}{% endif %}{% if current_status %}&status_filter={{ current_status }}{% endif %}{% if current_keyword %}&keyword={{ current_keyword }}{% endif %}">1</a>
+                    </li>
+                    {% if start_page > 2 %}
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                    {% endif %}
+                    {% endif %}
+
+                    {% for p in range(start_page, end_page + 1) %}
+                    <li class="page-item {% if p == page %}active{% endif %}">
+                        <a class="page-link" href="?page={{ p }}{% if current_column_id %}&column_id={{ current_column_id }}{% endif %}{% if current_status %}&status_filter={{ current_status }}{% endif %}{% if current_keyword %}&keyword={{ current_keyword }}{% endif %}">{{ p }}</a>
+                    </li>
+                    {% endfor %}
+
+                    {% if end_page < total_pages %}
+                    {% if end_page < total_pages - 1 %}
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                    {% endif %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ total_pages }}{% if current_column_id %}&column_id={{ current_column_id }}{% endif %}{% if current_status %}&status_filter={{ current_status }}{% endif %}{% if current_keyword %}&keyword={{ current_keyword }}{% endif %}">{{ total_pages }}</a>
+                    </li>
+                    {% endif %}
+
+                    {% if page < total_pages %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page + 1 }}{% if current_column_id %}&column_id={{ current_column_id }}{% endif %}{% if current_status %}&status_filter={{ current_status }}{% endif %}{% if current_keyword %}&keyword={{ current_keyword }}{% endif %}">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">
+                            <i class="bi bi-chevron-right"></i>
+                        </span>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
     </div>
     {% endif %}
 </div>
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/pages.js"></script>
+<script>
+/**
+ * 单页管理前端交互脚本 - Bootstrap 5 版本
+ */
+
+// 全选/取消全选
+function toggleSelectAll() {
+    const selectAll = document.getElementById('selectAll');
+    const checkboxes = document.querySelectorAll('.page-checkbox');
+
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = selectAll.checked;
+    });
+
+    updateBatchActions();
+}
+
+// 更新批量操作按钮状态
+function updateBatchActions() {
+    const checkboxes = document.querySelectorAll('.page-checkbox:checked');
+    const count = checkboxes.length;
+    const batchActionsBar = document.getElementById('batchActionsBar');
+    const selectedCount = document.getElementById('selectedCount');
+
+    if (count > 0) {
+        batchActionsBar.style.display = 'block';
+        selectedCount.textContent = count;
+    } else {
+        batchActionsBar.style.display = 'none';
+    }
+}
+
+// 清除选择
+function clearSelection() {
+    const checkboxes = document.querySelectorAll('.page-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
+    document.getElementById('selectAll').checked = false;
+    updateBatchActions();
+}
+
+// 获取选中的单页ID
+function getSelectedPageIds() {
+    const checkboxes = document.querySelectorAll('.page-checkbox:checked');
+    return Array.from(checkboxes).map(cb => parseInt(cb.value));
+}
+
+// 发布单页
+function publishPage(pageId) {
+    confirmAction(
+        '确认发布',
+        '确定要发布这个单页吗？',
+        function() {
+            fetch(`/admin/pages/${pageId}/publish`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('danger', '发布失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+
+// 取消发布单页（设为草稿）
+function unpublishPage(pageId) {
+    confirmAction(
+        '确认操作',
+        '确定要将这个单页设为草稿吗？',
+        function() {
+            fetch(`/admin/pages/${pageId}/unpublish`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('danger', '操作失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+
+// 删除单页
+function deletePage(pageId) {
+    confirmAction(
+        '确认删除',
+        '确定要删除这个单页吗？删除后无法恢复。',
+        function() {
+            fetch(`/admin/pages/${pageId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('danger', '删除失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+
+// 批量发布
+function batchPublish() {
+    const ids = getSelectedPageIds();
+    if (ids.length === 0) {
+        showToast('warning', '请先选择单页', '提示');
+        return;
+    }
+
+    confirmAction(
+        '批量发布确认',
+        `确定要发布选中的 ${ids.length} 个单页吗？`,
+        function() {
+            fetch('/admin/pages/batch/publish', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ page_ids: ids })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('danger', '批量发布失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+
+// 批量设为草稿
+function batchDraft() {
+    const ids = getSelectedPageIds();
+    if (ids.length === 0) {
+        showToast('warning', '请先选择单页', '提示');
+        return;
+    }
+
+    confirmAction(
+        '批量设为草稿确认',
+        `确定要将选中的 ${ids.length} 个单页设为草稿吗？`,
+        function() {
+            fetch('/admin/pages/batch/draft', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ page_ids: ids })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('danger', '批量操作失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+
+// 批量删除
+function batchDelete() {
+    const ids = getSelectedPageIds();
+    if (ids.length === 0) {
+        showToast('warning', '请先选择单页', '提示');
+        return;
+    }
+
+    confirmAction(
+        '批量删除确认',
+        `确定要删除选中的 ${ids.length} 个单页吗？删除后无法恢复。`,
+        function() {
+            fetch('/admin/pages/batch/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ page_ids: ids })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('danger', '批量删除失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+
+// 页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', function() {
+    // 初始化所有 tooltips
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+</script>
 {% endblock %}
