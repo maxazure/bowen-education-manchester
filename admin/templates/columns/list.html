@@ -2,225 +2,629 @@
 
 {% block title %}栏目管理 - 博文教育管理后台{% endblock %}
 
-{% block extra_css %}
-<style>
-    .columns-container {
-        padding: 20px;
-        max-width: 1400px;
-        margin: 0 auto;
-    }
-
-    .page-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 30px;
-        padding-bottom: 20px;
-        border-bottom: 2px solid #e0e0e0;
-    }
-
-    .page-title {
-        font-size: 28px;
-        font-weight: 600;
-        color: #333;
-    }
-
-    .btn {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        transition: all 0.3s;
-    }
-
-    .btn-primary {
-        background: #007bff;
-        color: white;
-    }
-
-    .btn-primary:hover {
-        background: #0056b3;
-    }
-
-    .btn-danger {
-        background: #dc3545;
-        color: white;
-    }
-
-    .btn-danger:hover {
-        background: #c82333;
-    }
-
-    .btn-sm {
-        padding: 5px 10px;
-        font-size: 12px;
-    }
-
-    .tree-container {
-        background: white;
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .column-item {
-        display: flex;
-        align-items: center;
-        padding: 15px;
-        margin: 10px 0;
-        background: #f8f9fa;
-        border-radius: 5px;
-        border-left: 4px solid #007bff;
-        cursor: move;
-        transition: all 0.3s;
-    }
-
-    .column-item:hover {
-        background: #e9ecef;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    .column-item.dragging {
-        opacity: 0.5;
-    }
-
-    .column-children {
-        margin-left: 30px;
-        border-left: 2px solid #dee2e6;
-        padding-left: 20px;
-    }
-
-    .column-info {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        gap: 15px;
-    }
-
-    .column-name {
-        font-size: 16px;
-        font-weight: 600;
-        color: #333;
-    }
-
-    .column-slug {
-        font-size: 14px;
-        color: #6c757d;
-        font-family: monospace;
-    }
-
-    .column-type {
-        padding: 3px 8px;
-        border-radius: 3px;
-        font-size: 12px;
-        font-weight: 500;
-    }
-
-    .type-SINGLE_PAGE {
-        background: #d1ecf1;
-        color: #0c5460;
-    }
-
-    .type-POST {
-        background: #d4edda;
-        color: #155724;
-    }
-
-    .type-PRODUCT {
-        background: #fff3cd;
-        color: #856404;
-    }
-
-    .type-GALLERY {
-        background: #e2d9f3;
-        color: #4a148c;
-    }
-
-    .type-CUSTOM {
-        background: #f8d7da;
-        color: #721c24;
-    }
-
-    .column-status {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-    }
-
-    .status-badge {
-        padding: 4px 10px;
-        border-radius: 12px;
-        font-size: 12px;
-        font-weight: 500;
-    }
-
-    .status-enabled {
-        background: #d4edda;
-        color: #155724;
-    }
-
-    .status-disabled {
-        background: #f8d7da;
-        color: #721c24;
-    }
-
-    .column-actions {
-        display: flex;
-        gap: 8px;
-    }
-
-    .icon {
-        width: 20px;
-        height: 20px;
-        display: inline-block;
-    }
-
-    .drag-handle {
-        cursor: move;
-        color: #6c757d;
-        margin-right: 10px;
-    }
-
-    .empty-state {
-        text-align: center;
-        padding: 60px 20px;
-        color: #6c757d;
-    }
-
-    .empty-state-icon {
-        font-size: 48px;
-        margin-bottom: 20px;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="columns-container">
-    <div class="page-header">
+<!-- 页面头部 -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
         <h1 class="page-title">栏目管理</h1>
-        <a href="/admin/columns/new" class="btn btn-primary">+ 新建栏目</a>
+        <p class="page-subtitle mb-0">管理网站的栏目结构和导航菜单</p>
+    </div>
+    <div class="page-actions">
+        <a href="/admin/columns/new" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-2"></i>新建栏目
+        </a>
+    </div>
+</div>
+
+<!-- 统计信息卡片 -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card bg-info-light">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon bg-info text-white me-3">
+                    <i class="bi bi-folder"></i>
+                </div>
+                <div>
+                    <div class="stat-label">总栏目数</div>
+                    <div class="stat-value text-info">{{ all_columns|length }}</div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="tree-container">
-        {% if tree %}
-            <div id="column-tree" class="sortable-tree">
-                {% for column in tree %}
-                    {% include 'columns/_column_item.html' %}
-                {% endfor %}
+    <div class="col-md-3">
+        <div class="card stat-card bg-success-light">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon bg-success text-white me-3">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+                <div>
+                    <div class="stat-label">已启用</div>
+                    <div class="stat-value text-success">{{ all_columns|selectattr('is_enabled', 'equalto', true)|list|length }}</div>
+                </div>
             </div>
-        {% else %}
-            <div class="empty-state">
-                <div class="empty-state-icon">📁</div>
-                <h3>还没有栏目</h3>
-                <p>点击"新建栏目"按钮创建第一个栏目</p>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card stat-card bg-warning-light">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon bg-warning text-white me-3">
+                    <i class="bi bi-x-circle"></i>
+                </div>
+                <div>
+                    <div class="stat-label">已禁用</div>
+                    <div class="stat-value text-warning">{{ all_columns|rejectattr('is_enabled', 'equalto', true)|list|length }}</div>
+                </div>
             </div>
-        {% endif %}
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card stat-card bg-primary-light">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon bg-primary text-white me-3">
+                    <i class="bi bi-list-nested"></i>
+                </div>
+                <div>
+                    <div class="stat-label">顶级栏目</div>
+                    <div class="stat-value text-primary">{{ tree|length }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 筛选表单 -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="GET" action="/admin/columns" class="row g-3" id="filterForm">
+            <div class="col-md-3">
+                <label class="form-label">栏目类型</label>
+                <select name="type_filter" class="form-select" id="typeFilter">
+                    <option value="">所有类型</option>
+                    <option value="SINGLE_PAGE">单页面</option>
+                    <option value="POST">文章栏目</option>
+                    <option value="PRODUCT">产品栏目</option>
+                    <option value="GALLERY">相册模块</option>
+                    <option value="CUSTOM">自定义模块</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">启用状态</label>
+                <select name="enabled_filter" class="form-select" id="enabledFilter">
+                    <option value="">全部</option>
+                    <option value="1">已启用</option>
+                    <option value="0">已禁用</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">显示在导航</label>
+                <select name="nav_filter" class="form-select" id="navFilter">
+                    <option value="">全部</option>
+                    <option value="1">显示</option>
+                    <option value="0">不显示</option>
+                </select>
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">父栏目</label>
+                <select name="parent_filter" class="form-select" id="parentFilter">
+                    <option value="">全部</option>
+                    <option value="0">仅顶级</option>
+                    <option value="-1">仅子栏目</option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">关键词搜索</label>
+                <div class="input-group">
+                    <span class="input-group-text">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input type="text" name="keyword" class="form-control" id="keywordInput"
+                           placeholder="搜索栏目名称、Slug">
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <button type="button" class="btn btn-primary" onclick="applyFilters()">
+                    <i class="bi bi-funnel me-1"></i>筛选
+                </button>
+                <button type="button" class="btn btn-outline-secondary" onclick="clearFilters()">
+                    <i class="bi bi-x-circle me-1"></i>清除筛选
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 批量操作栏 -->
+<div class="batch-actions-bar" id="batchActionsBar" style="display: none;">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <div>
+            <i class="bi bi-check-circle text-primary me-2"></i>
+            已选择 <strong id="selectedCount">0</strong> 个栏目
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-success" onclick="batchEnable()">
+                <i class="bi bi-check-circle me-1"></i>批量启用
+            </button>
+            <button class="btn btn-sm btn-outline-secondary" onclick="batchDisable()">
+                <i class="bi bi-x-circle me-1"></i>批量禁用
+            </button>
+            <button class="btn btn-sm btn-warning" onclick="batchShowInNav()">
+                <i class="bi bi-menu-button-wide me-1"></i>显示在导航
+            </button>
+            <button class="btn btn-sm btn-outline-warning" onclick="batchHideFromNav()">
+                <i class="bi bi-menu-button-wide me-1"></i>不显示在导航
+            </button>
+            <button class="btn btn-sm btn-outline-danger" onclick="batchDelete()">
+                <i class="bi bi-trash me-1"></i>批量删除
+            </button>
+            <button class="btn btn-sm btn-outline-secondary" onclick="clearSelection()">
+                <i class="bi bi-x-circle me-1"></i>取消选择
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 栏目列表卡片 -->
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0" id="columnsTable">
+                <thead>
+                    <tr>
+                        <th style="width: 50px;">
+                            <input type="checkbox" class="form-check-input" id="selectAll" onchange="toggleSelectAll()">
+                        </th>
+                        <th style="width: 60px;">ID</th>
+                        <th style="width: 40%;">栏目名称</th>
+                        <th style="width: 150px;">Slug</th>
+                        <th style="width: 120px;">类型</th>
+                        <th style="width: 80px;">导航</th>
+                        <th style="width: 80px;">启用</th>
+                        <th style="width: 80px;">排序</th>
+                        <th style="width: 150px;">更新时间</th>
+                        <th style="width: 240px;" class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody id="columnsTableBody">
+                    {% if tree %}
+                        {% for column in tree %}
+                            {% include 'columns/_column_row.html' %}
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="10">
+                                <div class="empty-state">
+                                    <i class="bi bi-folder-x"></i>
+                                    <h3>还没有栏目</h3>
+                                    <p>点击"新建栏目"按钮创建第一个栏目</p>
+                                    <a href="/admin/columns/new" class="btn btn-primary">
+                                        <i class="bi bi-plus-lg me-2"></i>创建第一个栏目
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
-<script src="/static/js/columns.js"></script>
+<script>
+/**
+ * 栏目管理前端交互脚本 - Bootstrap 5 版本
+ */
+
+// 全局变量：存储所有行数据
+let allRows = [];
+let filteredRows = [];
+
+// 页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', function() {
+    // 初始化所有 tooltips
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
+    // 收集所有行数据（用于前端筛选）
+    collectRowData();
+});
+
+// 收集所有行数据
+function collectRowData() {
+    const rows = document.querySelectorAll('#columnsTableBody tr.column-row');
+    allRows = Array.from(rows).map(row => {
+        return {
+            element: row,
+            id: row.dataset.id,
+            name: row.dataset.name.toLowerCase(),
+            slug: row.dataset.slug.toLowerCase(),
+            type: row.dataset.type,
+            enabled: row.dataset.enabled === 'true',
+            showInNav: row.dataset.showInNav === 'true',
+            parentId: row.dataset.parentId,
+            level: parseInt(row.dataset.level || '0')
+        };
+    });
+    filteredRows = [...allRows];
+}
+
+// 应用筛选
+function applyFilters() {
+    const typeFilter = document.getElementById('typeFilter').value;
+    const enabledFilter = document.getElementById('enabledFilter').value;
+    const navFilter = document.getElementById('navFilter').value;
+    const parentFilter = document.getElementById('parentFilter').value;
+    const keyword = document.getElementById('keywordInput').value.toLowerCase().trim();
+
+    filteredRows = allRows.filter(row => {
+        // 类型筛选
+        if (typeFilter && row.type !== typeFilter) {
+            return false;
+        }
+
+        // 启用状态筛选
+        if (enabledFilter === '1' && !row.enabled) {
+            return false;
+        }
+        if (enabledFilter === '0' && row.enabled) {
+            return false;
+        }
+
+        // 导航显示筛选
+        if (navFilter === '1' && !row.showInNav) {
+            return false;
+        }
+        if (navFilter === '0' && row.showInNav) {
+            return false;
+        }
+
+        // 父栏目筛选
+        if (parentFilter === '0' && row.parentId !== 'None') {
+            return false;
+        }
+        if (parentFilter === '-1' && row.parentId === 'None') {
+            return false;
+        }
+
+        // 关键词搜索
+        if (keyword && !row.name.includes(keyword) && !row.slug.includes(keyword)) {
+            return false;
+        }
+
+        return true;
+    });
+
+    // 更新显示
+    updateTableDisplay();
+}
+
+// 清除筛选
+function clearFilters() {
+    document.getElementById('typeFilter').value = '';
+    document.getElementById('enabledFilter').value = '';
+    document.getElementById('navFilter').value = '';
+    document.getElementById('parentFilter').value = '';
+    document.getElementById('keywordInput').value = '';
+
+    filteredRows = [...allRows];
+    updateTableDisplay();
+}
+
+// 更新表格显示
+function updateTableDisplay() {
+    // 隐藏所有行
+    allRows.forEach(row => {
+        row.element.style.display = 'none';
+    });
+
+    // 显示筛选后的行
+    filteredRows.forEach(row => {
+        row.element.style.display = '';
+    });
+
+    // 如果没有结果，显示空状态
+    const tbody = document.getElementById('columnsTableBody');
+    const existingEmptyState = tbody.querySelector('.empty-filter-state');
+
+    if (filteredRows.length === 0 && !existingEmptyState) {
+        const emptyRow = document.createElement('tr');
+        emptyRow.className = 'empty-filter-state';
+        emptyRow.innerHTML = `
+            <td colspan="10">
+                <div class="empty-state">
+                    <i class="bi bi-search"></i>
+                    <h3>没有找到匹配的栏目</h3>
+                    <p>请尝试调整筛选条件</p>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(emptyRow);
+    } else if (filteredRows.length > 0 && existingEmptyState) {
+        existingEmptyState.remove();
+    }
+}
+
+// 全选/取消全选
+function toggleSelectAll() {
+    const selectAll = document.getElementById('selectAll');
+    const checkboxes = document.querySelectorAll('.column-checkbox');
+
+    checkboxes.forEach(checkbox => {
+        // 只选中可见的行
+        const row = checkbox.closest('tr');
+        if (row.style.display !== 'none') {
+            checkbox.checked = selectAll.checked;
+        }
+    });
+
+    updateBatchActions();
+}
+
+// 更新批量操作按钮状态
+function updateBatchActions() {
+    const checkboxes = document.querySelectorAll('.column-checkbox:checked');
+    const visibleChecked = Array.from(checkboxes).filter(cb => {
+        const row = cb.closest('tr');
+        return row.style.display !== 'none';
+    });
+
+    const count = visibleChecked.length;
+    const batchActionsBar = document.getElementById('batchActionsBar');
+    const selectedCount = document.getElementById('selectedCount');
+
+    if (count > 0) {
+        batchActionsBar.style.display = 'block';
+        selectedCount.textContent = count;
+    } else {
+        batchActionsBar.style.display = 'none';
+    }
+}
+
+// 清除选择
+function clearSelection() {
+    const checkboxes = document.querySelectorAll('.column-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
+    document.getElementById('selectAll').checked = false;
+    updateBatchActions();
+}
+
+// 获取选中的栏目ID
+function getSelectedColumnIds() {
+    const checkboxes = document.querySelectorAll('.column-checkbox:checked');
+    return Array.from(checkboxes)
+        .filter(cb => cb.closest('tr').style.display !== 'none')
+        .map(cb => parseInt(cb.value));
+}
+
+// 折叠/展开子栏目
+function toggleChildren(columnId) {
+    const childRows = document.querySelectorAll(`[data-parent-id="${columnId}"]`);
+    const toggleIcon = document.getElementById(`toggle-${columnId}`);
+
+    childRows.forEach(row => {
+        if (row.style.display === 'none') {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+            // 递归隐藏所有子孙栏目
+            const childId = row.dataset.id;
+            hideAllDescendants(childId);
+        }
+    });
+
+    // 切换图标
+    if (toggleIcon) {
+        toggleIcon.classList.toggle('bi-caret-down-fill');
+        toggleIcon.classList.toggle('bi-caret-right-fill');
+    }
+}
+
+// 隐藏所有后代栏目
+function hideAllDescendants(columnId) {
+    const childRows = document.querySelectorAll(`[data-parent-id="${columnId}"]`);
+    childRows.forEach(row => {
+        row.style.display = 'none';
+        const childId = row.dataset.id;
+        hideAllDescendants(childId);
+    });
+}
+
+// 切换启用状态
+function toggleStatus(columnId) {
+    confirmAction(
+        '确认切换状态',
+        '确定要切换此栏目的启用状态吗？',
+        function() {
+            fetch(`/admin/columns/${columnId}/toggle`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.error || '操作失败', '错误');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('danger', '操作失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+
+// 删除栏目
+function deleteColumn(columnId) {
+    confirmAction(
+        '确认删除',
+        '确定要删除这个栏目吗？如果栏目包含子栏目或关联内容将无法删除。',
+        function() {
+            fetch(`/admin/columns/${columnId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.error || '删除失败', '错误');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('danger', '删除失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+
+// 添加子栏目
+function addSubColumn(parentId) {
+    window.location.href = `/admin/columns/new?parent_id=${parentId}`;
+}
+
+// 批量启用
+function batchEnable() {
+    batchUpdateStatus(true, '启用');
+}
+
+// 批量禁用
+function batchDisable() {
+    batchUpdateStatus(false, '禁用');
+}
+
+// 批量更新状态
+function batchUpdateStatus(enabled, action) {
+    const ids = getSelectedColumnIds();
+    if (ids.length === 0) {
+        showToast('warning', '请先选择栏目', '提示');
+        return;
+    }
+
+    confirmAction(
+        `批量${action}确认`,
+        `确定要${action}选中的 ${ids.length} 个栏目吗？`,
+        function() {
+            fetch('/admin/columns/batch/status', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ column_ids: ids, is_enabled: enabled })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('danger', `批量${action}失败，请稍后重试`, '错误');
+            });
+        }
+    );
+}
+
+// 批量显示在导航
+function batchShowInNav() {
+    batchUpdateNav(true, '显示在导航');
+}
+
+// 批量不显示在导航
+function batchHideFromNav() {
+    batchUpdateNav(false, '不显示在导航');
+}
+
+// 批量更新导航显示
+function batchUpdateNav(showInNav, action) {
+    const ids = getSelectedColumnIds();
+    if (ids.length === 0) {
+        showToast('warning', '请先选择栏目', '提示');
+        return;
+    }
+
+    confirmAction(
+        `批量${action}确认`,
+        `确定要将选中的 ${ids.length} 个栏目设置为${action}吗？`,
+        function() {
+            fetch('/admin/columns/batch/nav', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ column_ids: ids, show_in_nav: showInNav })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('danger', `批量${action}失败，请稍后重试`, '错误');
+            });
+        }
+    );
+}
+
+// 批量删除
+function batchDelete() {
+    const ids = getSelectedColumnIds();
+    if (ids.length === 0) {
+        showToast('warning', '请先选择栏目', '提示');
+        return;
+    }
+
+    confirmAction(
+        '批量删除确认',
+        `确定要删除选中的 ${ids.length} 个栏目吗？包含子栏目或关联内容的栏目将无法删除。`,
+        function() {
+            fetch('/admin/columns/batch/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ column_ids: ids })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('danger', '批量删除失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+</script>
 {% endblock %}

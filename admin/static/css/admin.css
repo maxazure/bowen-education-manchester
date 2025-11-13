@@ -1968,3 +1968,98 @@ a:hover {
     display: none;
   }
 }
+
+/* ====================================
+   28. 栏目列表树形结构样式
+   ==================================== */
+
+/* 栏目行层级样式 */
+.column-row.column-level-0 {
+  font-weight: 500;
+}
+
+.column-row.column-level-1 {
+  background-color: rgba(249, 250, 251, 0.5);
+}
+
+.column-row.column-level-2 {
+  background-color: rgba(243, 244, 246, 0.7);
+}
+
+.column-row.column-level-3 {
+  background-color: rgba(229, 231, 235, 0.5);
+}
+
+/* 折叠图标样式 */
+.toggle-icon {
+  color: #6b7280;
+  font-size: 16px;
+  transition: all var(--transition-fast);
+}
+
+.toggle-icon:hover {
+  color: var(--bs-primary);
+  transform: scale(1.2);
+}
+
+/* 栏目层级缩进线 */
+.column-row[data-level="1"] td:nth-child(3)::before,
+.column-row[data-level="2"] td:nth-child(3)::before,
+.column-row[data-level="3"] td:nth-child(3)::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(to bottom, transparent 0%, var(--bs-primary) 50%, transparent 100%);
+  opacity: 0.3;
+}
+
+/* 自定义徽章颜色 */
+.badge.bg-purple {
+  background-color: #9333ea !important;
+}
+
+.badge.bg-secondary-light {
+  background-color: #f3f4f6 !important;
+  color: #4b5563 !important;
+  font-weight: 500;
+}
+
+/* 响应式调整 - 栏目列表 */
+@media (max-width: 1199.98px) {
+  /* 平板设备隐藏更新时间列 */
+  .column-row td:nth-child(9),
+  #columnsTable thead th:nth-child(9) {
+    display: none;
+  }
+}
+
+@media (max-width: 991.98px) {
+  /* 移动端隐藏 Slug 和排序列 */
+  .column-row td:nth-child(4),
+  .column-row td:nth-child(8),
+  #columnsTable thead th:nth-child(4),
+  #columnsTable thead th:nth-child(8) {
+    display: none;
+  }
+}
+
+@media (max-width: 767.98px) {
+  /* 小屏幕设备进一步精简 */
+  .column-row td:nth-child(5),
+  #columnsTable thead th:nth-child(5) {
+    display: none;
+  }
+
+  /* 操作按钮堆叠显示 */
+  .column-row td:last-child .d-flex {
+    flex-direction: column;
+    gap: 4px !important;
+  }
+
+  .column-row td:last-child .btn {
+    width: 100%;
+  }
+}

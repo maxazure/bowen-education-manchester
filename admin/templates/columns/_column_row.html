@@ -1,0 +1,148 @@
+{% set type_badges = {
+    'SINGLE_PAGE': {'text': '单页面', 'class': 'bg-info'},
+    'POST': {'text': '文章', 'class': 'bg-success'},
+    'PRODUCT': {'text': '产品', 'class': 'bg-warning text-dark'},
+    'GALLERY': {'text': '相册', 'class': 'bg-purple text-white'},
+    'CUSTOM': {'text': '自定义', 'class': 'bg-danger'}
+} %}
+
+{% set type_display = type_badges.get(column.column_type.value, {'text': column.column_type.value, 'class': 'bg-secondary'}) %}
+
+<tr class="column-row column-level-{{ column.level or 0 }}"
+    data-id="{{ column.id }}"
+    data-name="{{ column.name }}"
+    data-slug="{{ column.slug }}"
+    data-type="{{ column.column_type.value }}"
+    data-enabled="{{ column.is_enabled|lower }}"
+    data-show-in-nav="{{ column.show_in_nav|lower }}"
+    data-parent-id="{{ column.parent_id or 'None' }}"
+    data-level="{{ column.level or 0 }}">
+
+    <td>
+        <input type="checkbox" class="form-check-input column-checkbox"
+               value="{{ column.id }}" onchange="updateBatchActions()">
+    </td>
+
+    <td>{{ column.id }}</td>
+
+    <td>
+        <div class="d-flex align-items-center">
+            <!-- 层级缩进 -->
+            {% if column.level and column.level > 0 %}
+            <span style="padding-left: {{ column.level * 24 }}px;"></span>
+            {% endif %}
+
+            <!-- 折叠/展开图标（如果有子栏目） -->
+            {% if column.children %}
+            <i class="bi bi-caret-down-fill text-muted me-2 toggle-icon"
+               id="toggle-{{ column.id }}"
+               onclick="toggleChildren({{ column.id }})"
+               style="cursor: pointer;"
+               data-bs-toggle="tooltip"
+               title="折叠/展开子栏目"></i>
+            {% endif %}
+
+            <!-- 栏目图标 -->
+            <i class="bi {{ column.icon or 'bi-file-text' }} text-primary me-2"></i>
+
+            <!-- 栏目名称 -->
+            <a href="/admin/columns/{{ column.id }}/edit"
+               class="text-decoration-none text-dark fw-medium">
+                {{ column.name }}
+            </a>
+        </div>
+    </td>
+
+    <td>
+        <code class="text-muted">/{{ column.slug }}</code>
+    </td>
+
+    <td>
+        <span class="badge {{ type_display.class }}">
+            {{ type_display.text }}
+        </span>
+    </td>
+
+    <td class="text-center">
+        {% if column.show_in_nav %}
+        <i class="bi bi-check-circle-fill text-success" title="显示在导航"></i>
+        {% else %}
+        <i class="bi bi-x-circle text-muted" title="不显示"></i>
+        {% endif %}
+    </td>
+
+    <td class="text-center">
+        {% if column.is_enabled %}
+        <i class="bi bi-toggle-on text-success fs-5"
+           style="cursor: pointer;"
+           onclick="toggleStatus({{ column.id }})"
+           data-bs-toggle="tooltip"
+           title="点击禁用"></i>
+        {% else %}
+        <i class="bi bi-toggle-off text-muted fs-5"
+           style="cursor: pointer;"
+           onclick="toggleStatus({{ column.id }})"
+           data-bs-toggle="tooltip"
+           title="点击启用"></i>
+        {% endif %}
+    </td>
+
+    <td>
+        <span class="badge bg-secondary-light">{{ column.sort_order }}</span>
+    </td>
+
+    <td>
+        <small class="text-muted">
+            {{ column.updated_at.strftime('%Y-%m-%d %H:%M') if column.updated_at else '-' }}
+        </small>
+    </td>
+
+    <td>
+        <div class="d-flex gap-1 justify-content-center">
+            <a href="/admin/columns/{{ column.id }}/edit"
+               class="btn btn-sm btn-primary"
+               data-bs-toggle="tooltip"
+               title="编辑栏目">
+                <i class="bi bi-pencil"></i>
+            </a>
+
+            <button class="btn btn-sm btn-outline-success"
+                    onclick="addSubColumn({{ column.id }})"
+                    data-bs-toggle="tooltip"
+                    title="添加子栏目">
+                <i class="bi bi-plus-circle"></i>
+            </button>
+
+            {% if column.is_enabled %}
+            <button class="btn btn-sm btn-outline-secondary"
+                    onclick="toggleStatus({{ column.id }})"
+                    data-bs-toggle="tooltip"
+                    title="禁用栏目">
+                <i class="bi bi-x-circle"></i>
+            </button>
+            {% else %}
+            <button class="btn btn-sm btn-success"
+                    onclick="toggleStatus({{ column.id }})"
+                    data-bs-toggle="tooltip"
+                    title="启用栏目">
+                <i class="bi bi-check-circle"></i>
+            </button>
+            {% endif %}
+
+            <button class="btn btn-sm btn-outline-danger"
+                    onclick="deleteColumn({{ column.id }})"
+                    data-bs-toggle="tooltip"
+                    title="删除栏目">
+                <i class="bi bi-trash"></i>
+            </button>
+        </div>
+    </td>
+</tr>
+
+<!-- 递归渲染子栏目 -->
+{% if column.children %}
+{% for child in column.children %}
+{% set column = child %}
+{% include 'columns/_column_row.html' %}
+{% endfor %}
+{% endif %}

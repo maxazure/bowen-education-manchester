@@ -378,3 +378,159 @@ async def toggle_column_status(column_id: int, db: Session = Depends(get_db)):
             "is_enabled": column.is_enabled,
         }
     )
+
+
+@router.post("/batch/status")
+async def batch_update_status(request: Request, db: Session = Depends(get_db)):
+    """
+    批量更新栏目启用状态
+
+    Args:
+        request: FastAPI request 对象
+        db: 数据库会话
+
+    Returns:
+        JSON 响应
+
+    Request Body:
+        {
+            "column_ids": [1, 2, 3],
+            "is_enabled": true
+        }
+    """
+    data = await request.json()
+    column_ids = data.get("column_ids", [])
+    is_enabled = data.get("is_enabled", True)
+
+    if not column_ids:
+        return JSONResponse(
+            status_code=400, content={"success": False, "message": "未选择栏目"}
+        )
+
+    # 批量更新
+    updated_count = 0
+    for column_id in column_ids:
+        column = db.query(SiteColumn).filter_by(id=column_id).first()
+        if column:
+            column.is_enabled = is_enabled
+            updated_count += 1
+
+    db.commit()
+
+    action = "启用" if is_enabled else "禁用"
+    return JSONResponse(
+        content={
+            "success": True,
+            "message": f"成功{action} {updated_count} 个栏目",
+            "count": updated_count,
+        }
+    )
+
+
+@router.post("/batch/nav")
+async def batch_update_nav(request: Request, db: Session = Depends(get_db)):
+    """
+    批量更新栏目导航显示状态
+
+    Args:
+        request: FastAPI request 对象
+        db: 数据库会话
+
+    Returns:
+        JSON 响应
+
+    Request Body:
+        {
+            "column_ids": [1, 2, 3],
+            "show_in_nav": true
+        }
+    """
+    data = await request.json()
+    column_ids = data.get("column_ids", [])
+    show_in_nav = data.get("show_in_nav", True)
+
+    if not column_ids:
+        return JSONResponse(
+            status_code=400, content={"success": False, "message": "未选择栏目"}
+        )
+
+    # 批量更新
+    updated_count = 0
+    for column_id in column_ids:
+        column = db.query(SiteColumn).filter_by(id=column_id).first()
+        if column:
+            column.show_in_nav = show_in_nav
+            updated_count += 1
+
+    db.commit()
+
+    action = "显示在导航" if show_in_nav else "不显示在导航"
+    return JSONResponse(
+        content={
+            "success": True,
+            "message": f"成功将 {updated_count} 个栏目设置为{action}",
+            "count": updated_count,
+        }
+    )
+
+
+@router.post("/batch/delete")
+async def batch_delete_columns(request: Request, db: Session = Depends(get_db)):
+    """
+    批量删除栏目
+
+    Args:
+        request: FastAPI request 对象
+        db: 数据库会话
+
+    Returns:
+        JSON 响应
+
+    Request Body:
+        {
+            "column_ids": [1, 2, 3]
+        }
+    """
+    data = await request.json()
+    column_ids = data.get("column_ids", [])
+
+    if not column_ids:
+        return JSONResponse(
+            status_code=400, content={"success": False, "message": "未选择栏目"}
+        )
+
+    # 批量删除
+    deleted_count = 0
+    failed_columns = []
+
+    for column_id in column_ids:
+        # 检查是否可以删除
+        if column_service.can_delete_column(db, column_id):
+            column = db.query(SiteColumn).filter_by(id=column_id).first()
+            if column:
+                db.delete(column)
+                deleted_count += 1
+        else:
+            column = db.query(SiteColumn).filter_by(id=column_id).first()
+            if column:
+                failed_columns.append(column.name)
+
+    db.commit()
+
+    if failed_columns:
+        return JSONResponse(
+            content={
+                "success": True,
+                "message": f"成功删除 {deleted_count} 个栏目，{len(failed_columns)} 个栏目无法删除（包含子栏目或关联内容）",
+                "count": deleted_count,
+                "failed": failed_columns,
+            }
+        )
+    else:
+        return JSONResponse(
+            content={
+                "success": True,
+                "message": f"成功删除 {deleted_count} 个栏目",
+                "count": deleted_count,
+            }
+        )
