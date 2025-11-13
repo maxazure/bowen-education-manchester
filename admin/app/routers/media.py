@@ -1,418 +1,546 @@
 """
-媒体库管理路由
+媒体库管理路由（扩展版）
 
-提供媒体文件的上传、查询、更新、删除功能
+提供完整的媒体文件管理功能：
+- 文件上传（图片、视频、文档）
+- 文件夹管理
+- 图片编辑（裁剪、缩放、压缩）
+- 文件批量操作
 """
 
-import os
-import re
-from datetime import datetime
-from pathlib import Path
 from typing import Optional
 
-from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
-from PIL import Image
-from pydantic import BaseModel
-from sqlalchemy.orm import Session
+from fastapi import (
+    APIRouter,
+    Depends,
+    File,
+    Form,
+    HTTPException,
+    Request,
+    UploadFile,
+)
+from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.templating import Jinja2Templates
+from sqlalchemy.orm import Session, joinedload
 
-from admin.app.database import get_db
-from app.models.media import MediaFile
+from app.database import get_db
+from app.models.media import MediaFile, MediaFolder
+from admin.app.services.media_service import MediaService
 
+# prefix 已在 main.py 中设置为 /admin/media，这里不需要再加
 router = APIRouter()
-
-# 配置常量
-UPLOAD_DIR = Path(__file__).parent.parent.parent / "uploads"
-IMAGES_DIR = UPLOAD_DIR / "images"
-THUMBNAILS_DIR = UPLOAD_DIR / "thumbnails"
-MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
-THUMBNAIL_SIZE = (300, 300)
-ALLOWED_MIME_TYPES = {
-    "image/jpeg": ".jpg",
-    "image/png": ".png",
-    "image/gif": ".gif",
-    "image/webp": ".webp",
-}
+templates = Jinja2Templates(directory="admin/templates")
 
 
-class MediaUpdateRequest(BaseModel):
-    """媒体更新请求"""
-
-    title: Optional[str] = None
-    alt_text: Optional[str] = None
-    caption: Optional[str] = None
+def get_media_service(db: Session = Depends(get_db)) -> MediaService:
+    """获取媒体服务实例"""
+    return MediaService(db)
 
 
-class MediaListResponse(BaseModel):
-    """媒体列表响应"""
-
-    items: list
-    total: int
-    page: int
-    per_page: int
+# ============================================================
+# 页面路由
+# ============================================================
 
 
-def sanitize_filename(filename: str) -> str:
-    """
-    清洗文件名，移除特殊字符
-
-    Args:
-        filename: 原始文件名
-
-    Returns:
-        str: 清洗后的安全文件名
-    """
-    # 移除路径遍历字符
-    filename = os.path.basename(filename)
-
-    # 移除特殊字符，只保留字母、数字、下划线、连字符和点
-    filename = re.sub(r"[^\w\-.]", "_", filename)
-
-    # 确保不以点开头（隐藏文件）
-    if filename.startswith("."):
-        filename = "_" + filename[1:]
-
-    return filename
-
-
-def generate_unique_filename(filename: str, directory: Path) -> str:
-    """
-    生成唯一文件名（处理重复）
-
-    Args:
-        filename: 原始文件名
-        directory: 保存目录
-
-    Returns:
-        str: 唯一文件名
-    """
-    base_name, ext = os.path.splitext(filename)
-    counter = 1
-    unique_filename = filename
-
-    while (directory / unique_filename).exists():
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        unique_filename = f"{base_name}_{timestamp}_{counter}{ext}"
-        counter += 1
-
-    return unique_filename
-
-
-def create_thumbnail(
-    image_path: Path, thumbnail_path: Path, size: tuple = THUMBNAIL_SIZE
-):
-    """
-    生成缩略图
-
-    Args:
-        image_path: 原图路径
-        thumbnail_path: 缩略图保存路径
-        size: 缩略图尺寸 (width, height)
-    """
-    with Image.open(image_path) as img:
-        # 保持比例缩放
-        img.thumbnail(size, Image.Resampling.LANCZOS)
-
-        # 保存缩略图
-        img.save(thumbnail_path, quality=90, optimize=True)
-
-
-@router.post("/upload", status_code=201)
-async def upload_media(
-    file: UploadFile = File(...),
+@router.get("", response_class=HTMLResponse)
+async def list_media(
+    request: Request,
+    folder_id: Optional[int] = None,
+    file_type: Optional[str] = None,
+    search: Optional[str] = None,
+    page: int = 1,
+    page_size: int = 24,
     db: Session = Depends(get_db),
 ):
     """
-    上传媒体文件
-
-    Args:
-        file: 上传的文件
-        db: 数据库会话
-
-    Returns:
-        dict: 媒体信息
-
-    Raises:
-        HTTPException: 文件类型不支持或文件过大
+    媒体库列表页面
     """
-    # 验证文件类型
-    if file.content_type not in ALLOWED_MIME_TYPES:
-        raise HTTPException(
-            status_code=400,
-            detail=f"不支持的文件类型: {file.content_type}。支持的类型: {', '.join(ALLOWED_MIME_TYPES.keys())}",
-        )
+    # 构建查询
+    query = db.query(MediaFile).options(joinedload(MediaFile.folder))
 
-    # 读取文件内容
-    contents = await file.read()
-    file_size = len(contents)
+    # 文件夹筛选
+    if folder_id:
+        query = query.filter(MediaFile.folder_id == folder_id)
 
-    # 验证文件大小
-    if file_size > MAX_FILE_SIZE:
-        raise HTTPException(
-            status_code=400,
-            detail=f"文件大小超过限制。最大允许: {MAX_FILE_SIZE / (1024 * 1024):.1f}MB",
-        )
-
-    # 清洗文件名
-    safe_filename = sanitize_filename(file.filename)
-
-    # 生成唯一文件名
-    unique_filename = generate_unique_filename(safe_filename, IMAGES_DIR)
-
-    # 保存原图
-    original_path = IMAGES_DIR / unique_filename
-    with open(original_path, "wb") as f:
-        f.write(contents)
-
-    # 获取图片尺寸
-    try:
-        with Image.open(original_path) as img:
-            width, height = img.size
-    except Exception:
-        width = None
-        height = None
-
-    # 生成缩略图
-    thumbnail_filename = f"thumb_{unique_filename}"
-    thumbnail_path = THUMBNAILS_DIR / thumbnail_filename
-
-    try:
-        create_thumbnail(original_path, thumbnail_path)
-    except Exception as e:
-        # 缩略图生成失败不应该阻止上传
-        thumbnail_path = None
-        print(f"缩略图生成失败: {e}")
-
-    # 创建数据库记录
-    media = MediaFile(
-        filename_original=safe_filename,
-        mime_type=file.content_type,
-        size_bytes=file_size,
-        width=width,
-        height=height,
-        path_original=str(original_path),
-        path_thumb=str(thumbnail_path) if thumbnail_path else None,
-        usage_count=0,
-    )
-
-    db.add(media)
-    db.commit()
-    db.refresh(media)
-
-    # 返回响应
-    return {
-        "id": media.id,
-        "filename_original": media.filename_original,
-        "mime_type": media.mime_type,
-        "size_bytes": media.size_bytes,
-        "width": media.width,
-        "height": media.height,
-        "path_original": media.path_original,
-        "path_thumb": media.path_thumb,
-        "usage_count": media.usage_count,
-        "created_at": media.created_at.isoformat() if media.created_at else None,
-        "updated_at": media.updated_at.isoformat() if media.updated_at else None,
-    }
-
-
-@router.get("", response_model=MediaListResponse)
-async def get_media_list(
-    page: int = Query(1, ge=1),
-    per_page: int = Query(20, ge=1, le=100),
-    search: Optional[str] = Query(None),
-    mime_type: Optional[str] = Query(None),
-    db: Session = Depends(get_db),
-):
-    """
-    获取媒体列表（支持分页、搜索、筛选）
-
-    Args:
-        page: 页码（从 1 开始）
-        per_page: 每页数量
-        search: 搜索关键词（文件名）
-        mime_type: MIME 类型筛选
-        db: 数据库会话
-
-    Returns:
-        MediaListResponse: 媒体列表和分页信息
-    """
-    query = db.query(MediaFile)
+    # 文件类型筛选
+    if file_type and file_type != "all":
+        query = query.filter(MediaFile.file_type == file_type)
 
     # 搜索
     if search:
-        query = query.filter(MediaFile.filename_original.contains(search))
+        query = query.filter(
+            (MediaFile.filename_original.contains(search))
+            | (MediaFile.title.contains(search))
+        )
 
-    # 类型筛选
-    if mime_type:
-        query = query.filter(MediaFile.mime_type == mime_type)
+    # 排序
+    query = query.order_by(MediaFile.created_at.desc())
 
-    # 总数
-    total = query.count()
-
-    # 分页
-    offset = (page - 1) * per_page
-    items = (
-        query.order_by(MediaFile.created_at.desc()).offset(offset).limit(per_page).all()
+    # 统计
+    total_files = query.count()
+    total_images = db.query(MediaFile).filter(MediaFile.file_type == "image").count()
+    total_videos = db.query(MediaFile).filter(MediaFile.file_type == "video").count()
+    total_documents = (
+        db.query(MediaFile).filter(MediaFile.file_type == "document").count()
     )
 
-    # 格式化返回数据
-    items_data = [
-        {
-            "id": item.id,
-            "filename_original": item.filename_original,
-            "mime_type": item.mime_type,
-            "size_bytes": item.size_bytes,
-            "width": item.width,
-            "height": item.height,
-            "path_original": item.path_original,
-            "path_thumb": item.path_thumb,
-            "usage_count": item.usage_count,
-            "title": item.title,
-            "alt_text": item.alt_text,
-            "caption": item.caption,
-            "created_at": item.created_at.isoformat() if item.created_at else None,
-            "updated_at": item.updated_at.isoformat() if item.updated_at else None,
-        }
-        for item in items
-    ]
+    # 分页
+    offset = (page - 1) * page_size
+    files = query.offset(offset).limit(page_size).all()
 
-    return {
-        "items": items_data,
-        "total": total,
-        "page": page,
-        "per_page": per_page,
-    }
+    # 获取文件夹列表
+    folders = db.query(MediaFolder).order_by(MediaFolder.sort_order).all()
+
+    # 计算总页数
+    total_pages = (total_files + page_size - 1) // page_size
+
+    return templates.TemplateResponse(
+        "media/list.html",
+        {
+            "request": request,
+            "files": files,
+            "folders": folders,
+            "current_folder_id": folder_id,
+            "current_file_type": file_type or "all",
+            "search": search or "",
+            "page": page,
+            "page_size": page_size,
+            "total": total_files,
+            "total_pages": total_pages,
+            "total_files": total_files,
+            "total_images": total_images,
+            "total_videos": total_videos,
+            "total_documents": total_documents,
+        },
+    )
+
+
+@router.get("/upload", response_class=HTMLResponse)
+async def upload_page(request: Request, db: Session = Depends(get_db)):
+    """上传页面"""
+    folders = db.query(MediaFolder).order_by(MediaFolder.sort_order).all()
+
+    return templates.TemplateResponse(
+        "media/upload.html",
+        {
+            "request": request,
+            "folders": folders,
+        },
+    )
+
+
+# ============================================================
+# 文件 API
+# ============================================================
+
+
+@router.post("/upload")
+async def upload_file(
+    file: UploadFile = File(...),
+    folder_id: Optional[int] = Form(None),
+    title: Optional[str] = Form(None),
+    alt_text: Optional[str] = Form(None),
+    caption: Optional[str] = Form(None),
+    db: Session = Depends(get_db),
+    media_service: MediaService = Depends(get_media_service),
+):
+    """上传文件 API"""
+    # 上传文件
+    media_file, error = await media_service.upload_file(
+        file, folder_id=folder_id, uploaded_by="admin"
+    )
+
+    if error:
+        return JSONResponse(
+            status_code=400, content={"success": False, "message": error}
+        )
+
+    # 更新可选字段
+    if title:
+        media_file.title = title
+    if alt_text:
+        media_file.alt_text = alt_text
+    if caption:
+        media_file.caption = caption
+
+    db.commit()
+    db.refresh(media_file)
+
+    return JSONResponse(
+        content={
+            "success": True,
+            "message": "上传成功",
+            "file": {
+                "id": media_file.id,
+                "filename": media_file.filename_original,
+                "url": media_file.path_original,
+                "thumb_url": media_file.path_thumb,
+                "file_type": media_file.file_type,
+                "size": media_file.size_formatted,
+            },
+        }
+    )
 
 
 @router.get("/{media_id}")
-async def get_media_detail(media_id: int, db: Session = Depends(get_db)):
-    """
-    获取单个媒体详情
+async def get_media(media_id: int, db: Session = Depends(get_db)):
+    """获取文件详情 API"""
+    media_file = (
+        db.query(MediaFile)
+        .options(joinedload(MediaFile.folder))
+        .filter(MediaFile.id == media_id)
+        .first()
+    )
 
-    Args:
-        media_id: 媒体 ID
-        db: 数据库会话
+    if not media_file:
+        return JSONResponse(
+            status_code=404, content={"success": False, "message": "文件不存在"}
+        )
 
-    Returns:
-        dict: 媒体详情
+    # 增加查看次数
+    media_file.view_count += 1
+    db.commit()
 
-    Raises:
-        HTTPException: 媒体不存在
-    """
-    media = db.query(MediaFile).filter(MediaFile.id == media_id).first()
-
-    if not media:
-        raise HTTPException(status_code=404, detail="媒体不存在")
-
-    return {
-        "id": media.id,
-        "filename_original": media.filename_original,
-        "mime_type": media.mime_type,
-        "size_bytes": media.size_bytes,
-        "width": media.width,
-        "height": media.height,
-        "path_original": media.path_original,
-        "path_thumb": media.path_thumb,
-        "usage_count": media.usage_count,
-        "title": media.title,
-        "alt_text": media.alt_text,
-        "caption": media.caption,
-        "created_at": media.created_at.isoformat() if media.created_at else None,
-        "updated_at": media.updated_at.isoformat() if media.updated_at else None,
-    }
+    return JSONResponse(
+        content={
+            "success": True,
+            "file": {
+                "id": media_file.id,
+                "filename": media_file.filename_original,
+                "title": media_file.title,
+                "alt_text": media_file.alt_text,
+                "caption": media_file.caption,
+                "description": media_file.description,
+                "file_type": media_file.file_type,
+                "mime_type": media_file.mime_type,
+                "size": media_file.size_formatted,
+                "size_bytes": media_file.size_bytes,
+                "width": media_file.width,
+                "height": media_file.height,
+                "url": media_file.path_original,
+                "thumb_url": media_file.path_thumb,
+                "medium_url": media_file.path_medium,
+                "folder_id": media_file.folder_id,
+                "folder_name": media_file.folder.name if media_file.folder else None,
+                "tags": media_file.tags,
+                "usage_count": media_file.usage_count,
+                "view_count": media_file.view_count,
+                "download_count": media_file.download_count,
+                "created_at": media_file.created_at.isoformat(),
+            },
+        }
+    )
 
 
 @router.put("/{media_id}")
 async def update_media(
     media_id: int,
-    data: MediaUpdateRequest,
+    title: Optional[str] = Form(None),
+    alt_text: Optional[str] = Form(None),
+    caption: Optional[str] = Form(None),
+    description: Optional[str] = Form(None),
+    folder_id: Optional[int] = Form(None),
+    tags: Optional[str] = Form(None),
     db: Session = Depends(get_db),
 ):
-    """
-    更新媒体元数据
+    """更新文件信息 API"""
+    media_file = db.query(MediaFile).filter(MediaFile.id == media_id).first()
 
-    Args:
-        media_id: 媒体 ID
-        data: 更新数据
-        db: 数据库会话
-
-    Returns:
-        dict: 更新后的媒体信息
-
-    Raises:
-        HTTPException: 媒体不存在
-    """
-    media = db.query(MediaFile).filter(MediaFile.id == media_id).first()
-
-    if not media:
-        raise HTTPException(status_code=404, detail="媒体不存在")
-
-    # 更新字段
-    if data.title is not None:
-        media.title = data.title
-    if data.alt_text is not None:
-        media.alt_text = data.alt_text
-    if data.caption is not None:
-        media.caption = data.caption
-
-    db.commit()
-    db.refresh(media)
-
-    return {
-        "id": media.id,
-        "filename_original": media.filename_original,
-        "mime_type": media.mime_type,
-        "size_bytes": media.size_bytes,
-        "width": media.width,
-        "height": media.height,
-        "path_original": media.path_original,
-        "path_thumb": media.path_thumb,
-        "usage_count": media.usage_count,
-        "title": media.title,
-        "alt_text": media.alt_text,
-        "caption": media.caption,
-        "created_at": media.created_at.isoformat() if media.created_at else None,
-        "updated_at": media.updated_at.isoformat() if media.updated_at else None,
-    }
-
-
-@router.delete("/{media_id}", status_code=204)
-async def delete_media(media_id: int, db: Session = Depends(get_db)):
-    """
-    删除媒体（带删除保护）
-
-    Args:
-        media_id: 媒体 ID
-        db: 数据库会话
-
-    Raises:
-        HTTPException: 媒体不存在或正在被使用
-    """
-    media = db.query(MediaFile).filter(MediaFile.id == media_id).first()
-
-    if not media:
-        raise HTTPException(status_code=404, detail="媒体不存在")
-
-    # 删除保护：检查使用次数
-    if media.usage_count > 0:
-        raise HTTPException(
-            status_code=400,
-            detail=f"媒体正在被使用（{media.usage_count} 次引用），无法删除",
+    if not media_file:
+        return JSONResponse(
+            status_code=404, content={"success": False, "message": "文件不存在"}
         )
 
-    # 删除文件
-    try:
-        # 删除原图
-        if media.path_original and Path(media.path_original).exists():
-            Path(media.path_original).unlink()
+    # 更新字段
+    if title is not None:
+        media_file.title = title
+    if alt_text is not None:
+        media_file.alt_text = alt_text
+    if caption is not None:
+        media_file.caption = caption
+    if description is not None:
+        media_file.description = description
+    if folder_id is not None:
+        media_file.folder_id = folder_id
+    if tags is not None:
+        media_file.tags = tags
 
-        # 删除缩略图
-        if media.path_thumb and Path(media.path_thumb).exists():
-            Path(media.path_thumb).unlink()
-    except Exception as e:
-        print(f"删除文件失败: {e}")
+    db.commit()
+    db.refresh(media_file)
 
-    # 删除数据库记录
-    db.delete(media)
+    return JSONResponse(content={"success": True, "message": "更新成功"})
+
+
+@router.delete("/{media_id}")
+async def delete_media(
+    media_id: int,
+    db: Session = Depends(get_db),
+    media_service: MediaService = Depends(get_media_service),
+):
+    """删除文件 API"""
+    success, error = media_service.delete_file(media_id)
+
+    if not success:
+        return JSONResponse(
+            status_code=400, content={"success": False, "message": error}
+        )
+
+    return JSONResponse(content={"success": True, "message": "删除成功"})
+
+
+@router.post("/batch-delete")
+async def batch_delete_media(
+    request: Request,
+    db: Session = Depends(get_db),
+    media_service: MediaService = Depends(get_media_service),
+):
+    """批量删除文件 API"""
+    data = await request.json()
+    media_ids = data.get("media_ids", [])
+
+    if not media_ids:
+        return JSONResponse(
+            status_code=400, content={"success": False, "message": "请选择要删除的文件"}
+        )
+
+    deleted_count = 0
+    errors = []
+
+    for media_id in media_ids:
+        success, error = media_service.delete_file(media_id)
+        if success:
+            deleted_count += 1
+        else:
+            errors.append(f"ID {media_id}: {error}")
+
+    if errors:
+        return JSONResponse(
+            status_code=400,
+            content={
+                "success": False,
+                "message": f"删除了 {deleted_count} 个文件，{len(errors)} 个失败",
+                "errors": errors,
+            },
+        )
+
+    return JSONResponse(
+        content={"success": True, "message": f"成功删除 {deleted_count} 个文件"}
+    )
+
+
+# ============================================================
+# 图片编辑 API
+# ============================================================
+
+
+@router.post("/{media_id}/crop")
+async def crop_image(
+    media_id: int,
+    request: Request,
+    db: Session = Depends(get_db),
+    media_service: MediaService = Depends(get_media_service),
+):
+    """裁剪图片 API"""
+    data = await request.json()
+    x = data.get("x", 0)
+    y = data.get("y", 0)
+    width = data.get("width")
+    height = data.get("height")
+
+    if not width or not height:
+        return JSONResponse(
+            status_code=400, content={"success": False, "message": "请指定裁剪尺寸"}
+        )
+
+    success, error = media_service.crop_image(media_id, x, y, width, height)
+
+    if not success:
+        return JSONResponse(
+            status_code=400, content={"success": False, "message": error}
+        )
+
+    return JSONResponse(content={"success": True, "message": "裁剪成功"})
+
+
+@router.post("/{media_id}/resize")
+async def resize_image(
+    media_id: int,
+    request: Request,
+    db: Session = Depends(get_db),
+    media_service: MediaService = Depends(get_media_service),
+):
+    """缩放图片 API"""
+    data = await request.json()
+    width = data.get("width")
+    height = data.get("height")
+
+    if not width or not height:
+        return JSONResponse(
+            status_code=400, content={"success": False, "message": "请指定缩放尺寸"}
+        )
+
+    success, error = media_service.resize_image(media_id, width, height)
+
+    if not success:
+        return JSONResponse(
+            status_code=400, content={"success": False, "message": error}
+        )
+
+    return JSONResponse(content={"success": True, "message": "缩放成功"})
+
+
+@router.post("/{media_id}/compress")
+async def compress_image(
+    media_id: int,
+    quality: int = Form(85),
+    db: Session = Depends(get_db),
+    media_service: MediaService = Depends(get_media_service),
+):
+    """压缩图片 API"""
+    if not 1 <= quality <= 100:
+        return JSONResponse(
+            status_code=400,
+            content={"success": False, "message": "压缩质量必须在 1-100 之间"},
+        )
+
+    success, error = media_service.compress_image(media_id, quality)
+
+    if not success:
+        return JSONResponse(
+            status_code=400, content={"success": False, "message": error}
+        )
+
+    return JSONResponse(content={"success": True, "message": "压缩成功"})
+
+
+# ============================================================
+# 文件夹管理 API
+# ============================================================
+
+
+@router.get("/folders/list")
+async def list_folders(db: Session = Depends(get_db)):
+    """获取文件夹列表 API"""
+    folders = db.query(MediaFolder).order_by(MediaFolder.sort_order).all()
+
+    return JSONResponse(
+        content={
+            "success": True,
+            "folders": [
+                {
+                    "id": f.id,
+                    "name": f.name,
+                    "parent_id": f.parent_id,
+                    "path": f.path,
+                    "description": f.description,
+                    "sort_order": f.sort_order,
+                }
+                for f in folders
+            ],
+        }
+    )
+
+
+@router.post("/folders")
+async def create_folder(
+    name: str = Form(...),
+    parent_id: Optional[int] = Form(None),
+    description: Optional[str] = Form(None),
+    db: Session = Depends(get_db),
+):
+    """创建文件夹 API"""
+    # 生成路径
+    if parent_id:
+        parent = db.query(MediaFolder).filter(MediaFolder.id == parent_id).first()
+        if not parent:
+            return JSONResponse(
+                status_code=404, content={"success": False, "message": "父文件夹不存在"}
+            )
+        path = f"{parent.path}/{name}".replace("//", "/")
+    else:
+        path = f"/{name}"
+
+    # 创建文件夹
+    folder = MediaFolder(
+        name=name,
+        parent_id=parent_id,
+        path=path,
+        description=description,
+    )
+
+    db.add(folder)
+    db.commit()
+    db.refresh(folder)
+
+    return JSONResponse(
+        content={
+            "success": True,
+            "message": "创建成功",
+            "folder": {
+                "id": folder.id,
+                "name": folder.name,
+                "path": folder.path,
+            },
+        }
+    )
+
+
+@router.put("/folders/{folder_id}")
+async def update_folder(
+    folder_id: int,
+    name: Optional[str] = Form(None),
+    description: Optional[str] = Form(None),
+    db: Session = Depends(get_db),
+):
+    """更新文件夹 API"""
+    folder = db.query(MediaFolder).filter(MediaFolder.id == folder_id).first()
+
+    if not folder:
+        return JSONResponse(
+            status_code=404, content={"success": False, "message": "文件夹不存在"}
+        )
+
+    if name:
+        folder.name = name
+        # 更新路径
+        if folder.parent_id:
+            parent = (
+                db.query(MediaFolder).filter(MediaFolder.id == folder.parent_id).first()
+            )
+            folder.path = f"{parent.path}/{name}".replace("//", "/")
+        else:
+            folder.path = f"/{name}"
+
+    if description is not None:
+        folder.description = description
+
+    db.commit()
+    db.refresh(folder)
+
+    return JSONResponse(content={"success": True, "message": "更新成功"})
+
+
+@router.delete("/folders/{folder_id}")
+async def delete_folder(folder_id: int, db: Session = Depends(get_db)):
+    """删除文件夹 API"""
+    folder = db.query(MediaFolder).filter(MediaFolder.id == folder_id).first()
+
+    if not folder:
+        return JSONResponse(
+            status_code=404, content={"success": False, "message": "文件夹不存在"}
+        )
+
+    # 检查是否有子文件夹或文件
+    has_children = db.query(MediaFolder).filter(MediaFolder.parent_id == folder_id).first()
+    has_files = db.query(MediaFile).filter(MediaFile.folder_id == folder_id).first()
+
+    if has_children or has_files:
+        return JSONResponse(
+            status_code=400,
+            content={"success": False, "message": "文件夹不为空，无法删除"},
+        )
+
+    db.delete(folder)
     db.commit()
 
-    return None
+    return JSONResponse(content={"success": True, "message": "删除成功"})
