@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>留言管理 - 管理后台</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .stat-item {
+            padding: 10px 20px;
+            background: #f5f5f5;
+            border-radius: 4px;
+        }
+        .filters {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 4px;
+        }
+        .filters select, .filters input[type="text"] {
+            padding: 5px;
+            margin-right: 10px;
+        }
+        .batch-actions {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #fff3cd;
+            border-radius: 4px;
+            display: none;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #f5f5f5;
+            font-weight: bold;
+        }
+        .status-badge {
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        .status-unread {
+            background: #ffc107;
+            color: #000;
+        }
+        .status-handled {
+            background: #28a745;
+            color: #fff;
+        }
+        .btn {
+            padding: 5px 10px;
+            margin-right: 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 3px;
+        }
+        .btn-primary {
+            background: #007bff;
+            color: white;
+        }
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        .pagination {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .pagination a, .pagination span {
+            padding: 5px 10px;
+            margin: 0 5px;
+        }
+        .message-preview {
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        /* 模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 5px;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: #000;
+        }
+        .detail-row {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #f9f9f9;
+        }
+        .detail-label {
+            font-weight: bold;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>留言管理</h1>
+        <div>
+            <button class="btn btn-success" onclick="exportCSV()">导出 CSV</button>
+        </div>
+    </div>
+
+    <!-- 统计信息 -->
+    <div class="stats">
+        <div class="stat-item">
+            <strong>未读:</strong> {{ unread_count }}
+        </div>
+        <div class="stat-item">
+            <strong>已处理:</strong> {{ handled_count }}
+        </div>
+        <div class="stat-item">
+            <strong>总计:</strong> {{ total }}
+        </div>
+    </div>
+
+    <!-- 筛选表单 -->
+    <form method="GET" action="/admin/contacts" class="filters">
+        <select name="status_filter" onchange="this.form.submit()">
+            <option value="">所有状态</option>
+            <option value="unread" {% if current_status == 'unread' %}selected{% endif %}>未读</option>
+            <option value="handled" {% if current_status == 'handled' %}selected{% endif %}>已处理</option>
+        </select>
+
+        <input type="text" name="keyword" value="{{ current_keyword or '' }}" placeholder="搜索姓名、联系方式、留言内容">
+        <button type="submit" class="btn btn-primary">搜索</button>
+
+        {% if current_status or current_keyword %}
+        <a href="/admin/contacts" class="btn btn-secondary">清除筛选</a>
+        {% endif %}
+    </form>
+
+    <!-- 批量操作 -->
+    <div class="batch-actions" id="batchActions">
+        <span>已选择 <strong id="selectedCount">0</strong> 条留言</span>
+        <button class="btn btn-success" onclick="batchMarkAsHandled()">批量标记为已处理</button>
+        <button class="btn btn-secondary" onclick="batchMarkAsUnread()">批量标记为未读</button>
+        <button class="btn btn-secondary" onclick="clearSelection()">取消选择</button>
+    </div>
+
+    <!-- 留言列表 -->
+    <table>
+        <thead>
+            <tr>
+                <th><input type="checkbox" id="selectAll" onchange="toggleSelectAll()"></th>
+                <th>ID</th>
+                <th>姓名</th>
+                <th>联系方式</th>
+                <th>留言内容</th>
+                <th>状态</th>
+                <th>创建时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if contacts %}
+            {% for contact in contacts %}
+            <tr>
+                <td><input type="checkbox" class="contact-checkbox" value="{{ contact.id }}" onchange="updateBatchActions()"></td>
+                <td>{{ contact.id }}</td>
+                <td>{{ contact.name }}</td>
+                <td>{{ contact.contact_info }}</td>
+                <td>
+                    <div class="message-preview">{{ contact.message_text }}</div>
+                </td>
+                <td>
+                    <span class="status-badge status-{{ contact.status }}">
+                        {{ '未读' if contact.status == 'unread' else '已处理' }}
+                    </span>
+                </td>
+                <td>{{ contact.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                <td>
+                    <button class="btn btn-primary" onclick="viewDetail({{ contact.id }})">查看</button>
+                    {% if contact.status == 'unread' %}
+                    <button class="btn btn-success" onclick="markAsHandled({{ contact.id }})">标记已处理</button>
+                    {% else %}
+                    <button class="btn btn-secondary" onclick="markAsUnread({{ contact.id }})">标记未读</button>
+                    {% endif %}
+                    <button class="btn btn-danger" onclick="deleteContact({{ contact.id }})">删除</button>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="8" style="text-align: center; padding: 40px;">暂无留言</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    <!-- 分页 -->
+    <div class="pagination">
+        {% if page > 1 %}
+        <a href="?page={{ page - 1 }}{% if current_status %}&status_filter={{ current_status }}{% endif %}{% if current_keyword %}&keyword={{ current_keyword }}{% endif %}">上一页</a>
+        {% endif %}
+        <span>第 {{ page }} / {{ total_pages }} 页 (共 {{ total }} 条)</span>
+        {% if page < total_pages %}
+        <a href="?page={{ page + 1 }}{% if current_status %}&status_filter={{ current_status }}{% endif %}{% if current_keyword %}&keyword={{ current_keyword }}{% endif %}">下一页</a>
+        {% endif %}
+    </div>
+
+    <!-- 详情模态框 -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>留言详情</h2>
+                <span class="close" onclick="closeDetailModal()">&times;</span>
+            </div>
+            <div id="detailContent">
+                <!-- 详情内容将通过 AJAX 加载 -->
+            </div>
+        </div>
+    </div>
+
+    <script src="/admin/static/js/contacts.js"></script>
+</body>
+</html>

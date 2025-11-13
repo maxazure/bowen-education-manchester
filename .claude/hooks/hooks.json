@@ -12,6 +12,12 @@
       "command": "python .claude/hooks/test_checker.py",
       "blocking": false,
       "enabled": true
+    },
+    "PostStop": {
+      "description": "Remind Claude to restart the next subagent when unfinished tasks remain",
+      "command": "python .claude/hooks/subagent_auto_resume.py",
+      "blocking": false,
+      "enabled": true
     }
   },
   "settings": {

@@ -32,7 +32,8 @@
 {% if column.children %}
 <div class="column-children">
     {% for child in column.children %}
-        {% include 'columns/_column_item.html' with column=child %}
+        {% set column = child %}
+        {% include 'columns/_column_item.html' %}
     {% endfor %}
 </div>
 {% endif %}

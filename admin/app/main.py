@@ -12,8 +12,9 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 
-from admin.app.routers import auth, media, columns, single_pages, posts, products, settings
-from admin.app.middleware import AdminAuthMiddleware
+# 使用相对导入避免命名冲突
+from .routers import auth, media, columns, single_pages, posts, products, settings, galleries, contacts
+from .middleware import AdminAuthMiddleware
 
 # 获取admin目录的绝对路径
 ADMIN_DIR = Path(__file__).parent.parent
@@ -42,6 +43,8 @@ app.include_router(single_pages.router, prefix="/admin", tags=["pages"])
 app.include_router(posts.router, prefix="/admin", tags=["posts"])
 app.include_router(products.router, prefix="/admin", tags=["products"])
 app.include_router(settings.router, prefix="/admin", tags=["settings"])
+app.include_router(galleries.router, prefix="/admin", tags=["galleries"])
+app.include_router(contacts.router, prefix="/admin", tags=["contacts"])
 
 # 挂载静态文件
 app.mount("/static", StaticFiles(directory=str(ADMIN_DIR / "static")), name="static")

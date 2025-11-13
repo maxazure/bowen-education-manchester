@@ -73,3 +73,78 @@ def client(db_session):
     yield test_client
 
     app.dependency_overrides.clear()
+
+
+@pytest.fixture(scope="function")
+def test_media_file(db_session):
+    """创建测试媒体文件"""
+    from app.models.media import MediaFile
+
+    media = MediaFile(
+        filename_original="test_image.jpg",
+        path_original="/uploads/test_image.jpg",
+        mime_type="image/jpeg",
+        size_bytes=1024 * 100,  # 100KB
+        width=800,
+        height=600,
+    )
+    db_session.add(media)
+    db_session.commit()
+    db_session.refresh(media)
+
+    yield media
+
+    db_session.delete(media)
+    db_session.commit()
+
+
+@pytest.fixture(scope="function")
+def test_media_files(db_session):
+    """创建多个测试媒体文件"""
+    from app.models.media import MediaFile
+
+    media_files = []
+    for i in range(5):
+        media = MediaFile(
+            filename_original=f"test_image_{i+1}.jpg",
+            path_original=f"/uploads/test_image_{i+1}.jpg",
+            mime_type="image/jpeg",
+            size_bytes=1024 * 100,  # 100KB
+            width=800,
+            height=600,
+        )
+        db_session.add(media)
+        media_files.append(media)
+
+    db_session.commit()
+    for media in media_files:
+        db_session.refresh(media)
+
+    yield media_files
+
+    for media in media_files:
+        db_session.delete(media)
+    db_session.commit()
+
+
+@pytest.fixture(scope="function")
+def test_gallery(db_session):
+    """创建测试相册"""
+    from app.models.gallery import Gallery
+
+    gallery = Gallery(
+        title="测试相册",
+        slug="test-gallery",
+        description="这是一个测试相册",
+        category="测试分类",
+        is_public=True,
+        sort_order=0,
+    )
+    db_session.add(gallery)
+    db_session.commit()
+    db_session.refresh(gallery)
+
+    yield gallery
+
+    db_session.delete(gallery)
+    db_session.commit()
