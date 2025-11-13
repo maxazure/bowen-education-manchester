@@ -1,0 +1,292 @@
+{% extends "base.html" %}
+
+{% block title %}{% if mode == 'edit' %}编辑单页{% else %}新建单页{% endif %} - 博文教育管理后台{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+<style>
+    .form-container {
+        padding: 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    .page-title {
+        font-size: 28px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-primary {
+        background: #007bff;
+        color: white;
+    }
+
+    .btn-success {
+        background: #28a745;
+        color: white;
+    }
+
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 30px;
+        margin-bottom: 30px;
+    }
+
+    .form-main {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .form-sidebar {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .form-group input[type="text"],
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .markdown-editor {
+        margin-bottom: 20px;
+    }
+
+    .preview-container {
+        margin-top: 20px;
+        padding: 20px;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        background: #f8f9fa;
+    }
+
+    .preview-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: #495057;
+    }
+
+    .preview-content {
+        background: white;
+        padding: 20px;
+        border-radius: 4px;
+        min-height: 200px;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #dee2e6;
+    }
+
+    .sidebar-section {
+        margin-bottom: 25px;
+        padding-bottom: 25px;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .sidebar-section:last-child {
+        border-bottom: none;
+    }
+
+    .sidebar-section-title {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 15px;
+        color: #495057;
+    }
+
+    .radio-group {
+        display: flex;
+        gap: 15px;
+    }
+
+    .radio-group label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-weight: normal;
+    }
+
+    .help-text {
+        font-size: 12px;
+        color: #6c757d;
+        margin-top: 5px;
+    }
+
+    .CodeMirror {
+        height: 400px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+    }
+
+    .EasyMDEContainer {
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="page-header">
+        <h1 class="page-title">{% if mode == 'edit' %}编辑单页{% else %}新建单页{% endif %}</h1>
+        <a href="/admin/pages" class="btn btn-secondary">返回列表</a>
+    </div>
+
+    <form method="POST" action="{% if mode == 'edit' %}/admin/pages/{{ page.id }}{% else %}/admin/pages{% endif %}" id="pageForm">
+        <div class="form-row">
+            <div class="form-main">
+                <div class="form-group">
+                    <label for="title">标题 *</label>
+                    <input type="text" id="title" name="title" required value="{{ page.title if page else '' }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="slug">URL Slug *</label>
+                    <input type="text" id="slug" name="slug" required value="{{ page.slug if page else '' }}">
+                    <div class="help-text">留空将自动生成。只能包含字母、数字和连字符。</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="subtitle">副标题</label>
+                    <input type="text" id="subtitle" name="subtitle" value="{{ page.subtitle if page else '' }}">
+                </div>
+
+                <div class="form-group markdown-editor">
+                    <label for="content_markdown">内容 (Markdown) *</label>
+                    <textarea id="content_markdown" name="content_markdown" required>{{ page.content_markdown if page else '' }}</textarea>
+                </div>
+
+                <div class="preview-container" id="previewContainer" style="display: none;">
+                    <div class="preview-title">实时预览</div>
+                    <div class="preview-content" id="previewContent"></div>
+                </div>
+            </div>
+
+            <div class="form-sidebar">
+                <div class="sidebar-section">
+                    <div class="sidebar-section-title">发布设置</div>
+                    <div class="form-group">
+                        <label>状态</label>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="status" value="draft" {% if not page or page.status == 'draft' %}checked{% endif %}>
+                                草稿
+                            </label>
+                            <label>
+                                <input type="radio" name="status" value="published" {% if page and page.status == 'published' %}checked{% endif %}>
+                                发布
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="sidebar-section-title">栏目关联</div>
+                    <div class="form-group">
+                        <label for="column_id">所属栏目 *</label>
+                        <select id="column_id" name="column_id" required>
+                            <option value="">-- 选择栏目 --</option>
+                            {% for column in columns %}
+                            <option value="{{ column.id }}" {% if page and page.column_id == column.id %}selected{% endif %}>
+                                {{ column.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="sidebar-section-title">Hero 设置</div>
+                    <div class="form-group">
+                        <label for="hero_media_id">背景图 ID</label>
+                        <input type="number" id="hero_media_id" name="hero_media_id" value="{{ page.hero_media_id if page else '' }}">
+                        <div class="help-text">输入媒体库图片的 ID</div>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <div class="sidebar-section-title">SEO 设置</div>
+                    <div class="form-group">
+                        <label for="seo_title">SEO 标题</label>
+                        <input type="text" id="seo_title" name="seo_title" value="{{ page.seo_title if page else '' }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="seo_description">SEO 描述</label>
+                        <textarea id="seo_description" name="seo_description" rows="3">{{ page.seo_description if page else '' }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="seo_keywords">SEO 关键词</label>
+                        <input type="text" id="seo_keywords" name="seo_keywords" value="{{ page.seo_keywords if page else '' }}">
+                        <div class="help-text">用逗号分隔多个关键词</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">{% if mode == 'edit' %}更新单页{% else %}创建单页{% endif %}</button>
+            <button type="button" class="btn btn-secondary" onclick="window.location.href='/admin/pages'">取消</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+<script src="/static/js/pages.js"></script>
+{% endblock %}

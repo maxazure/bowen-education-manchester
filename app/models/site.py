@@ -97,13 +97,16 @@ class SinglePage(BaseModel):
         comment="关联栏目ID",
     )
     title = Column(String(200), nullable=False, comment="页面标题")
+    slug = Column(String(200), unique=True, nullable=False, comment="URL Slug")
     subtitle = Column(String(300), nullable=True, comment="副标题")
+    content_markdown = Column(Text, nullable=True, comment="Markdown原文")
     content_html = Column(Text, nullable=False, comment="页面内容HTML")
     hero_media_id = Column(
         Integer, ForeignKey("media_file.id"), nullable=True, comment="主图/背景图ID"
     )
     seo_title = Column(String(200), nullable=True, comment="SEO标题")
     seo_description = Column(Text, nullable=True, comment="SEO描述")
+    seo_keywords = Column(String(500), nullable=True, comment="SEO关键词")
     status = Column(
         Enum("draft", "published", "hidden", name="single_page_status"),
         default="draft",

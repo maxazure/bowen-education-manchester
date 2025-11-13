@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+
+{% block title %}单页管理 - 博文教育管理后台{% endblock %}
+
+{% block extra_css %}
+<style>
+    .pages-container {
+        padding: 20px;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    .page-title {
+        font-size: 28px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-primary {
+        background: #007bff;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #0056b3;
+    }
+
+    .btn-success {
+        background: #28a745;
+        color: white;
+    }
+
+    .btn-warning {
+        background: #ffc107;
+        color: #212529;
+    }
+
+    .btn-danger {
+        background: #dc3545;
+        color: white;
+    }
+
+    .btn-sm {
+        padding: 5px 10px;
+        font-size: 12px;
+    }
+
+    .pages-table {
+        width: 100%;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .pages-table table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .pages-table th {
+        background: #f8f9fa;
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+        color: #495057;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .pages-table td {
+        padding: 15px;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .pages-table tr:hover {
+        background: #f8f9fa;
+    }
+
+    .status-badge {
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .status-draft {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .status-published {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .status-hidden {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .page-slug {
+        font-family: monospace;
+        color: #6c757d;
+        font-size: 13px;
+    }
+
+    .actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #6c757d;
+        background: white;
+        border-radius: 8px;
+    }
+
+    .empty-state-icon {
+        font-size: 48px;
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="pages-container">
+    <div class="page-header">
+        <h1 class="page-title">单页管理</h1>
+        <a href="/admin/pages/new" class="btn btn-primary">+ 新建单页</a>
+    </div>
+
+    {% if pages %}
+    <div class="pages-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>标题</th>
+                    <th>Slug</th>
+                    <th>状态</th>
+                    <th>更新时间</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for page in pages %}
+                <tr data-page-id="{{ page.id }}">
+                    <td>{{ page.id }}</td>
+                    <td>
+                        <strong>{{ page.title }}</strong>
+                        {% if page.subtitle %}
+                        <br>
+                        <small style="color: #6c757d;">{{ page.subtitle }}</small>
+                        {% endif %}
+                    </td>
+                    <td class="page-slug">{{ page.slug }}</td>
+                    <td>
+                        {% if page.status == 'published' %}
+                        <span class="status-badge status-published">已发布</span>
+                        {% elif page.status == 'draft' %}
+                        <span class="status-badge status-draft">草稿</span>
+                        {% else %}
+                        <span class="status-badge status-hidden">隐藏</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ page.updated_at.strftime('%Y-%m-%d %H:%M') if page.updated_at else '-' }}</td>
+                    <td>
+                        <div class="actions">
+                            <a href="/admin/pages/{{ page.id }}/edit" class="btn btn-sm btn-primary">编辑</a>
+                            {% if page.status == 'published' %}
+                            <button class="btn btn-sm btn-warning btn-publish" data-id="{{ page.id }}" data-status="published">取消发布</button>
+                            {% else %}
+                            <button class="btn btn-sm btn-success btn-publish" data-id="{{ page.id }}" data-status="draft">发布</button>
+                            {% endif %}
+                            <button class="btn btn-sm btn-danger btn-delete" data-id="{{ page.id }}">删除</button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">📄</div>
+        <h3>还没有单页</h3>
+        <p>点击"新建单页"按钮创建第一个单页</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/pages.js"></script>
+{% endblock %}
