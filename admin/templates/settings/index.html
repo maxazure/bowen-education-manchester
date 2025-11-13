@@ -1,0 +1,364 @@
+{% extends "base.html" %}
+
+{% block title %}站点设置 - 博文教育管理后台{% endblock %}
+
+{% block extra_css %}
+<style>
+    .settings-container {
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .page-header {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    .page-title {
+        font-size: 28px;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .page-subtitle {
+        font-size: 14px;
+        color: #666;
+        margin-top: 8px;
+    }
+
+    .settings-form {
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    /* Tab 样式 */
+    .tabs {
+        display: flex;
+        border-bottom: 1px solid #e0e0e0;
+        background: #f8f9fa;
+    }
+
+    .tab-button {
+        padding: 15px 30px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-size: 15px;
+        color: #666;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s;
+    }
+
+    .tab-button:hover {
+        color: #333;
+        background: rgba(0,0,0,0.05);
+    }
+
+    .tab-button.active {
+        color: #007bff;
+        border-bottom-color: #007bff;
+        font-weight: 600;
+    }
+
+    .tab-content {
+        display: none;
+        padding: 30px;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    /* 表单样式 */
+    .form-group {
+        margin-bottom: 25px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: #333;
+        font-size: 14px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+        transition: border-color 0.3s;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+    }
+
+    textarea.form-control {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    .form-text {
+        font-size: 12px;
+        color: #666;
+        margin-top: 5px;
+    }
+
+    /* 媒体选择器 */
+    .media-selector {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .media-preview {
+        width: 100px;
+        height: 100px;
+        border: 2px dashed #ddd;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .media-preview img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+
+    .media-preview-empty {
+        color: #999;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    .btn-select-media {
+        padding: 8px 16px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .btn-select-media:hover {
+        background: #0056b3;
+    }
+
+    /* 保存按钮 */
+    .form-actions {
+        padding: 20px 30px;
+        background: #f8f9fa;
+        border-top: 1px solid #e0e0e0;
+        text-align: right;
+    }
+
+    .btn-save {
+        padding: 12px 30px;
+        background: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+
+    .btn-save:hover {
+        background: #218838;
+    }
+
+    /* 提示信息 */
+    .alert {
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .alert-error {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="settings-container">
+    <div class="page-header">
+        <h1 class="page-title">站点设置</h1>
+        <p class="page-subtitle">配置站点的基本信息、联系方式、社交媒体等设置</p>
+    </div>
+
+    <!-- 提示信息（通过 JavaScript 显示） -->
+    <div id="alert-container"></div>
+
+    <form id="settings-form" class="settings-form">
+        <!-- Tab 导航 -->
+        <div class="tabs">
+            <button type="button" class="tab-button active" data-tab="basic">基本信息</button>
+            <button type="button" class="tab-button" data-tab="contact">联系方式</button>
+            <button type="button" class="tab-button" data-tab="social">社交媒体</button>
+            <button type="button" class="tab-button" data-tab="advanced">高级设置</button>
+        </div>
+
+        <!-- 基本信息 Tab -->
+        <div id="tab-basic" class="tab-content active">
+            <div class="form-group">
+                <label class="form-label">站点名称</label>
+                <input type="text" name="site_name" class="form-control" value="{{ settings.site_name }}" placeholder="例如: 博文教育">
+                <small class="form-text">显示在网站标题和头部</small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">站点标语</label>
+                <input type="text" name="site_tagline" class="form-control" value="{{ settings.site_tagline }}" placeholder="例如: 专业的羽毛球培训">
+                <small class="form-text">简短的站点描述</small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">站点描述</label>
+                <textarea name="site_description" class="form-control" placeholder="详细介绍您的站点...">{{ settings.site_description }}</textarea>
+                <small class="form-text">用于 SEO 和站点介绍</small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">站点 Logo</label>
+                <div class="media-selector">
+                    <div class="media-preview" id="logo-preview">
+                        <div class="media-preview-empty">暂无 Logo</div>
+                    </div>
+                    <button type="button" class="btn-select-media" onclick="selectMedia('logo')">选择 Logo</button>
+                </div>
+                <input type="hidden" name="logo_id" id="logo_id" value="{{ settings.logo_id }}">
+                <small class="form-text">建议尺寸: 200x60 像素</small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Favicon</label>
+                <div class="media-selector">
+                    <div class="media-preview" id="favicon-preview">
+                        <div class="media-preview-empty">暂无 Favicon</div>
+                    </div>
+                    <button type="button" class="btn-select-media" onclick="selectMedia('favicon')">选择 Favicon</button>
+                </div>
+                <input type="hidden" name="favicon_id" id="favicon_id" value="{{ settings.favicon_id }}">
+                <small class="form-text">建议尺寸: 32x32 像素</small>
+            </div>
+        </div>
+
+        <!-- 联系方式 Tab -->
+        <div id="tab-contact" class="tab-content">
+            <div class="form-group">
+                <label class="form-label">联系电话</label>
+                <input type="text" name="contact_phone" class="form-control" value="{{ settings.contact_phone }}" placeholder="例如: 0161-123-4567">
+                <small class="form-text">显示在网站联系区域</small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">联系邮箱</label>
+                <input type="email" name="contact_email" class="form-control" value="{{ settings.contact_email }}" placeholder="例如: info@bowen-education.com">
+                <small class="form-text">用于接收网站咨询</small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">联系地址</label>
+                <input type="text" name="contact_address" class="form-control" value="{{ settings.contact_address }}" placeholder="例如: Manchester, UK">
+                <small class="form-text">显示在联系我们页面</small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">工作时间</label>
+                <textarea name="contact_hours" class="form-control" placeholder="例如: 周一至周五 9:00-18:00">{{ settings.contact_hours }}</textarea>
+                <small class="form-text">显示在联系我们页面</small>
+            </div>
+        </div>
+
+        <!-- 社交媒体 Tab -->
+        <div id="tab-social" class="tab-content">
+            <div class="form-group">
+                <label class="form-label">微信二维码</label>
+                <input type="text" name="social_wechat" class="form-control" value="{{ settings.social_wechat }}" placeholder="微信二维码图片 URL">
+                <small class="form-text">上传二维码图片并填写链接</small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">微博</label>
+                <input type="url" name="social_weibo" class="form-control" value="{{ settings.social_weibo }}" placeholder="https://weibo.com/your-account">
+                <small class="form-text">微博主页链接</small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Facebook</label>
+                <input type="url" name="social_facebook" class="form-control" value="{{ settings.social_facebook }}" placeholder="https://facebook.com/your-page">
+                <small class="form-text">Facebook 页面链接</small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Twitter</label>
+                <input type="url" name="social_twitter" class="form-control" value="{{ settings.social_twitter }}" placeholder="https://twitter.com/your-account">
+                <small class="form-text">Twitter 账号链接</small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">LinkedIn</label>
+                <input type="url" name="social_linkedin" class="form-control" value="{{ settings.social_linkedin }}" placeholder="https://linkedin.com/company/your-company">
+                <small class="form-text">LinkedIn 公司页面链接</small>
+            </div>
+        </div>
+
+        <!-- 高级设置 Tab -->
+        <div id="tab-advanced" class="tab-content">
+            <div class="form-group">
+                <label class="form-label">SEO 关键词</label>
+                <input type="text" name="seo_keywords" class="form-control" value="{{ settings.seo_keywords }}" placeholder="例如: 羽毛球, 培训, 曼彻斯特">
+                <small class="form-text">多个关键词用逗号分隔</small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">SEO 描述</label>
+                <textarea name="seo_description" class="form-control" placeholder="站点的 SEO 描述...">{{ settings.seo_description }}</textarea>
+                <small class="form-text">用于搜索引擎优化，建议 150-160 字符</small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Google Analytics 代码</label>
+                <input type="text" name="analytics_code" class="form-control" value="{{ settings.analytics_code }}" placeholder="例如: UA-123456-1">
+                <small class="form-text">Google Analytics 跟踪 ID</small>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">自定义统计代码</label>
+                <textarea name="tracking_code" class="form-control" placeholder="其他统计代码（例如百度统计）...">{{ settings.tracking_code }}</textarea>
+                <small class="form-text">自定义的 JavaScript 统计代码</small>
+            </div>
+        </div>
+
+        <!-- 保存按钮 -->
+        <div class="form-actions">
+            <button type="submit" class="btn-save">保存设置</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/settings.js"></script>
+{% endblock %}
