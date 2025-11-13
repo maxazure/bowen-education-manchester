@@ -1,123 +1,665 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>{{ '编辑' if post else '新建' }}文章 - 管理后台</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
-</head>
-<body>
-    <h1>{{ '编辑' if post else '新建' }}文章</h1>
-    
-    <form id="postForm" method="POST" action="{{ action }}">
+{% extends "base.html" %}
+
+{% block title %}{% if post %}编辑文章{% else %}新建文章{% endif %} - 博文教育管理后台{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+<style>
+    /* 表单布局样式 */
+    .form-container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .form-layout {
+        display: grid;
+        grid-template-columns: 1fr 380px;
+        gap: 24px;
+        margin-bottom: 24px;
+    }
+
+    /* 主表单区域 */
+    .form-main .card {
+        margin-bottom: 24px;
+    }
+
+    .form-main .card:last-child {
+        margin-bottom: 0;
+    }
+
+    /* 侧边栏表单 */
+    .form-sidebar .card {
+        margin-bottom: 24px;
+        position: sticky;
+        top: 80px;
+    }
+
+    .form-sidebar .card:last-child {
+        margin-bottom: 0;
+    }
+
+    /* EasyMDE 编辑器样式增强 */
+    .EasyMDEContainer {
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .EasyMDEContainer .CodeMirror {
+        min-height: 400px;
+        border: 1px solid var(--bs-border-color);
+        border-radius: 8px;
+        font-size: 14px;
+    }
+
+    .EasyMDEContainer .editor-toolbar {
+        border: 1px solid var(--bs-border-color);
+        border-bottom: none;
+        border-radius: 8px 8px 0 0;
+        background-color: var(--bg-light);
+    }
+
+    .EasyMDEContainer .CodeMirror-scroll {
+        min-height: 400px;
+    }
+
+    /* 分类复选框组 */
+    .category-checkboxes {
+        max-height: 300px;
+        overflow-y: auto;
+        padding: 8px 0;
+    }
+
+    .category-checkboxes .form-check {
+        padding: 8px 12px;
+        margin-bottom: 0;
+        border-radius: 6px;
+        transition: background-color 0.15s ease;
+    }
+
+    .category-checkboxes .form-check:hover {
+        background-color: var(--bg-light);
+    }
+
+    .category-checkboxes .form-check-input {
+        width: 18px;
+        height: 18px;
+        margin-top: 0.15em;
+        cursor: pointer;
+    }
+
+    .category-checkboxes .form-check-label {
+        cursor: pointer;
+        font-size: 14px;
+        color: var(--bs-body-color);
+        margin-left: 8px;
+    }
+
+    /* 按钮组 */
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        padding-top: 24px;
+        border-top: 1px solid var(--bs-border-color);
+        margin-top: 24px;
+    }
+
+    .form-actions .btn {
+        min-width: 120px;
+    }
+
+    /* 侧边栏分组 */
+    .sidebar-section {
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid var(--bs-border-color);
+    }
+
+    .sidebar-section:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+        margin-bottom: 0;
+    }
+
+    .sidebar-section-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--bs-dark);
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .sidebar-section-title i {
+        font-size: 16px;
+        color: var(--bs-primary);
+    }
+
+    /* 帮助文本 */
+    .help-text {
+        font-size: 12px;
+        color: var(--bs-secondary-text);
+        margin-top: 6px;
+        display: flex;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .help-text i {
+        font-size: 14px;
+        margin-top: 2px;
+        flex-shrink: 0;
+    }
+
+    /* 开关样式 */
+    .form-switch .form-check-input {
+        width: 44px;
+        height: 24px;
+        cursor: pointer;
+    }
+
+    .form-switch .form-check-label {
+        cursor: pointer;
+        margin-left: 8px;
+    }
+
+    /* 空分类提示 */
+    .empty-categories {
+        text-align: center;
+        padding: 24px;
+        color: var(--bs-secondary-text);
+    }
+
+    .empty-categories i {
+        font-size: 32px;
+        color: var(--bs-border-color);
+        margin-bottom: 8px;
+    }
+
+    /* 响应式调整 */
+    @media (max-width: 991.98px) {
+        .form-layout {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .form-sidebar .card {
+            position: static;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .form-actions .btn {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <!-- 页面头部 -->
+    <div class="page-header d-flex justify-content-between align-items-center">
         <div>
-            <label>标题:</label>
-            <input type="text" name="title" value="{{ post.title if post else '' }}" required>
+            <h1 class="page-title mb-1">
+                <i class="bi bi-{% if post %}pencil-square{% else %}plus-circle{% endif %} me-2"></i>
+                {% if post %}编辑文章{% else %}新建文章{% endif %}
+            </h1>
+            <p class="page-subtitle mb-0">
+                {% if post %}
+                更新文章信息和内容
+                {% else %}
+                创建一篇新的文章内容
+                {% endif %}
+            </p>
         </div>
-        
         <div>
-            <label>Slug:</label>
-            <input type="text" name="slug" value="{{ post.slug if post else '' }}">
+            <a href="/admin/posts" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>返回列表
+            </a>
         </div>
-        
-        <div>
-            <label>栏目:</label>
-            <select name="column_id" required>
-                {% for col in columns %}
-                <option value="{{ col.id }}" {% if post and col.id == post.column_id %}selected{% endif %}>
-                    {{ col.name }}
-                </option>
-                {% endfor %}
-            </select>
-        </div>
-        
-        <div>
-            <label>摘要:</label>
-            <textarea name="summary" rows="3">{{ post.summary if post else '' }}</textarea>
-        </div>
-        
-        <div>
-            <label>内容 (Markdown):</label>
-            <textarea id="markdown-editor" name="content_markdown">{{ post.content_markdown if post else '' }}</textarea>
-        </div>
-        
-        <div>
-            <label>封面图ID:</label>
-            <input type="number" name="cover_media_id" value="{{ post.cover_media_id if post else '' }}">
-        </div>
-        
-        <div>
-            <label>分类 (逗号分隔ID):</label>
-            <input type="text" name="category_ids" 
-                value="{% if post %}{{ post.categories|map(attribute='id')|join(',') }}{% endif %}">
-        </div>
-        
-        <div>
-            <label>SEO标题:</label>
-            <input type="text" name="seo_title" value="{{ post.seo_title if post else '' }}">
-        </div>
-        
-        <div>
-            <label>SEO描述:</label>
-            <textarea name="seo_description" rows="2">{{ post.seo_description if post else '' }}</textarea>
-        </div>
-        
-        <div>
-            <label>
-                <input type="checkbox" name="is_recommended" value="1" 
-                    {% if post and post.is_recommended %}checked{% endif %}>
-                推荐
-            </label>
-            <label>
-                <input type="checkbox" name="is_pinned" value="1" 
-                    {% if post and post.is_pinned %}checked{% endif %}>
-                置顶
-            </label>
-        </div>
-        
-        <div>
-            <label>状态:</label>
-            <select name="status">
-                <option value="draft" {% if not post or post.status == 'draft' %}selected{% endif %}>草稿</option>
-                <option value="published" {% if post and post.status == 'published' %}selected{% endif %}>发布</option>
-                <option value="offline" {% if post and post.status == 'offline' %}selected{% endif %}>下线</option>
-            </select>
-        </div>
-        
-        <div>
-            <button type="submit">保存</button>
-            <a href="/admin/posts">返回列表</a>
+    </div>
+
+    <!-- 表单内容 -->
+    <form method="POST" action="{{ action }}" id="postForm" class="needs-validation" novalidate>
+        <div class="form-layout">
+            <!-- 左侧主要内容 -->
+            <div class="form-main">
+                <!-- 基本信息卡片 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-info-circle me-2"></i>基本信息
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- 标题 -->
+                        <div class="mb-3">
+                            <label for="title" class="form-label">
+                                文章标题 <span class="text-danger">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="title"
+                                name="title"
+                                value="{{ post.title if post else '' }}"
+                                required
+                                placeholder="请输入文章标题">
+                            <div class="invalid-feedback">
+                                请输入文章标题
+                            </div>
+                        </div>
+
+                        <!-- Slug -->
+                        <div class="mb-3">
+                            <label for="slug" class="form-label">
+                                URL Slug
+                            </label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="slug"
+                                name="slug"
+                                value="{{ post.slug if post else '' }}"
+                                placeholder="留空自动生成">
+                            <div class="help-text">
+                                <i class="bi bi-info-circle"></i>
+                                <span>URL 友好的标识符，留空将根据标题自动生成</span>
+                            </div>
+                        </div>
+
+                        <!-- 摘要 -->
+                        <div class="mb-0">
+                            <label for="summary" class="form-label">
+                                文章摘要
+                            </label>
+                            <textarea
+                                class="form-control"
+                                id="summary"
+                                name="summary"
+                                rows="3"
+                                placeholder="请输入文章摘要">{{ post.summary if post else '' }}</textarea>
+                            <div class="help-text">
+                                <i class="bi bi-info-circle"></i>
+                                <span>简短描述文章内容，用于列表展示</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 文章内容卡片 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-file-text me-2"></i>文章内容
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-0">
+                            <label for="content_markdown" class="form-label">
+                                内容 (Markdown) <span class="text-danger">*</span>
+                            </label>
+                            <textarea
+                                id="content_markdown"
+                                name="content_markdown"
+                                required>{{ post.content_markdown if post else '' }}</textarea>
+                            <div class="invalid-feedback">
+                                请输入文章内容
+                            </div>
+                            <div class="help-text">
+                                <i class="bi bi-markdown"></i>
+                                <span>支持 Markdown 格式编辑，实时预览内容效果</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEO 设置卡片 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-search me-2"></i>SEO 设置
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- SEO 标题 -->
+                        <div class="mb-3">
+                            <label for="seo_title" class="form-label">
+                                SEO 标题
+                            </label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="seo_title"
+                                name="seo_title"
+                                value="{{ post.seo_title if post else '' }}"
+                                placeholder="留空使用文章标题">
+                        </div>
+
+                        <!-- SEO 描述 -->
+                        <div class="mb-0">
+                            <label for="seo_description" class="form-label">
+                                SEO 描述
+                            </label>
+                            <textarea
+                                class="form-control"
+                                id="seo_description"
+                                name="seo_description"
+                                rows="3"
+                                placeholder="用于搜索引擎显示的描述">{{ post.seo_description if post else '' }}</textarea>
+                            <div class="help-text">
+                                <i class="bi bi-info-circle"></i>
+                                <span>建议长度 120-160 字符，用于搜索引擎结果展示</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 表单操作按钮 -->
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-check-circle me-2"></i>
+                        {% if post %}更新文章{% else %}创建文章{% endif %}
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="window.location.href='/admin/posts'">
+                        <i class="bi bi-x-circle me-2"></i>
+                        取消
+                    </button>
+                </div>
+            </div>
+
+            <!-- 右侧侧边栏 -->
+            <div class="form-sidebar">
+                <!-- 发布设置 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-send me-2"></i>发布设置
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="sidebar-section">
+                            <div class="sidebar-section-title">
+                                <i class="bi bi-journal-text"></i>
+                                <span>所属栏目</span>
+                            </div>
+                            <select class="form-select" id="column_id" name="column_id" required>
+                                <option value="">-- 选择栏目 --</option>
+                                {% for column in columns %}
+                                <option value="{{ column.id }}" {% if post and column.id == post.column_id %}selected{% endif %}>
+                                    {{ column.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                            <div class="invalid-feedback">
+                                请选择文章所属栏目
+                            </div>
+                        </div>
+
+                        <div class="sidebar-section">
+                            <div class="sidebar-section-title">
+                                <i class="bi bi-toggle-on"></i>
+                                <span>状态</span>
+                            </div>
+                            <select class="form-select" name="status">
+                                <option value="draft" {% if not post or post.status == 'draft' %}selected{% endif %}>
+                                    <i class="bi bi-file-earmark"></i> 草稿
+                                </option>
+                                <option value="published" {% if post and post.status == 'published' %}selected{% endif %}>
+                                    <i class="bi bi-check-circle"></i> 已发布
+                                </option>
+                                <option value="offline" {% if post and post.status == 'offline' %}selected{% endif %}>
+                                    <i class="bi bi-x-circle"></i> 已下线
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="sidebar-section">
+                            <div class="sidebar-section-title">
+                                <i class="bi bi-star"></i>
+                                <span>特殊标记</span>
+                            </div>
+
+                            <div class="form-check form-switch mb-3">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    id="is_recommended"
+                                    name="is_recommended"
+                                    value="1"
+                                    {% if post and post.is_recommended %}checked{% endif %}>
+                                <label class="form-check-label" for="is_recommended">
+                                    <i class="bi bi-heart text-danger me-1"></i>推荐文章
+                                </label>
+                            </div>
+
+                            <div class="form-check form-switch mb-0">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    id="is_pinned"
+                                    name="is_pinned"
+                                    value="1"
+                                    {% if post and post.is_pinned %}checked{% endif %}>
+                                <label class="form-check-label" for="is_pinned">
+                                    <i class="bi bi-pin-angle text-primary me-1"></i>置顶文章
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="sidebar-section mb-0">
+                            <div class="sidebar-section-title">
+                                <i class="bi bi-image"></i>
+                                <span>封面图片</span>
+                            </div>
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="cover_media_id"
+                                name="cover_media_id"
+                                value="{{ post.cover_media_id if post else '' }}"
+                                placeholder="输入媒体 ID">
+                            <div class="help-text">
+                                <i class="bi bi-info-circle"></i>
+                                <span>请输入媒体库中图片的 ID</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 分类设置 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-folder me-2"></i>文章分类
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        {% if categories %}
+                        <div class="category-checkboxes">
+                            {% for category in categories %}
+                            <div class="form-check">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    name="category_checkbox"
+                                    value="{{ category.id }}"
+                                    id="category_{{ category.id }}"
+                                    {% if post and category in post.categories %}checked{% endif %}>
+                                <label class="form-check-label" for="category_{{ category.id }}">
+                                    {{ category.name }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        <input type="hidden" name="category_ids" id="category_ids" value="{% if post %}{{ post.categories|map(attribute='id')|join(',') }}{% endif %}">
+                        <div class="help-text mt-2">
+                            <i class="bi bi-info-circle"></i>
+                            <span>可以选择多个分类</span>
+                        </div>
+                        {% else %}
+                        <div class="empty-categories">
+                            <i class="bi bi-folder-x d-block"></i>
+                            <p class="mb-0">暂无分类</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
     </form>
-    
-    <script>
-    // 初始化 Markdown 编辑器
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+<script>
+(function() {
+    'use strict';
+
+    // 初始化 EasyMDE Markdown 编辑器
     const easyMDE = new EasyMDE({
-        element: document.getElementById('markdown-editor'),
+        element: document.getElementById('content_markdown'),
         spellChecker: false,
-        autosave: {enabled: true, uniqueId: 'post-content'}
+        autosave: {
+            enabled: true,
+            uniqueId: 'post-content-' + ({{ post.id if post else 0 }}),
+            delay: 5000,
+        },
+        placeholder: '请输入文章内容，支持 Markdown 格式...',
+        minHeight: '400px',
+        maxHeight: '600px',
+        toolbar: [
+            'bold', 'italic', 'heading', '|',
+            'quote', 'unordered-list', 'ordered-list', '|',
+            'link', 'image', '|',
+            'preview', 'side-by-side', 'fullscreen', '|',
+            'guide'
+        ],
+        status: ['autosave', 'lines', 'words', 'cursor'],
+        renderingConfig: {
+            codeSyntaxHighlighting: true,
+        }
     });
-    
+
+    // 分类复选框处理
+    const categoryCheckboxes = document.querySelectorAll('input[name="category_checkbox"]');
+    const categoryIdsInput = document.getElementById('category_ids');
+
+    function updateCategoryIds() {
+        const selectedIds = Array.from(categoryCheckboxes)
+            .filter(cb => cb.checked)
+            .map(cb => cb.value);
+        categoryIdsInput.value = selectedIds.join(',');
+    }
+
+    categoryCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateCategoryIds);
+    });
+
+    // Bootstrap 表单验证
+    const form = document.getElementById('postForm');
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        // 验证表单
+        if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            return;
+        }
+
+        // 提交表单
+        submitForm();
+    });
+
     // AJAX 提交表单
-    document.getElementById('postForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const formData = new FormData(this);
-        
-        // 处理复选框
-        formData.set('is_recommended', document.querySelector('[name=is_recommended]').checked);
-        formData.set('is_pinned', document.querySelector('[name=is_pinned]').checked);
-        
-        fetch(this.action, {
+    function submitForm() {
+        const formData = new FormData(form);
+
+        // 处理复选框值（确保布尔值正确传递）
+        formData.set('is_recommended', document.getElementById('is_recommended').checked);
+        formData.set('is_pinned', document.getElementById('is_pinned').checked);
+
+        // 获取 Markdown 内容
+        formData.set('content_markdown', easyMDE.value());
+
+        // 显示加载状态
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>保存中...';
+
+        fetch(form.action, {
             method: 'POST',
             body: formData
         })
-        .then(r => r.json())
-        .then(d => {
-            alert(d.message);
-            if (d.success) window.location.href = '/admin/posts';
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast('success', data.message, '成功');
+
+                // 延迟跳转到列表页
+                setTimeout(() => {
+                    window.location.href = '/admin/posts';
+                }, 1500);
+            } else {
+                showToast('danger', data.message, '错误');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
         })
-        .catch(e => alert('提交失败: ' + e));
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('danger', '提交失败: ' + error.message, '错误');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+        });
+    }
+
+    // 自动生成 Slug（可选功能）
+    const titleInput = document.getElementById('title');
+    const slugInput = document.getElementById('slug');
+
+    titleInput.addEventListener('blur', function() {
+        if (!slugInput.value && titleInput.value) {
+            // 简单的拼音转换（实际使用可能需要更复杂的处理）
+            const slug = titleInput.value
+                .toLowerCase()
+                .replace(/\s+/g, '-')
+                .replace(/[^a-z0-9-]/g, '');
+            slugInput.value = slug;
+        }
     });
-    </script>
-</body>
-</html>
+
+    // 防止意外离开页面
+    let formChanged = false;
+
+    form.addEventListener('change', function() {
+        formChanged = true;
+    });
+
+    easyMDE.codemirror.on('change', function() {
+        formChanged = true;
+    });
+
+    window.addEventListener('beforeunload', function(e) {
+        if (formChanged) {
+            e.preventDefault();
+            e.returnValue = '';
+            return '';
+        }
+    });
+
+    // 表单提交后清除警告
+    form.addEventListener('submit', function() {
+        formChanged = false;
+    });
+
+})();
+</script>
+{% endblock %}
