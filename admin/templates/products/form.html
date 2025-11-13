@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ '编辑' if product else '新建' }}产品 - 管理后台</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+</head>
+<body>
+    <h1>{{ '编辑' if product else '新建' }}产品</h1>
+
+    <form id="productForm" method="POST" action="{{ action }}">
+        <div>
+            <label>产品名称:</label>
+            <input type="text" name="name" value="{{ product.name if product else '' }}" required>
+        </div>
+
+        <div>
+            <label>Slug:</label>
+            <input type="text" name="slug" value="{{ product.slug if product else '' }}">
+        </div>
+
+        <div>
+            <label>栏目:</label>
+            <select name="column_id" required>
+                {% for col in columns %}
+                <option value="{{ col.id }}" {% if product and col.id == product.column_id %}selected{% endif %}>
+                    {{ col.name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div>
+            <label>产品卖点/简述:</label>
+            <textarea name="summary" rows="3">{{ product.summary if product else '' }}</textarea>
+        </div>
+
+        <div>
+            <label>详细说明 (Markdown):</label>
+            <textarea id="markdown-editor" name="description_markdown">{{ product.description_html if product else '' }}</textarea>
+        </div>
+
+        <div>
+            <label>封面图ID:</label>
+            <input type="number" name="cover_media_id" value="{{ product.cover_media_id if product else '' }}">
+        </div>
+
+        <div>
+            <label>价格文本:</label>
+            <input type="text" name="price_text" value="{{ product.price_text if product else '' }}" placeholder="例如: ¥999 或 ¥1999 (原价 ¥2999)">
+        </div>
+
+        <div>
+            <label>供货状态:</label>
+            <select name="availability_status">
+                <option value="in_stock" {% if not product or product.availability_status == 'in_stock' %}selected{% endif %}>有货</option>
+                <option value="out_of_stock" {% if product and product.availability_status == 'out_of_stock' %}selected{% endif %}>缺货</option>
+                <option value="inquiry" {% if product and product.availability_status == 'inquiry' %}selected{% endif %}>询价</option>
+            </select>
+        </div>
+
+        <div>
+            <label>分类 (逗号分隔ID):</label>
+            <input type="text" name="category_ids"
+                value="{% if product %}{{ product.categories|map(attribute='id')|join(',') }}{% endif %}">
+        </div>
+
+        <div>
+            <label>SEO标题:</label>
+            <input type="text" name="seo_title" value="{{ product.seo_title if product else '' }}">
+        </div>
+
+        <div>
+            <label>SEO描述:</label>
+            <textarea name="seo_description" rows="2">{{ product.seo_description if product else '' }}</textarea>
+        </div>
+
+        <div>
+            <label>
+                <input type="checkbox" name="is_recommended" value="1"
+                    {% if product and product.is_recommended %}checked{% endif %}>
+                推荐
+            </label>
+        </div>
+
+        <div>
+            <label>状态:</label>
+            <select name="status">
+                <option value="draft" {% if not product or product.status == 'draft' %}selected{% endif %}>草稿</option>
+                <option value="online" {% if product and product.status == 'online' %}selected{% endif %}>上线</option>
+                <option value="offline" {% if product and product.status == 'offline' %}selected{% endif %}>下线</option>
+            </select>
+        </div>
+
+        <div>
+            <button type="submit">保存</button>
+            <a href="/admin/products">返回列表</a>
+        </div>
+    </form>
+
+    <script>
+    // 初始化 Markdown 编辑器
+    const easyMDE = new EasyMDE({
+        element: document.getElementById('markdown-editor'),
+        spellChecker: false,
+        autosave: {enabled: true, uniqueId: 'product-description'}
+    });
+
+    // AJAX 提交表单
+    document.getElementById('productForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+
+        // 处理复选框
+        formData.set('is_recommended', document.querySelector('[name=is_recommended]').checked);
+
+        fetch(this.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(r => r.json())
+        .then(d => {
+            alert(d.message);
+            if (d.success) window.location.href = '/admin/products';
+        })
+        .catch(e => alert('提交失败: ' + e));
+    });
+    </script>
+</body>
+</html>

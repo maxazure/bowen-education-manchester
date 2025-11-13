@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>产品列表 - 管理后台</title>
+</head>
+<body>
+    <h1>产品管理</h1>
+    <div>
+        <a href="/admin/products/new">新建产品</a>
+    </div>
+
+    <!-- 筛选表单 -->
+    <form method="GET" action="/admin/products">
+        <select name="column_id">
+            <option value="">所有栏目</option>
+            {% for col in columns %}
+            <option value="{{ col.id }}" {% if col.id == current_column_id %}selected{% endif %}>
+                {{ col.name }}
+            </option>
+            {% endfor %}
+        </select>
+
+        <select name="status_filter">
+            <option value="">所有状态</option>
+            <option value="draft" {% if current_status == 'draft' %}selected{% endif %}>草稿</option>
+            <option value="online" {% if current_status == 'online' %}selected{% endif %}>已上线</option>
+            <option value="offline" {% if current_status == 'offline' %}selected{% endif %}>已下线</option>
+        </select>
+
+        <input type="text" name="keyword" value="{{ current_keyword or '' }}" placeholder="搜索关键词">
+        <button type="submit">筛选</button>
+    </form>
+
+    <!-- 产品列表 -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>封面</th>
+                <th>名称</th>
+                <th>栏目</th>
+                <th>价格</th>
+                <th>供货状态</th>
+                <th>状态</th>
+                <th>推荐</th>
+                <th>更新时间</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>
+                    {% if product.cover_media %}
+                    <img src="{{ product.cover_media.file_url }}" alt="{{ product.name }}" style="width: 50px; height: 50px; object-fit: cover;">
+                    {% else %}
+                    无图片
+                    {% endif %}
+                </td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.column.name }}</td>
+                <td>{{ product.price_text or '未设置' }}</td>
+                <td>
+                    {% if product.availability_status == 'in_stock' %}
+                    有货
+                    {% elif product.availability_status == 'out_of_stock' %}
+                    缺货
+                    {% else %}
+                    询价
+                    {% endif %}
+                </td>
+                <td>{{ product.status }}</td>
+                <td>{{ '是' if product.is_recommended else '否' }}</td>
+                <td>{{ product.updated_at }}</td>
+                <td>
+                    <a href="/admin/products/{{ product.id }}/edit">编辑</a>
+                    <button onclick="deleteProduct({{ product.id }})">删除</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- 分页 -->
+    <div>
+        {% if page > 1 %}
+        <a href="?page={{ page - 1 }}">上一页</a>
+        {% endif %}
+        <span>第 {{ page }} / {{ total_pages }} 页 (共 {{ total }} 条)</span>
+        {% if page < total_pages %}
+        <a href="?page={{ page + 1 }}">下一页</a>
+        {% endif %}
+    </div>
+
+    <script>
+    function deleteProduct(id) {
+        if (!confirm('确定要删除这个产品吗?')) {
+            return;
+        }
+
+        fetch(`/admin/products/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                location.reload();
+            } else {
+                alert('删除失败: ' + data.message);
+            }
+        })
+        .catch(error => {
+            alert('删除失败: ' + error);
+        });
+    }
+    </script>
+</body>
+</html>
