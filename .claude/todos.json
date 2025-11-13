@@ -1,0 +1,46 @@
+{
+  "todos": [
+    {
+      "content": "规划 Bootstrap 5 现代化管理后台 UI 设计方案",
+      "status": "completed",
+      "activeForm": "正在规划 Bootstrap 5 现代化管理后台 UI 设计方案"
+    },
+    {
+      "content": "重构 base.html 模板引入 Bootstrap 5 和现代化布局",
+      "status": "completed",
+      "activeForm": "正在重构 base.html 模板引入 Bootstrap 5 和现代化布局"
+    },
+    {
+      "content": "重构 header 组件，增加用户下拉菜单和修改密码选项",
+      "status": "completed",
+      "activeForm": "正在重构 header 组件，增加用户下拉菜单和修改密码选项"
+    },
+    {
+      "content": "重构 sidebar 组件，使用 Bootstrap 5 侧边栏和图标",
+      "status": "completed",
+      "activeForm": "正在重构 sidebar 组件，使用 Bootstrap 5 侧边栏和图标"
+    },
+    {
+      "content": "更新 admin.css 为现代化样式",
+      "status": "completed",
+      "activeForm": "正在更新 admin.css 为现代化样式"
+    },
+    {
+      "content": "重构 dashboard.html 使用 Bootstrap 5 卡片和网格系统",
+      "status": "completed",
+      "activeForm": "正在重构 dashboard.html 使用 Bootstrap 5 卡片和网格系统"
+    },
+    {
+      "content": "更新登录页面为 Bootstrap 5 样式",
+      "status": "completed",
+      "activeForm": "正在更新登录页面为 Bootstrap 5 样式"
+    },
+    {
+      "content": "使用 Chrome DevTools 预览并验证界面效果",
+      "status": "completed",
+      "activeForm": "正在使用 Chrome DevTools 预览并验证界面效果"
+    }
+  ],
+  "lastUpdated": "2025-11-13T22:40:15.855149",
+  "sessionId": "8d1586f0-1a19-4d75-a4d0-fbc562b64d85"
+}

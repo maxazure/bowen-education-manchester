@@ -1,3 +1,8 @@
+---
+name: website-tester
+description: 网站测试代理 - Test websites with Chrome DevTools and visual inspection
+---
+
 # Website Tester Agent
 # 网站测试代理
 

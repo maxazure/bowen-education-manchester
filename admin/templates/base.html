@@ -3,15 +3,584 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="博文教育集团管理后台">
+    <meta name="author" content="博文教育集团">
     <title>{% block title %}博文教育管理后台{% endblock %}</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- 自定义样式 -->
     <link rel="stylesheet" href="/static/css/admin.css">
+
     {% block extra_css %}{% endblock %}
+
+    <style>
+        /* Bootstrap 5 管理后台自定义样式 */
+        :root {
+            --topbar-height: 60px;
+            --sidebar-width: 240px;
+            --sidebar-collapsed-width: 70px;
+            --primary-color: #c8102e;
+            --sidebar-bg: #1f2937;
+            --sidebar-text: #9ca3af;
+            --sidebar-active: #c8102e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+            background-color: #f9fafb;
+            padding-top: var(--topbar-height);
+        }
+
+        /* 顶部导航栏 */
+        .topbar {
+            height: var(--topbar-height);
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .topbar .navbar-brand {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .topbar .navbar-brand:hover {
+            color: var(--primary-color);
+        }
+
+        #sidebarToggle {
+            color: #4b5563;
+            font-size: 1.5rem;
+            text-decoration: none;
+        }
+
+        #sidebarToggle:hover {
+            color: var(--primary-color);
+        }
+
+        .user-dropdown .btn {
+            color: #4b5563;
+            text-decoration: none;
+            border: none;
+            background: transparent;
+        }
+
+        .user-dropdown .btn:hover,
+        .user-dropdown .btn:focus {
+            color: var(--primary-color);
+            background: transparent;
+        }
+
+        /* 侧边栏 */
+        .sidebar {
+            position: fixed;
+            top: var(--topbar-height);
+            left: 0;
+            width: var(--sidebar-width);
+            height: calc(100vh - var(--topbar-height));
+            background-color: var(--sidebar-bg);
+            overflow-y: auto;
+            overflow-x: hidden;
+            transition: width 0.3s ease, transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: #374151;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #4b5563;
+            border-radius: 3px;
+        }
+
+        .sidebar-content {
+            padding: 1rem 0;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            color: var(--sidebar-text);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .sidebar-link:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+        }
+
+        .sidebar-link.active {
+            background-color: rgba(200, 16, 46, 0.1);
+            color: #ffffff;
+            border-left: 3px solid var(--sidebar-active);
+        }
+
+        .sidebar-link i {
+            font-size: 1.25rem;
+            width: 24px;
+            margin-right: 0.75rem;
+        }
+
+        .sidebar-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sidebar-header {
+            padding: 0.5rem 1.5rem;
+            color: #6b7280;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .sidebar-section {
+            margin-bottom: 0.5rem;
+        }
+
+        /* 侧边栏折叠状态 */
+        .sidebar.collapsed {
+            width: var(--sidebar-collapsed-width);
+        }
+
+        .sidebar.collapsed .sidebar-text,
+        .sidebar.collapsed .sidebar-header {
+            display: none;
+        }
+
+        .sidebar.collapsed .sidebar-link {
+            justify-content: center;
+            padding: 0.75rem;
+        }
+
+        .sidebar.collapsed .sidebar-link i {
+            margin-right: 0;
+        }
+
+        /* 主内容区 */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+            min-height: calc(100vh - var(--topbar-height));
+            transition: margin-left 0.3s ease;
+        }
+
+        body.sidebar-collapsed .main-content {
+            margin-left: var(--sidebar-collapsed-width);
+        }
+
+        /* 移动端遮罩 */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: var(--topbar-height);
+            left: 0;
+            width: 100%;
+            height: calc(100vh - var(--topbar-height));
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar-overlay.show {
+            display: block;
+            opacity: 1;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 991.98px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            body.sidebar-collapsed .main-content {
+                margin-left: 0;
+            }
+        }
+
+        /* 页面标题 */
+        .page-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.25rem;
+        }
+
+        .page-subtitle {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        /* 卡片样式 */
+        .card {
+            border: none;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            background-color: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 1rem 1.25rem;
+        }
+
+        .card-title {
+            margin-bottom: 0;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        /* 按钮颜色覆盖 */
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover,
+        .btn-primary:focus {
+            background-color: #a00d25;
+            border-color: #a00d25;
+        }
+
+        /* 面包屑 */
+        .breadcrumb {
+            background-color: transparent;
+            padding: 0;
+            margin-bottom: 1rem;
+        }
+
+        /* Toast 容器 */
+        .toast-container {
+            z-index: 9999;
+        }
+    </style>
 </head>
 <body>
-    <div class="admin-container">
+    <!-- 顶部导航栏 -->
+    <nav class="navbar topbar navbar-expand-lg navbar-light bg-white border-bottom fixed-top">
+        <div class="container-fluid px-4">
+            <!-- 左侧：折叠按钮 + Logo -->
+            <div class="d-flex align-items-center">
+                <button class="btn btn-link p-0 me-3" id="sidebarToggle" type="button">
+                    <i class="bi bi-list"></i>
+                </button>
+                <a class="navbar-brand d-flex align-items-center" href="/admin/">
+                    <span class="fw-bold">博文教育</span>
+                    <span class="ms-2 d-none d-md-inline text-muted">管理后台</span>
+                </a>
+            </div>
+
+            <!-- 右侧：用户菜单 -->
+            <div class="d-flex align-items-center">
+                <div class="dropdown user-dropdown">
+                    <button class="btn dropdown-toggle d-flex align-items-center" type="button"
+                            id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle fs-5 me-2"></i>
+                        <span class="d-none d-md-inline">管理员</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <a class="dropdown-item" href="/admin/change-password">
+                                <i class="bi bi-key me-2"></i>修改密码
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="/admin/logout">
+                                <i class="bi bi-box-arrow-right me-2"></i>退出登录
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 左侧导航栏 -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-content">
+            <!-- 仪表板 -->
+            <a href="/admin/" class="sidebar-link {% if request.path == '/admin/' %}active{% endif %}">
+                <i class="bi bi-speedometer2"></i>
+                <span class="sidebar-text">仪表板</span>
+            </a>
+
+            <!-- 内容管理 -->
+            <div class="sidebar-section mt-3">
+                <div class="sidebar-header">内容管理</div>
+                <a href="/admin/columns" class="sidebar-link {% if '/columns' in request.path %}active{% endif %}">
+                    <i class="bi bi-folder"></i>
+                    <span class="sidebar-text">栏目管理</span>
+                </a>
+                <a href="/admin/pages" class="sidebar-link {% if '/pages' in request.path %}active{% endif %}">
+                    <i class="bi bi-file-text"></i>
+                    <span class="sidebar-text">单页管理</span>
+                </a>
+                <a href="/admin/posts" class="sidebar-link {% if '/posts' in request.path %}active{% endif %}">
+                    <i class="bi bi-newspaper"></i>
+                    <span class="sidebar-text">文章管理</span>
+                </a>
+                <a href="/admin/products" class="sidebar-link {% if '/products' in request.path %}active{% endif %}">
+                    <i class="bi bi-box-seam"></i>
+                    <span class="sidebar-text">产品管理</span>
+                </a>
+            </div>
+
+            <!-- 媒体资源 -->
+            <div class="sidebar-section mt-3">
+                <div class="sidebar-header">媒体资源</div>
+                <a href="/admin/media" class="sidebar-link {% if '/media' in request.path %}active{% endif %}">
+                    <i class="bi bi-images"></i>
+                    <span class="sidebar-text">媒体库</span>
+                </a>
+                <a href="/admin/galleries" class="sidebar-link {% if '/galleries' in request.path %}active{% endif %}">
+                    <i class="bi bi-collection"></i>
+                    <span class="sidebar-text">相册管理</span>
+                </a>
+            </div>
+
+            <!-- 用户互动 -->
+            <div class="sidebar-section mt-3">
+                <div class="sidebar-header">用户互动</div>
+                <a href="/admin/contacts" class="sidebar-link {% if '/contacts' in request.path %}active{% endif %}">
+                    <i class="bi bi-chat-dots"></i>
+                    <span class="sidebar-text">留言管理</span>
+                </a>
+            </div>
+
+            <!-- 系统设置 -->
+            <div class="sidebar-section mt-3">
+                <div class="sidebar-header">系统设置</div>
+                <a href="/admin/settings" class="sidebar-link {% if '/settings' in request.path %}active{% endif %}">
+                    <i class="bi bi-gear"></i>
+                    <span class="sidebar-text">站点设置</span>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="main-content" id="mainContent">
         {% block content %}{% endblock %}
-    </div>
+    </main>
+
+    <!-- 移动端遮罩 -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
+    <!-- 自定义 JS -->
     <script src="/static/js/admin.js"></script>
+
+    <script>
+        /**
+         * 侧边栏折叠功能
+         */
+        (function() {
+            'use strict';
+
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const mainContent = document.getElementById('mainContent');
+
+            if (!sidebar || !sidebarToggle) return;
+
+            // 侧边栏切换
+            sidebarToggle.addEventListener('click', function() {
+                if (window.innerWidth < 992) {
+                    // 移动端：显示/隐藏侧边栏
+                    sidebar.classList.toggle('show');
+                    if (sidebarOverlay) {
+                        sidebarOverlay.classList.toggle('show');
+                    }
+                } else {
+                    // 桌面端：折叠/展开侧边栏
+                    sidebar.classList.toggle('collapsed');
+                    document.body.classList.toggle('sidebar-collapsed');
+
+                    // 保存状态到 localStorage
+                    const isCollapsed = sidebar.classList.contains('collapsed');
+                    localStorage.setItem('sidebarCollapsed', isCollapsed);
+                }
+            });
+
+            // 点击遮罩关闭侧边栏（移动端）
+            if (sidebarOverlay) {
+                sidebarOverlay.addEventListener('click', function() {
+                    sidebar.classList.remove('show');
+                    sidebarOverlay.classList.remove('show');
+                });
+            }
+
+            // 窗口大小改变时的处理
+            window.addEventListener('resize', function() {
+                if (window.innerWidth >= 992) {
+                    // 桌面端：移除移动端的 show 类
+                    sidebar.classList.remove('show');
+                    if (sidebarOverlay) {
+                        sidebarOverlay.classList.remove('show');
+                    }
+                } else {
+                    // 移动端：移除桌面端的 collapsed 类
+                    sidebar.classList.remove('collapsed');
+                    document.body.classList.remove('sidebar-collapsed');
+                }
+            });
+
+            // 恢复侧边栏折叠状态
+            if (window.innerWidth >= 992) {
+                const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+                if (isCollapsed) {
+                    sidebar.classList.add('collapsed');
+                    document.body.classList.add('sidebar-collapsed');
+                }
+            }
+        })();
+
+        /**
+         * 初始化 Bootstrap 组件
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            // 初始化所有 tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            // 初始化所有 popovers
+            const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+            popoverTriggerList.map(function (popoverTriggerEl) {
+                return new bootstrap.Popover(popoverTriggerEl);
+            });
+        });
+
+        /**
+         * 全局工具函数
+         */
+        window.showToast = function(type, message, title = '提示') {
+            const toastHTML = `
+                <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header bg-${type} text-white">
+                        <i class="bi bi-${getToastIcon(type)} me-2"></i>
+                        <strong class="me-auto">${title}</strong>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                    </div>
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                </div>
+            `;
+
+            let container = document.querySelector('.toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'toast-container position-fixed top-0 end-0 p-3';
+                document.body.appendChild(container);
+            }
+
+            const toastElement = document.createElement('div');
+            toastElement.innerHTML = toastHTML;
+            container.appendChild(toastElement.firstElementChild);
+
+            const toast = new bootstrap.Toast(toastElement.firstElementChild);
+            toast.show();
+
+            setTimeout(() => {
+                toastElement.remove();
+            }, 3500);
+        };
+
+        function getToastIcon(type) {
+            const icons = {
+                'success': 'check-circle',
+                'danger': 'x-circle',
+                'warning': 'exclamation-triangle',
+                'info': 'info-circle'
+            };
+            return icons[type] || 'info-circle';
+        }
+
+        window.confirmAction = function(title, message, onConfirm) {
+            const modalHTML = `
+                <div class="modal fade" id="confirmModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">
+                                    <i class="bi bi-exclamation-triangle text-warning me-2"></i>
+                                    ${title}
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                ${message}
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                <button type="button" class="btn btn-danger" id="confirmBtn">确认</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const oldModal = document.getElementById('confirmModal');
+            if (oldModal) oldModal.remove();
+
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+            const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+            modal.show();
+
+            document.getElementById('confirmBtn').addEventListener('click', function() {
+                modal.hide();
+                if (typeof onConfirm === 'function') {
+                    onConfirm();
+                }
+            });
+        };
+    </script>
+
     {% block extra_js %}{% endblock %}
 </body>
 </html>

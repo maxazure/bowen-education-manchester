@@ -1,0 +1,696 @@
+<!--
+  博文教育管理后台 - Bootstrap 5 模板示例
+  
+  这个文件展示了完整的 Bootstrap 5 布局结构和主要组件的使用方法
+-->
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文章管理 - 博文教育管理后台</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- 自定义样式 -->
+    <link href="/static/css/bootstrap-admin.css" rel="stylesheet">
+</head>
+<body>
+    <!-- ========================================
+         顶部导航栏 (Topbar)
+         ======================================== -->
+    <nav class="navbar topbar navbar-expand-lg navbar-light bg-white border-bottom fixed-top">
+        <div class="container-fluid px-4">
+            <!-- 左侧：折叠按钮 + Logo -->
+            <div class="d-flex align-items-center">
+                <button class="btn btn-link p-0 me-3" id="sidebarToggle" type="button">
+                    <i class="bi bi-list fs-3"></i>
+                </button>
+                <a class="navbar-brand d-flex align-items-center" href="/admin/">
+                    <img src="/static/images/logo.png" height="30" alt="博文教育">
+                    <span class="ms-2 d-none d-md-inline">管理后台</span>
+                </a>
+            </div>
+
+            <!-- 右侧：通知 + 用户菜单 -->
+            <div class="d-flex align-items-center">
+                <!-- 通知图标 -->
+                <button class="btn btn-link notification-icon me-2" type="button">
+                    <i class="bi bi-bell"></i>
+                    <span class="badge bg-danger notification-badge">3</span>
+                </button>
+
+                <!-- 用户下拉菜单 -->
+                <div class="dropdown user-dropdown">
+                    <button class="btn dropdown-toggle d-flex align-items-center" type="button" 
+                            id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle fs-5 me-2"></i>
+                        <span class="d-none d-md-inline">管理员</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li>
+                            <a class="dropdown-item" href="/admin/profile">
+                                <i class="bi bi-person me-2"></i>个人资料
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/admin/change-password">
+                                <i class="bi bi-key me-2"></i>修改密码
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="/admin/logout">
+                                <i class="bi bi-box-arrow-right me-2"></i>退出登录
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ========================================
+         布局容器
+         ======================================== -->
+    <div class="admin-wrapper">
+        <!-- ========================================
+             左侧导航栏 (Sidebar)
+             ======================================== -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-content">
+                <!-- 仪表板 -->
+                <a href="/admin/" class="sidebar-link">
+                    <i class="bi bi-speedometer2"></i>
+                    <span class="sidebar-text">仪表板</span>
+                </a>
+
+                <!-- 内容管理 -->
+                <div class="sidebar-section mt-3">
+                    <div class="sidebar-header">内容管理</div>
+                    <a href="/admin/columns" class="sidebar-link">
+                        <i class="bi bi-folder"></i>
+                        <span class="sidebar-text">栏目管理</span>
+                    </a>
+                    <a href="/admin/pages" class="sidebar-link">
+                        <i class="bi bi-file-text"></i>
+                        <span class="sidebar-text">单页管理</span>
+                    </a>
+                    <a href="/admin/posts" class="sidebar-link active">
+                        <i class="bi bi-newspaper"></i>
+                        <span class="sidebar-text">文章管理</span>
+                    </a>
+                    <a href="/admin/products" class="sidebar-link">
+                        <i class="bi bi-box-seam"></i>
+                        <span class="sidebar-text">产品管理</span>
+                    </a>
+                </div>
+
+                <!-- 媒体资源 -->
+                <div class="sidebar-section mt-3">
+                    <div class="sidebar-header">媒体资源</div>
+                    <a href="/admin/media" class="sidebar-link">
+                        <i class="bi bi-images"></i>
+                        <span class="sidebar-text">媒体库</span>
+                    </a>
+                    <a href="/admin/galleries" class="sidebar-link">
+                        <i class="bi bi-collection"></i>
+                        <span class="sidebar-text">相册管理</span>
+                    </a>
+                </div>
+
+                <!-- 用户互动 -->
+                <div class="sidebar-section mt-3">
+                    <div class="sidebar-header">用户互动</div>
+                    <a href="/admin/contacts" class="sidebar-link">
+                        <i class="bi bi-chat-dots"></i>
+                        <span class="sidebar-text">留言管理</span>
+                        <span class="badge bg-danger rounded-pill ms-auto">5</span>
+                    </a>
+                </div>
+
+                <!-- 系统设置 -->
+                <div class="sidebar-section mt-3">
+                    <div class="sidebar-header">系统设置</div>
+                    <a href="/admin/settings" class="sidebar-link">
+                        <i class="bi bi-gear"></i>
+                        <span class="sidebar-text">站点设置</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ========================================
+             主内容区 (Main Content)
+             ======================================== -->
+        <main class="main-content" id="mainContent">
+            <!-- 面包屑导航 -->
+            <nav aria-label="breadcrumb" class="mb-3">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/admin/">首页</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">文章管理</li>
+                </ol>
+            </nav>
+
+            <!-- 页面标题区 -->
+            <div class="page-header">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h1 class="page-title">文章管理</h1>
+                        <p class="page-subtitle mb-0">管理网站的所有文章内容</p>
+                    </div>
+                    <div class="col-auto">
+                        <a href="/admin/posts/new" class="btn btn-primary">
+                            <i class="bi bi-plus-lg me-2"></i>新建文章
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 筛选表单 -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form class="row g-3">
+                        <div class="col-md-3">
+                            <label for="columnFilter" class="form-label">栏目</label>
+                            <select class="form-select" id="columnFilter">
+                                <option value="">所有栏目</option>
+                                <option value="1">中文学校</option>
+                                <option value="2">国际象棋</option>
+                                <option value="3">羽毛球俱乐部</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="statusFilter" class="form-label">状态</label>
+                            <select class="form-select" id="statusFilter">
+                                <option value="">所有状态</option>
+                                <option value="published">已发布</option>
+                                <option value="draft">草稿</option>
+                                <option value="offline">已下线</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="keywordSearch" class="form-label">关键词</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-search"></i>
+                                </span>
+                                <input type="text" class="form-control" id="keywordSearch" 
+                                       placeholder="搜索标题或内容...">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label d-block">&nbsp;</label>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-funnel me-2"></i>筛选
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 数据表格 -->
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th width="5%">
+                                        <input type="checkbox" class="form-check-input">
+                                    </th>
+                                    <th width="8%">ID</th>
+                                    <th width="35%">标题</th>
+                                    <th width="12%">栏目</th>
+                                    <th width="10%">状态</th>
+                                    <th width="10%">推荐</th>
+                                    <th width="15%">更新时间</th>
+                                    <th width="15%" class="text-center">操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- 数据行示例 1 -->
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="form-check-input">
+                                    </td>
+                                    <td>001</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="/static/images/post-thumb.jpg" 
+                                                 alt="缩略图" class="rounded me-2" 
+                                                 style="width: 40px; height: 40px; object-fit: cover;">
+                                            <div>
+                                                <a href="/admin/posts/1/edit" class="text-decoration-none">
+                                                    博文中文学校秋季招生开始啦
+                                                </a>
+                                                <div class="text-muted small">
+                                                    <i class="bi bi-eye me-1"></i>128 次查看
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-info">中文学校</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success">已发布</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-warning text-dark">
+                                            <i class="bi bi-star-fill"></i> 推荐
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="text-muted small">
+                                            <div>2025-11-13</div>
+                                            <div>10:30:00</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex justify-content-center gap-1">
+                                            <a href="/admin/posts/1/edit" 
+                                               class="btn btn-sm btn-outline-secondary" 
+                                               title="编辑">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a href="/posts/1" target="_blank"
+                                               class="btn btn-sm btn-outline-info" 
+                                               title="预览">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <button type="button" 
+                                                    class="btn btn-sm btn-outline-danger" 
+                                                    onclick="deletePost(1)"
+                                                    title="删除">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- 数据行示例 2 -->
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="form-check-input">
+                                    </td>
+                                    <td>002</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img src="/static/images/post-thumb2.jpg" 
+                                                 alt="缩略图" class="rounded me-2" 
+                                                 style="width: 40px; height: 40px; object-fit: cover;">
+                                            <div>
+                                                <a href="/admin/posts/2/edit" class="text-decoration-none">
+                                                    国际象棋比赛获奖名单公布
+                                                </a>
+                                                <div class="text-muted small">
+                                                    <i class="bi bi-eye me-1"></i>86 次查看
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-secondary">国际象棋</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success">已发布</span>
+                                    </td>
+                                    <td>-</td>
+                                    <td>
+                                        <div class="text-muted small">
+                                            <div>2025-11-12</div>
+                                            <div>15:20:00</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex justify-content-center gap-1">
+                                            <a href="/admin/posts/2/edit" 
+                                               class="btn btn-sm btn-outline-secondary" 
+                                               title="编辑">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a href="/posts/2" target="_blank"
+                                               class="btn btn-sm btn-outline-info" 
+                                               title="预览">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <button type="button" 
+                                                    class="btn btn-sm btn-outline-danger" 
+                                                    onclick="deletePost(2)"
+                                                    title="删除">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- 数据行示例 3 - 草稿状态 -->
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="form-check-input">
+                                    </td>
+                                    <td>003</td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-light rounded me-2" 
+                                                 style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                                                <i class="bi bi-image text-muted"></i>
+                                            </div>
+                                            <div>
+                                                <a href="/admin/posts/3/edit" class="text-decoration-none text-muted">
+                                                    羽毛球俱乐部冬季训练计划
+                                                </a>
+                                                <div class="text-muted small">
+                                                    <i class="bi bi-eye me-1"></i>0 次查看
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary">羽毛球俱乐部</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-warning text-dark">草稿</span>
+                                    </td>
+                                    <td>-</td>
+                                    <td>
+                                        <div class="text-muted small">
+                                            <div>2025-11-11</div>
+                                            <div>09:15:00</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex justify-content-center gap-1">
+                                            <a href="/admin/posts/3/edit" 
+                                               class="btn btn-sm btn-outline-secondary" 
+                                               title="编辑">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <button type="button" 
+                                                    class="btn btn-sm btn-outline-success" 
+                                                    onclick="publishPost(3)"
+                                                    title="发布">
+                                                <i class="bi bi-check-lg"></i>
+                                            </button>
+                                            <button type="button" 
+                                                    class="btn btn-sm btn-outline-danger" 
+                                                    onclick="deletePost(3)"
+                                                    title="删除">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- 表格底部：批量操作 + 分页 -->
+                <div class="card-footer bg-white">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center gap-2">
+                                <select class="form-select form-select-sm" style="width: auto;">
+                                    <option>批量操作</option>
+                                    <option value="publish">批量发布</option>
+                                    <option value="offline">批量下线</option>
+                                    <option value="delete">批量删除</option>
+                                </select>
+                                <button class="btn btn-sm btn-secondary">应用</button>
+                            </div>
+                            <div class="text-muted small mt-2">
+                                显示第 1-10 条，共 128 条记录
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-end mb-0">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1">
+                                            <i class="bi bi-chevron-left"></i>
+                                        </a>
+                                    </li>
+                                    <li class="page-item active">
+                                        <a class="page-link" href="#">1</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">2</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">3</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">4</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">5</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">
+                                            <i class="bi bi-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底部留白 -->
+            <div class="py-4"></div>
+        </main>
+    </div>
+
+    <!-- ========================================
+         移动端侧边栏遮罩
+         ======================================== -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- ========================================
+         删除确认模态框
+         ======================================== -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">
+                        <i class="bi bi-exclamation-triangle text-danger me-2"></i>
+                        确认删除
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>确定要删除这篇文章吗？此操作无法撤销。</p>
+                    <div class="alert alert-warning mb-0">
+                        <i class="bi bi-info-circle me-2"></i>
+                        文章删除后，相关的评论和统计数据也会被清除。
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        取消
+                    </button>
+                    <button type="button" class="btn btn-danger" id="confirmDelete">
+                        <i class="bi bi-trash me-2"></i>确认删除
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================
+         Toast 提示容器
+         ======================================== -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="successToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header bg-success text-white">
+                <i class="bi bi-check-circle me-2"></i>
+                <strong class="me-auto">成功</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body">
+                操作成功！
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================
+         JavaScript
+         ======================================== -->
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- 自定义 JS -->
+    <script>
+        // ====================================
+        // 1. 侧边栏折叠功能
+        // ====================================
+        document.getElementById('sidebarToggle').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            if (window.innerWidth < 992) {
+                // 移动端：显示/隐藏侧边栏
+                sidebar.classList.toggle('show');
+                overlay.classList.toggle('show');
+            } else {
+                // 桌面端：折叠/展开侧边栏
+                sidebar.classList.toggle('collapsed');
+                document.body.classList.toggle('sidebar-collapsed');
+            }
+        });
+
+        // 点击遮罩关闭侧边栏（移动端）
+        document.getElementById('sidebarOverlay').addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            sidebar.classList.remove('show');
+            overlay.classList.remove('show');
+        });
+
+        // ====================================
+        // 2. 删除文章功能
+        // ====================================
+        let deletePostId = null;
+
+        function deletePost(id) {
+            deletePostId = id;
+            const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            deleteModal.show();
+        }
+
+        document.getElementById('confirmDelete').addEventListener('click', function() {
+            if (deletePostId) {
+                // 发送删除请求
+                fetch(`/admin/posts/${deletePostId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // 关闭模态框
+                        const deleteModal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+                        deleteModal.hide();
+                        
+                        // 显示成功提示
+                        showToast('success', '删除成功！');
+                        
+                        // 刷新页面
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        showToast('danger', '删除失败：' + data.message);
+                    }
+                })
+                .catch(error => {
+                    showToast('danger', '删除失败：' + error.message);
+                });
+            }
+        });
+
+        // ====================================
+        // 3. 发布文章功能
+        // ====================================
+        function publishPost(id) {
+            if (confirm('确定要发布这篇文章吗？')) {
+                fetch(`/admin/posts/${id}/publish`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast('success', '发布成功！');
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
+                    } else {
+                        showToast('danger', '发布失败：' + data.message);
+                    }
+                })
+                .catch(error => {
+                    showToast('danger', '发布失败：' + error.message);
+                });
+            }
+        }
+
+        // ====================================
+        // 4. Toast 提示功能
+        // ====================================
+        function showToast(type, message) {
+            const toastEl = document.getElementById('successToast');
+            const toastHeader = toastEl.querySelector('.toast-header');
+            const toastBody = toastEl.querySelector('.toast-body');
+            
+            // 设置样式和图标
+            toastHeader.className = 'toast-header text-white';
+            let icon = 'bi-check-circle';
+            
+            if (type === 'success') {
+                toastHeader.classList.add('bg-success');
+                icon = 'bi-check-circle';
+            } else if (type === 'danger') {
+                toastHeader.classList.add('bg-danger');
+                icon = 'bi-x-circle';
+            } else if (type === 'warning') {
+                toastHeader.classList.add('bg-warning');
+                icon = 'bi-exclamation-triangle';
+            } else if (type === 'info') {
+                toastHeader.classList.add('bg-info');
+                icon = 'bi-info-circle';
+            }
+            
+            toastHeader.querySelector('i').className = `bi ${icon} me-2`;
+            toastBody.textContent = message;
+            
+            const toast = new bootstrap.Toast(toastEl);
+            toast.show();
+        }
+
+        // ====================================
+        // 5. 全选功能
+        // ====================================
+        const headerCheckbox = document.querySelector('thead input[type="checkbox"]');
+        const rowCheckboxes = document.querySelectorAll('tbody input[type="checkbox"]');
+        
+        headerCheckbox.addEventListener('change', function() {
+            rowCheckboxes.forEach(checkbox => {
+                checkbox.checked = headerCheckbox.checked;
+            });
+        });
+
+        // ====================================
+        // 6. 窗口大小改变时的响应式处理
+        // ====================================
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            if (window.innerWidth >= 992) {
+                // 桌面端：移除移动端的 show 类
+                sidebar.classList.remove('show');
+                overlay.classList.remove('show');
+            } else {
+                // 移动端：移除桌面端的 collapsed 类
+                sidebar.classList.remove('collapsed');
+                document.body.classList.remove('sidebar-collapsed');
+            }
+        });
+    </script>
+</body>
+</html>

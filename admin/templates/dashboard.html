@@ -3,21 +3,497 @@
 {% block title %}仪表板 - 博文教育管理后台{% endblock %}
 
 {% block content %}
-<div class="dashboard">
-    <h1>欢迎来到管理后台</h1>
-    <div class="stats">
-        <div class="stat-card">
-            <h3>用户总数</h3>
-            <p class="stat-value">0</p>
+<!-- 页面标题区 -->
+<div class="page-header fade-in">
+    <h1 class="page-title">
+        <i class="bi bi-speedometer2 text-primary me-2"></i>仪表板
+    </h1>
+    <p class="page-subtitle">欢迎回来，查看您的系统概览</p>
+</div>
+
+<!-- 统计卡片区 -->
+<div class="row g-4 mb-4">
+    <!-- 文章统计 -->
+    <div class="col-12 col-sm-6 col-lg-3">
+        <div class="card stat-card bg-primary-light hover-lift h-100">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon text-primary me-3">
+                    <i class="bi bi-newspaper"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="stat-label">文章总数</div>
+                    <div class="stat-value" id="postsCount">-</div>
+                    <div class="stat-change text-success">
+                        <i class="bi bi-arrow-up-short"></i>
+                        <small>本月新增 0 篇</small>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="stat-card">
-            <h3>文章总数</h3>
-            <p class="stat-value">0</p>
+    </div>
+
+    <!-- 产品统计 -->
+    <div class="col-12 col-sm-6 col-lg-3">
+        <div class="card stat-card bg-success-light hover-lift h-100">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon text-success me-3">
+                    <i class="bi bi-box-seam"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="stat-label">产品总数</div>
+                    <div class="stat-value" id="productsCount">-</div>
+                    <div class="stat-change text-success">
+                        <i class="bi bi-arrow-up-short"></i>
+                        <small>本月新增 0 个</small>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="stat-card">
-            <h3>相册总数</h3>
-            <p class="stat-value">0</p>
+    </div>
+
+    <!-- 相册统计 -->
+    <div class="col-12 col-sm-6 col-lg-3">
+        <div class="card stat-card bg-info-light hover-lift h-100">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon text-info me-3">
+                    <i class="bi bi-collection"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="stat-label">相册总数</div>
+                    <div class="stat-value" id="galleriesCount">-</div>
+                    <div class="stat-change text-success">
+                        <i class="bi bi-arrow-up-short"></i>
+                        <small>本月新增 0 个</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 留言统计 -->
+    <div class="col-12 col-sm-6 col-lg-3">
+        <div class="card stat-card bg-warning-light hover-lift h-100">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon text-warning me-3">
+                    <i class="bi bi-chat-dots"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="stat-label">待处理留言</div>
+                    <div class="stat-value" id="contactsCount">-</div>
+                    <div class="stat-change text-warning">
+                        <i class="bi bi-exclamation-circle"></i>
+                        <small>需要关注</small>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+<!-- 主要内容区 -->
+<div class="row g-4">
+    <!-- 快速操作 -->
+    <div class="col-12 col-lg-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-lightning-charge text-primary me-2"></i>快速操作
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-3">
+                    <a href="/admin/posts/new" class="btn btn-outline-primary d-flex align-items-center justify-content-between">
+                        <span>
+                            <i class="bi bi-plus-circle me-2"></i>创建文章
+                        </span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                    <a href="/admin/products/new" class="btn btn-outline-success d-flex align-items-center justify-content-between">
+                        <span>
+                            <i class="bi bi-plus-circle me-2"></i>添加产品
+                        </span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                    <a href="/admin/galleries/new" class="btn btn-outline-info d-flex align-items-center justify-content-between">
+                        <span>
+                            <i class="bi bi-plus-circle me-2"></i>创建相册
+                        </span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                    <a href="/admin/media" class="btn btn-outline-secondary d-flex align-items-center justify-content-between">
+                        <span>
+                            <i class="bi bi-cloud-upload me-2"></i>上传媒体
+                        </span>
+                        <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 最近活动 -->
+    <div class="col-12 col-lg-8">
+        <div class="card h-100">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-clock-history text-primary me-2"></i>最近活动
+                </h5>
+                <a href="/admin/posts" class="btn btn-sm btn-outline-primary">
+                    查看全部 <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush" id="recentActivities">
+                    <!-- 加载状态 -->
+                    <div class="text-center py-4 text-muted">
+                        <div class="spinner-border spinner-border-sm me-2" role="status">
+                            <span class="visually-hidden">加载中...</span>
+                        </div>
+                        正在加载最近活动...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 系统状态 -->
+<div class="row g-4 mt-2">
+    <div class="col-12 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-bar-chart text-primary me-2"></i>内容分布
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-muted">已发布文章</span>
+                        <span class="fw-bold" id="publishedPostsCount">0</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 0%" id="publishedPostsBar"></div>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-muted">草稿文章</span>
+                        <span class="fw-bold" id="draftPostsCount">0</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: 0%" id="draftPostsBar"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="text-muted">媒体文件</span>
+                        <span class="fw-bold" id="mediaCount">0</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 0%" id="mediaBar"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-info-circle text-primary me-2"></i>系统信息
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-primary-light text-primary me-3" style="width: 48px; height: 48px; font-size: 20px;">
+                                <i class="bi bi-folder"></i>
+                            </div>
+                            <div>
+                                <div class="text-muted small">栏目数量</div>
+                                <div class="fw-bold fs-5" id="columnsCount">-</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-success-light text-success me-3" style="width: 48px; height: 48px; font-size: 20px;">
+                                <i class="bi bi-file-text"></i>
+                            </div>
+                            <div>
+                                <div class="text-muted small">单页数量</div>
+                                <div class="fw-bold fs-5" id="pagesCount">-</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-info-light text-info me-3" style="width: 48px; height: 48px; font-size: 20px;">
+                                <i class="bi bi-images"></i>
+                            </div>
+                            <div>
+                                <div class="text-muted small">媒体库</div>
+                                <div class="fw-bold fs-5" id="mediaLibCount">-</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-warning-light text-warning me-3" style="width: 48px; height: 48px; font-size: 20px;">
+                                <i class="bi bi-gear"></i>
+                            </div>
+                            <div>
+                                <div class="text-muted small">系统状态</div>
+                                <div class="fw-bold fs-5">
+                                    <span class="badge bg-success-light text-success">正常</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 数据加载和初始化脚本 -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 加载统计数据
+    loadDashboardStats();
+
+    // 加载最近活动
+    loadRecentActivities();
+
+    // 每30秒刷新一次数据
+    setInterval(loadDashboardStats, 30000);
+});
+
+/**
+ * 加载仪表板统计数据
+ */
+async function loadDashboardStats() {
+    try {
+        // 这里应该调用实际的API接口
+        // 目前使用模拟数据
+        const stats = {
+            posts: 45,
+            products: 28,
+            galleries: 12,
+            contacts: 5,
+            columns: 8,
+            pages: 6,
+            media: 156,
+            publishedPosts: 38,
+            draftPosts: 7
+        };
+
+        // 更新统计数字
+        updateStatValue('postsCount', stats.posts);
+        updateStatValue('productsCount', stats.products);
+        updateStatValue('galleriesCount', stats.galleries);
+        updateStatValue('contactsCount', stats.contacts);
+        updateStatValue('columnsCount', stats.columns);
+        updateStatValue('pagesCount', stats.pages);
+        updateStatValue('mediaLibCount', stats.media);
+
+        // 更新进度条
+        updateStatValue('publishedPostsCount', stats.publishedPosts);
+        updateStatValue('draftPostsCount', stats.draftPosts);
+        updateStatValue('mediaCount', stats.media);
+
+        const total = stats.posts;
+        updateProgressBar('publishedPostsBar', (stats.publishedPosts / total) * 100);
+        updateProgressBar('draftPostsBar', (stats.draftPosts / total) * 100);
+        updateProgressBar('mediaBar', Math.min((stats.media / 200) * 100, 100));
+
+    } catch (error) {
+        console.error('加载统计数据失败:', error);
+    }
+}
+
+/**
+ * 更新统计数值（带动画效果）
+ */
+function updateStatValue(elementId, value) {
+    const element = document.getElementById(elementId);
+    if (!element) return;
+
+    const currentValue = parseInt(element.textContent) || 0;
+    const targetValue = value;
+    const duration = 1000; // 动画持续时间（毫秒）
+    const steps = 30; // 动画步数
+    const increment = (targetValue - currentValue) / steps;
+    const stepDuration = duration / steps;
+
+    let currentStep = 0;
+    const timer = setInterval(() => {
+        currentStep++;
+        const newValue = Math.round(currentValue + (increment * currentStep));
+        element.textContent = newValue;
+
+        if (currentStep >= steps) {
+            clearInterval(timer);
+            element.textContent = targetValue;
+        }
+    }, stepDuration);
+}
+
+/**
+ * 更新进度条
+ */
+function updateProgressBar(elementId, percentage) {
+    const element = document.getElementById(elementId);
+    if (!element) return;
+
+    element.style.width = percentage + '%';
+    element.setAttribute('aria-valuenow', percentage);
+}
+
+/**
+ * 加载最近活动
+ */
+async function loadRecentActivities() {
+    try {
+        // 这里应该调用实际的API接口
+        // 目前使用模拟数据
+        const activities = [
+            {
+                icon: 'bi-newspaper',
+                color: 'primary',
+                title: '新文章发布',
+                description: '发布了文章《博文教育2024年度总结》',
+                time: '2分钟前'
+            },
+            {
+                icon: 'bi-box-seam',
+                color: 'success',
+                title: '产品更新',
+                description: '更新了产品《雅思培训课程》的信息',
+                time: '15分钟前'
+            },
+            {
+                icon: 'bi-images',
+                color: 'info',
+                title: '上传媒体',
+                description: '上传了5张图片到媒体库',
+                time: '1小时前'
+            },
+            {
+                icon: 'bi-chat-dots',
+                color: 'warning',
+                title: '收到新留言',
+                description: '张先生咨询了雅思课程相关信息',
+                time: '2小时前'
+            },
+            {
+                icon: 'bi-collection',
+                color: 'info',
+                title: '相册创建',
+                description: '创建了新相册《2024毕业典礼》',
+                time: '3小时前'
+            }
+        ];
+
+        const container = document.getElementById('recentActivities');
+        if (!container) return;
+
+        // 清空加载状态
+        container.innerHTML = '';
+
+        // 渲染活动列表
+        activities.forEach((activity, index) => {
+            const item = document.createElement('div');
+            item.className = 'list-group-item list-group-item-action d-flex align-items-start border-0 py-3 fade-in';
+            item.style.animationDelay = (index * 0.1) + 's';
+            item.innerHTML = `
+                <div class="me-3">
+                    <div class="stat-icon bg-${activity.color}-light text-${activity.color}" style="width: 40px; height: 40px; font-size: 18px;">
+                        <i class="${activity.icon}"></i>
+                    </div>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-start mb-1">
+                        <h6 class="mb-0">${activity.title}</h6>
+                        <small class="text-muted">${activity.time}</small>
+                    </div>
+                    <p class="text-muted mb-0 small">${activity.description}</p>
+                </div>
+            `;
+            container.appendChild(item);
+        });
+
+    } catch (error) {
+        console.error('加载最近活动失败:', error);
+        const container = document.getElementById('recentActivities');
+        if (container) {
+            container.innerHTML = `
+                <div class="text-center py-4 text-danger">
+                    <i class="bi bi-exclamation-circle fs-3 mb-2"></i>
+                    <p class="mb-0">加载失败，请刷新页面重试</p>
+                </div>
+            `;
+        }
+    }
+}
+</script>
+
+<style>
+/* 仪表板特定样式 */
+.stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+
+.hover-lift {
+    transition: all 0.3s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.list-group-item-action:hover {
+    background-color: var(--bs-light);
+}
+
+/* 动画延迟 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* 进度条动画 */
+.progress-bar {
+    transition: width 1s ease;
+}
+
+/* 响应式调整 */
+@media (max-width: 767.98px) {
+    .stat-card .card-body {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .stat-card .stat-icon {
+        margin: 0 0 12px 0 !important;
+    }
+}
+</style>
 {% endblock %}
