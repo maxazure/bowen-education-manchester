@@ -1,0 +1,47 @@
+"""
+管理后台应用入口
+
+独立的FastAPI应用，可以单独运行。
+"""
+
+import os
+from pathlib import Path
+
+from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from starlette.middleware.sessions import SessionMiddleware
+
+# 获取admin目录的绝对路径
+ADMIN_DIR = Path(__file__).parent.parent
+
+# 创建FastAPI应用
+app = FastAPI(
+    title="博文教育管理后台",
+    description="Bowen Education Admin System",
+    version="1.0.0",
+)
+
+# 添加Session中间件
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=os.getenv("SECRET_KEY", "your-secret-key-change-in-production"),
+)
+
+# 挂载静态文件
+app.mount("/static", StaticFiles(directory=str(ADMIN_DIR / "static")), name="static")
+
+# 配置模板
+templates = Jinja2Templates(directory=str(ADMIN_DIR / "templates"))
+
+
+@app.get("/")
+async def root():
+    """根路径"""
+    return {"message": "博文教育管理后台API", "version": "1.0.0"}
+
+
+@app.get("/health")
+async def health_check():
+    """健康检查"""
+    return {"status": "ok"}
