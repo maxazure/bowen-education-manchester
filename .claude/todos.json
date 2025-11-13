@@ -1,46 +1,21 @@
 {
   "todos": [
     {
-      "content": "规划 Bootstrap 5 现代化管理后台 UI 设计方案",
-      "status": "completed",
-      "activeForm": "正在规划 Bootstrap 5 现代化管理后台 UI 设计方案"
+      "content": "高优先级模板迁移 - 5个文件（posts/form.html, products/form.html, settings/index.html, columns/form.html, contacts/list.html）",
+      "status": "in_progress",
+      "activeForm": "规划高优先级模板迁移任务"
     },
     {
-      "content": "重构 base.html 模板引入 Bootstrap 5 和现代化布局",
-      "status": "completed",
-      "activeForm": "正在重构 base.html 模板引入 Bootstrap 5 和现代化布局"
+      "content": "中优先级模板迁移 - 4个文件（posts/list.html, products/list.html, columns/list.html, pages/list.html）",
+      "status": "pending",
+      "activeForm": "规划中优先级模板迁移任务"
     },
     {
-      "content": "重构 header 组件，增加用户下拉菜单和修改密码选项",
-      "status": "completed",
-      "activeForm": "正在重构 header 组件，增加用户下拉菜单和修改密码选项"
-    },
-    {
-      "content": "重构 sidebar 组件，使用 Bootstrap 5 侧边栏和图标",
-      "status": "completed",
-      "activeForm": "正在重构 sidebar 组件，使用 Bootstrap 5 侧边栏和图标"
-    },
-    {
-      "content": "更新 admin.css 为现代化样式",
-      "status": "completed",
-      "activeForm": "正在更新 admin.css 为现代化样式"
-    },
-    {
-      "content": "重构 dashboard.html 使用 Bootstrap 5 卡片和网格系统",
-      "status": "completed",
-      "activeForm": "正在重构 dashboard.html 使用 Bootstrap 5 卡片和网格系统"
-    },
-    {
-      "content": "更新登录页面为 Bootstrap 5 样式",
-      "status": "completed",
-      "activeForm": "正在更新登录页面为 Bootstrap 5 样式"
-    },
-    {
-      "content": "使用 Chrome DevTools 预览并验证界面效果",
-      "status": "completed",
-      "activeForm": "正在使用 Chrome DevTools 预览并验证界面效果"
+      "content": "新增页面开发 - 2个模块（媒体库管理界面、相册管理界面）",
+      "status": "pending",
+      "activeForm": "规划新增页面开发任务"
     }
   ],
-  "lastUpdated": "2025-11-13T22:40:15.855149",
-  "sessionId": "8d1586f0-1a19-4d75-a4d0-fbc562b64d85"
+  "lastUpdated": "2025-11-14T09:40:45.037649",
+  "sessionId": "7ffe287b-c499-48da-8ead-e0ce1d537deb"
 }

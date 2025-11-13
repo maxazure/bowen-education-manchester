@@ -2,6 +2,98 @@
 
 ## ✅ 已完成
 
+### [2025-11-14] 文章编辑页面 Bootstrap 5 迁移
+- [x] 将 posts/form.html 迁移到 Bootstrap 5 UI - 完成时间: 2025-11-14 - 负责人: maxazure
+  - **迁移内容**:
+    - 移除所有内联 CSS（198行）到 admin.css 统一管理
+    - 继承现有的 base.html 模板（Bootstrap 5）
+    - 使用 Bootstrap 5 表单组件和验证系统
+    - 保持两栏布局：左侧主表单（1fr）+ 右侧侧边栏（380px）
+    - 集成 EasyMDE Markdown 编辑器样式
+    - 响应式设计：移动端自动纵向堆叠
+  - **样式系统升级**:
+    - 新增19个文章表单专用样式类到 admin.css（321行）
+    - EasyMDE 编辑器样式增强（圆角、字体、工具栏等）
+    - 分类复选框组样式（悬停效果、焦点状态）
+    - 表单开关增强（48px x 26px，主题色）
+    - 表单验证状态样式（成功/失败图标）
+    - 封面图片预览组件样式
+    - 侧边栏分组和帮助文本样式
+  - **JavaScript 功能**:
+    - EasyMDE 初始化配置（自动保存、工具栏、预览）
+    - 分类复选框同步到隐藏字段
+    - Bootstrap 表单验证（HTML5 + Bootstrap）
+    - AJAX 提交表单（FormData + Fetch API）
+    - Slug 自动生成（从标题转换）
+    - 页面离开警告（防止丢失未保存内容）
+    - 使用 base.html 提供的全局函数（showToast, confirmAction）
+  - **表单字段**（完整功能）:
+    - 标题、Slug、摘要（基本信息）
+    - Markdown 内容编辑器（EasyMDE）
+    - SEO 标题和描述
+    - 所属栏目选择（下拉框，必填）
+    - 发布状态（草稿/已发布/已下线）
+    - 特殊标记（推荐文章、置顶文章开关）
+    - 封面图片 ID（数字输入框）
+    - 文章分类（多选复选框）
+  - **响应式断点**:
+    - 桌面端（≥992px）：两栏布局，侧边栏固定定位
+    - 平板端（768px-991px）：纵向堆叠，侧边栏取消固定
+    - 移动端（<768px）：完全堆叠，按钮全宽显示
+  - **CSS 变量使用**:
+    - 使用 admin.css 的完整 CSS 变量系统
+    - 颜色：--bs-primary, --bs-border-color, --bg-light 等
+    - 过渡：--transition-fast, --transition-base
+    - 主题一致性：与其他管理页面风格统一
+  - **代码优化统计**:
+    - 模板文件：从 666 行减少到 474 行（减少 192 行，-29%）
+    - 内联 CSS：从 198 行减少到 0 行（-100%）
+    - admin.css：新增 321 行（表单专用样式，可复用）
+    - 净代码增加：129 行（集中管理，易维护）
+  - **兼容性**:
+    - EasyMDE 编辑器：支持 Markdown 实时预览
+    - Bootstrap 5 表单验证：HTML5 + CSS
+    - 浏览器支持：Chrome, Firefox, Safari, Edge
+    - 移动设备完全支持
+  - **相关文件**:
+    - admin/templates/posts/form.html（优化）
+    - admin/static/css/admin.css（新增 19. 文章表单专用样式）
+
+### [2025-11-13] 留言管理页面 Bootstrap 5 迁移
+- [x] 将 contacts/list.html 迁移到 Bootstrap 5 UI - 完成时间: 2025-11-13 - 负责人: maxazure
+  - **迁移内容**:
+    - 继承新的 base.html 模板（Bootstrap 5）
+    - 使用 Bootstrap 5 统计卡片组件显示未读/已处理/总计数据
+    - 使用 Bootstrap 5 表单组件实现筛选表单（状态、关键词搜索）
+    - 使用 Bootstrap 5 表格组件（table-hover, table-striped）
+    - 实现批量操作栏（动画效果、响应式设计）
+    - 使用 Bootstrap 5 Badge 组件显示留言状态（未读/已处理）
+    - 使用 Bootstrap 5 Modal 组件实现详情查看模态框
+    - 使用 Bootstrap 5 Pagination 组件实现分页（智能页码显示）
+    - 添加操作按钮组（查看、标记、删除）
+  - **JavaScript 升级**:
+    - 使用 Bootstrap 5 Modal API 替代原生模态框
+    - 使用 base.html 提供的全局函数（showToast, confirmAction）
+    - 保持所有 AJAX 交互功能（查看详情、更新状态、删除、批量操作）
+    - 添加 Tooltip 初始化
+  - **样式优化**:
+    - 完全移除内联 CSS
+    - 使用 admin.css 的 CSS 变量系统
+    - 添加统计卡片渐变背景
+    - 添加批量操作栏滑入动画
+    - 响应式设计优化（移动端适配）
+  - **功能特性**:
+    - 统计卡片带图标和渐变背景
+    - 筛选表单一键清除功能
+    - 批量操作（复选框、全选、批量标记、批量删除）
+    - 状态徽章带图标显示
+    - 详情模态框加载状态
+    - 智能分页（显示省略号）
+    - CSV 导出按钮
+    - Tooltip 提示
+  - **文件路径**: admin/templates/contacts/list.html
+  - **总行数**: 701 行
+
 ### [2025-11-12] 生成主栏目 Hero 背景图片
 - [x] 为8个主栏目生成高质量 Hero 背景图片 - 完成时间: 2025-11-12 17:16 - 负责人: maxazure
   - **生成脚本**:

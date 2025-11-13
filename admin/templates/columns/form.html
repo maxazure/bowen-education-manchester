@@ -2,349 +2,317 @@
 
 {% block title %}{% if mode == 'edit' %}编辑栏目{% else %}新建栏目{% endif %} - 博文教育管理后台{% endblock %}
 
-{% block extra_css %}
-<style>
-    .form-container {
-        padding: 20px;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-
-    .page-header {
-        margin-bottom: 30px;
-        padding-bottom: 20px;
-        border-bottom: 2px solid #e0e0e0;
-    }
-
-    .page-title {
-        font-size: 28px;
-        font-weight: 600;
-        color: #333;
-    }
-
-    .form-card {
-        background: white;
-        border-radius: 8px;
-        padding: 30px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        margin-bottom: 20px;
-    }
-
-    .tabs {
-        display: flex;
-        gap: 10px;
-        border-bottom: 2px solid #e0e0e0;
-        margin-bottom: 30px;
-    }
-
-    .tab {
-        padding: 12px 24px;
-        cursor: pointer;
-        border: none;
-        background: none;
-        font-size: 16px;
-        color: #6c757d;
-        border-bottom: 3px solid transparent;
-        transition: all 0.3s;
-    }
-
-    .tab.active {
-        color: #007bff;
-        border-bottom-color: #007bff;
-        font-weight: 600;
-    }
-
-    .tab:hover {
-        color: #007bff;
-    }
-
-    .tab-content {
-        display: none;
-    }
-
-    .tab-content.active {
-        display: block;
-    }
-
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    .form-label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        color: #333;
-    }
-
-    .form-label.required::after {
-        content: " *";
-        color: #dc3545;
-    }
-
-    .form-control {
-        width: 100%;
-        padding: 10px 15px;
-        border: 1px solid #ced4da;
-        border-radius: 5px;
-        font-size: 14px;
-        transition: border-color 0.3s;
-    }
-
-    .form-control:focus {
-        outline: none;
-        border-color: #007bff;
-        box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
-    }
-
-    .form-control-sm {
-        padding: 8px 12px;
-        font-size: 13px;
-    }
-
-    textarea.form-control {
-        resize: vertical;
-        min-height: 100px;
-    }
-
-    .form-check {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 10px;
-    }
-
-    .form-check-input {
-        width: 18px;
-        height: 18px;
-        cursor: pointer;
-    }
-
-    .form-check-label {
-        cursor: pointer;
-        font-size: 14px;
-    }
-
-    .form-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-    }
-
-    .form-actions {
-        display: flex;
-        gap: 10px;
-        padding-top: 20px;
-        border-top: 2px solid #e0e0e0;
-        margin-top: 30px;
-    }
-
-    .btn {
-        padding: 12px 30px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        font-weight: 500;
-        transition: all 0.3s;
-    }
-
-    .btn-primary {
-        background: #007bff;
-        color: white;
-    }
-
-    .btn-primary:hover {
-        background: #0056b3;
-    }
-
-    .btn-secondary {
-        background: #6c757d;
-        color: white;
-    }
-
-    .btn-secondary:hover {
-        background: #5a6268;
-    }
-
-    .help-text {
-        font-size: 13px;
-        color: #6c757d;
-        margin-top: 5px;
-    }
-
-    select.form-control {
-        cursor: pointer;
-    }
-</style>
-{% endblock %}
-
 {% block content %}
-<div class="form-container">
+<div class="container-fluid">
+    <!-- 页面标题 -->
     <div class="page-header">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/admin/">首页</a></li>
+                <li class="breadcrumb-item"><a href="/admin/columns">栏目管理</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{% if mode == 'edit' %}编辑栏目{% else %}新建栏目{% endif %}</li>
+            </ol>
+        </nav>
         <h1 class="page-title">{% if mode == 'edit' %}编辑栏目{% else %}新建栏目{% endif %}</h1>
+        <p class="page-subtitle">配置栏目的基本信息、Hero 区域和高级设置</p>
     </div>
 
     <form method="POST" action="{% if mode == 'edit' %}/admin/columns/{{ column.id }}{% else %}/admin/columns{% endif %}">
-        <div class="form-card">
-            <div class="tabs">
-                <button type="button" class="tab active" data-tab="basic">基础信息</button>
-                <button type="button" class="tab" data-tab="hero">Hero 区域</button>
-                <button type="button" class="tab" data-tab="advanced">高级设置</button>
+        <div class="row">
+            <!-- 主内容区 -->
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <!-- 标签页导航 -->
+                        <ul class="nav nav-tabs mb-4" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="basic-tab" data-bs-toggle="tab"
+                                        data-bs-target="#basic" type="button" role="tab"
+                                        aria-controls="basic" aria-selected="true">
+                                    <i class="bi bi-info-circle me-2"></i>基础信息
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="hero-tab" data-bs-toggle="tab"
+                                        data-bs-target="#hero" type="button" role="tab"
+                                        aria-controls="hero" aria-selected="false">
+                                    <i class="bi bi-image me-2"></i>Hero 区域
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="advanced-tab" data-bs-toggle="tab"
+                                        data-bs-target="#advanced" type="button" role="tab"
+                                        aria-controls="advanced" aria-selected="false">
+                                    <i class="bi bi-gear me-2"></i>高级设置
+                                </button>
+                            </li>
+                        </ul>
+
+                        <!-- 标签页内容 -->
+                        <div class="tab-content">
+                            <!-- 基础信息 Tab -->
+                            <div class="tab-pane fade show active" id="basic" role="tabpanel" aria-labelledby="basic-tab">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="name" class="form-label">
+                                            栏目名称 <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text" class="form-control" id="name" name="name"
+                                               value="{% if column %}{{ column.name }}{% endif %}"
+                                               required placeholder="例如：关于我们">
+                                        <div class="form-text">栏目的显示名称</div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="slug" class="form-label">URL Slug</label>
+                                        <input type="text" class="form-control" id="slug" name="slug"
+                                               value="{% if column %}{{ column.slug }}{% endif %}"
+                                               placeholder="留空自动生成">
+                                        <div class="form-text">URL 中的标识符，如 about-us</div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="column_type" class="form-label">
+                                            栏目类型 <span class="text-danger">*</span>
+                                        </label>
+                                        <select class="form-select" id="column_type" name="column_type" required>
+                                            <option value="">请选择</option>
+                                            <option value="SINGLE_PAGE" {% if column and column.column_type.value == 'SINGLE_PAGE' %}selected{% endif %}>
+                                                单页面
+                                            </option>
+                                            <option value="POST" {% if column and column.column_type.value == 'POST' %}selected{% endif %}>
+                                                文章栏目
+                                            </option>
+                                            <option value="PRODUCT" {% if column and column.column_type.value == 'PRODUCT' %}selected{% endif %}>
+                                                产品栏目
+                                            </option>
+                                            <option value="GALLERY" {% if column and column.column_type.value == 'GALLERY' %}selected{% endif %}>
+                                                相册模块
+                                            </option>
+                                            <option value="CUSTOM" {% if column and column.column_type.value == 'CUSTOM' %}selected{% endif %}>
+                                                自定义模块
+                                            </option>
+                                        </select>
+                                        <div class="form-text">决定栏目的内容类型和展示方式</div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="sort_order" class="form-label">排序值</label>
+                                        <input type="number" class="form-control" id="sort_order" name="sort_order"
+                                               value="{% if column %}{{ column.sort_order }}{% else %}0{% endif %}"
+                                               min="0">
+                                        <div class="form-text">数字越小越靠前显示</div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="description" class="form-label">栏目描述</label>
+                                        <textarea class="form-control" id="description" name="description"
+                                                  rows="3" placeholder="简要描述栏目内容">{% if column %}{{ column.description or '' }}{% endif %}</textarea>
+                                        <div class="form-text">也可作为 Hero 区域的副标题</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Hero 区域 Tab -->
+                            <div class="tab-pane fade" id="hero" role="tabpanel" aria-labelledby="hero-tab">
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label for="hero_title" class="form-label">Hero 主标题</label>
+                                        <input type="text" class="form-control" id="hero_title" name="hero_title"
+                                               value="{% if column %}{{ column.hero_title or '' }}{% endif %}"
+                                               placeholder="例如：欢迎来到博文教育">
+                                        <div class="form-text">页面顶部显示的主标题（中文）</div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="hero_title_en" class="form-label">Hero 英文副标题</label>
+                                        <input type="text" class="form-control" id="hero_title_en" name="hero_title_en"
+                                               value="{% if column %}{{ column.hero_title_en or '' }}{% endif %}"
+                                               placeholder="例如：Welcome to Bowen Education">
+                                        <div class="form-text">英文标题或副标题</div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="hero_tagline" class="form-label">Hero 标语/口号</label>
+                                        <input type="text" class="form-control" id="hero_tagline" name="hero_tagline"
+                                               value="{% if column %}{{ column.hero_tagline or '' }}{% endif %}"
+                                               placeholder="例如：专业、创新、卓越">
+                                        <div class="form-text">简短的品牌口号或宣传语</div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="hero_cta_text" class="form-label">CTA 按钮文字</label>
+                                        <input type="text" class="form-control" id="hero_cta_text" name="hero_cta_text"
+                                               value="{% if column %}{{ column.hero_cta_text or '' }}{% endif %}"
+                                               placeholder="例如：了解更多">
+                                        <div class="form-text">行动号召按钮的显示文字</div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="hero_cta_url" class="form-label">CTA 按钮链接</label>
+                                        <input type="text" class="form-control" id="hero_cta_url" name="hero_cta_url"
+                                               value="{% if column %}{{ column.hero_cta_url or '' }}{% endif %}"
+                                               placeholder="例如：/about">
+                                        <div class="form-text">按钮点击后的跳转地址</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 高级设置 Tab -->
+                            <div class="tab-pane fade" id="advanced" role="tabpanel" aria-labelledby="advanced-tab">
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label for="parent_id" class="form-label">父栏目</label>
+                                        <select class="form-select" id="parent_id" name="parent_id">
+                                            <option value="">无（顶级栏目）</option>
+                                            {% for col in all_columns %}
+                                                {% if not column or col.id != column.id %}
+                                                    <option value="{{ col.id }}"
+                                                            {% if column and column.parent_id == col.id %}selected{% endif %}>
+                                                        {% if col.parent_id %}└─ {% endif %}{{ col.name }}
+                                                    </option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                        <div class="form-text">设置为其他栏目的子栏目，建立层级关系</div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="menu_location" class="form-label">菜单位置</label>
+                                        <select class="form-select" id="menu_location" name="menu_location">
+                                            <option value="header" {% if column and column.menu_location == 'header' %}selected{% endif %}>
+                                                顶部导航
+                                            </option>
+                                            <option value="footer" {% if column and column.menu_location == 'footer' %}selected{% endif %}>
+                                                底部菜单
+                                            </option>
+                                            <option value="both" {% if column and column.menu_location == 'both' %}selected{% endif %}>
+                                                顶部和底部
+                                            </option>
+                                            <option value="none" {% if column and column.menu_location == 'none' %}selected{% endif %}>
+                                                不显示
+                                            </option>
+                                        </select>
+                                        <div class="form-text">栏目在网站中的显示位置</div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="icon" class="form-label">图标类名</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">
+                                                <i class="bi {% if column and column.icon %}{{ column.icon }}{% else %}bi-file-text{% endif %}"
+                                                   id="icon-preview"></i>
+                                            </span>
+                                            <input type="text" class="form-control" id="icon" name="icon"
+                                                   value="{% if column %}{{ column.icon or '' }}{% endif %}"
+                                                   placeholder="例如：bi-house">
+                                        </div>
+                                        <div class="form-text">
+                                            Bootstrap Icons 图标类名，
+                                            <a href="https://icons.getbootstrap.com/" target="_blank">查看图标库</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="form-label d-block">显示控制</label>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox"
+                                                   id="show_in_nav" name="show_in_nav" value="true"
+                                                   {% if not column or column.show_in_nav %}checked{% endif %}>
+                                            <label class="form-check-label" for="show_in_nav">
+                                                显示在导航栏
+                                            </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="checkbox"
+                                                   id="is_enabled" name="is_enabled" value="true"
+                                                   {% if not column or column.is_enabled %}checked{% endif %}>
+                                            <label class="form-check-label" for="is_enabled">
+                                                启用栏目
+                                            </label>
+                                        </div>
+                                        <div class="form-text">控制栏目的可见性和启用状态</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <!-- 基础信息 Tab -->
-            <div class="tab-content active" id="tab-basic">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label required">栏目名称</label>
-                        <input type="text" name="name" class="form-control"
-                               value="{% if column %}{{ column.name }}{% endif %}"
-                               required placeholder="例如：关于我们">
-                        <div class="help-text">栏目的显示名称</div>
+            <!-- 侧边栏 -->
+            <div class="col-lg-4">
+                <!-- 操作面板 -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-box-arrow-in-up me-2"></i>发布
+                        </h5>
                     </div>
-
-                    <div class="form-group">
-                        <label class="form-label">URL Slug</label>
-                        <input type="text" name="slug" class="form-control"
-                               value="{% if column %}{{ column.slug }}{% endif %}"
-                               placeholder="留空自动生成">
-                        <div class="help-text">URL 中的标识符，如 about-us</div>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label required">栏目类型</label>
-                        <select name="column_type" class="form-control" required>
-                            <option value="">请选择</option>
-                            <option value="SINGLE_PAGE" {% if column and column.column_type.value == 'SINGLE_PAGE' %}selected{% endif %}>单页面</option>
-                            <option value="POST" {% if column and column.column_type.value == 'POST' %}selected{% endif %}>文章栏目</option>
-                            <option value="PRODUCT" {% if column and column.column_type.value == 'PRODUCT' %}selected{% endif %}>产品栏目</option>
-                            <option value="GALLERY" {% if column and column.column_type.value == 'GALLERY' %}selected{% endif %}>相册模块</option>
-                            <option value="CUSTOM" {% if column and column.column_type.value == 'CUSTOM' %}selected{% endif %}>自定义模块</option>
-                        </select>
-                        <div class="help-text">决定栏目的内容类型</div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">排序值</label>
-                        <input type="number" name="sort_order" class="form-control"
-                               value="{% if column %}{{ column.sort_order }}{% else %}0{% endif %}"
-                               min="0">
-                        <div class="help-text">数字越小越靠前</div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle me-2"></i>保存栏目
+                            </button>
+                            <a href="/admin/columns" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-2"></i>取消
+                            </a>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">栏目描述</label>
-                    <textarea name="description" class="form-control"
-                              placeholder="简要描述栏目内容">{% if column %}{{ column.description or '' }}{% endif %}</textarea>
-                    <div class="help-text">也作为 Hero 区域的副标题</div>
+                <!-- 帮助信息 -->
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-question-circle me-2"></i>帮助信息
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <h6 class="fw-bold">栏目类型说明</h6>
+                            <ul class="small text-muted mb-0">
+                                <li><strong>单页面：</strong>适合固定内容，如关于我们</li>
+                                <li><strong>文章栏目：</strong>用于新闻、博客等列表</li>
+                                <li><strong>产品栏目：</strong>用于产品展示</li>
+                                <li><strong>相册模块：</strong>用于图片展示</li>
+                                <li><strong>自定义模块：</strong>特殊功能页面</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h6 class="fw-bold">URL Slug 规则</h6>
+                            <ul class="small text-muted mb-0">
+                                <li>只能包含小写字母、数字和连字符</li>
+                                <li>不能以连字符开头或结尾</li>
+                                <li>留空将自动从栏目名称生成</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- 栏目信息（编辑模式） -->
+                {% if mode == 'edit' and column %}
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">
+                            <i class="bi bi-info-circle me-2"></i>栏目信息
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="small">
+                            <div class="mb-2">
+                                <span class="text-muted">创建时间：</span>
+                                <br>{{ column.created_at.strftime('%Y-%m-%d %H:%M') }}
+                            </div>
+                            <div>
+                                <span class="text-muted">更新时间：</span>
+                                <br>{{ column.updated_at.strftime('%Y-%m-%d %H:%M') }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
             </div>
-
-            <!-- Hero 区域 Tab -->
-            <div class="tab-content" id="tab-hero">
-                <div class="form-group">
-                    <label class="form-label">Hero 主标题</label>
-                    <input type="text" name="hero_title" class="form-control"
-                           value="{% if column %}{{ column.hero_title or '' }}{% endif %}"
-                           placeholder="例如：欢迎来到博文教育">
-                    <div class="help-text">页面顶部大标题（中文）</div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Hero 英文副标题</label>
-                    <input type="text" name="hero_title_en" class="form-control"
-                           value="{% if column %}{{ column.hero_title_en or '' }}{% endif %}"
-                           placeholder="例如：Welcome to Bowen Education">
-                    <div class="help-text">英文标题或副标题</div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Hero 标语/口号</label>
-                    <input type="text" name="hero_tagline" class="form-control"
-                           value="{% if column %}{{ column.hero_tagline or '' }}{% endif %}"
-                           placeholder="例如：专业、创新、卓越">
-                    <div class="help-text">简短的品牌口号</div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">CTA 按钮文字</label>
-                        <input type="text" name="hero_cta_text" class="form-control"
-                               value="{% if column %}{{ column.hero_cta_text or '' }}{% endif %}"
-                               placeholder="例如：了解更多">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">CTA 按钮链接</label>
-                        <input type="text" name="hero_cta_url" class="form-control"
-                               value="{% if column %}{{ column.hero_cta_url or '' }}{% endif %}"
-                               placeholder="例如：/about">
-                    </div>
-                </div>
-            </div>
-
-            <!-- 高级设置 Tab -->
-            <div class="tab-content" id="tab-advanced">
-                <div class="form-group">
-                    <label class="form-label">父栏目</label>
-                    <select name="parent_id" class="form-control">
-                        <option value="">无（顶级栏目）</option>
-                        {% for col in all_columns %}
-                            {% if not column or col.id != column.id %}
-                                <option value="{{ col.id }}"
-                                        {% if column and column.parent_id == col.id %}selected{% endif %}>
-                                    {{ col.name }}
-                                </option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                    <div class="help-text">设置为其他栏目的子栏目</div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">菜单位置</label>
-                    <select name="menu_location" class="form-control">
-                        <option value="header" {% if column and column.menu_location == 'header' %}selected{% endif %}>顶部导航</option>
-                        <option value="footer" {% if column and column.menu_location == 'footer' %}selected{% endif %}>底部菜单</option>
-                        <option value="both" {% if column and column.menu_location == 'both' %}selected{% endif %}>顶部和底部</option>
-                        <option value="none" {% if column and column.menu_location == 'none' %}selected{% endif %}>不显示</option>
-                    </select>
-                    <div class="help-text">栏目在网站中的显示位置</div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">图标类名</label>
-                    <input type="text" name="icon" class="form-control"
-                           value="{% if column %}{{ column.icon or '' }}{% endif %}"
-                           placeholder="例如：fa-home">
-                    <div class="help-text">Font Awesome 图标类名</div>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">显示控制</label>
-                    <div class="form-check">
-                        <input type="checkbox" name="show_in_nav" class="form-check-input"
-                               value="true" id="show_in_nav"
-                               {% if not column or column.show_in_nav %}checked{% endif %}>
-                        <label class="form-check-label" for="show_in_nav">显示在导航栏</label>
-                    </div>
-                    <div class="form-check">
-                        <input type="checkbox" name="is_enabled" class="form-check-input"
-                               value="true" id="is_enabled"
-                               {% if not column or column.is_enabled %}checked{% endif %}>
-                        <label class="form-check-label" for="is_enabled">启用栏目</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="form-actions">
-            <button type="submit" class="btn btn-primary">保存栏目</button>
-            <a href="/admin/columns" class="btn btn-secondary">取消</a>
         </div>
     </form>
 </div>
@@ -352,38 +320,106 @@
 
 {% block extra_js %}
 <script>
-// Tab 切换
-document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-        // 移除所有 active 类
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+(function() {
+    'use strict';
 
-        // 添加当前 tab 的 active 类
-        tab.classList.add('active');
-        const tabId = tab.getAttribute('data-tab');
-        document.getElementById('tab-' + tabId).classList.add('active');
-    });
-});
+    // Slug 自动生成
+    const nameInput = document.getElementById('name');
+    const slugInput = document.getElementById('slug');
+    const isEditMode = {{ 'true' if mode == 'edit' else 'false' }};
 
-// 自动生成 slug
-const nameInput = document.querySelector('input[name="name"]');
-const slugInput = document.querySelector('input[name="slug"]');
-const isEditMode = {{ 'true' if mode == 'edit' else 'false' }};
+    if (!isEditMode && nameInput && slugInput) {
+        nameInput.addEventListener('input', function() {
+            if (!slugInput.value || slugInput.dataset.autoGenerated === 'true') {
+                const slug = generateSlug(nameInput.value);
+                slugInput.value = slug;
+                slugInput.dataset.autoGenerated = 'true';
+            }
+        });
 
-if (!isEditMode) {
-    nameInput.addEventListener('input', () => {
-        if (!slugInput.value) {
-            const slug = nameInput.value
-                .toLowerCase()
-                .replace(/\s+/g, '-')
-                .replace(/[^\w\-]+/g, '')
-                .replace(/\-\-+/g, '-')
-                .replace(/^-+/, '')
-                .replace(/-+$/, '');
-            slugInput.value = slug;
-        }
-    });
-}
+        // 用户手动修改 slug 时，停止自动生成
+        slugInput.addEventListener('input', function() {
+            if (slugInput.value) {
+                slugInput.dataset.autoGenerated = 'false';
+            }
+        });
+    }
+
+    /**
+     * 生成 URL Slug
+     */
+    function generateSlug(text) {
+        return text
+            .toLowerCase()
+            .trim()
+            .replace(/\s+/g, '-')        // 空格替换为连字符
+            .replace(/[^\w\-]+/g, '')    // 移除非单词字符
+            .replace(/\-\-+/g, '-')      // 多个连字符替换为单个
+            .replace(/^-+/, '')          // 去除开头的连字符
+            .replace(/-+$/, '');         // 去除结尾的连字符
+    }
+
+    // 图标预览
+    const iconInput = document.getElementById('icon');
+    const iconPreview = document.getElementById('icon-preview');
+
+    if (iconInput && iconPreview) {
+        iconInput.addEventListener('input', function() {
+            const iconClass = iconInput.value.trim();
+            if (iconClass) {
+                iconPreview.className = 'bi ' + iconClass;
+            } else {
+                iconPreview.className = 'bi bi-file-text';
+            }
+        });
+    }
+
+    // 表单验证提示
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const requiredFields = form.querySelectorAll('[required]');
+            let isValid = true;
+
+            requiredFields.forEach(function(field) {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.classList.add('is-invalid');
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+
+            if (!isValid) {
+                e.preventDefault();
+                showToast('danger', '请填写所有必填字段', '表单验证失败');
+            }
+        });
+    }
+
+    // 栏目类型提示
+    const columnTypeSelect = document.getElementById('column_type');
+    if (columnTypeSelect) {
+        const typeDescriptions = {
+            'SINGLE_PAGE': '单页面适合展示固定内容，如"关于我们"、"联系我们"等。',
+            'POST': '文章栏目用于展示新闻、博客等动态内容列表。',
+            'PRODUCT': '产品栏目用于展示和管理产品信息。',
+            'GALLERY': '相册模块用于图片集展示，支持图片浏览功能。',
+            'CUSTOM': '自定义模块用于特殊功能页面，需要单独开发。'
+        };
+
+        columnTypeSelect.addEventListener('change', function() {
+            const selectedType = this.value;
+            const description = typeDescriptions[selectedType];
+
+            if (description) {
+                const helpText = this.nextElementSibling;
+                if (helpText && helpText.classList.contains('form-text')) {
+                    helpText.textContent = description;
+                }
+            }
+        });
+    }
+})();
 </script>
 {% endblock %}

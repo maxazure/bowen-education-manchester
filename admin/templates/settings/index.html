@@ -4,361 +4,774 @@
 
 {% block extra_css %}
 <style>
-    .settings-container {
-        padding: 20px;
-        max-width: 1200px;
-        margin: 0 auto;
+    /* Tab 内容区域样式 */
+    .tab-pane {
+        padding: 24px 0;
     }
 
-    .page-header {
-        margin-bottom: 30px;
-        padding-bottom: 20px;
-        border-bottom: 2px solid #e0e0e0;
-    }
-
-    .page-title {
-        font-size: 28px;
-        font-weight: 600;
-        color: #333;
-    }
-
-    .page-subtitle {
-        font-size: 14px;
-        color: #666;
-        margin-top: 8px;
-    }
-
-    .settings-form {
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        overflow: hidden;
-    }
-
-    /* Tab 样式 */
-    .tabs {
-        display: flex;
-        border-bottom: 1px solid #e0e0e0;
-        background: #f8f9fa;
-    }
-
-    .tab-button {
-        padding: 15px 30px;
-        border: none;
-        background: transparent;
-        cursor: pointer;
-        font-size: 15px;
-        color: #666;
-        border-bottom: 3px solid transparent;
-        transition: all 0.3s;
-    }
-
-    .tab-button:hover {
-        color: #333;
-        background: rgba(0,0,0,0.05);
-    }
-
-    .tab-button.active {
-        color: #007bff;
-        border-bottom-color: #007bff;
-        font-weight: 600;
-    }
-
-    .tab-content {
-        display: none;
-        padding: 30px;
-    }
-
-    .tab-content.active {
-        display: block;
-    }
-
-    /* 表单样式 */
-    .form-group {
-        margin-bottom: 25px;
-    }
-
-    .form-label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        color: #333;
-        font-size: 14px;
-    }
-
-    .form-control {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 14px;
-        transition: border-color 0.3s;
-    }
-
-    .form-control:focus {
-        outline: none;
-        border-color: #007bff;
-        box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
-    }
-
-    textarea.form-control {
-        min-height: 100px;
-        resize: vertical;
-    }
-
-    .form-text {
-        font-size: 12px;
-        color: #666;
-        margin-top: 5px;
-    }
-
-    /* 媒体选择器 */
+    /* 媒体选择器组件 */
     .media-selector {
         display: flex;
         align-items: center;
-        gap: 15px;
+        gap: 16px;
     }
 
     .media-preview {
-        width: 100px;
-        height: 100px;
-        border: 2px dashed #ddd;
-        border-radius: 5px;
+        width: 120px;
+        height: 120px;
+        border: 2px dashed var(--bs-border-color);
+        border-radius: 8px;
         display: flex;
         align-items: center;
         justify-content: center;
         overflow: hidden;
+        background-color: var(--bg-light);
+        position: relative;
     }
 
     .media-preview img {
         max-width: 100%;
         max-height: 100%;
+        object-fit: contain;
     }
 
     .media-preview-empty {
-        color: #999;
-        font-size: 12px;
+        color: var(--bs-secondary-text);
+        font-size: 13px;
         text-align: center;
+        padding: 10px;
     }
 
-    .btn-select-media {
-        padding: 8px 16px;
-        background: #007bff;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
+    .media-preview-empty i {
+        display: block;
+        font-size: 32px;
+        margin-bottom: 8px;
+        opacity: 0.5;
     }
 
-    .btn-select-media:hover {
-        background: #0056b3;
+    .media-controls {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
     }
 
-    /* 保存按钮 */
-    .form-actions {
-        padding: 20px 30px;
-        background: #f8f9fa;
-        border-top: 1px solid #e0e0e0;
-        text-align: right;
+    /* 固定底部保存按钮 */
+    .save-button-fixed {
+        position: sticky;
+        bottom: 0;
+        background: white;
+        border-top: 1px solid var(--bs-border-color);
+        padding: 16px 0;
+        margin: 24px 0 0 0;
+        z-index: 10;
     }
 
-    .btn-save {
-        padding: 12px 30px;
-        background: #28a745;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
+    /* 表单分组 */
+    .form-section {
+        margin-bottom: 32px;
+    }
+
+    .form-section:last-child {
+        margin-bottom: 0;
+    }
+
+    .form-section-title {
         font-size: 16px;
         font-weight: 600;
-        transition: all 0.3s;
+        color: var(--bs-dark);
+        margin-bottom: 16px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--bs-border-color);
     }
 
-    .btn-save:hover {
-        background: #218838;
+    /* Bootstrap Nav Tabs 自定义样式 */
+    .nav-tabs {
+        border-bottom: 2px solid var(--bs-border-color);
+        margin-bottom: 0;
     }
 
-    /* 提示信息 */
-    .alert {
-        padding: 15px;
-        border-radius: 5px;
-        margin-bottom: 20px;
+    .nav-tabs .nav-link {
+        border: none;
+        border-bottom: 3px solid transparent;
+        color: var(--bs-secondary-text);
+        font-weight: 500;
+        padding: 12px 24px;
+        transition: all var(--transition-fast);
+        border-radius: 0;
     }
 
-    .alert-success {
-        background: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
+    .nav-tabs .nav-link:hover {
+        color: var(--bs-primary);
+        border-bottom-color: transparent;
+        background-color: rgba(200, 16, 46, 0.05);
     }
 
-    .alert-error {
-        background: #f8d7da;
-        color: #721c24;
-        border: 1px solid #f5c6cb;
+    .nav-tabs .nav-link.active {
+        color: var(--bs-primary);
+        border-bottom-color: var(--bs-primary);
+        background-color: transparent;
+    }
+
+    .nav-tabs .nav-link i {
+        margin-right: 6px;
+    }
+
+    /* 响应式调整 */
+    @media (max-width: 767.98px) {
+        .media-selector {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .media-preview {
+            width: 100px;
+            height: 100px;
+        }
+
+        .nav-tabs .nav-link {
+            padding: 10px 16px;
+            font-size: 13px;
+        }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="settings-container">
+<div class="container-fluid">
+    <!-- 页面标题 -->
     <div class="page-header">
-        <h1 class="page-title">站点设置</h1>
+        <h1 class="page-title">
+            <i class="bi bi-gear me-2"></i>站点设置
+        </h1>
         <p class="page-subtitle">配置站点的基本信息、联系方式、社交媒体等设置</p>
     </div>
 
-    <!-- 提示信息（通过 JavaScript 显示） -->
+    <!-- 提示信息容器 -->
     <div id="alert-container"></div>
 
-    <form id="settings-form" class="settings-form">
-        <!-- Tab 导航 -->
-        <div class="tabs">
-            <button type="button" class="tab-button active" data-tab="basic">基本信息</button>
-            <button type="button" class="tab-button" data-tab="contact">联系方式</button>
-            <button type="button" class="tab-button" data-tab="social">社交媒体</button>
-            <button type="button" class="tab-button" data-tab="advanced">高级设置</button>
-        </div>
+    <!-- 设置表单卡片 -->
+    <div class="card">
+        <div class="card-body p-0">
+            <!-- Bootstrap 5 Nav Tabs -->
+            <ul class="nav nav-tabs" id="settingsTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="basic-tab" data-bs-toggle="tab"
+                            data-bs-target="#basic" type="button" role="tab"
+                            aria-controls="basic" aria-selected="true">
+                        <i class="bi bi-info-circle"></i>基本信息
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="contact-tab" data-bs-toggle="tab"
+                            data-bs-target="#contact" type="button" role="tab"
+                            aria-controls="contact" aria-selected="false">
+                        <i class="bi bi-telephone"></i>联系方式
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="social-tab" data-bs-toggle="tab"
+                            data-bs-target="#social" type="button" role="tab"
+                            aria-controls="social" aria-selected="false">
+                        <i class="bi bi-share"></i>社交媒体
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="advanced-tab" data-bs-toggle="tab"
+                            data-bs-target="#advanced" type="button" role="tab"
+                            aria-controls="advanced" aria-selected="false">
+                        <i class="bi bi-sliders"></i>高级设置
+                    </button>
+                </li>
+            </ul>
 
-        <!-- 基本信息 Tab -->
-        <div id="tab-basic" class="tab-content active">
-            <div class="form-group">
-                <label class="form-label">站点名称</label>
-                <input type="text" name="site_name" class="form-control" value="{{ settings.site_name }}" placeholder="例如: 博文教育">
-                <small class="form-text">显示在网站标题和头部</small>
-            </div>
+            <!-- Tab 内容 -->
+            <div class="tab-content p-4" id="settingsTabContent">
+                <form id="settings-form" class="needs-validation" novalidate>
+                    <!-- 基本信息 Tab -->
+                    <div class="tab-pane fade show active" id="basic" role="tabpanel" aria-labelledby="basic-tab">
+                        <div class="form-section">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="site_name" class="form-label">
+                                        站点名称 <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text" class="form-control" id="site_name"
+                                           name="site_name" value="{{ settings.site_name }}"
+                                           placeholder="例如: 博文教育" required>
+                                    <div class="form-text">显示在网站标题和头部</div>
+                                    <div class="invalid-feedback">请输入站点名称</div>
+                                </div>
 
-            <div class="form-group">
-                <label class="form-label">站点标语</label>
-                <input type="text" name="site_tagline" class="form-control" value="{{ settings.site_tagline }}" placeholder="例如: 专业的羽毛球培训">
-                <small class="form-text">简短的站点描述</small>
-            </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="site_tagline" class="form-label">站点标语</label>
+                                    <input type="text" class="form-control" id="site_tagline"
+                                           name="site_tagline" value="{{ settings.site_tagline }}"
+                                           placeholder="例如: 专业的羽毛球培训">
+                                    <div class="form-text">简短的站点描述</div>
+                                </div>
+                            </div>
 
-            <div class="form-group">
-                <label class="form-label">站点描述</label>
-                <textarea name="site_description" class="form-control" placeholder="详细介绍您的站点...">{{ settings.site_description }}</textarea>
-                <small class="form-text">用于 SEO 和站点介绍</small>
-            </div>
+                            <div class="mb-3">
+                                <label for="site_description" class="form-label">站点描述</label>
+                                <textarea class="form-control" id="site_description"
+                                          name="site_description" rows="3"
+                                          placeholder="详细介绍您的站点...">{{ settings.site_description }}</textarea>
+                                <div class="form-text">用于 SEO 和站点介绍，建议 100-200 字符</div>
+                            </div>
+                        </div>
 
-            <div class="form-group">
-                <label class="form-label">站点 Logo</label>
-                <div class="media-selector">
-                    <div class="media-preview" id="logo-preview">
-                        <div class="media-preview-empty">暂无 Logo</div>
+                        <div class="form-section">
+                            <h6 class="form-section-title">媒体资源</h6>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">站点 Logo</label>
+                                    <div class="media-selector">
+                                        <div class="media-preview" id="logo-preview">
+                                            {% if settings.logo_url %}
+                                                <img src="{{ settings.logo_url }}" alt="Logo">
+                                            {% else %}
+                                                <div class="media-preview-empty">
+                                                    <i class="bi bi-image"></i>
+                                                    暂无 Logo
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="media-controls">
+                                            <button type="button" class="btn btn-sm btn-primary"
+                                                    onclick="selectMedia('logo')">
+                                                <i class="bi bi-upload me-1"></i>选择图片
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                                    onclick="removeMedia('logo')" id="remove-logo"
+                                                    {% if not settings.logo_url %}style="display:none;"{% endif %}>
+                                                <i class="bi bi-trash me-1"></i>移除
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="logo_id" id="logo_id" value="{{ settings.logo_id }}">
+                                    <div class="form-text mt-2">建议尺寸: 200x60 像素，支持 PNG/JPG/SVG 格式</div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Favicon</label>
+                                    <div class="media-selector">
+                                        <div class="media-preview" id="favicon-preview" style="width: 80px; height: 80px;">
+                                            {% if settings.favicon_url %}
+                                                <img src="{{ settings.favicon_url }}" alt="Favicon">
+                                            {% else %}
+                                                <div class="media-preview-empty">
+                                                    <i class="bi bi-star"></i>
+                                                    暂无
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="media-controls">
+                                            <button type="button" class="btn btn-sm btn-primary"
+                                                    onclick="selectMedia('favicon')">
+                                                <i class="bi bi-upload me-1"></i>选择图片
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                                    onclick="removeMedia('favicon')" id="remove-favicon"
+                                                    {% if not settings.favicon_url %}style="display:none;"{% endif %}>
+                                                <i class="bi bi-trash me-1"></i>移除
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="favicon_id" id="favicon_id" value="{{ settings.favicon_id }}">
+                                    <div class="form-text mt-2">建议尺寸: 32x32 或 64x64 像素，支持 ICO/PNG 格式</div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">默认封面图</label>
+                                <div class="media-selector">
+                                    <div class="media-preview" id="default-cover-preview">
+                                        {% if settings.default_cover_url %}
+                                            <img src="{{ settings.default_cover_url }}" alt="默认封面">
+                                        {% else %}
+                                            <div class="media-preview-empty">
+                                                <i class="bi bi-image"></i>
+                                                暂无封面
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="media-controls">
+                                        <button type="button" class="btn btn-sm btn-primary"
+                                                onclick="selectMedia('default_cover')">
+                                            <i class="bi bi-upload me-1"></i>选择图片
+                                        </button>
+                                        <button type="button" class="btn btn-sm btn-outline-danger"
+                                                onclick="removeMedia('default_cover')" id="remove-default-cover"
+                                                {% if not settings.default_cover_url %}style="display:none;"{% endif %}>
+                                            <i class="bi bi-trash me-1"></i>移除
+                                        </button>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="default_cover_id" id="default_cover_id" value="{{ settings.default_cover_id }}">
+                                <div class="form-text mt-2">文章和页面没有设置封面时使用的默认图片，建议尺寸: 1200x630 像素</div>
+                            </div>
+                        </div>
                     </div>
-                    <button type="button" class="btn-select-media" onclick="selectMedia('logo')">选择 Logo</button>
-                </div>
-                <input type="hidden" name="logo_id" id="logo_id" value="{{ settings.logo_id }}">
-                <small class="form-text">建议尺寸: 200x60 像素</small>
-            </div>
 
-            <div class="form-group">
-                <label class="form-label">Favicon</label>
-                <div class="media-selector">
-                    <div class="media-preview" id="favicon-preview">
-                        <div class="media-preview-empty">暂无 Favicon</div>
+                    <!-- 联系方式 Tab -->
+                    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                        <div class="form-section">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="contact_phone" class="form-label">
+                                        <i class="bi bi-telephone me-1"></i>联系电话
+                                    </label>
+                                    <input type="tel" class="form-control" id="contact_phone"
+                                           name="contact_phone" value="{{ settings.contact_phone }}"
+                                           placeholder="例如: 0161-123-4567">
+                                    <div class="form-text">显示在网站联系区域</div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="contact_email" class="form-label">
+                                        <i class="bi bi-envelope me-1"></i>联系邮箱
+                                    </label>
+                                    <input type="email" class="form-control" id="contact_email"
+                                           name="contact_email" value="{{ settings.contact_email }}"
+                                           placeholder="例如: info@bowen-education.com">
+                                    <div class="form-text">用于接收网站咨询</div>
+                                    <div class="invalid-feedback">请输入有效的邮箱地址</div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="contact_address" class="form-label">
+                                    <i class="bi bi-geo-alt me-1"></i>联系地址
+                                </label>
+                                <input type="text" class="form-control" id="contact_address"
+                                       name="contact_address" value="{{ settings.contact_address }}"
+                                       placeholder="例如: Manchester, UK">
+                                <div class="form-text">显示在联系我们页面和页脚</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="contact_hours" class="form-label">
+                                    <i class="bi bi-clock me-1"></i>工作时间
+                                </label>
+                                <textarea class="form-control" id="contact_hours"
+                                          name="contact_hours" rows="4"
+                                          placeholder="例如:&#10;周一至周五: 9:00-18:00&#10;周六: 10:00-16:00&#10;周日: 休息">{{ settings.contact_hours }}</textarea>
+                                <div class="form-text">显示在联系我们页面，可以分行显示</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="contact_map_url" class="form-label">
+                                    <i class="bi bi-map me-1"></i>地图嵌入代码
+                                </label>
+                                <textarea class="form-control" id="contact_map_url"
+                                          name="contact_map_url" rows="3"
+                                          placeholder="粘贴 Google Maps 或其他地图服务的嵌入代码">{{ settings.contact_map_url }}</textarea>
+                                <div class="form-text">在联系页面显示地图定位</div>
+                            </div>
+                        </div>
                     </div>
-                    <button type="button" class="btn-select-media" onclick="selectMedia('favicon')">选择 Favicon</button>
-                </div>
-                <input type="hidden" name="favicon_id" id="favicon_id" value="{{ settings.favicon_id }}">
-                <small class="form-text">建议尺寸: 32x32 像素</small>
+
+                    <!-- 社交媒体 Tab -->
+                    <div class="tab-pane fade" id="social" role="tabpanel" aria-labelledby="social-tab">
+                        <div class="form-section">
+                            <h6 class="form-section-title">社交媒体链接</h6>
+                            <p class="text-muted small mb-3">填写社交媒体账号链接，将显示在网站页脚和相关页面</p>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="social_wechat" class="form-label">
+                                        <i class="bi bi-wechat text-success me-1"></i>微信二维码
+                                    </label>
+                                    <input type="url" class="form-control" id="social_wechat"
+                                           name="social_wechat" value="{{ settings.social_wechat }}"
+                                           placeholder="上传二维码图片后填写链接">
+                                    <div class="form-text">上传微信二维码图片并填写图片链接</div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="social_weibo" class="form-label">
+                                        <i class="bi bi-sina-weibo text-danger me-1"></i>微博
+                                    </label>
+                                    <input type="url" class="form-control" id="social_weibo"
+                                           name="social_weibo" value="{{ settings.social_weibo }}"
+                                           placeholder="https://weibo.com/your-account">
+                                    <div class="form-text">微博主页链接</div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="social_facebook" class="form-label">
+                                        <i class="bi bi-facebook text-primary me-1"></i>Facebook
+                                    </label>
+                                    <input type="url" class="form-control" id="social_facebook"
+                                           name="social_facebook" value="{{ settings.social_facebook }}"
+                                           placeholder="https://facebook.com/your-page">
+                                    <div class="form-text">Facebook 页面链接</div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="social_twitter" class="form-label">
+                                        <i class="bi bi-twitter text-info me-1"></i>Twitter / X
+                                    </label>
+                                    <input type="url" class="form-control" id="social_twitter"
+                                           name="social_twitter" value="{{ settings.social_twitter }}"
+                                           placeholder="https://twitter.com/your-account">
+                                    <div class="form-text">Twitter 账号链接</div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="social_linkedin" class="form-label">
+                                        <i class="bi bi-linkedin text-primary me-1"></i>LinkedIn
+                                    </label>
+                                    <input type="url" class="form-control" id="social_linkedin"
+                                           name="social_linkedin" value="{{ settings.social_linkedin }}"
+                                           placeholder="https://linkedin.com/company/your-company">
+                                    <div class="form-text">LinkedIn 公司页面链接</div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="social_instagram" class="form-label">
+                                        <i class="bi bi-instagram text-danger me-1"></i>Instagram
+                                    </label>
+                                    <input type="url" class="form-control" id="social_instagram"
+                                           name="social_instagram" value="{{ settings.social_instagram }}"
+                                           placeholder="https://instagram.com/your-account">
+                                    <div class="form-text">Instagram 账号链接</div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="social_youtube" class="form-label">
+                                        <i class="bi bi-youtube text-danger me-1"></i>YouTube
+                                    </label>
+                                    <input type="url" class="form-control" id="social_youtube"
+                                           name="social_youtube" value="{{ settings.social_youtube }}"
+                                           placeholder="https://youtube.com/@your-channel">
+                                    <div class="form-text">YouTube 频道链接</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 高级设置 Tab -->
+                    <div class="tab-pane fade" id="advanced" role="tabpanel" aria-labelledby="advanced-tab">
+                        <div class="form-section">
+                            <h6 class="form-section-title">SEO 优化</h6>
+
+                            <div class="mb-3">
+                                <label for="seo_keywords" class="form-label">SEO 关键词</label>
+                                <input type="text" class="form-control" id="seo_keywords"
+                                       name="seo_keywords" value="{{ settings.seo_keywords }}"
+                                       placeholder="例如: 羽毛球, 培训, 曼彻斯特">
+                                <div class="form-text">多个关键词用逗号分隔，建议 5-10 个关键词</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="seo_description" class="form-label">SEO 描述</label>
+                                <textarea class="form-control" id="seo_description"
+                                          name="seo_description" rows="3"
+                                          placeholder="站点的 SEO 描述...">{{ settings.seo_description }}</textarea>
+                                <div class="form-text">
+                                    用于搜索引擎优化，建议 150-160 字符
+                                    <span id="seo-desc-count" class="ms-2 badge bg-secondary">0 字符</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h6 class="form-section-title">统计代码</h6>
+
+                            <div class="mb-3">
+                                <label for="analytics_code" class="form-label">
+                                    <i class="bi bi-google me-1"></i>Google Analytics
+                                </label>
+                                <input type="text" class="form-control" id="analytics_code"
+                                       name="analytics_code" value="{{ settings.analytics_code }}"
+                                       placeholder="例如: G-XXXXXXXXXX 或 UA-123456-1">
+                                <div class="form-text">Google Analytics 跟踪 ID（支持 GA4 和 Universal Analytics）</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="tracking_code" class="form-label">自定义统计代码</label>
+                                <textarea class="form-control font-monospace" id="tracking_code"
+                                          name="tracking_code" rows="5"
+                                          placeholder="<!-- 其他统计代码（例如百度统计） -->&#10;<script>&#10;  // 在这里粘贴统计代码&#10;</script>">{{ settings.tracking_code }}</textarea>
+                                <div class="form-text">自定义的 JavaScript 统计代码，将插入到页面 &lt;head&gt; 标签中</div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h6 class="form-section-title">其他设置</h6>
+
+                            <div class="mb-3">
+                                <label for="copyright_text" class="form-label">版权信息</label>
+                                <input type="text" class="form-control" id="copyright_text"
+                                       name="copyright_text" value="{{ settings.copyright_text }}"
+                                       placeholder="例如: © 2024 博文教育集团. All rights reserved.">
+                                <div class="form-text">显示在网站页脚的版权信息</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="icp_number" class="form-label">ICP 备案号</label>
+                                <input type="text" class="form-control" id="icp_number"
+                                       name="icp_number" value="{{ settings.icp_number }}"
+                                       placeholder="例如: 京ICP备12345678号">
+                                <div class="form-text">中国大陆网站需要的 ICP 备案号（如适用）</div>
+                            </div>
+
+                            <div class="form-check form-switch mb-3">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                       id="maintenance_mode" name="maintenance_mode"
+                                       {% if settings.maintenance_mode %}checked{% endif %}>
+                                <label class="form-check-label" for="maintenance_mode">
+                                    <strong>维护模式</strong>
+                                    <div class="form-text d-inline-block ms-2">
+                                        开启后前台将显示维护提示，管理员仍可访问
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 固定底部保存按钮 -->
+                    <div class="save-button-fixed">
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-outline-secondary" onclick="resetForm()">
+                                <i class="bi bi-arrow-clockwise me-1"></i>重置
+                            </button>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle me-1"></i>保存设置
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-
-        <!-- 联系方式 Tab -->
-        <div id="tab-contact" class="tab-content">
-            <div class="form-group">
-                <label class="form-label">联系电话</label>
-                <input type="text" name="contact_phone" class="form-control" value="{{ settings.contact_phone }}" placeholder="例如: 0161-123-4567">
-                <small class="form-text">显示在网站联系区域</small>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">联系邮箱</label>
-                <input type="email" name="contact_email" class="form-control" value="{{ settings.contact_email }}" placeholder="例如: info@bowen-education.com">
-                <small class="form-text">用于接收网站咨询</small>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">联系地址</label>
-                <input type="text" name="contact_address" class="form-control" value="{{ settings.contact_address }}" placeholder="例如: Manchester, UK">
-                <small class="form-text">显示在联系我们页面</small>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">工作时间</label>
-                <textarea name="contact_hours" class="form-control" placeholder="例如: 周一至周五 9:00-18:00">{{ settings.contact_hours }}</textarea>
-                <small class="form-text">显示在联系我们页面</small>
-            </div>
-        </div>
-
-        <!-- 社交媒体 Tab -->
-        <div id="tab-social" class="tab-content">
-            <div class="form-group">
-                <label class="form-label">微信二维码</label>
-                <input type="text" name="social_wechat" class="form-control" value="{{ settings.social_wechat }}" placeholder="微信二维码图片 URL">
-                <small class="form-text">上传二维码图片并填写链接</small>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">微博</label>
-                <input type="url" name="social_weibo" class="form-control" value="{{ settings.social_weibo }}" placeholder="https://weibo.com/your-account">
-                <small class="form-text">微博主页链接</small>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Facebook</label>
-                <input type="url" name="social_facebook" class="form-control" value="{{ settings.social_facebook }}" placeholder="https://facebook.com/your-page">
-                <small class="form-text">Facebook 页面链接</small>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Twitter</label>
-                <input type="url" name="social_twitter" class="form-control" value="{{ settings.social_twitter }}" placeholder="https://twitter.com/your-account">
-                <small class="form-text">Twitter 账号链接</small>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">LinkedIn</label>
-                <input type="url" name="social_linkedin" class="form-control" value="{{ settings.social_linkedin }}" placeholder="https://linkedin.com/company/your-company">
-                <small class="form-text">LinkedIn 公司页面链接</small>
-            </div>
-        </div>
-
-        <!-- 高级设置 Tab -->
-        <div id="tab-advanced" class="tab-content">
-            <div class="form-group">
-                <label class="form-label">SEO 关键词</label>
-                <input type="text" name="seo_keywords" class="form-control" value="{{ settings.seo_keywords }}" placeholder="例如: 羽毛球, 培训, 曼彻斯特">
-                <small class="form-text">多个关键词用逗号分隔</small>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">SEO 描述</label>
-                <textarea name="seo_description" class="form-control" placeholder="站点的 SEO 描述...">{{ settings.seo_description }}</textarea>
-                <small class="form-text">用于搜索引擎优化，建议 150-160 字符</small>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">Google Analytics 代码</label>
-                <input type="text" name="analytics_code" class="form-control" value="{{ settings.analytics_code }}" placeholder="例如: UA-123456-1">
-                <small class="form-text">Google Analytics 跟踪 ID</small>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">自定义统计代码</label>
-                <textarea name="tracking_code" class="form-control" placeholder="其他统计代码（例如百度统计）...">{{ settings.tracking_code }}</textarea>
-                <small class="form-text">自定义的 JavaScript 统计代码</small>
-            </div>
-        </div>
-
-        <!-- 保存按钮 -->
-        <div class="form-actions">
-            <button type="submit" class="btn-save">保存设置</button>
-        </div>
-    </form>
+    </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
-<script src="/static/js/settings.js"></script>
+<script>
+/**
+ * 站点设置页面 JavaScript
+ */
+(function() {
+    'use strict';
+
+    // 表单元素
+    const form = document.getElementById('settings-form');
+    const alertContainer = document.getElementById('alert-container');
+
+    /**
+     * 显示提示信息
+     */
+    function showAlert(type, message) {
+        const alertHTML = `
+            <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                <i class="bi bi-${type === 'success' ? 'check-circle' : 'exclamation-triangle'} me-2"></i>
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+        alertContainer.innerHTML = alertHTML;
+
+        // 滚动到顶部
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // 3秒后自动关闭
+        setTimeout(() => {
+            const alert = alertContainer.querySelector('.alert');
+            if (alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }
+        }, 3000);
+    }
+
+    /**
+     * 表单提交处理
+     */
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        // 表单验证
+        if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            showAlert('danger', '请检查表单中的错误项');
+            return;
+        }
+
+        // 收集表单数据
+        const formData = new FormData(form);
+        const data = {};
+        for (let [key, value] of formData.entries()) {
+            data[key] = value;
+        }
+
+        // 处理复选框
+        data.maintenance_mode = document.getElementById('maintenance_mode').checked;
+
+        // 提交数据
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>保存中...';
+
+        try {
+            const response = await fetch('/admin/settings/save', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                showAlert('success', '设置保存成功！');
+                form.classList.remove('was-validated');
+            } else {
+                showAlert('danger', result.message || '保存失败，请重试');
+            }
+        } catch (error) {
+            console.error('保存设置失败:', error);
+            showAlert('danger', '网络错误，请检查连接后重试');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+        }
+    });
+
+    /**
+     * 重置表单
+     */
+    window.resetForm = function() {
+        if (confirm('确定要重置所有修改吗？')) {
+            form.reset();
+            form.classList.remove('was-validated');
+            showAlert('info', '表单已重置');
+        }
+    };
+
+    /**
+     * 选择媒体
+     */
+    window.selectMedia = function(type) {
+        // TODO: 打开媒体库选择器
+        console.log('选择媒体:', type);
+
+        // 模拟选择图片（实际应该打开媒体库弹窗）
+        alert('媒体库功能正在开发中，请稍后使用');
+
+        // 示例：更新预览
+        // updateMediaPreview(type, mediaUrl, mediaId);
+    };
+
+    /**
+     * 移除媒体
+     */
+    window.removeMedia = function(type) {
+        if (confirm('确定要移除这张图片吗？')) {
+            const preview = document.getElementById(`${type.replace('_', '-')}-preview`);
+            const input = document.getElementById(`${type}_id`);
+            const removeBtn = document.getElementById(`remove-${type.replace('_', '-')}`);
+
+            // 清空预览
+            preview.innerHTML = `
+                <div class="media-preview-empty">
+                    <i class="bi bi-image"></i>
+                    暂无${type === 'logo' ? 'Logo' : type === 'favicon' ? 'Favicon' : '封面'}
+                </div>
+            `;
+
+            // 清空隐藏字段
+            input.value = '';
+
+            // 隐藏移除按钮
+            removeBtn.style.display = 'none';
+
+            showAlert('success', '图片已移除');
+        }
+    };
+
+    /**
+     * 更新媒体预览
+     */
+    function updateMediaPreview(type, url, id) {
+        const preview = document.getElementById(`${type.replace('_', '-')}-preview`);
+        const input = document.getElementById(`${type}_id`);
+        const removeBtn = document.getElementById(`remove-${type.replace('_', '-')}`);
+
+        preview.innerHTML = `<img src="${url}" alt="${type}">`;
+        input.value = id;
+        removeBtn.style.display = 'block';
+    }
+
+    /**
+     * SEO 描述字符计数
+     */
+    const seoDescription = document.getElementById('seo_description');
+    const seoDescCount = document.getElementById('seo-desc-count');
+
+    function updateSeoDescCount() {
+        const length = seoDescription.value.length;
+        seoDescCount.textContent = `${length} 字符`;
+
+        if (length > 160) {
+            seoDescCount.classList.remove('bg-secondary', 'bg-success');
+            seoDescCount.classList.add('bg-warning');
+        } else if (length >= 150) {
+            seoDescCount.classList.remove('bg-secondary', 'bg-warning');
+            seoDescCount.classList.add('bg-success');
+        } else {
+            seoDescCount.classList.remove('bg-warning', 'bg-success');
+            seoDescCount.classList.add('bg-secondary');
+        }
+    }
+
+    seoDescription.addEventListener('input', updateSeoDescCount);
+    updateSeoDescCount(); // 初始化
+
+    /**
+     * 邮箱验证
+     */
+    const emailInput = document.getElementById('contact_email');
+    emailInput.addEventListener('blur', function() {
+        if (this.value && !this.checkValidity()) {
+            this.classList.add('is-invalid');
+        } else {
+            this.classList.remove('is-invalid');
+        }
+    });
+
+    /**
+     * URL 字段验证
+     */
+    document.querySelectorAll('input[type="url"]').forEach(input => {
+        input.addEventListener('blur', function() {
+            if (this.value && !this.checkValidity()) {
+                this.classList.add('is-invalid');
+                showAlert('warning', `${this.previousElementSibling.textContent} 格式不正确`);
+            } else {
+                this.classList.remove('is-invalid');
+            }
+        });
+    });
+
+    /**
+     * Tab 切换时移除验证样式
+     */
+    const tabButtons = document.querySelectorAll('#settingsTabs button[data-bs-toggle="tab"]');
+    tabButtons.forEach(button => {
+        button.addEventListener('shown.bs.tab', function() {
+            // 可以在这里添加Tab切换时的逻辑
+        });
+    });
+
+    // 页面加载完成提示
+    console.log('站点设置页面已加载');
+})();
+</script>
 {% endblock %}

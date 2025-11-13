@@ -13,11 +13,15 @@ from pathlib import Path
 
 # 添加主项目路径到sys.path
 PROJECT_ROOT = Path(__file__).parent.parent.parent
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
+sys.path.insert(0, str(PROJECT_ROOT))
 
-# 从主项目导入配置
-from app.config import settings as main_settings
+# 从主项目导入配置（使用绝对路径避免冲突）
+import importlib.util
+config_path = PROJECT_ROOT / "app" / "config.py"
+spec = importlib.util.spec_from_file_location("main_config", config_path)
+main_config = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(main_config)
+main_settings = main_config.settings
 
 # 创建数据库引擎
 engine = create_engine(
