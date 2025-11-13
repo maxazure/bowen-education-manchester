@@ -15,19 +15,37 @@ class AdminAuthMiddleware(BaseHTTPMiddleware):
     """
 
     async def dispatch(self, request: Request, call_next):
-        # TODO: 在用户管理模块中实现
         # 公开路径（无需认证）
-        public_paths = ["/login", "/health", "/static"]
+        public_paths = ["/admin/login"]
+        static_paths = ["/static/", "/uploads/", "/health"]
 
-        # 检查是否是公开路径
-        is_public = any(request.url.path.startswith(path) for path in public_paths)
+        # 检查是否是静态资源或公开路径
+        for static_path in static_paths:
+            if request.url.path.startswith(static_path):
+                response = await call_next(request)
+                return response
 
-        if not is_public:
-            # 检查session中是否有用户信息
-            user_id = request.session.get("admin_user_id")
+        # 如果是管理后台路径且不是公开路径
+        if (
+            request.url.path.startswith("/admin")
+            and request.url.path not in public_paths
+        ):
+            # 检查 session 中是否有用户信息
+            try:
+                user_id = request.session.get("admin_user_id")
+            except (AttributeError, RuntimeError, AssertionError):
+                # 在测试环境中 session 可能未正确初始化
+                user_id = None
+
             if not user_id:
                 # 未登录，重定向到登录页
-                return RedirectResponse(url="/login", status_code=302)
+                if request.method == "GET":
+                    return RedirectResponse(url="/admin/login", status_code=302)
+                else:
+                    # POST 请求返回 401
+                    from fastapi.responses import JSONResponse
+
+                    return JSONResponse({"detail": "未授权"}, status_code=401)
 
         response = await call_next(request)
         return response

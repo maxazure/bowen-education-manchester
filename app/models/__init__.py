@@ -3,6 +3,9 @@
 # 基础模型
 from app.models.base import BaseModel
 
+# 管理员模块
+from app.models.admin_user import AdminUser
+
 # 站点核心模块
 from app.models.site import (
     SiteColumn,
@@ -51,6 +54,7 @@ from app.models.gallery import (
 )
 
 __all__ = [
+    "AdminUser",
     "BaseModel",
     "ColumnType",
     "ContactMessage",

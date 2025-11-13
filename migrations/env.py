@@ -13,47 +13,8 @@ from app.config import settings
 from app.database import Base
 
 # 导入所有模型以确保它们被注册到 SQLAlchemy metadata
-from app.models import (
-    # 基础模型
-    BaseModel,
-    # 站点核心模块
-    SiteColumn,
-    ColumnType,
-    SinglePage,
-    SiteSetting,
-    MediaFile,
-    ContactMessage,
-    # 基础内容模块
-    CustomFieldDef,
-    CustomFieldOption,
-    ProductCustomFieldValue,
-    Product,
-    ProductCategory,
-    ProductCategoryLink,
-    Post,
-    PostCategory,
-    PostCategoryLink,
-    TeamMember,
-    FAQ,
-    FAQCategory,
-    # 交互功能模块
-    User,
-    # 预约与服务模块
-    Booking,
-    BookingService,
-    BookingTimeSlot,
-    Event,
-    EventRegistration,
-    EventTicketType,
-    # 多媒体与资源模块
-    FileCategory,
-    FileDownload,
-    FileDownloadLog,
-    Video,
-    VideoCategory,
-    VideoPlaylist,
-    VideoPlaylistLink,
-)
+# 只导入实际存在的模型
+import app.models  # noqa: F401
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

@@ -12,6 +12,9 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 
+from admin.app.routers import auth
+from admin.app.middleware import AdminAuthMiddleware
+
 # 获取admin目录的绝对路径
 ADMIN_DIR = Path(__file__).parent.parent
 
@@ -22,11 +25,17 @@ app = FastAPI(
     version="1.0.0",
 )
 
-# 添加Session中间件
+# 添加Session中间件（必须在认证中间件之前）
 app.add_middleware(
     SessionMiddleware,
     secret_key=os.getenv("SECRET_KEY", "your-secret-key-change-in-production"),
 )
+
+# 添加认证中间件
+app.add_middleware(AdminAuthMiddleware)
+
+# 注册路由
+app.include_router(auth.router, prefix="/admin", tags=["auth"])
 
 # 挂载静态文件
 app.mount("/static", StaticFiles(directory=str(ADMIN_DIR / "static")), name="static")
@@ -35,10 +44,23 @@ app.mount("/static", StaticFiles(directory=str(ADMIN_DIR / "static")), name="sta
 templates = Jinja2Templates(directory=str(ADMIN_DIR / "templates"))
 
 
+from fastapi import Request
+from fastapi.responses import HTMLResponse
+
+
 @app.get("/")
 async def root():
     """根路径"""
     return {"message": "博文教育管理后台API", "version": "1.0.0"}
+
+
+@app.get("/admin/", response_class=HTMLResponse)
+async def admin_dashboard(request: Request):
+    """管理后台仪表板"""
+    return templates.TemplateResponse(
+        "dashboard.html",
+        {"request": request}
+    )
 
 
 @app.get("/health")
