@@ -34,14 +34,25 @@ async def list_pages(request: Request, db: Session = Depends(get_db)):
     Returns:
         单页列表页面 HTML
     """
-    # 获取所有单页
-    pages = db.query(SinglePage).order_by(SinglePage.created_at.desc()).all()
+    # 获取所有单页（预加载关联的栏目）
+    from sqlalchemy.orm import joinedload
+    pages = db.query(SinglePage).options(joinedload(SinglePage.column)).order_by(SinglePage.created_at.desc()).all()
+
+    # 计算统计信息
+    total_pages = len(pages)
+    published_pages = len([p for p in pages if p.status == 'published'])
+    draft_pages = len([p for p in pages if p.status == 'draft'])
 
     return templates.TemplateResponse(
         "pages/list.html",
         {
             "request": request,
             "pages": pages,
+            "page": 1,  # 当前页码
+            "total": total_pages,  # 总数量
+            "total_pages": total_pages,
+            "published_pages": published_pages,
+            "draft_pages": draft_pages,
         },
     )
 
