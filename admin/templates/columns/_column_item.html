@@ -1,0 +1,38 @@
+<div class="column-item" data-id="{{ column.id }}" data-sort="{{ column.sort_order }}">
+    <span class="drag-handle">⋮⋮</span>
+
+    <div class="column-info">
+        <span class="column-name">{{ column.name }}</span>
+        <span class="column-slug">/{{ column.slug }}</span>
+        <span class="column-type type-{{ column.column_type }}">{{ column.column_type }}</span>
+    </div>
+
+    <div class="column-status">
+        {% if column.is_enabled %}
+            <span class="status-badge status-enabled">已启用</span>
+        {% else %}
+            <span class="status-badge status-disabled">已禁用</span>
+        {% endif %}
+
+        {% if column.show_in_nav %}
+            <span class="status-badge" style="background: #cfe2ff; color: #084298;">导航</span>
+        {% endif %}
+
+        {% if column.menu_location == 'footer' or column.menu_location == 'both' %}
+            <span class="status-badge" style="background: #e7d0f5; color: #5a148c;">底部</span>
+        {% endif %}
+    </div>
+
+    <div class="column-actions">
+        <a href="/admin/columns/{{ column.id }}/edit" class="btn btn-sm btn-primary">编辑</a>
+        <button class="btn btn-sm btn-danger delete-column" data-id="{{ column.id }}">删除</button>
+    </div>
+</div>
+
+{% if column.children %}
+<div class="column-children">
+    {% for child in column.children %}
+        {% include 'columns/_column_item.html' with column=child %}
+    {% endfor %}
+</div>
+{% endif %}
