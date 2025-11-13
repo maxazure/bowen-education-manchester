@@ -2,6 +2,28 @@
 
 ## ✅ 已完成
 
+### [2025-11-14] 修复单页列表分页变量问题
+- [x] 修复 pages/list.html 分页变量缺失 - 完成时间: 2025-11-14 - 负责人: maxazure
+  - **问题描述**:
+    - 模板使用了 `page` 和 `total` 变量进行分页显示
+    - 路由 `list_pages` 未传递这些变量
+    - 导致 `jinja2.exceptions.UndefinedError: 'page' is undefined`
+
+  - **解决方案**:
+    - 在 `admin/app/routers/single_pages.py:46-57` 添加缺失变量
+    - 添加 `page: 1` (当前页码)
+    - 添加 `total: total_pages` (总数量)
+
+  - **测试结果**:
+    - ✅ 页面正常显示
+    - ✅ 统计卡片显示：24个单页，24个已发布，0个草稿
+    - ✅ 数据表格完整显示所有24个单页
+    - ✅ 分页组件正常："第 1 / 24 页 (共 24 个)"
+    - ✅ 完成 9/9 个页面 UI 预览（100%）
+
+  - **Git 提交**: c49268a
+  - **修改文件**: admin/app/routers/single_pages.py (+13 -2)
+
 ### [2025-11-14] 管理后台 Bootstrap 5 UI 迁移总结（9个模板全部完成）
 - [x] 完成所有高优先级和中优先级模板的 Bootstrap 5 迁移 - 完成时间: 2025-11-14 - 负责人: maxazure
   - **总体概况**:
