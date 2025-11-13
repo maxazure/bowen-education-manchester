@@ -1,6 +1,6 @@
 """媒体文件模型"""
 
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Text
 
 from app.models.base import BaseModel
 
@@ -22,6 +22,12 @@ class MediaFile(BaseModel):
     path_original = Column(String(500), nullable=False, comment="原图路径")
     path_medium = Column(String(500), nullable=True, comment="中等尺寸图路径")
     path_thumb = Column(String(500), nullable=True, comment="缩略图路径")
+
+    # 新增字段（Module 03）
+    usage_count = Column(Integer, default=0, nullable=False, comment="使用次数")
+    title = Column(String(255), nullable=True, comment="媒体标题")
+    alt_text = Column(String(255), nullable=True, comment="Alt 文本（SEO）")
+    caption = Column(Text, nullable=True, comment="说明文字")
 
     @property
     def file_url(self):

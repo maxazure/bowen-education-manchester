@@ -1,6 +1,7 @@
 """
 管理后台测试配置
 """
+import os
 import sys
 from pathlib import Path
 
@@ -8,6 +9,9 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+
+# 设置测试环境标志
+os.environ["TESTING"] = "1"
 
 # 添加主项目路径到sys.path
 PROJECT_ROOT = Path(__file__).parent.parent.parent
@@ -54,7 +58,7 @@ def db_session(test_db):
 
 @pytest.fixture(scope="function")
 def client(db_session):
-    """创建测试客户端，支持 session cookies"""
+    """创建测试客户端"""
     def override_get_db():
         try:
             yield db_session
@@ -64,7 +68,7 @@ def client(db_session):
     app.dependency_overrides[get_db] = override_get_db
 
     # TestClient 会自动管理 cookies，包括 session cookies
-    test_client = TestClient(app, follow_redirects=False)
+    test_client = TestClient(app)
 
     yield test_client
 

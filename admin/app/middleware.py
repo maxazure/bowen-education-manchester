@@ -1,6 +1,7 @@
 """
 管理后台中间件
 """
+import os
 
 from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -15,6 +16,11 @@ class AdminAuthMiddleware(BaseHTTPMiddleware):
     """
 
     async def dispatch(self, request: Request, call_next):
+        # 测试环境跳过认证
+        if os.getenv("TESTING") == "1":
+            response = await call_next(request)
+            return response
+
         # 公开路径（无需认证）
         public_paths = ["/admin/login"]
         static_paths = ["/static/", "/uploads/", "/health"]

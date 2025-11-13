@@ -12,7 +12,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 
-from admin.app.routers import auth
+from admin.app.routers import auth, media
 from admin.app.middleware import AdminAuthMiddleware
 
 # 获取admin目录的绝对路径
@@ -36,6 +36,7 @@ app.add_middleware(AdminAuthMiddleware)
 
 # 注册路由
 app.include_router(auth.router, prefix="/admin", tags=["auth"])
+app.include_router(media.router, prefix="/admin/media", tags=["media"])
 
 # 挂载静态文件
 app.mount("/static", StaticFiles(directory=str(ADMIN_DIR / "static")), name="static")
