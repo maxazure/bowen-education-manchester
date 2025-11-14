@@ -2,6 +2,35 @@
 
 ## ✅ 已完成
 
+### [2025-11-14] 重命名管理后台静态文件目录避免路径冲突
+- [x] 解决 admin.css 和 admin.js 404 错误 - 完成时间: 2025-11-14 - 负责人: maxazure
+  - **问题描述**:
+    - 管理后台静态资源加载失败
+    - 错误：`GET http://localhost:8001/static/css/admin.css net::ERR_ABORTED 404`
+    - 错误：`GET http://localhost:8001/static/js/admin.js net::ERR_ABORTED 404`
+    - 原因：admin 应用和前台应用的 /static 路径冲突
+
+  - **解决方案**:
+    - **目录重命名**：将 `admin/static` 重命名为 `admin/admin-static`
+    - **更新路由挂载**：在 `admin/app/main.py` 添加 `/admin-static` 路由
+    - **更新模板引用**：
+      - `admin/templates/base.html`: CSS 和 JS 路径
+      - `admin/templates/login.html`: CSS 路径
+      - 统一使用 `/admin-static/` 前缀
+
+  - **验证结果**:
+    - ✅ `/admin-static/css/admin.css` 加载成功 (HTTP 200)
+    - ✅ `/admin-static/js/admin.js` 加载成功 (HTTP 200)
+    - ✅ 页面样式正常显示
+    - ✅ 路径冲突完全解决
+
+  - **Git 提交**: 1fd4f2f
+  - **修改文件**:
+    - admin/app/main.py (+3 行)
+    - admin/templates/base.html (2 处路径修改)
+    - admin/templates/login.html (1 处路径修改)
+    - 7 个文件从 admin/static 移动到 admin/admin-static
+
 ### [2025-11-14] 修复单页编辑页面显示问题并批量修复数据
 - [x] 修复模板中 NULL 值显示为 "None" 的问题 - 完成时间: 2025-11-14 - 负责人: maxazure
   - **问题描述**:
