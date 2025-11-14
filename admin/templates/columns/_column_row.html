@@ -6,13 +6,14 @@
     'CUSTOM': {'text': '自定义', 'class': 'bg-danger'}
 } %}
 
-{% set type_display = type_badges.get(column.column_type.value, {'text': column.column_type.value, 'class': 'bg-secondary'}) %}
+{% set column_type_str = column.column_type.value if column.column_type.value is defined else column.column_type %}
+{% set type_display = type_badges.get(column_type_str, {'text': column_type_str, 'class': 'bg-secondary'}) %}
 
 <tr class="column-row column-level-{{ column.level or 0 }}"
     data-id="{{ column.id }}"
     data-name="{{ column.name }}"
     data-slug="{{ column.slug }}"
-    data-type="{{ column.column_type.value }}"
+    data-type="{{ column_type_str }}"
     data-enabled="{{ column.is_enabled|lower }}"
     data-show-in-nav="{{ column.show_in_nav|lower }}"
     data-parent-id="{{ column.parent_id or 'None' }}"
