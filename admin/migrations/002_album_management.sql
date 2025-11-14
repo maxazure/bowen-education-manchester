@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS album_photo (
     caption TEXT,
     sort_order INTEGER DEFAULT 0,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     -- 外键约束
     FOREIGN KEY (album_id) REFERENCES album(id) ON DELETE CASCADE,
