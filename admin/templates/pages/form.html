@@ -197,18 +197,18 @@
 
                 <div class="form-group">
                     <label for="slug">URL Slug *</label>
-                    <input type="text" id="slug" name="slug" required value="{{ page.slug if page else '' }}">
+                    <input type="text" id="slug" name="slug" required value="{{ page.slug if page and page.slug else '' }}">
                     <div class="help-text">留空将自动生成。只能包含字母、数字和连字符。</div>
                 </div>
 
                 <div class="form-group">
                     <label for="subtitle">副标题</label>
-                    <input type="text" id="subtitle" name="subtitle" value="{{ page.subtitle if page else '' }}">
+                    <input type="text" id="subtitle" name="subtitle" value="{{ page.subtitle if page and page.subtitle else '' }}">
                 </div>
 
                 <div class="form-group markdown-editor">
                     <label for="content_markdown">内容 (Markdown) *</label>
-                    <textarea id="content_markdown" name="content_markdown" required>{{ page.content_markdown if page else '' }}</textarea>
+                    <textarea id="content_markdown" name="content_markdown" required>{{ page.content_markdown if page and page.content_markdown else '' }}</textarea>
                 </div>
 
                 <div class="preview-container" id="previewContainer" style="display: none;">
@@ -254,7 +254,7 @@
                     <div class="sidebar-section-title">Hero 设置</div>
                     <div class="form-group">
                         <label for="hero_media_id">背景图 ID</label>
-                        <input type="number" id="hero_media_id" name="hero_media_id" value="{{ page.hero_media_id if page else '' }}">
+                        <input type="number" id="hero_media_id" name="hero_media_id" value="{{ page.hero_media_id if page and page.hero_media_id else '' }}">
                         <div class="help-text">输入媒体库图片的 ID</div>
                     </div>
                 </div>
@@ -263,15 +263,15 @@
                     <div class="sidebar-section-title">SEO 设置</div>
                     <div class="form-group">
                         <label for="seo_title">SEO 标题</label>
-                        <input type="text" id="seo_title" name="seo_title" value="{{ page.seo_title if page else '' }}">
+                        <input type="text" id="seo_title" name="seo_title" value="{{ page.seo_title if page and page.seo_title else '' }}">
                     </div>
                     <div class="form-group">
                         <label for="seo_description">SEO 描述</label>
-                        <textarea id="seo_description" name="seo_description" rows="3">{{ page.seo_description if page else '' }}</textarea>
+                        <textarea id="seo_description" name="seo_description" rows="3">{{ page.seo_description if page and page.seo_description else '' }}</textarea>
                     </div>
                     <div class="form-group">
                         <label for="seo_keywords">SEO 关键词</label>
-                        <input type="text" id="seo_keywords" name="seo_keywords" value="{{ page.seo_keywords if page else '' }}">
+                        <input type="text" id="seo_keywords" name="seo_keywords" value="{{ page.seo_keywords if page and page.seo_keywords else '' }}">
                         <div class="help-text">用逗号分隔多个关键词</div>
                     </div>
                 </div>
