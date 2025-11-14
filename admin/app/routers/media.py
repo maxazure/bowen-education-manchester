@@ -23,7 +23,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session, joinedload
 
-from app.database import get_db
+from admin.app.database import get_db
 from app.models.media import MediaFile, MediaFolder
 from admin.app.services.media_service import MediaService
 

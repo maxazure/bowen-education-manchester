@@ -14,7 +14,7 @@ from pydantic import BaseModel, Field
 from slugify import slugify
 from sqlalchemy.orm import Session
 
-from app.database import get_db
+from admin.app.database import get_db
 from app.models.gallery import Gallery, GalleryImage
 from app.models.media import MediaFile
 

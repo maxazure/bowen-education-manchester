@@ -178,7 +178,8 @@
 <!-- 递归渲染子栏目 -->
 {% if column.children %}
 {% for child in column.children %}
-{% set column = child %}
+{% with column=child %}
 {% include 'columns/_column_row.html' %}
+{% endwith %}
 {% endfor %}
 {% endif %}

@@ -17,7 +17,8 @@ from sqlalchemy.orm import Session
 
 from app.models.post import Post
 from app.models.product import Product
-from app.models.site import SiteColumn
+from app.models.site import SiteColumn, SinglePage, ColumnType
+from app.models.gallery import Gallery
 
 
 def generate_slug(name: str, db: Session, exclude_id: Optional[int] = None) -> str:
@@ -93,7 +94,7 @@ def can_delete_column(db: Session, column_id: int) -> bool:
     return True
 
 
-def build_tree(db: Session, parent_id: Optional[int] = None) -> List[Dict]:
+def build_tree(db: Session, parent_id: Optional[int] = None) -> List[SiteColumn]:
     """
     构建栏目树形结构
 
@@ -102,24 +103,7 @@ def build_tree(db: Session, parent_id: Optional[int] = None) -> List[Dict]:
         parent_id: 父栏目 ID（None 表示获取顶级栏目）
 
     Returns:
-        树形结构的栏目列表
-
-    Examples:
-        [
-            {
-                "id": 1,
-                "name": "关于我们",
-                "slug": "about",
-                "column_type": "SINGLE_PAGE",
-                "is_enabled": True,
-                "sort_order": 1,
-                "children": [
-                    {"id": 2, "name": "团队介绍", "children": []},
-                    {"id": 3, "name": "联系方式", "children": []}
-                ]
-            },
-            ...
-        ]
+        树形结构的栏目列表（模型对象，包含 children, level, content_id 属性）
     """
     # 获取指定父级的所有子栏目
     columns = (
@@ -132,26 +116,55 @@ def build_tree(db: Session, parent_id: Optional[int] = None) -> List[Dict]:
     result = []
     for column in columns:
         # 递归构建子树
-        children = build_tree(db, column.id)
+        column.children = build_tree(db, column.id)
 
-        result.append(
-            {
-                "id": column.id,
-                "name": column.name,
-                "slug": column.slug,
-                "column_type": column.column_type.value,
-                "is_enabled": column.is_enabled,
-                "show_in_nav": column.show_in_nav,
-                "menu_location": column.menu_location,
-                "sort_order": column.sort_order,
-                "parent_id": column.parent_id,
-                "icon": column.icon,
-                "description": column.description,
-                "children": children,
-            }
-        )
+        # 添加层级属性
+        column.level = _get_column_level(db, column.id)
+
+        # 添加关联内容ID
+        column.content_id = _get_content_id(db, column)
+
+        result.append(column)
 
     return result
+
+
+def _get_column_level(db: Session, column_id: int) -> int:
+    """
+    获取栏目的层级深度
+
+    Args:
+        db: 数据库会话
+        column_id: 栏目 ID
+
+    Returns:
+        层级深度（0 表示顶级）
+    """
+    column = db.query(SiteColumn).filter_by(id=column_id).first()
+    if not column or column.parent_id is None:
+        return 0
+
+    return 1 + _get_column_level(db, column.parent_id)
+
+
+def _get_content_id(db: Session, column: SiteColumn) -> Optional[int]:
+    """
+    根据栏目类型获取关联内容的ID
+
+    Args:
+        db: 数据库会话
+        column: 栏目对象
+
+    Returns:
+        关联内容的ID，如果没有则返回 None
+    """
+    # 单页面类型 - 查询 single_page 表
+    if column.column_type == ColumnType.SINGLE_PAGE:
+        page = db.query(SinglePage).filter_by(column_id=column.id).first()
+        return page.id if page else None
+
+    # 其他类型没有关联内容ID
+    return None
 
 
 def get_nav_columns(db: Session) -> List[SiteColumn]:

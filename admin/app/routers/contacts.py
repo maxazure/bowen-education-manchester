@@ -13,7 +13,7 @@ from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
-from app.database import get_db
+from admin.app.database import get_db
 from app.models.contact import ContactMessage
 
 router = APIRouter(prefix="/contacts", tags=["contacts"])

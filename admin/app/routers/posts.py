@@ -10,7 +10,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session, joinedload
 
-from app.database import get_db
+from admin.app.database import get_db
 from app.models.post import Post, PostCategory
 from app.models.site import ColumnType, SiteColumn
 from app.services.post_service import (can_delete_post, generate_slug,

@@ -11,7 +11,7 @@ from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
-from app.database import get_db
+from admin.app.database import get_db
 from app.models.site import ColumnType, SiteColumn
 from app.services import column_service
 

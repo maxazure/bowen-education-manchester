@@ -32,6 +32,10 @@ app = FastAPI(
 app.add_middleware(
     SessionMiddleware,
     secret_key=os.getenv("SECRET_KEY", "your-secret-key-change-in-production"),
+    session_cookie="admin_session",
+    max_age=14400,  # 4小时
+    same_site="lax",
+    https_only=False,  # 开发环境使用HTTP
 )
 
 # 添加认证中间件

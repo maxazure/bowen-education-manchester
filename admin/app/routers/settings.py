@@ -11,7 +11,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
-from app.database import get_db
+from admin.app.database import get_db
 from app.services.site_settings_service import (get_all_settings, update_settings)
 
 router = APIRouter(prefix="/settings", tags=["settings"])
