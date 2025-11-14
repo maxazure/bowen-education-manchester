@@ -18,6 +18,8 @@ from .middleware import AdminAuthMiddleware
 
 # 获取admin目录的绝对路径
 ADMIN_DIR = Path(__file__).parent.parent
+# 获取项目根目录
+PROJECT_ROOT = ADMIN_DIR.parent
 
 # 创建FastAPI应用
 app = FastAPI(
@@ -46,8 +48,8 @@ app.include_router(settings.router, prefix="/admin", tags=["settings"])
 app.include_router(galleries.router, prefix="/admin", tags=["galleries"])
 app.include_router(contacts.router, prefix="/admin", tags=["contacts"])
 
-# 挂载静态文件
-app.mount("/static", StaticFiles(directory=str(ADMIN_DIR / "static")), name="static")
+# 挂载静态文件（使用前台的 templates/static 目录）
+app.mount("/static", StaticFiles(directory=str(PROJECT_ROOT / "templates" / "static")), name="static")
 
 # 配置模板
 templates = Jinja2Templates(directory=str(ADMIN_DIR / "templates"))
