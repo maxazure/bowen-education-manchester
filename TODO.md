@@ -2,6 +2,39 @@
 
 ## ✅ 已完成
 
+### [2025-11-14] 修复单页编辑页面显示问题并批量修复数据
+- [x] 修复模板中 NULL 值显示为 "None" 的问题 - 完成时间: 2025-11-14 - 负责人: maxazure
+  - **问题描述**:
+    - 单页编辑页面所有空字段都显示为字符串 "None"
+    - 数据库中 24 个单页，23 个缺少 `slug` 和 `content_markdown` 数据
+    - 前台使用 `content_html`，后台编辑需要 `content_markdown`
+
+  - **解决方案 1 - 模板修复**:
+    - 修改 `admin/templates/pages/form.html` 的字段显示逻辑
+    - 从 `{{ page.field if page else '' }}` 改为 `{{ page.field if page and page.field else '' }}`
+    - 修复字段：slug、subtitle、content_markdown、hero_media_id、seo_title、seo_description、seo_keywords
+
+  - **解决方案 2 - 数据批量修复**:
+    - 创建 `scripts/fix_single_pages.py` 数据修复脚本
+    - 自动为 23 个单页生成唯一 URL slug
+      - 英文标题：直接转换（如 "Contact Us" → "contact-us"）
+      - 中文标题：转换为拼音（如 "中文学校" → "zhong-wen-xue-xiao"）
+    - 将 HTML 内容转换为 Markdown 格式
+      - 自动识别并转换标题、段落、列表等元素
+      - 保留原有文本内容
+
+  - **修复结果**:
+    - ✅ 24 个单页全部拥有完整的 slug 和 content_markdown
+    - ✅ 缺失 slug 数量：0（修复前 23）
+    - ✅ 缺失 content_markdown 数量：0（修复前 23）
+    - ✅ 编辑页面不再显示 "None" 字符串
+    - ✅ 测试页面：About Us、Contact Us、中文学校 全部正常
+
+  - **Git 提交**: 9f0c9e6
+  - **修改文件**:
+    - admin/templates/pages/form.html (修改 7 处显示逻辑)
+    - scripts/fix_single_pages.py (新增 123 行)
+
 ### [2025-11-14] 修复单页列表分页变量问题
 - [x] 修复 pages/list.html 分页变量缺失 - 完成时间: 2025-11-14 - 负责人: maxazure
   - **问题描述**:
