@@ -53,17 +53,9 @@ from app.models.gallery import (
     Gallery,
     GalleryImage,
 )
-from app.models.album import (
-    Album,
-    AlbumCategory,
-    AlbumPhoto,
-)
 
 __all__ = [
     "AdminUser",
-    "Album",
-    "AlbumCategory",
-    "AlbumPhoto",
     "BaseModel",
     "ColumnType",
     "ContactMessage",
