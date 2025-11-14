@@ -302,7 +302,7 @@
 
                     <div class="media-thumbnail" onclick="viewFile({{ file.id }})">
                         {% if file.file_type == 'image' %}
-                            <img src="/{{ file.path_thumb or file.path_original }}"
+                            <img src="{{ file.path_thumb or file.path_original }}"
                                  alt="{{ file.filename_original }}"
                                  onerror="this.src='/static/images/placeholder.png'">
                         {% elif file.file_type == 'video' %}
@@ -498,9 +498,9 @@ function displayFileDetail(file) {
     let previewHTML = '';
 
     if (file.file_type === 'image') {
-        previewHTML = `<img src="/${file.url}" class="img-fluid mb-3" alt="${file.filename}">`;
+        previewHTML = `<img src="${file.url}" class="img-fluid mb-3" alt="${file.filename}">`;
     } else if (file.file_type === 'video') {
-        previewHTML = `<video src="/${file.url}" controls class="w-100 mb-3"></video>`;
+        previewHTML = `<video src="${file.url}" controls class="w-100 mb-3"></video>`;
     }
 
     const html = `
