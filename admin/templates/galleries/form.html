@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+
+{% block title %}{{ '编辑相册' if is_edit else '新建相册' }} - 博文教育管理后台{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- 页面标题 -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">
+            <i class="bi bi-{% if is_edit %}pencil-square{% else %}plus-circle{% endif %} me-2"></i>
+            {{ '编辑相册' if is_edit else '新建相册' }}
+        </h1>
+        <a href="/admin/galleries" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i>返回列表
+        </a>
+    </div>
+
+    <!-- 表单 -->
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <form id="galleryForm" method="post">
+                        <!-- 基本信息 -->
+                        <h5 class="mb-3">基本信息</h5>
+
+                        <div class="mb-3">
+                            <label for="title" class="form-label">相册标题 <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="title" name="title"
+                                   value="{{ gallery.title if gallery else '' }}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="description" class="form-label">相册描述</label>
+                            <textarea class="form-control" id="description" name="description" rows="4">{{ gallery.description if gallery else '' }}</textarea>
+                        </div>
+
+                        <!-- 分类和标签 -->
+                        <h5 class="mb-3 mt-4">分类和标签</h5>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="category" class="form-label">分类</label>
+                                <input type="text" class="form-control" id="category" name="category"
+                                       value="{{ gallery.category if gallery else '' }}"
+                                       placeholder="例如：学校活动、课堂风采">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="tags" class="form-label">标签</label>
+                                <input type="text" class="form-control" id="tags" name="tags"
+                                       value="{{ gallery.tags if gallery else '' }}"
+                                       placeholder="逗号分隔，例如：运动会,2024">
+                            </div>
+                        </div>
+
+                        <!-- 展示设置 -->
+                        <h5 class="mb-3 mt-4">展示设置</h5>
+
+                        <div class="mb-3">
+                            <label for="display_mode" class="form-label">展示模式</label>
+                            <select class="form-select" id="display_mode" name="display_mode">
+                                <option value="grid" {% if gallery and gallery.display_mode == 'grid' %}selected{% elif not gallery %}selected{% endif %}>网格模式</option>
+                                <option value="masonry" {% if gallery and gallery.display_mode == 'masonry' %}selected{% endif %}>瀑布流</option>
+                                <option value="carousel" {% if gallery and gallery.display_mode == 'carousel' %}selected{% endif %}>轮播图</option>
+                            </select>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="is_featured" name="is_featured"
+                                           {% if gallery and gallery.is_featured %}checked{% endif %}>
+                                    <label class="form-check-label" for="is_featured">推荐相册</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="is_public" name="is_public"
+                                           {% if gallery and gallery.is_public %}checked{% elif not gallery %}checked{% endif %}>
+                                    <label class="form-check-label" for="is_public">公开显示</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 功能设置 -->
+                        <h5 class="mb-3 mt-4">功能设置</h5>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="allow_download" name="allow_download"
+                                           {% if gallery and gallery.allow_download %}checked{% endif %}>
+                                    <label class="form-check-label" for="allow_download">允许下载</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="watermark_enabled" name="watermark_enabled"
+                                           {% if gallery and gallery.watermark_enabled %}checked{% endif %}>
+                                    <label class="form-check-label" for="watermark_enabled">启用水印</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SEO 设置 -->
+                        <h5 class="mb-3 mt-4">SEO 优化</h5>
+
+                        <div class="mb-3">
+                            <label for="seo_title" class="form-label">SEO 标题</label>
+                            <input type="text" class="form-control" id="seo_title" name="seo_title"
+                                   value="{{ gallery.seo_title if gallery else '' }}"
+                                   placeholder="不填则使用相册标题">
+                            <small class="text-muted">建议50-60个字符</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="seo_description" class="form-label">SEO 描述</label>
+                            <textarea class="form-control" id="seo_description" name="seo_description" rows="3"
+                                      placeholder="不填则使用相册描述">{{ gallery.seo_description if gallery else '' }}</textarea>
+                            <small class="text-muted">建议120-160个字符</small>
+                        </div>
+
+                        <!-- 提交按钮 -->
+                        <div class="d-flex gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-lg me-1"></i>保存相册
+                            </button>
+                            <a href="/admin/galleries" class="btn btn-outline-secondary">取消</a>
+                            {% if is_edit and gallery %}
+                            <a href="/admin/galleries/{{ gallery.id }}/images" class="btn btn-outline-primary ms-auto">
+                                <i class="bi bi-images me-1"></i>管理照片
+                            </a>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 侧边栏 -->
+        <div class="col-lg-4">
+            {% if is_edit and gallery %}
+            <div class="card border-0 shadow-sm mb-3">
+                <div class="card-body">
+                    <h6 class="card-title mb-3">相册统计</h6>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">照片数量：</span>
+                        <strong>{{ gallery.image_count }}</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">浏览次数：</span>
+                        <strong>{{ gallery.view_count }}</strong>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">创建时间：</span>
+                        <small>{{ gallery.created_at.strftime('%Y-%m-%d %H:%M') if gallery.created_at else '' }}</small>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <span class="text-muted">更新时间：</span>
+                        <small>{{ gallery.updated_at.strftime('%Y-%m-%d %H:%M') if gallery.updated_at else '' }}</small>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title mb-3">提示</h6>
+                    <ul class="small text-muted mb-0 ps-3">
+                        <li>相册标题是必填项</li>
+                        <li>可以在"管理照片"页面添加照片</li>
+                        <li>选择"推荐相册"会在首页显示</li>
+                        <li>未公开的相册仅在后台可见</li>
+                        <li>启用水印后上传的照片会自动添加水印</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('galleryForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const formData = {
+        title: document.getElementById('title').value,
+        description: document.getElementById('description').value || null,
+        category: document.getElementById('category').value || null,
+        tags: document.getElementById('tags').value || null,
+        display_mode: document.getElementById('display_mode').value,
+        is_featured: document.getElementById('is_featured').checked,
+        is_public: document.getElementById('is_public').checked,
+        allow_download: document.getElementById('allow_download').checked,
+        watermark_enabled: document.getElementById('watermark_enabled').checked,
+        seo_title: document.getElementById('seo_title').value || null,
+        seo_description: document.getElementById('seo_description').value || null,
+    };
+
+    const isEdit = {{ 'true' if is_edit else 'false' }};
+    const galleryId = {{ gallery.id if gallery else 'null' }};
+    const url = isEdit ? `/admin/galleries/${galleryId}` : '/admin/galleries';
+    const method = isEdit ? 'PUT' : 'POST';
+
+    try {
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            alert(isEdit ? '相册更新成功！' : '相册创建成功！');
+            if (!isEdit && result.id) {
+                window.location.href = `/admin/galleries/${result.id}/images`;
+            } else {
+                window.location.href = '/admin/galleries';
+            }
+        } else {
+            const error = await response.json();
+            alert('错误：' + (error.detail || '操作失败'));
+        }
+    } catch (error) {
+        alert('错误：' + error.message);
+    }
+});
+</script>
+{% endblock %}

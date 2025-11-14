@@ -1,0 +1,423 @@
+{% extends "base.html" %}
+
+{% block title %}管理照片 - {{ gallery.title }} - 博文教育管理后台{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- 页面标题 -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">
+            <i class="bi bi-images me-2"></i>
+            管理照片 - {{ gallery.title }}
+        </h1>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addImagesModal">
+                <i class="bi bi-plus-lg me-1"></i>添加照片
+            </button>
+            <a href="/admin/galleries/{{ gallery.id }}/edit" class="btn btn-outline-secondary">
+                <i class="bi bi-pencil me-1"></i>编辑相册
+            </a>
+            <a href="/admin/galleries" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i>返回列表
+            </a>
+        </div>
+    </div>
+
+    <!-- 相册信息 -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h5 class="card-title">{{ gallery.title }}</h5>
+                    {% if gallery.description %}
+                    <p class="text-muted mb-0">{{ gallery.description }}</p>
+                    {% endif %}
+                </div>
+                <div class="col-md-4">
+                    <div class="d-flex justify-content-end gap-4">
+                        <div class="text-center">
+                            <div class="text-muted small">照片数量</div>
+                            <div class="fs-4 fw-bold">{{ images|length }}</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-muted small">浏览次数</div>
+                            <div class="fs-4 fw-bold">{{ gallery.view_count }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 照片列表 -->
+    {% if images %}
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">照片列表</h5>
+                <div class="text-muted small">
+                    <i class="bi bi-info-circle me-1"></i>拖拽照片可调整顺序
+                </div>
+            </div>
+
+            <div id="imagesList" class="row g-3">
+                {% for image in images %}
+                <div class="col-md-3" data-image-id="{{ image.id }}">
+                    <div class="card border h-100 position-relative">
+                        <!-- 拖拽手柄 -->
+                        <div class="drag-handle position-absolute top-0 start-0 m-2 bg-white rounded px-2 py-1 shadow-sm" style="cursor: move; z-index: 1;">
+                            <i class="bi bi-grip-vertical"></i>
+                        </div>
+
+                        <!-- 封面标记 -->
+                        {% if gallery.cover_media_id == image.media_id %}
+                        <div class="position-absolute top-0 end-0 m-2">
+                            <span class="badge bg-primary">封面</span>
+                        </div>
+                        {% endif %}
+
+                        <!-- 图片 -->
+                        <div class="position-relative" style="height: 200px; overflow: hidden;">
+                            <img src="{{ image.media.path_thumb or image.media.path_original }}"
+                                 alt="{{ image.caption or gallery.title }}"
+                                 class="w-100 h-100 object-fit-cover">
+
+                            <!-- 可见性标记 -->
+                            {% if not image.is_visible %}
+                            <div class="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex align-items-center justify-content-center">
+                                <span class="badge bg-warning">已隐藏</span>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="card-body">
+                            <!-- 标题输入框 -->
+                            <input type="text"
+                                   class="form-control form-control-sm mb-2 caption-input"
+                                   placeholder="照片标题"
+                                   value="{{ image.caption or '' }}"
+                                   data-image-id="{{ image.id }}">
+
+                            <!-- 操作按钮 -->
+                            <div class="d-flex gap-1">
+                                {% if gallery.cover_media_id != image.media_id %}
+                                <button type="button" class="btn btn-sm btn-outline-primary flex-fill"
+                                        onclick="setCover({{ image.media_id }})">
+                                    <i class="bi bi-star"></i>
+                                </button>
+                                {% endif %}
+
+                                <button type="button" class="btn btn-sm btn-outline-secondary flex-fill"
+                                        onclick="toggleVisibility({{ image.id }})">
+                                    <i class="bi bi-eye{% if not image.is_visible %}-slash{% endif %}"></i>
+                                </button>
+
+                                <button type="button" class="btn btn-sm btn-outline-danger flex-fill"
+                                        onclick="removeImage({{ image.id }})">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+
+                            <!-- 元信息 -->
+                            <div class="mt-2 small text-muted">
+                                <div>排序: {{ image.sort_order }}</div>
+                                <div>尺寸: {{ image.media.width }}x{{ image.media.height }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="card border-0 shadow-sm">
+        <div class="card-body text-center py-5">
+            <i class="bi bi-images text-muted mb-3" style="font-size: 4rem;"></i>
+            <h5 class="text-muted mb-3">还没有添加任何照片</h5>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addImagesModal">
+                <i class="bi bi-plus-lg me-1"></i>添加照片
+            </button>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- 添加照片模态框 -->
+<div class="modal fade" id="addImagesModal" tabindex="-1">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">选择照片</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <!-- 媒体库选择器 -->
+                <div class="row g-3" id="mediaLibrary">
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">加载中...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="me-auto">
+                    <span id="selectedCount" class="text-muted">已选择 0 张照片</span>
+                </div>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="addSelectedImages()">添加照片</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 引入 Sortable.js -->
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
+<script>
+const galleryId = {{ gallery.id }};
+let selectedMediaIds = new Set();
+
+// 初始化拖拽排序
+if (document.getElementById('imagesList')) {
+    new Sortable(document.getElementById('imagesList'), {
+        animation: 150,
+        handle: '.drag-handle',
+        onEnd: function(evt) {
+            saveSortOrder();
+        }
+    });
+}
+
+// 保存排序
+async function saveSortOrder() {
+    const items = document.querySelectorAll('#imagesList > div[data-image-id]');
+    const imageIds = Array.from(items).map(item => parseInt(item.dataset.imageId));
+
+    try {
+        const response = await fetch(`/admin/galleries/${galleryId}/images/drag-sort`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({image_ids: imageIds})
+        });
+
+        if (response.ok) {
+            // 静默成功
+        } else {
+            alert('排序保存失败');
+            location.reload();
+        }
+    } catch (error) {
+        alert('错误：' + error.message);
+    }
+}
+
+// 设置封面
+async function setCover(mediaId) {
+    try {
+        const response = await fetch(`/admin/galleries/${galleryId}/set-cover`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({media_id: mediaId})
+        });
+
+        if (response.ok) {
+            alert('封面设置成功！');
+            location.reload();
+        } else {
+            const error = await response.json();
+            alert('错误：' + (error.detail || '设置失败'));
+        }
+    } catch (error) {
+        alert('错误：' + error.message);
+    }
+}
+
+// 切换可见性
+async function toggleVisibility(imageId) {
+    try {
+        const response = await fetch(`/admin/galleries/${galleryId}/images/${imageId}/toggle-visibility`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'}
+        });
+
+        if (response.ok) {
+            location.reload();
+        } else {
+            const error = await response.json();
+            alert('错误：' + (error.detail || '操作失败'));
+        }
+    } catch (error) {
+        alert('错误：' + error.message);
+    }
+}
+
+// 删除照片
+async function removeImage(imageId) {
+    if (!confirm('确定要从相册中移除这张照片吗？')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/admin/galleries/${galleryId}/images/${imageId}`, {
+            method: 'DELETE',
+            headers: {'Content-Type': 'application/json'}
+        });
+
+        if (response.ok) {
+            alert('删除成功！');
+            location.reload();
+        } else {
+            const error = await response.json();
+            alert('错误：' + (error.detail || '删除失败'));
+        }
+    } catch (error) {
+        alert('错误：' + error.message);
+    }
+}
+
+// 加载媒体库
+async function loadMediaLibrary() {
+    try {
+        const response = await fetch('/admin/media/files?file_type=image&page_size=100');
+        const data = await response.json();
+
+        const container = document.getElementById('mediaLibrary');
+        if (data.items && data.items.length > 0) {
+            container.innerHTML = data.items.map(file => `
+                <div class="col-md-2 col-sm-3 col-4">
+                    <div class="card border h-100 media-item" data-media-id="${file.id}" onclick="toggleMediaSelection(${file.id})">
+                        <div class="position-relative" style="height: 150px; overflow: hidden;">
+                            <img src="${file.path_thumb || file.path_original}"
+                                 alt="${file.original_filename}"
+                                 class="w-100 h-100 object-fit-cover">
+                            <div class="selection-overlay position-absolute top-0 start-0 w-100 h-100 bg-primary bg-opacity-50 d-none align-items-center justify-content-center">
+                                <i class="bi bi-check-circle-fill text-white" style="font-size: 2rem;"></i>
+                            </div>
+                        </div>
+                        <div class="card-body p-2">
+                            <small class="text-muted text-truncate d-block">${file.original_filename}</small>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            container.innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <i class="bi bi-images text-muted mb-3" style="font-size: 4rem;"></i>
+                    <h5 class="text-muted">媒体库中没有图片</h5>
+                    <a href="/admin/media" class="btn btn-primary mt-3" target="_blank">
+                        <i class="bi bi-upload me-1"></i>上传图片
+                    </a>
+                </div>
+            `;
+        }
+    } catch (error) {
+        document.getElementById('mediaLibrary').innerHTML = `
+            <div class="col-12 text-center py-5">
+                <p class="text-danger">加载失败：${error.message}</p>
+            </div>
+        `;
+    }
+}
+
+// 切换媒体选择
+function toggleMediaSelection(mediaId) {
+    const item = document.querySelector(`.media-item[data-media-id="${mediaId}"]`);
+    const overlay = item.querySelector('.selection-overlay');
+
+    if (selectedMediaIds.has(mediaId)) {
+        selectedMediaIds.delete(mediaId);
+        overlay.classList.add('d-none');
+        overlay.classList.remove('d-flex');
+    } else {
+        selectedMediaIds.add(mediaId);
+        overlay.classList.remove('d-none');
+        overlay.classList.add('d-flex');
+    }
+
+    document.getElementById('selectedCount').textContent = `已选择 ${selectedMediaIds.size} 张照片`;
+}
+
+// 添加选中的照片
+async function addSelectedImages() {
+    if (selectedMediaIds.size === 0) {
+        alert('请先选择照片');
+        return;
+    }
+
+    try {
+        const response = await fetch(`/admin/galleries/${galleryId}/images/batch`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                media_ids: Array.from(selectedMediaIds)
+            })
+        });
+
+        if (response.ok) {
+            alert('照片添加成功！');
+            location.reload();
+        } else {
+            const error = await response.json();
+            alert('错误：' + (error.detail || '添加失败'));
+        }
+    } catch (error) {
+        alert('错误：' + error.message);
+    }
+}
+
+// 监听模态框显示事件
+document.getElementById('addImagesModal').addEventListener('show.bs.modal', function() {
+    selectedMediaIds.clear();
+    loadMediaLibrary();
+});
+
+// 标题自动保存（防抖）
+let captionTimers = {};
+document.querySelectorAll('.caption-input').forEach(input => {
+    input.addEventListener('input', function() {
+        const imageId = this.dataset.imageId;
+        clearTimeout(captionTimers[imageId]);
+
+        captionTimers[imageId] = setTimeout(async () => {
+            try {
+                const response = await fetch(`/admin/galleries/${galleryId}/images/${imageId}`, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        caption: this.value
+                    })
+                });
+
+                if (!response.ok) {
+                    alert('标题保存失败');
+                }
+            } catch (error) {
+                console.error('保存标题失败:', error);
+            }
+        }, 1000);
+    });
+});
+</script>
+
+<style>
+.object-fit-cover {
+    object-fit: cover;
+}
+
+.media-item {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.media-item:hover {
+    transform: scale(1.05);
+}
+
+.drag-handle:hover {
+    background-color: #f8f9fa !important;
+}
+</style>
+{% endblock %}

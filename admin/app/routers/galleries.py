@@ -5,8 +5,11 @@
 """
 
 from typing import List, Optional
+from pathlib import Path
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field
 from slugify import slugify
 from sqlalchemy.orm import Session
@@ -15,7 +18,110 @@ from app.database import get_db
 from app.models.gallery import Gallery, GalleryImage
 from app.models.media import MediaFile
 
+# 获取admin目录的绝对路径
+ADMIN_DIR = Path(__file__).parent.parent.parent
+templates = Jinja2Templates(directory=str(ADMIN_DIR / "templates"))
+
 router = APIRouter(prefix="/galleries", tags=["galleries"])
+
+
+# ===== HTML 页面路由 =====
+
+
+@router.get("", response_class=HTMLResponse)
+async def list_galleries(
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    """
+    相册列表页面 HTML
+    """
+    # 获取所有相册
+    galleries = db.query(Gallery).order_by(Gallery.sort_order.asc(), Gallery.created_at.desc()).all()
+
+    # 计算统计信息
+    total_galleries = len(galleries)
+    published_galleries = len([g for g in galleries if g.is_public])
+    draft_galleries = len([g for g in galleries if not g.is_public])
+    total_images = sum(g.image_count for g in galleries)
+
+    return templates.TemplateResponse(
+        "galleries/list.html",
+        {
+            "request": request,
+            "galleries": galleries,
+            "total_galleries": total_galleries,
+            "published_galleries": published_galleries,
+            "draft_galleries": draft_galleries,
+            "total_images": total_images,
+        }
+    )
+
+
+@router.get("/new", response_class=HTMLResponse)
+async def new_gallery(request: Request):
+    """
+    新建相册页面 HTML
+    """
+    return templates.TemplateResponse(
+        "galleries/form.html",
+        {
+            "request": request,
+            "gallery": None,
+            "is_edit": False,
+        }
+    )
+
+
+@router.get("/{gallery_id}/edit", response_class=HTMLResponse)
+async def edit_gallery(
+    request: Request,
+    gallery_id: int,
+    db: Session = Depends(get_db),
+):
+    """
+    编辑相册页面 HTML
+    """
+    gallery = db.query(Gallery).filter(Gallery.id == gallery_id).first()
+    if not gallery:
+        raise HTTPException(status_code=404, detail="相册不存在")
+
+    return templates.TemplateResponse(
+        "galleries/form.html",
+        {
+            "request": request,
+            "gallery": gallery,
+            "is_edit": True,
+        }
+    )
+
+
+@router.get("/{gallery_id}/images", response_class=HTMLResponse)
+async def manage_images(
+    request: Request,
+    gallery_id: int,
+    db: Session = Depends(get_db),
+):
+    """
+    照片管理页面 HTML
+    """
+    gallery = db.query(Gallery).filter(Gallery.id == gallery_id).first()
+    if not gallery:
+        raise HTTPException(status_code=404, detail="相册不存在")
+
+    # 获取相册中的所有图片（按排序）
+    images = db.query(GalleryImage).filter(
+        GalleryImage.gallery_id == gallery_id
+    ).order_by(GalleryImage.sort_order.asc()).all()
+
+    return templates.TemplateResponse(
+        "galleries/images.html",
+        {
+            "request": request,
+            "gallery": gallery,
+            "images": images,
+        }
+    )
 
 
 # ===== Schemas =====
