@@ -100,6 +100,38 @@
 
     <td>
         <div class="d-flex gap-1 justify-content-center">
+            <!-- 管理内容按钮 -->
+            {% if column_type_str == 'SINGLE_PAGE' and column.content_id %}
+            <a href="/admin/pages/{{ column.content_id }}/edit"
+               class="btn btn-sm btn-success"
+               data-bs-toggle="tooltip"
+               title="管理单页内容">
+                <i class="bi bi-file-text"></i>
+            </a>
+            {% elif column_type_str == 'POST' %}
+            <a href="/admin/posts?column_id={{ column.id }}"
+               class="btn btn-sm btn-success"
+               data-bs-toggle="tooltip"
+               title="管理文章列表">
+                <i class="bi bi-journal-text"></i>
+            </a>
+            {% elif column_type_str == 'PRODUCT' %}
+            <a href="/admin/products?column_id={{ column.id }}"
+               class="btn btn-sm btn-success"
+               data-bs-toggle="tooltip"
+               title="管理产品列表">
+                <i class="bi bi-box-seam"></i>
+            </a>
+            {% elif column_type_str == 'GALLERY' %}
+            <a href="/admin/galleries?column_id={{ column.id }}"
+               class="btn btn-sm btn-success"
+               data-bs-toggle="tooltip"
+               title="管理相册列表">
+                <i class="bi bi-images"></i>
+            </a>
+            {% endif %}
+
+            <!-- 编辑栏目按钮 -->
             <a href="/admin/columns/{{ column.id }}/edit"
                class="btn btn-sm btn-primary"
                data-bs-toggle="tooltip"
@@ -107,6 +139,7 @@
                 <i class="bi bi-pencil"></i>
             </a>
 
+            <!-- 添加子栏目按钮 -->
             <button class="btn btn-sm btn-outline-success"
                     onclick="addSubColumn({{ column.id }})"
                     data-bs-toggle="tooltip"
@@ -114,6 +147,7 @@
                 <i class="bi bi-plus-circle"></i>
             </button>
 
+            <!-- 启用/禁用按钮 -->
             {% if column.is_enabled %}
             <button class="btn btn-sm btn-outline-secondary"
                     onclick="toggleStatus({{ column.id }})"
@@ -130,6 +164,7 @@
             </button>
             {% endif %}
 
+            <!-- 删除栏目按钮 -->
             <button class="btn btn-sm btn-outline-danger"
                     onclick="deleteColumn({{ column.id }})"
                     data-bs-toggle="tooltip"

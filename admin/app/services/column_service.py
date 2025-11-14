@@ -10,7 +10,10 @@ from typing import List, Optional
 from pypinyin import lazy_pinyin
 from sqlalchemy.orm import Session
 
-from app.models.site import SiteColumn
+from app.models.site import SiteColumn, SinglePage
+from app.models.post import Post
+from app.models.product import Product
+from app.models.gallery import Gallery
 
 
 def build_tree(db: Session, parent_id: Optional[int] = None) -> List[SiteColumn]:
@@ -39,6 +42,10 @@ def build_tree(db: Session, parent_id: Optional[int] = None) -> List[SiteColumn]
         column.children = build_tree(db, column.id)
         # 添加层级属性（用于前端显示缩进）
         column.level = 0 if parent_id is None else _get_column_level(db, column.id)
+
+        # 根据栏目类型获取关联内容ID
+        column.content_id = _get_content_id(db, column)
+
         tree.append(column)
 
     return tree
@@ -191,3 +198,28 @@ def _get_column_level(db: Session, column_id: int) -> int:
         return 0
 
     return 1 + _get_column_level(db, column.parent_id)
+
+
+def _get_content_id(db: Session, column: SiteColumn) -> Optional[int]:
+    """
+    根据栏目类型获取关联内容的ID
+
+    Args:
+        db: 数据库会话
+        column: 栏目对象
+
+    Returns:
+        关联内容的ID，如果没有则返回 None
+    """
+    from app.models.site import ColumnType
+
+    # 单页面类型 - 查询 single_page 表
+    if column.column_type == ColumnType.SINGLE_PAGE:
+        page = db.query(SinglePage).filter_by(column_id=column.id).first()
+        return page.id if page else None
+
+    # 文章栏目类型 - 返回栏目ID（跳转到文章列表）
+    # 产品栏目类型 - 返回栏目ID（跳转到产品列表）
+    # 相册栏目类型 - 返回栏目ID（跳转到相册列表）
+    # 自定义栏目类型 - 没有关联内容
+    return None
