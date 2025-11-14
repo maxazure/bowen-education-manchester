@@ -52,6 +52,9 @@ app.include_router(settings.router, prefix="/admin", tags=["settings"])
 app.include_router(galleries.router, prefix="/admin", tags=["galleries"])
 app.include_router(contacts.router, prefix="/admin", tags=["contacts"])
 
+# 挂载管理后台静态文件
+app.mount("/admin-static", StaticFiles(directory=str(ADMIN_DIR / "admin-static")), name="admin-static")
+
 # 挂载静态文件（使用前台的 templates/static 目录）
 app.mount("/static", StaticFiles(directory=str(PROJECT_ROOT / "templates" / "static")), name="static")
 
