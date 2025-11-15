@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-4">
+  <h1 class="h4 mb-3">页面预览（草稿）</h1>
+  <div id="preview" class="page-preview">
+    {{ html | safe }}
+  </div>
+</div>
+{% endblock %}

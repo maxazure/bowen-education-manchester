@@ -89,8 +89,31 @@ class Post(BaseModel):
         """Get the featured image URL for this article"""
         if self.cover_media:
             return self.cover_media.file_url
-        # Fallback to static image based on slug
-        return f"/static/images/article-{self.slug}-featured.jpg"
+        from app.config import STATIC_DIR
+        from pathlib import Path
+        # slug-based mapping to existing images
+        slug_map = {
+            "chess-tactics-double-attack": "/static/images/news/chess-club-tournament-achievements.jpg",
+            "student-success-story-zhang-ming": "/static/images/news/chess-club-tournament-achievements.jpg",
+            "chess-annual-event-2024": "/static/images/news/chess-club-tournament-achievements.jpg",
+            "sunday-doubles-practice-match": "/static/images/services/service-badminton-club.jpg",
+            "spring-badminton-league-2025-registration": "/static/images/services/service-badminton-club.jpg",
+            "badminton-friendly-invitational-2024": "/static/images/services/service-badminton-club.jpg",
+            "henan-university-partnership": "/static/images/news/henan-university-partnership.jpg",
+            "haf-programme-success-2024": "/static/images/news/haf-programme-success-2024.jpg",
+            "2024-autumn-term-enrollment": "/static/images/news/2024-autumn-term-enrollment.jpg",
+        }
+        if self.slug in slug_map:
+            return slug_map[self.slug]
+        candidate = STATIC_DIR / "images" / f"article-{self.slug}-featured.jpg"
+        if Path(candidate).exists():
+            return f"/static/images/article-{self.slug}-featured.jpg"
+        col_slug = getattr(getattr(self, "column", None), "slug", "")
+        if "chess" in (col_slug or ""):
+            return "/static/images/services/service-chess-club.jpg"
+        if "badminton" in (col_slug or ""):
+            return "/static/images/services/service-badminton-club.jpg"
+        return "/static/images/news/news-hero-background.jpg"
 
 
 class PostCategoryLink(Base):

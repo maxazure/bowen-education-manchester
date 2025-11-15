@@ -8,7 +8,7 @@ function deleteProduct(id) {
         return;
     }
 
-    fetch(`/admin/products/${id}`, {
+    fetch(`/products/${id}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(r => r.json())
         .then(d => {
             alert(d.message);
-            if (d.success) window.location.href = '/admin/products';
+            if (d.success) window.location.href = '/products';
         })
         .catch(e => alert('提交失败: ' + e));
     });

@@ -485,7 +485,7 @@
         submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>保存中...';
 
         try {
-            const response = await fetch('/admin/settings/save', {
+            const response = await fetch('/settings/save', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

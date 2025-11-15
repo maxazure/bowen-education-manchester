@@ -249,7 +249,7 @@ const dropzone = new Dropzone("#mediaDropzone", {
             if (queued === 0 && uploading === 0) {
                 // 所有文件上传完成
                 setTimeout(() => {
-                    window.location.href = '/admin/media';
+                    window.location.href = '/media';
                 }, 1500);
             }
         }, 500);

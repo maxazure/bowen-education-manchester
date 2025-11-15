@@ -363,6 +363,97 @@
     }
 
     // ============================================================
+    // 10. MOBILE NAVIGATION FALLBACK - 移动端导航后备方案
+    // ============================================================
+    function initMobileNavigationFallback() {
+        // If Alpine.js loaded correctly, use existing implementation.
+        if (window.Alpine) return;
+
+        const nav = document.querySelector('.main-nav');
+        const toggle = nav ? nav.querySelector('.mobile-menu-toggle') : null;
+        const menu = document.getElementById('mobile-menu-panel');
+
+        if (!nav || !toggle || !menu || menu.dataset.fallbackInit === 'true') {
+            return;
+        }
+
+        const closeButton = menu.querySelector('.mobile-nav-close');
+        const submenuToggles = menu.querySelectorAll('.mobile-nav-item.has-submenu > .mobile-nav-toggle');
+        const focusableSelector = 'a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])';
+        let isOpen = false;
+        let lastFocused = null;
+
+        menu.dataset.fallbackInit = 'true';
+
+        const setMenuState = (open) => {
+            isOpen = open;
+            menu.style.display = open ? 'block' : 'none';
+            menu.setAttribute('aria-hidden', String(!open));
+            toggle.setAttribute('aria-expanded', String(open));
+            document.body.classList.toggle('mobile-menu-open', open);
+
+            if (open) {
+                lastFocused = document.activeElement;
+                const focusable = menu.querySelector(focusableSelector);
+                if (focusable) focusable.focus();
+            } else if (lastFocused) {
+                lastFocused.focus();
+            }
+        };
+
+        setMenuState(false);
+
+        toggle.addEventListener('click', (event) => {
+            event.preventDefault();
+            setMenuState(!isOpen);
+        });
+
+        if (closeButton) {
+            closeButton.addEventListener('click', (event) => {
+                event.preventDefault();
+                setMenuState(false);
+            });
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && isOpen) {
+                setMenuState(false);
+            }
+        });
+
+        document.addEventListener('click', (event) => {
+            if (!isOpen) {
+                return;
+            }
+
+            if (!event.target.closest('.mobile-menu') && !event.target.closest('.mobile-menu-toggle')) {
+                setMenuState(false);
+            }
+        });
+
+        submenuToggles.forEach((btn) => {
+            const parent = btn.closest('.mobile-nav-item');
+            const submenu = parent ? parent.querySelector('.mobile-submenu') : null;
+            if (!submenu) return;
+
+            const setSubmenuState = (open) => {
+                submenu.style.display = open ? 'block' : 'none';
+                submenu.setAttribute('aria-hidden', String(!open));
+                btn.setAttribute('aria-expanded', String(open));
+                parent.classList.toggle('submenu-open', open);
+            };
+
+            setSubmenuState(false);
+
+            btn.addEventListener('click', (event) => {
+                event.preventDefault();
+                const willOpen = submenu.getAttribute('aria-hidden') === 'true';
+                setSubmenuState(willOpen);
+            });
+        });
+    }
+
+    // ============================================================
     // INITIALIZATION - 初始化
     // ============================================================
     document.addEventListener('DOMContentLoaded', function() {
@@ -378,6 +469,7 @@
         initScrollAnimations();
         initModals();
         initCookieConsent();
+        initMobileNavigationFallback();
     });
 
     // Expose utilities to global scope if needed

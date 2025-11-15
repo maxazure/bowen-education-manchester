@@ -13,7 +13,7 @@ from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 
 # 使用相对导入避免命名冲突
-from .routers import auth, media, columns, single_pages, posts, products, settings, galleries, contacts
+from .routers import auth, media, columns, single_pages, posts, products, settings, galleries, contacts, home, column_builder
 from .middleware import AdminAuthMiddleware
 
 # 获取admin目录的绝对路径
@@ -41,16 +41,18 @@ app.add_middleware(
 # 添加认证中间件
 app.add_middleware(AdminAuthMiddleware)
 
-# 注册路由
-app.include_router(auth.router, prefix="/admin", tags=["auth"])
-app.include_router(media.router, prefix="/admin/media", tags=["media"])
-app.include_router(columns.router, prefix="/admin", tags=["columns"])
-app.include_router(single_pages.router, prefix="/admin", tags=["pages"])
-app.include_router(posts.router, prefix="/admin", tags=["posts"])
-app.include_router(products.router, prefix="/admin", tags=["products"])
-app.include_router(settings.router, prefix="/admin", tags=["settings"])
-app.include_router(galleries.router, prefix="/admin", tags=["galleries"])
-app.include_router(contacts.router, prefix="/admin", tags=["contacts"])
+# 注册路由（移除 /admin 前缀，因为挂载时会自动添加）
+app.include_router(auth.router, prefix="", tags=["auth"])
+app.include_router(media.router, prefix="/media", tags=["media"])
+app.include_router(columns.router, prefix="", tags=["columns"])
+app.include_router(single_pages.router, prefix="", tags=["pages"])
+app.include_router(posts.router, prefix="", tags=["posts"])
+app.include_router(products.router, prefix="", tags=["products"])
+app.include_router(settings.router, prefix="", tags=["settings"])
+app.include_router(galleries.router, prefix="", tags=["galleries"])
+app.include_router(contacts.router, prefix="", tags=["contacts"])
+app.include_router(home.router, prefix="", tags=["home"])
+app.include_router(column_builder.router, prefix="", tags=["columns-builder"])
 
 # 挂载管理后台静态文件
 app.mount("/admin-static", StaticFiles(directory=str(ADMIN_DIR / "admin-static")), name="admin-static")
@@ -72,7 +74,7 @@ async def root():
     return {"message": "博文教育管理后台API", "version": "1.0.0"}
 
 
-@app.get("/admin/", response_class=HTMLResponse)
+@app.get("/", response_class=HTMLResponse)
 async def admin_dashboard(request: Request):
     """管理后台仪表板"""
     return templates.TemplateResponse(

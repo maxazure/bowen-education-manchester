@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-4">
+  <h1 class="h4 mb-3">首页/栏目 页面编辑器</h1>
+  <div id="layout-root" data-layout-id="{{ tree.layout.id }}" class="mb-3"></div>
+  <div class="row">
+    <div class="col-md-8">
+      <div id="sections" class="v-stack gap-3"></div>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-header">区块库</div>
+        <div class="card-body d-flex flex-wrap gap-2">
+          <button class="btn btn-sm btn-outline-primary" onclick="paletteAdd('RichText')">RichText</button>
+          <button class="btn btn-sm btn-outline-primary" onclick="paletteAdd('HeroBanner')">HeroBanner</button>
+          <button class="btn btn-sm btn-outline-primary" onclick="paletteAdd('PostList')">PostList</button>
+          <button class="btn btn-sm btn-outline-primary" onclick="paletteAdd('ProductGrid')">ProductGrid</button>
+          <button class="btn btn-sm btn-outline-primary" onclick="paletteAdd('GalleryGrid')">GalleryGrid</button>
+          <button class="btn btn-sm btn-outline-primary" onclick="paletteAdd('ContactCTA')">ContactCTA</button>
+          <button class="btn btn-sm btn-outline-primary" onclick="paletteAdd('HeroCarousel')">HeroCarousel</button>
+          <button class="btn btn-sm btn-outline-primary" onclick="paletteAdd('QuickEntryGrid')">QuickEntryGrid</button>
+          <button class="btn btn-sm btn-outline-primary" onclick="paletteAdd('ServiceBlocksGrid')">ServiceBlocksGrid</button>
+          <button class="btn btn-sm btn-outline-primary" onclick="paletteAdd('NewsGrid')">NewsGrid</button>
+          <button class="btn btn-sm btn-outline-primary" onclick="paletteAdd('PartnerLogos')">PartnerLogos</button>
+          <button class="btn btn-sm btn-outline-primary" onclick="paletteAdd('StatsSection')">StatsSection</button>
+          <button class="btn btn-sm btn-outline-primary" onclick="paletteAdd('ContactSection')">ContactSection</button>
+        </div>
+      </div>
+      <div class="card mt-3">
+        <div class="card-header">操作</div>
+        <div class="card-body d-flex gap-2">
+          <button class="btn btn-success" onclick="publishLayout()">发布</button>
+          <a class="btn btn-secondary" href="#" onclick="previewLayout(event)">预览</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4">
+    <button class="btn btn-primary" onclick="addSection()">新增分区</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+<script src="/admin-static/js/home.js"></script>
+{% endblock %}

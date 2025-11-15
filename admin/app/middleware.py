@@ -2,10 +2,13 @@
 管理后台中间件
 """
 import os
+import logging
 
 from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import RedirectResponse
+
+logger = logging.getLogger(__name__)
 
 
 class AdminAuthMiddleware(BaseHTTPMiddleware):
@@ -23,7 +26,7 @@ class AdminAuthMiddleware(BaseHTTPMiddleware):
 
         # 公开路径（无需认证）
         public_paths = ["/admin/login"]
-        static_paths = ["/static/", "/uploads/", "/health"]
+        static_paths = ["/static/", "/admin-static/", "/uploads/", "/health"]
 
         # 检查是否是静态资源或公开路径
         for static_path in static_paths:
@@ -32,19 +35,19 @@ class AdminAuthMiddleware(BaseHTTPMiddleware):
                 return response
 
         # 如果是管理后台路径且不是公开路径
-        if (
-            request.url.path.startswith("/admin")
-            and request.url.path not in public_paths
-        ):
+        if request.url.path.startswith("/admin") and request.url.path not in public_paths:
             # 检查 session 中是否有用户信息
             try:
                 user_id = request.session.get("admin_user_id")
-            except (AttributeError, RuntimeError, AssertionError):
+                logger.info(f"访问 {request.url.path}, session user_id: {user_id}, session内容: {dict(request.session)}")
+            except (AttributeError, RuntimeError, AssertionError) as e:
                 # 在测试环境中 session 可能未正确初始化
+                logger.error(f"Session读取异常: {e}")
                 user_id = None
 
             if not user_id:
                 # 未登录，重定向到登录页
+                logger.warning(f"未登录用户访问: {request.url.path}")
                 if request.method == "GET":
                     return RedirectResponse(url="/admin/login", status_code=302)
                 else:

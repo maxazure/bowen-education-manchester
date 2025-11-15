@@ -160,7 +160,7 @@
 
 <!-- 筛选表单 -->
 <div class="filters-card">
-    <form method="GET" action="/admin/contacts" class="row g-3">
+    <form method="GET" action="/contacts" class="row g-3">
         <div class="col-md-3">
             <label class="form-label">状态筛选</label>
             <select name="status_filter" class="form-select" onchange="this.form.submit()">
@@ -631,7 +631,7 @@ function batchUpdateStatus(status) {
         '批量操作确认',
         `确定将选中的 ${ids.length} 条留言标记为${statusText}吗？`,
         function() {
-            fetch('/admin/contacts/batch/status', {
+            fetch('/contacts/batch/status', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -676,7 +676,7 @@ function exportCSV() {
     const keyword = urlParams.get('keyword') || '';
 
     // 构建导出 URL
-    let exportUrl = '/admin/contacts/export/csv?';
+    let exportUrl = '/contacts/export/csv?';
     if (statusFilter) {
         exportUrl += `status_filter=${statusFilter}&`;
     }

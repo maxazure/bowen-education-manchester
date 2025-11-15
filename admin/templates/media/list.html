@@ -215,7 +215,7 @@
     <!-- 筛选和搜索 -->
     <div class="card border-0 shadow-sm mb-4">
         <div class="card-body">
-            <form method="get" action="/admin/media" class="row g-3">
+            <form method="get" action="/media" class="row g-3">
                 <div class="col-md-3">
                     <label class="form-label">文件类型</label>
                     <select name="file_type" class="form-select" onchange="this.form.submit()">
@@ -255,12 +255,12 @@
             <div class="folder-tree">
                 <h6 class="text-muted mb-3">文件夹</h6>
                 <div class="folder-item {% if not current_folder_id %}active{% endif %}"
-                     onclick="location.href='/admin/media'">
+                     onclick="location.href='/media'">
                     <i class="bi bi-folder"></i> 全部文件
                 </div>
                 {% for folder in folders %}
                 <div class="folder-item {% if current_folder_id == folder.id %}active{% endif %}"
-                     onclick="location.href='/admin/media?folder_id={{ folder.id }}'">
+                     onclick="location.href='/media?folder_id={{ folder.id }}'">
                     <i class="bi bi-folder"></i> {{ folder.name }}
                 </div>
                 {% endfor %}
@@ -450,7 +450,7 @@ document.getElementById('batchDeleteBtn').addEventListener('click', function() {
         return;
     }
 
-    fetch('/admin/media/batch-delete', {
+    fetch('/media/batch-delete', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

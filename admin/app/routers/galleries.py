@@ -183,8 +183,7 @@ class GalleryImageUpdate(BaseModel):
 class DragSortRequest(BaseModel):
     """拖拽排序请求"""
 
-    image_id: int = Field(..., description="要移动的图片ID")
-    new_position: int = Field(..., ge=0, description="新位置（从0开始）")
+    image_ids: List[int] = Field(..., description="排序后的图片ID列表")
 
 
 class BatchReorderRequest(BaseModel):
@@ -580,51 +579,36 @@ def drag_sort_images(
 
     Args:
         gallery_id: 相册ID
-        request: 拖拽排序请求
+        request: 拖拽排序请求（包含排序后的完整图片ID列表）
         db: 数据库会话
 
     Returns:
         排序结果
     """
-    # 获取相册所有图片
+    # 验证所有图片ID都属于该相册
     images = (
         db.query(GalleryImage)
         .filter_by(gallery_id=gallery_id)
-        .order_by(GalleryImage.sort_order)
         .all()
     )
 
     if not images:
         return {"success": True, "message": "No images to sort"}
 
-    # 找到要移动的图片
-    moving_image = None
-    old_position = None
-    for i, img in enumerate(images):
-        if img.id == request.image_id:
-            moving_image = img
-            old_position = i
-            break
+    # 创建图片ID到图片对象的映射
+    image_map = {img.id: img for img in images}
 
-    if moving_image is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Image with id {request.image_id} not found",
-        )
+    # 验证请求中的所有图片ID都有效
+    for image_id in request.image_ids:
+        if image_id not in image_map:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Image with id {image_id} not found in gallery {gallery_id}",
+            )
 
-    # 如果位置没变，直接返回
-    if old_position == request.new_position:
-        return {"success": True, "message": "Position unchanged"}
-
-    # 移除图片
-    images.pop(old_position)
-
-    # 插入到新位置
-    images.insert(request.new_position, moving_image)
-
-    # 更新所有图片的 sort_order
-    for i, img in enumerate(images):
-        img.sort_order = i
+    # 按照新的顺序更新 sort_order
+    for new_order, image_id in enumerate(request.image_ids):
+        image_map[image_id].sort_order = new_order
 
     db.commit()
 

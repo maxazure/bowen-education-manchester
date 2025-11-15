@@ -280,7 +280,7 @@ async function removeImage(imageId) {
 // 加载媒体库
 async function loadMediaLibrary() {
     try {
-        const response = await fetch('/admin/media/files?file_type=image&page_size=100');
+        const response = await fetch('/media/files?file_type=image&page_size=100');
         const data = await response.json();
 
         const container = document.getElementById('mediaLibrary');

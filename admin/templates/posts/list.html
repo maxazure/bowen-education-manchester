@@ -78,7 +78,7 @@
 <!-- 筛选表单 -->
 <div class="card mb-4">
     <div class="card-body">
-        <form method="GET" action="/admin/posts" class="row g-3">
+        <form method="GET" action="/posts" class="row g-3">
             <div class="col-md-3">
                 <label class="form-label">栏目筛选</label>
                 <select name="column_id" class="form-select">
@@ -570,7 +570,7 @@ function batchPublish() {
         '批量发布确认',
         `确定要发布选中的 ${ids.length} 篇文章吗？`,
         function() {
-            fetch('/admin/posts/batch/publish', {
+            fetch('/posts/batch/publish', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -606,7 +606,7 @@ function batchDraft() {
         '批量设为草稿确认',
         `确定要将选中的 ${ids.length} 篇文章设为草稿吗？`,
         function() {
-            fetch('/admin/posts/batch/draft', {
+            fetch('/posts/batch/draft', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -642,7 +642,7 @@ function batchRecommend() {
         '批量推荐确认',
         `确定要推荐选中的 ${ids.length} 篇文章吗？`,
         function() {
-            fetch('/admin/posts/batch/recommend', {
+            fetch('/posts/batch/recommend', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -678,7 +678,7 @@ function batchUnrecommend() {
         '批量取消推荐确认',
         `确定要取消推荐选中的 ${ids.length} 篇文章吗？`,
         function() {
-            fetch('/admin/posts/batch/recommend', {
+            fetch('/posts/batch/recommend', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -714,7 +714,7 @@ function batchDelete() {
         '批量删除确认',
         `确定要删除选中的 ${ids.length} 篇文章吗？删除后无法恢复。`,
         function() {
-            fetch('/admin/posts/batch/delete', {
+            fetch('/posts/batch/delete', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

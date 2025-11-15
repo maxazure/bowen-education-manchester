@@ -239,7 +239,7 @@
                                     <i class="bi bi-file-earmark"></i>
                                 </button>
                                 {% endif %}
-                                <a href="/pages/{{ page.slug }}" target="_blank"
+                                <a href="/admin/pages/{{ page.slug }}" target="_blank"
                                    class="btn btn-sm btn-outline-info"
                                    data-bs-toggle="tooltip"
                                    title="预览单页">
@@ -489,7 +489,7 @@ function batchPublish() {
         '批量发布确认',
         `确定要发布选中的 ${ids.length} 个单页吗？`,
         function() {
-            fetch('/admin/pages/batch/publish', {
+            fetch('/pages/batch/publish', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -525,7 +525,7 @@ function batchDraft() {
         '批量设为草稿确认',
         `确定要将选中的 ${ids.length} 个单页设为草稿吗？`,
         function() {
-            fetch('/admin/pages/batch/draft', {
+            fetch('/pages/batch/draft', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -561,7 +561,7 @@ function batchDelete() {
         '批量删除确认',
         `确定要删除选中的 ${ids.length} 个单页吗？删除后无法恢复。`,
         function() {
-            fetch('/admin/pages/batch/delete', {
+            fetch('/pages/batch/delete', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

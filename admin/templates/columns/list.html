@@ -521,7 +521,7 @@ function batchUpdateStatus(enabled, action) {
         `批量${action}确认`,
         `确定要${action}选中的 ${ids.length} 个栏目吗？`,
         function() {
-            fetch('/admin/columns/batch/status', {
+            fetch('/columns/batch/status', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -567,7 +567,7 @@ function batchUpdateNav(showInNav, action) {
         `批量${action}确认`,
         `确定要将选中的 ${ids.length} 个栏目设置为${action}吗？`,
         function() {
-            fetch('/admin/columns/batch/nav', {
+            fetch('/columns/batch/nav', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -603,7 +603,7 @@ function batchDelete() {
         '批量删除确认',
         `确定要删除选中的 ${ids.length} 个栏目吗？包含子栏目或关联内容的栏目将无法删除。`,
         function() {
-            fetch('/admin/columns/batch/delete', {
+            fetch('/columns/batch/delete', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

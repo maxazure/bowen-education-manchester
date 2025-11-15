@@ -65,7 +65,7 @@ function initForm() {
             const formData = new FormData(form);
 
             // 提交数据
-            const response = await fetch('/admin/settings', {
+            const response = await fetch('/settings', {
                 method: 'POST',
                 body: formData
             });

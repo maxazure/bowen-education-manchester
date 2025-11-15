@@ -79,7 +79,10 @@
     <button
         class="mobile-menu-toggle"
         @click="toggleMobileMenu()"
-        :aria-expanded="mobileMenuOpen.toString()"
+        type="button"
+        aria-expanded="false"
+        x-bind:aria-expanded="mobileMenuOpen.toString()"
+        aria-controls="mobile-menu-panel"
         aria-label="Menu"
     >
         <span class="hamburger-line" :class="{ 'active': mobileMenuOpen }"></span>
@@ -92,15 +95,20 @@
         class="mobile-menu"
         x-show="mobileMenuOpen"
         x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0 transform translate-x-full"
-        x-transition:enter-end="opacity-100 transform translate-x-0"
+        x-transition:enter-start="opacity-0 max-h-0"
+        x-transition:enter-end="opacity-100 max-h-menu"
         x-transition:leave="transition ease-in duration-200"
-        x-transition:leave-start="opacity-100 transform translate-x-0"
-        x-transition:leave-end="opacity-0 transform translate-x-full"
-        style="display: none;"
+        x-transition:leave-start="opacity-100 max-h-menu"
+        x-transition:leave-end="opacity-0 max-h-0"
+        style="display: none; overflow: hidden;"
         x-cloak
+        id="mobile-menu-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-hidden="true"
     >
         <div class="mobile-nav">
+            <button class="mobile-nav-toggle mobile-nav-close" type="button" @click="closeMobileMenu()" aria-label="关闭">关闭</button>
             <ul class="mobile-nav-menu">
                 {% for item in navigation %}
                     {% if not item.parent_id %}
@@ -112,8 +120,10 @@
                             {% if has_children %}
                             <button
                                 class="mobile-nav-toggle"
+                                type="button"
                                 @click="submenuOpen = !submenuOpen"
-                                :aria-expanded="submenuOpen.toString()"
+                                aria-expanded="false"
+                                x-bind:aria-expanded="submenuOpen.toString()"
                             >
                                 <span><span class="nav-chinese">{{ item.name }}</span></span>
                                 <svg
@@ -141,6 +151,7 @@
                                 x-transition:leave-end="opacity-0 max-h-0"
                                 style="display: none; overflow: hidden;"
                                 x-cloak
+                                aria-hidden="true"
                             >
                                 <!-- Link to parent overview page -->
                                 <li>
@@ -170,6 +181,8 @@
             </div>
         </div>
     </div>
+
+    
 </nav>
 
 <script>
@@ -181,6 +194,7 @@ function navigationMenu() {
     return {
         // 移动菜单开关状态
         mobileMenuOpen: false,
+        lastFocused: null,
 
         /**
          * 切换移动菜单
@@ -189,6 +203,14 @@ function navigationMenu() {
             this.mobileMenuOpen = !this.mobileMenuOpen;
             // 切换body类来禁用滚动
             document.body.classList.toggle('mobile-menu-open', this.mobileMenuOpen);
+            if (this.mobileMenuOpen) {
+                this.lastFocused = document.activeElement;
+                const panel = document.getElementById('mobile-menu-panel');
+                const focusables = panel ? panel.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])') : [];
+                if (focusables.length) focusables[0].focus();
+            } else if (this.lastFocused) {
+                this.lastFocused.focus();
+            }
         },
 
         /**
@@ -197,6 +219,7 @@ function navigationMenu() {
         closeMobileMenu() {
             this.mobileMenuOpen = false;
             document.body.classList.remove('mobile-menu-open');
+            if (this.lastFocused) this.lastFocused.focus();
         },
 
         /**
@@ -207,6 +230,16 @@ function navigationMenu() {
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && this.mobileMenuOpen) {
                     this.closeMobileMenu();
+                }
+                if (e.key === 'Tab' && this.mobileMenuOpen) {
+                    const panel = document.getElementById('mobile-menu-panel');
+                    const focusables = panel ? Array.from(panel.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])')) : [];
+                    if (focusables.length) {
+                        const first = focusables[0];
+                        const last = focusables[focusables.length - 1];
+                        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+                        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+                    }
                 }
             });
 

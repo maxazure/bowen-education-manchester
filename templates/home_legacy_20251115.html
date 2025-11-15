@@ -316,7 +316,6 @@
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 1.5rem;
     margin-top: 2rem;
-    align-items: stretch;
 }
 
 .quick-entry-card {
@@ -332,7 +331,6 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
-    height: 100%;
 }
 
 .quick-entry-card::before {
@@ -507,7 +505,7 @@
     }
 
     .quick-entry-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
     }
 
@@ -1152,6 +1150,15 @@
                         Saturday: 9:00 - 17:00<br>
                         Sunday: 9:00 - 17:00
                     </p>
+                </div>
+
+                <!-- Placeholder for Google Map -->
+                <div class="bg-secondary rounded" style="height: 300px; display: flex; align-items: center; justify-content: center; color: white;">
+                    <div class="text-center">
+                        <div class="h2 mb-2">🗺️</div>
+                        <div>Google Maps Integration</div>
+                        <small class="d-block mt-2 opacity-75">Map will be embedded here</small>
+                    </div>
                 </div>
             </div>
         </div>

@@ -51,11 +51,17 @@ async def login(
     Returns:
         成功则重定向到仪表板，失败则返回登录页面with error
     """
+    import logging
+    logger = logging.getLogger(__name__)
+    logger.info(f"登录尝试: username={username}")
+
     # 查询管理员
     admin = db.query(AdminUser).filter(AdminUser.username == username).first()
+    logger.info(f"查询结果: admin={'找到' if admin else '未找到'}")
 
     # 验证用户名和密码
     if not admin or not admin.verify_password(password):
+        logger.warning(f"登录失败: 用户名或密码错误")
         return templates.TemplateResponse(
             "login.html", {"request": request, "error": "用户名或密码错误"}
         )
@@ -63,10 +69,12 @@ async def login(
     # 更新最后登录时间
     admin.last_login_at = datetime.now()
     db.commit()
+    logger.info(f"登录成功: user_id={admin.id}, username={admin.username}")
 
     # 设置 Session
     request.session["admin_user_id"] = admin.id
     request.session["admin_username"] = admin.username
+    logger.info("Session已设置")
 
     # 重定向到仪表板
     return RedirectResponse(url="/admin/", status_code=302)

@@ -218,7 +218,7 @@
                         <i class="bi bi-check-circle me-2"></i>
                         {% if product %}更新产品{% else %}创建产品{% endif %}
                     </button>
-                    <button type="button" class="btn btn-outline-secondary" onclick="window.location.href='/admin/products'">
+                    <button type="button" class="btn btn-outline-secondary" onclick="window.location.href='/products'">
                         <i class="bi bi-x-circle me-2"></i>
                         取消
                     </button>
@@ -455,7 +455,7 @@
 
                 // 延迟跳转到列表页
                 setTimeout(() => {
-                    window.location.href = '/admin/products';
+                    window.location.href = '/products';
                 }, 1500);
             } else {
                 showToast('danger', data.message, '错误');

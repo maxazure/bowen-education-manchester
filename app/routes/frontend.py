@@ -19,6 +19,7 @@ from app.models import ColumnType, SiteColumn
 from app.models.contact import ContactMessage
 from app.schemas.requests import ContactFormRequest
 from app.services import post_service, product_service, site_service
+from app.services import layout_service as layout_render_service
 from app.utils.template_helpers import (
     get_navigation,
     post_list,
@@ -80,6 +81,13 @@ async def homepage(request: Request, db: Session = Depends(get_db)):
     """Homepage"""
     context = get_base_context(request, db)
 
+    # 优先使用已发布的布局进行渲染
+    from app.models.layout import LayoutScope
+    published_layout = layout_render_service.get_published_layout(db, LayoutScope.HOME)
+    if published_layout:
+        html = layout_render_service.render_layout_html(db, published_layout)
+        return templates.TemplateResponse("layout_page.html", {"request": request, **context, "layout_html": html})
+
     # Get homepage column
     home_column = site_service.get_column_by_slug(db, "home")
     if home_column and home_column.column_type == ColumnType.SINGLE_PAGE:
@@ -107,6 +115,10 @@ async def column_page(
     column_slug: str, request: Request, db: Session = Depends(get_db)
 ):
     """Column page (product list, post list, or single page)"""
+    # Exclude admin paths - they should be handled by admin router
+    if column_slug.startswith("admin"):
+        raise HTTPException(status_code=404, detail="Page not found")
+
     column = site_service.get_column_by_slug(db, column_slug)
 
     if not column:
@@ -114,6 +126,13 @@ async def column_page(
 
     context = get_base_context(request, db)
     context["column"] = column
+
+    # Universal layout priority: if a published layout exists for this column, render it
+    from app.models.layout import LayoutScope
+    published_layout_for_column = layout_render_service.get_published_layout(db, LayoutScope.COLUMN, scope_id=column.id)
+    if published_layout_for_column:
+        html = layout_render_service.render_layout_html(db, published_layout_for_column)
+        return templates.TemplateResponse("layout_page.html", {"request": request, **context, "layout_html": html})
 
     # Add parent column and sibling columns for sidebar navigation
     if column.parent_id:
@@ -256,6 +275,9 @@ async def column_page(
         return templates.TemplateResponse("gallery.html", context)
 
     elif column.column_type == ColumnType.CUSTOM:
+        # 优先使用自定义栏目的已发布布局进行渲染
+        # 已在通用检查处处理，此处继续旧逻辑
+
         # For custom columns like Home, try to render custom template
         # If home slug, redirect to homepage
         if column_slug == "home":
@@ -354,6 +376,10 @@ async def item_detail_page_short(
     column_slug: str, item_slug: str, request: Request, db: Session = Depends(get_db)
 ):
     """Short URL format for post and product detail pages (e.g., /news/{slug})"""
+    # Exclude admin paths - they should be handled by admin router
+    if column_slug.startswith("admin"):
+        raise HTTPException(status_code=404, detail="Page not found")
+
     column = site_service.get_column_by_slug(db, column_slug)
 
     if not column:
@@ -416,6 +442,10 @@ async def item_detail_page(
     column_slug: str, item_slug: str, request: Request, db: Session = Depends(get_db)
 ):
     """Universal item detail page for products and posts (legacy URL format)"""
+    # Exclude admin paths - they should be handled by admin router
+    if column_slug.startswith("admin"):
+        raise HTTPException(status_code=404, detail="Page not found")
+
     column = site_service.get_column_by_slug(db, column_slug)
 
     if not column:

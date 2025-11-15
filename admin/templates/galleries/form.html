@@ -199,7 +199,7 @@ document.getElementById('galleryForm').addEventListener('submit', async function
 
     const isEdit = {{ 'true' if is_edit else 'false' }};
     const galleryId = {{ gallery.id if gallery else 'null' }};
-    const url = isEdit ? `/admin/galleries/${galleryId}` : '/admin/galleries';
+    const url = isEdit ? `/admin/galleries/${galleryId}` : '/galleries';
     const method = isEdit ? 'PUT' : 'POST';
 
     try {
@@ -217,7 +217,7 @@ document.getElementById('galleryForm').addEventListener('submit', async function
             if (!isEdit && result.id) {
                 window.location.href = `/admin/galleries/${result.id}/images`;
             } else {
-                window.location.href = '/admin/galleries';
+                window.location.href = '/galleries';
             }
         } else {
             const error = await response.json();

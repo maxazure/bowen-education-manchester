@@ -6,7 +6,7 @@
     'CUSTOM': {'text': '自定义', 'class': 'bg-danger'}
 } %}
 
-{% set column_type_str = column.column_type.value if column.column_type.value is defined else column.column_type %}
+{% set column_type_str = (column.column_type | string) %}
 {% set type_display = type_badges.get(column_type_str, {'text': column_type_str, 'class': 'bg-secondary'}) %}
 
 <tr class="column-row column-level-{{ column.level or 0 }}"
@@ -14,8 +14,8 @@
     data-name="{{ column.name }}"
     data-slug="{{ column.slug }}"
     data-type="{{ column_type_str }}"
-    data-enabled="{{ column.is_enabled|lower }}"
-    data-show-in-nav="{{ column.show_in_nav|lower }}"
+    data-enabled="{{ column.is_enabled | string | lower }}"
+    data-show-in-nav="{{ column.show_in_nav | string | lower }}"
     data-parent-id="{{ column.parent_id or 'None' }}"
     data-level="{{ column.level or 0 }}">
 
@@ -128,6 +128,13 @@
                data-bs-toggle="tooltip"
                title="管理相册列表">
                 <i class="bi bi-images"></i>
+            </a>
+            {% elif column_type_str == 'CUSTOM' %}
+            <a href="/admin/columns/{{ column.id }}/builder"
+               class="btn btn-sm btn-success"
+               data-bs-toggle="tooltip"
+               title="编辑页面（区块）">
+                <i class="bi bi-layout-text-window"></i>
             </a>
             {% endif %}
 

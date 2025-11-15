@@ -370,7 +370,7 @@
                         <i class="bi bi-check-circle me-2"></i>
                         {% if mode == 'edit' %}更新栏目{% else %}创建栏目{% endif %}
                     </button>
-                    <button type="button" class="btn btn-outline-secondary" onclick="window.location.href='/admin/columns'">
+                    <button type="button" class="btn btn-outline-secondary" onclick="window.location.href='/columns'">
                         <i class="bi bi-x-circle me-2"></i>
                         取消
                     </button>
@@ -548,7 +548,7 @@
 
                 // 延迟跳转到列表页
                 setTimeout(() => {
-                    window.location.href = '/admin/columns';
+                    window.location.href = '/columns';
                 }, 1500);
             } else {
                 showToast('danger', data.message, '错误');

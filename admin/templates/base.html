@@ -301,7 +301,7 @@
                 <button class="btn btn-link p-0 me-3" id="sidebarToggle" type="button">
                     <i class="bi bi-list"></i>
                 </button>
-                <a class="navbar-brand d-flex align-items-center" href="/admin/">
+                <a class="navbar-brand d-flex align-items-center" href="/">
                     <span class="fw-bold">博文教育</span>
                     <span class="ms-2 d-none d-md-inline text-muted">管理后台</span>
                 </a>
@@ -337,7 +337,7 @@
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-content">
             <!-- 仪表板 -->
-            <a href="/admin/" class="sidebar-link {% if request.path == '/admin/' %}active{% endif %}">
+            <a href="/admin/" class="sidebar-link {% if request.path == '/admin/' or request.path == '/admin' %}active{% endif %}">
                 <i class="bi bi-speedometer2"></i>
                 <span class="sidebar-text">仪表板</span>
             </a>
