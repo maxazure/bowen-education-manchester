@@ -973,14 +973,14 @@
             {% for post in latest_posts %}
             <article class="news-card" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
                 <div class="news-card-image" style="background-image: url('{{ post.featured_image }}');">
-                    <span class="news-card-category">{{ post.column.name }}</span>
+                    <span class="news-card-category">{{ post.column.name_en or post.column.name }}</span>
                 </div>
                 <div class="news-card-content">
                     <div class="news-card-date">
                         {{ post.published_at.strftime('%B %d, %Y') if post.published_at else '' }}
                     </div>
-                    <h3 class="news-card-title">{{ post.title }}</h3>
-                    <p class="news-card-excerpt">{{ post.summary or (post.content_html|striptags)[:100] + '...' }}</p>
+                    <h3 class="news-card-title">{{ post.title_en or post.title }}</h3>
+                    <p class="news-card-excerpt">{{ post.summary_en or post.summary or ((post.content_html_en or post.content_html)|striptags)[:100] + '...' }}</p>
                     <a href="/en/news/{{ post.slug }}/" class="btn btn-sm btn-primary">Read More →</a>
                 </div>
             </article>

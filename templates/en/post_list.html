@@ -63,12 +63,12 @@
 
                             <!-- Title -->
                             <h3 class="news-card__title">
-                                <a href="/en/{{ column.slug }}/{{ post.slug }}">{{ post.title }}</a>
+                                <a href="/en/{{ column.slug }}/{{ post.slug }}">{{ post.title_en or post.title }}</a>
                             </h3>
 
                             <!-- Summary -->
                             <p class="news-card__summary">
-                                {{ post.summary or (post.content_html|striptags|truncate(120)) }}
+                                {{ post.summary_en or post.summary or ((post.content_html_en or post.content_html)|striptags|truncate(120)) }}
                             </p>
 
                             <!-- Read More Link -->
