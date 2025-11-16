@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}{{ column.name }} - Bowen Education Group{% endblock %}
+{% block title %}{{ column|column_name }} - Bowen Education Group{% endblock %}
 
-{% block meta_description %}{{ column.description or (column.name ~ ' - Bowen Education Group provides quality Chinese language education') }}{% endblock %}
+{% block meta_description %}{{ column.hero_tagline or (column|column_name ~ ' - Bowen Education Group provides quality Chinese language education') }}{% endblock %}
 
 {% block content %}
 
 <!-- Hero Section -->
-{% set hero_title = column.name %}
-{% set hero_subtitle = column.description %}
+{% set hero_title = column|column_name %}
+{% set hero_subtitle = None %}
 {% include 'components/hero_standard.html' %}
 
 <!-- Content Section with Sidebar -->
