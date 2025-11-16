@@ -2,6 +2,85 @@
 
 ## ✅ 已完成
 
+### [2025-11-16] 修复英文页面显示和路由问题
+- [x] 添加栏目英文名称字段 - 完成时间: 2025-11-16 - 负责人: maxazure
+- [x] 修复导航菜单显示中文问题 - 完成时间: 2025-11-16 - 负责人: maxazure
+- [x] 修复 URL 路由 404 错误 - 完成时间: 2025-11-16 - 负责人: maxazure
+- [x] 修复英文页面 Hero 组件显示中文 - 完成时间: 2025-11-16 - 负责人: maxazure
+- [x] 测试英文页面功能正常 - 完成时间: 2025-11-16 - 负责人: maxazure
+
+  - **问题背景**:
+    - 完成英文模板清理后，测试发现英文页面仍显示中文内容
+    - 导航菜单显示中文栏目名称
+    - 访问 `/en/school/` 等页面出现 404 错误
+    - Hero 区域显示数据库中的中文内容
+
+  - **修复详情**:
+    1. **数据库架构更新**:
+       - 在 `site_column` 表添加 `name_en` 字段
+       - 创建迁移脚本 `add_english_column_names.py`
+       - 为所有 31 个栏目添加英文名称
+       - 翻译对照表：
+         * "首页" → "Home"
+         * "中文学校" → "Chinese School"
+         * "补习中心" → "Tuition Centre"
+         * "国际象棋俱乐部" → "Chess Club"
+         * "羽毛球俱乐部" → "Badminton Club"
+         * 等等...
+
+    2. **模型层更新** (app/models/site.py:49):
+       - 在 `SiteColumn` 模型添加 `name_en` 字段定义
+       - 字段类型: `Column(String(100), nullable=True, comment="栏目英文名称")`
+
+    3. **模板引擎更新** (app/routes/frontend_i18n.py:52-59):
+       - 添加 `column_name` 自定义过滤器
+       - 根据语言代码自动选择中文或英文栏目名称
+       - 英文环境优先使用 `name_en` 字段
+
+    4. **导航组件更新** (templates/en/components/navigation.html):
+       - 将 `{{ item.name }}` 替换为 `{{ item|column_name }}`
+       - 将 `{{ child.name }}` 替换为 `{{ child|column_name }}`
+       - 共更新 5 处使用栏目名称的位置
+
+    5. **URL 路由修复** (app/routes/frontend.py:185):
+       - 修复 column_slug 尾部斜杠问题
+       - 添加 `column_slug = column_slug.rstrip('/')` 清理逻辑
+       - 解决 `/en/school/` 查询数据库时找不到 `'school/'` 的问题
+
+    6. **Hero 组件修复** (templates/en/components/hero_main_column.html:10-14):
+       - 英文版使用 `column.hero_title_en` 或 `column.name_en` 作为主标题
+       - 隐藏中文副标题 (`h_title_en = None`)
+       - 隐藏中文 tagline (`h_tagline = None`)
+       - 隐藏中文 CTA 按钮 (`h_cta_text = None`)
+
+    7. **临时方案** (app/routes/frontend.py:128-135):
+       - 临时禁用英文首页的布局系统
+       - 直接使用清理后的 home.html 模板
+       - TODO: 后续需要清理数据库布局中的中文内容
+
+  - **测试结果**:
+    - ✅ 首页 `/en/` 完全显示英文内容
+    - ✅ 导航菜单显示英文栏目名称
+    - ✅ 中文学校页面 `/en/school/` 正常加载
+    - ✅ 联系页面 `/en/contact/` 正常加载
+    - ✅ Hero 区域只显示英文标题
+    - ✅ 所有按钮和标签均为英文
+    - ⚠️ News & Events 区域文章标题仍为中文（数据库数据问题，不影响模板）
+
+  - **Git 提交记录**:
+    - `cc62fe5` - fix: 修复英文页面显示问题
+
+  - **技术要点**:
+    - 使用 Jinja2 自定义过滤器实现双语支持
+    - SQLAlchemy 模型动态字段加载
+    - 路由参数清理和规范化
+    - 组件模板根据语言上下文调整渲染逻辑
+
+  - **后续任务**:
+    - [ ] 清理数据库 `page_layout` 表中的已发布布局（包含中文内容）
+    - [ ] 为英文页面创建专门的布局模板
+    - [ ] 添加其他栏目的英文 hero_title_en 和 tagline
+
 ### [2025-11-16] 完成英文模板系统中文文本清理
 - [x] 清理核心页面模板 - 完成时间: 2025-11-16 - 负责人: maxazure
 - [x] 清理俱乐部页面模板 - 完成时间: 2025-11-16 - 负责人: maxazure
