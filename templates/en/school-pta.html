@@ -81,6 +81,24 @@
 </section>
 
 <style>
+/* Page Layout - Two Column */
+.page-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.page-layout__sidebar {
+    flex: 0 0 280px;
+    min-width: 280px;
+    max-width: 280px;
+}
+
+.page-layout__main {
+    flex: 1;
+    min-width: 0;
+}
+
 .content-article {
     background: white;
     padding: 2rem;
@@ -178,6 +196,18 @@
 }
 
 @media (max-width: 768px) {
+    .page-layout {
+        flex-direction: column;
+    }
+
+    .page-layout__sidebar {
+        flex: none;
+        width: 100%;
+        min-width: 100%;
+        max-width: 100%;
+        order: -1;
+    }
+
     .content-article {
         padding: 1.5rem;
     }
