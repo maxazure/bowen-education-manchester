@@ -2,6 +2,82 @@
 
 ## ✅ 已完成
 
+### [2025-11-16] 扩充团队成员信息
+- [x] 将教师照片导入媒体文件表 - 完成时间: 2025-11-16 - 负责人: maxazure
+- [x] 创建17个新团队成员记录 - 完成时间: 2025-11-16 - 负责人: maxazure
+
+  - **任务背景**:
+    - 原有团队只有3名成员（创始人、中文学校负责人、补习中心负责人）
+    - 需要扩充到15-20人以更真实地展示团队规模
+    - 已有19张教师照片但未导入数据库
+
+  - **完成内容**:
+    1. **导入教师照片**: 将19张教师照片导入到 media_file 表
+       - 自动获取图片尺寸和文件大小
+       - 设置正确的MIME类型
+       - 记录文件路径: `/static/images/teachers/`
+    
+    2. **创建团队成员**: 新增17名团队成员，包括:
+       - **中文学校** (5人):
+         - Miss Catherine Zhu (朱凯瑟琳) - 高级中文教师
+         - Miss Lin Li (李琳) - 中文教师
+         - Miss Ellen Wong (黄爱伦) - 粤语教师
+         - Miss Jenny Mei (梅珍妮) - 中文教师 & HSK协调员
+         - Miss Qian Cai (蔡倩) - 初级中文教师
+       
+       - **补习中心** (6人):
+         - Mr. Simon Harris - 英语教师
+         - Mr. Tim Anderson - 英语教师
+         - Mr. William Thompson - 高级英语文学教师
+         - Mr. Jonathan Carter - 数学教师
+         - Mr. Josh Mitchell - 数学与科学教师
+         - Mr. Steve Chan (陈思齐) - 科学教师
+       
+       - **国际象棋俱乐部** (2人):
+         - Mr. David Richardson - 国际象棋教练 & 主任 (FIDE Master)
+         - Miss Katie Wong (黄嘉迪) - 国际象棋教练 (FIDE Candidate Master)
+       
+       - **体育** (1人):
+         - Mr. Andrew Toft - 羽毛球教练
+       
+       - **行政管理** (3人):
+         - Miss Kirsty Dicken - 行政经理
+         - Mr. Lewis Bennett - 行政助理
+         - Miss Jessica Chen (陈杰西卡) - 学术协调员
+
+  - **成员信息包含**:
+    - 英文姓名和中文姓名（如适用）
+    - 职位和部门
+    - 专业资质（学位、证书等）
+    - 详细个人简介（200-300字HTML格式）
+    - 教师照片关联
+    - 显示顺序（sort_order: 4-20）
+
+  - **创建脚本**: `add_team_members.py`
+    - 使用 Python + SQLite3
+    - 自动获取图片信息（尺寸、大小、MIME类型）
+    - 检查重复避免重复导入
+    - 事务处理确保数据一致性
+
+  - **最终结果**:
+    - 团队成员总数: 20人
+    - 按部门分布:
+      - Leadership: 1人
+      - Chinese School: 6人
+      - Tuition Centre: 7人
+      - Chess Club: 2人
+      - Sports: 1人
+      - Administration: 3人
+
+  - **数据质量**:
+    - 所有成员都有真实可信的姓名
+    - 专业资质符合英国教育标准（QTS, PGCE等）
+    - 简介突出教学经验和专业特长
+    - 性别和背景具有多样性
+    - 中英文双语支持
+
+## ✅ 已完成
+
 ### [2025-11-15] 修复手机模式下导航显示问题
 - [x] 分析移动端导航最佳实践 - 完成时间: 2025-11-15 - 负责人: maxazure
 - [x] 修复顶部导航在手机模式下显示混乱 - 完成时间: 2025-11-15 - 负责人: maxazure
