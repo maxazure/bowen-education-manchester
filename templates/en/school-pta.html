@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block title %}Parent-Teacher Association | Bowen Chinese School{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+{% if column %}
+    {% set hero_title_en = "Parent-Teacher Association" %}
+    {% set hero_title = "Parent-Teacher Association" %}
+    {% include 'components/hero_standard.html' %}
+{% endif %}
+
+<!-- Main Content with Sidebar -->
+<section class="section section--with-sidebar">
+    <div class="container">
+        <div class="page-layout">
+            <!-- Sidebar Navigation -->
+            {% if parent_column or sibling_columns %}
+            <aside class="page-layout__sidebar">
+                {% include 'components/sidebar_nav.html' %}
+            </aside>
+            {% endif %}
+
+            <!-- Main Content -->
+            <div class="page-layout__main">
+                <article class="content-article">
+                    <header class="content-article__header">
+                        <h1 class="content-article__title">About Our PTA</h1>
+                    </header>
+
+                    <div class="content-article__body">
+                        <p class="lead">
+                            The Bowen Chinese School Parent-Teacher Association (PTA) is a voluntary organization formed by parents and teachers, working together to promote home-school cooperation and create a better learning environment for students.
+                        </p>
+
+                        <h2>Our Mission</h2>
+                        <ul>
+                            <li>Strengthen communication and cooperation between parents and school</li>
+                            <li>Organize cultural activities and social events</li>
+                            <li>Support school fundraising and improve teaching facilities</li>
+                            <li>Provide advice on school education programmes</li>
+                        </ul>
+
+                        <h2>What We Do</h2>
+                        <h3>Home-School Communication</h3>
+                        <p>
+                            We serve as a bridge between parents and teachers, facilitating regular communication through parent meetings, newsletters, and online platforms to ensure parents stay informed about their children's learning progress.
+                        </p>
+
+                        <h3>Cultural Events</h3>
+                        <p>
+                            We organize various cultural activities throughout the year, including Chinese New Year celebrations, Mid-Autumn Festival events, and educational workshops, helping children understand and appreciate Chinese culture.
+                        </p>
+
+                        <h3>Fundraising Activities</h3>
+                        <p>
+                            Through charity sales, sponsored events, and community activities, we raise funds to support school development, purchase teaching materials, and improve educational facilities.
+                        </p>
+
+                        <h3>Volunteer Services</h3>
+                        <p>
+                            Parent volunteers play an important role in school activities, from classroom assistance to event organization, contributing their time and expertise to support student development.
+                        </p>
+
+                        <h2>Join Us</h2>
+                        <p>
+                            All parents are welcome to join the PTA. Whether you can spare a few hours or want to be more actively involved, we welcome your participation. Together, we can create a better learning environment for our children.
+                        </p>
+
+                        <div class="cta-box">
+                            <h3>Get Involved</h3>
+                            <p>Interested in joining the PTA or learning more about our activities?</p>
+                            <a href="/en/contact/" class="btn btn-primary">Contact Us</a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.content-article {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.content-article__header {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.content-article__title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0;
+}
+
+.content-article__body {
+    color: #374151;
+    line-height: 1.8;
+}
+
+.content-article__body .lead {
+    font-size: 1.125rem;
+    color: #4b5563;
+    margin-bottom: 2rem;
+}
+
+.content-article__body h2 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+}
+
+.content-article__body h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #374151;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.content-article__body p {
+    margin-bottom: 1.5rem;
+}
+
+.content-article__body ul {
+    margin-bottom: 1.5rem;
+    padding-left: 2rem;
+}
+
+.content-article__body li {
+    margin-bottom: 0.75rem;
+}
+
+.cta-box {
+    background: linear-gradient(135deg, #0052cc 0%, #0033a0 100%);
+    color: white;
+    padding: 2.5rem;
+    border-radius: 12px;
+    margin-top: 3rem;
+    text-align: center;
+}
+
+.cta-box h3 {
+    color: white !important;
+    margin-top: 0;
+    font-size: 1.75rem;
+}
+
+.cta-box p {
+    font-size: 1.125rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.95;
+}
+
+.cta-box .btn {
+    background: white;
+    color: #0052cc;
+    border: none;
+    padding: 1rem 2.5rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.cta-box .btn:hover {
+    background: #f3f4f6;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+    .content-article {
+        padding: 1.5rem;
+    }
+
+    .content-article__title {
+        font-size: 2rem;
+    }
+
+    .content-article__body h2 {
+        font-size: 1.5rem;
+    }
+
+    .content-article__body h3 {
+        font-size: 1.25rem;
+    }
+}
+</style>
+
+{% endblock %}

@@ -7,8 +7,8 @@
 {% block content %}
 
 <!-- Hero Section -->
-{% set hero_title = column.name %}
-{% set hero_subtitle = column.description %}
+{% set hero_title = column|column_name %}
+{% set hero_subtitle = None %}
 {% include 'components/hero_standard.html' %}
 
 <!-- Content Section with Sidebar -->
@@ -26,10 +26,7 @@
                 <!-- Column Title Section -->
                 {% if column.name %}
                 <div class="content-header" data-aos="fade-up">
-                    <h2 class="content-title">{{ column.name }}</h2>
-                    {% if column.description %}
-                    <p class="content-description">{{ column.description }}</p>
-                    {% endif %}
+                    <h2 class="content-title">{{ column|column_name }}</h2>
                 </div>
                 {% endif %}
 

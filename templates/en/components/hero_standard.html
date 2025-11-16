@@ -3,8 +3,8 @@
   Unified Hero section component, supports loading background images from columns or pages
 -->
 
-{% set hero_title = hero_title or (page.title if page is defined else column.name) %}
-{% set hero_subtitle = hero_subtitle or (page.subtitle if page is defined else (column.description if column is defined else none)) %}
+{% set hero_title = hero_title if hero_title is defined else (page.title if page is defined else column.name) %}
+{% set hero_subtitle = hero_subtitle if hero_subtitle is defined else (page.subtitle if page is defined else (column.description if column is defined else none)) %}
 {# Background image priority: explicitly passed hero_image > page.hero_media > column.hero_media > default image #}
 {% if not hero_image %}
     {% if page is defined and page.hero_media %}

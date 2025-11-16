@@ -7,8 +7,8 @@
 <aside class="sidebar-nav">
     <!-- Parent Column Link -->
     <div class="sidebar-header">
-        <a href="/en/{{ parent_column.slug }}/" class="sidebar-parent-link">
-            <h3>{{ parent_column.name }}</h3>
+        <a href="{% if parent_column.slug == 'home' %}/en/{% else %}/en/{{ parent_column.slug }}/{% endif %}" class="sidebar-parent-link">
+            <h3>{{ parent_column|column_name }}</h3>
 
         </a>
     </div>
@@ -20,7 +20,7 @@
             {% for sibling in sibling_columns %}
             <li class="sidebar-menu-item">
                 <a
-                    href="/en/{{ sibling.slug }}/"
+                    href="{% if sibling.slug == 'home' %}/en/{% else %}/en/{{ sibling.slug }}/{% endif %}"
                     class="sidebar-menu-link{% if column and column.id == sibling.id %} active{% endif %}"
                 >
                     <span class="sidebar-menu-icon">
@@ -50,7 +50,7 @@
                         </svg>
                         {% endif %}
                     </span>
-                    <span class="sidebar-menu-text">{{ sibling.name }}</span>
+                    <span class="sidebar-menu-text">{{ sibling|column_name }}</span>
                 </a>
             </li>
             {% endfor %}

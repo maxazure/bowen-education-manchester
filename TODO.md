@@ -2,6 +2,54 @@
 
 ## ✅ 已完成
 
+### [2025-11-16] 修复侧边栏和文章列表页面英文显示问题
+- [x] 修复侧边栏导航显示英文 - 完成时间: 2025-11-16 - 负责人: maxazure
+- [x] 修复 chess-events 页面英文显示 - 完成时间: 2025-11-16 - 负责人: maxazure
+- [x] 修复 Hero 组件的 None 值处理 - 完成时间: 2025-11-16 - 负责人: maxazure
+
+  - **问题背景**:
+    - PTA 和 chess-events 页面仍显示中文内容
+    - 侧边栏导航显示中文栏目名称
+    - Hero 组件的副标题即使设为 None 仍显示中文
+
+  - **修复详情**:
+    1. **侧边栏导航组件更新** (templates/en/components/sidebar_nav.html):
+       - Line 11: `{{ parent_column.name }}` → `{{ parent_column|column_name }}`
+       - Line 53: `{{ sibling.name }}` → `{{ sibling|column_name }}`
+       - Line 23: 添加 Home 链接条件判断
+
+    2. **chess-events 栏目名称更新**:
+       - 更新数据库: `name_en = 'Events & Competitions'`
+       - 之前为中文 "活动与赛事"
+
+    3. **post_list_universal.html 模板更新**:
+       - Line 10: `hero_title = column.name` → `hero_title = column|column_name`
+       - Line 11: `hero_subtitle = column.description` → `hero_subtitle = None`
+       - Line 29: `{{ column.name }}` → `{{ column|column_name }}`
+       - 移除 Line 31 的中文描述显示
+
+    4. **Hero 组件逻辑修复** (templates/en/components/hero_standard.html:6-7):
+       - 从 `hero_title or ...` 改为 `hero_title if hero_title is defined else ...`
+       - 从 `hero_subtitle or ...` 改为 `hero_subtitle if hero_subtitle is defined else ...`
+       - 解决 None 值被误判为 False 的问题
+
+    5. **PTA 页面英文模板创建** (templates/en/school-pta.html):
+       - 创建专门的英文单页模板
+       - 完整的 PTA 介绍英文内容
+       - 更新数据库 PTA 栏目: `name_en = 'Parent-Teacher Association'`
+
+  - **测试结果**:
+    - ✅ PTA 页面侧边栏显示英文
+    - ✅ chess-events 页面英雄区域仅显示 "Events & Competitions"
+    - ✅ chess-events 页面内容标题显示英文
+    - ✅ 所有侧边栏链接正确处理 home slug
+    - ⚠️ 文章标题和内容仍为中文（数据库内容，待后续处理）
+
+  - **技术要点**:
+    - Jinja2 的 `is defined` 测试可以正确区分 None 和未定义变量
+    - 使用 `or` 操作符会将 None 视为 False，导致逻辑错误
+    - 对于可选值的模板变量，应该使用 `if var is defined else default` 模式
+
 ### [2025-11-16] 修复英文页面显示和路由问题
 - [x] 添加栏目英文名称字段 - 完成时间: 2025-11-16 - 负责人: maxazure
 - [x] 修复导航菜单显示中文问题 - 完成时间: 2025-11-16 - 负责人: maxazure
