@@ -41,18 +41,14 @@
                     {% endif %}
                 </div>
                 <div class="language-switcher">
-                    <button class="language-toggle" aria-label="Language">
+                    <a href="{{ request.url.path|replace('/en', '') }}" class="language-toggle" aria-label="Switch to Chinese">
                         <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="10"></circle>
                             <line x1="2" y1="12" x2="22" y2="12"></line>
                             <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
                         </svg>
-                        <span>EN</span>
-                    </button>
-                    <ul class="language-dropdown" hidden>
-                        <li><a href="?lang=en">English</a></li>
-                        <li><a href="?lang=zh">中文</a></li>
-                    </ul>
+                        <span>中文</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -64,11 +60,10 @@
             <div class="header-content">
                 <!-- Logo -->
                 <div class="header-logo">
-                    <a href="/" aria-label="Bowen Education Group Home">
+                    <a href="/en/" aria-label="Bowen Education Group Home">
                         <img src="/static/images/logo.png" alt="Bowen Education Group" height="60">
                         <span class="logo-text">
                             <strong>{{ site.site_name }}</strong>
-                            <small>{{ site.site_name_chinese }}</small>
                         </span>
                     </a>
                 </div>

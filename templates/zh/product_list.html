@@ -1,0 +1,461 @@
+{% extends "base.html" %}
+
+{% block title %}{{ column.name }} | 博文教育集团 Bowen Education Group{% endblock %}
+
+{% block meta_description %}{{ column.description or (column.name ~ ' - 博文教育集团为您提供优质的课程和服务') }}{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+{% set hero_title = column.name %}
+{% set hero_subtitle = column.description %}
+{% include 'components/hero_standard.html' %}
+
+<!-- Products List Section -->
+<section class="section section--products">
+    <div class="container">
+        {% if parent_column %}
+        <!-- Two-column layout with sidebar -->
+        <div class="page-layout">
+            <!-- Left Sidebar Navigation -->
+            <aside class="page-layout__sidebar">
+                {% include 'components/sidebar_nav.html' %}
+            </aside>
+
+            <!-- Right Main Content -->
+            <div class="page-layout__main">
+                <div class="products-grid">
+                {% if products %}
+                    {% for product in products %}
+                    <article class="product-card" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 50 }}">
+                        {% if product.cover_media %}
+                        <div class="product-card__image">
+                            <img src="{{ product.cover_media.path_medium or product.cover_media.path_original }}"
+                                 alt="{{ product.name }}"
+                                 loading="lazy">
+                        </div>
+                        {% endif %}
+                        <div class="product-card__content">
+                            <h2 class="product-card__title">
+                                <span lang="zh-CN">{{ product.name }}</span>
+                            </h2>
+                            <p class="product-card__summary">
+                                {{ product.summary or (product.description_html|striptags|truncate(150)) }}
+                            </p>
+                            {% if product.price_text %}
+                            <p class="product-card__price">{{ product.price_text }}</p>
+                            {% endif %}
+                            <a href="/{{ column.slug }}/{{ product.slug }}"
+                               class="product-card__link"
+                               aria-label="了解 {{ product.name }} 详情">
+                                <span lang="zh-CN">了解详情</span> →
+                            </a>
+                        </div>
+                    </article>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <div class="empty-state__icon">📚</div>
+                        <h3 class="empty-state__title" lang="zh-CN">暂无课程</h3>
+                        <p class="empty-state__text" lang="zh-CN">课程正在更新中，敬请期待。</p>
+                        <a href="/" class="btn btn-primary">返回首页</a>
+                    </div>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <!-- Single column layout without sidebar -->
+        <div class="page-layout page-layout--single">
+            <div class="products-grid">
+            {% if products %}
+                {% for product in products %}
+                <article class="product-card" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 50 }}">
+                    {% if product.cover_media %}
+                    <div class="product-card__image">
+                        <img src="{{ product.cover_media.path_medium or product.cover_media.path_original }}"
+                             alt="{{ product.name }}"
+                             loading="lazy">
+                    </div>
+                    {% endif %}
+                    <div class="product-card__content">
+                        <h2 class="product-card__title">
+                            <span lang="zh-CN">{{ product.name }}</span>
+                        </h2>
+                        <p class="product-card__summary">
+                            {{ product.summary or (product.description_html|striptags|truncate(150)) }}
+                        </p>
+                        {% if product.price_text %}
+                        <p class="product-card__price">{{ product.price_text }}</p>
+                        {% endif %}
+                        <a href="/{{ column.slug }}/{{ product.slug }}"
+                           class="product-card__link"
+                           aria-label="了解 {{ product.name }} 详情">
+                            <span lang="zh-CN">了解详情</span> →
+                        </a>
+                    </div>
+                </article>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <div class="empty-state__icon">📚</div>
+                    <h3 class="empty-state__title" lang="zh-CN">暂无课程</h3>
+                    <p class="empty-state__text" lang="zh-CN">课程正在更新中，敬请期待。</p>
+                    <a href="/" class="btn btn-primary">返回首页</a>
+                </div>
+            {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section section--cta" aria-labelledby="cta-title">
+    <div class="container text-center" data-aos="fade-up">
+        <h2 id="cta-title" class="section__title">
+            <span lang="zh-CN">想了解更多？</span>
+        </h2>
+        <h3 class="section__title-chinese">
+            <span lang="en-GB">Want to Learn More?</span>
+        </h3>
+        <p class="section__subtitle">
+            <span lang="zh-CN">联系我们获取详细课程信息</span>
+        </p>
+        <div class="cta-buttons" role="group" aria-label="Contact actions">
+            <a href="/contact"
+               class="btn btn-primary btn-lg"
+               aria-label="联系博文教育集团获取课程信息">
+                <i class="fas fa-envelope" aria-hidden="true"></i>
+                <span lang="zh-CN">联系我们</span>
+            </a>
+            <a href="tel:01619693071"
+               class="btn btn-outline-primary btn-lg"
+               aria-label="致电博文教育集团 0161 969 3071">
+                <i class="fas fa-phone" aria-hidden="true"></i>
+                <span>0161 969 3071</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_css %}
+<link rel="preload" href="https://unpkg.com/aos@2.3.1/dist/aos.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</noscript>
+<style>
+/* Page Layout System */
+.section--products {
+    padding: 3rem 0;
+    background: linear-gradient(to bottom, #ffffff 0%, #f7fafc 100%);
+}
+
+.page-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.page-layout__sidebar {
+    flex: 0 0 280px;
+    min-width: 280px;
+    max-width: 280px;
+}
+
+.page-layout__main {
+    flex: 1;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.page-layout--single {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Products Grid */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+/* Product Card */
+.product-card {
+    background: white;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.product-card__image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.product-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-card__image img {
+    transform: scale(1.05);
+}
+
+.product-card__content {
+    padding: 1.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-card__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 0.75rem;
+}
+
+.product-card__summary {
+    color: #4a5568;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    flex: 1;
+}
+
+.product-card__price {
+    color: #0052cc;
+    font-weight: 600;
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
+}
+
+.product-card__link {
+    color: #0052cc;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: gap 0.3s ease;
+}
+
+.product-card__link:hover {
+    gap: 0.75rem;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.empty-state__icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.empty-state__title {
+    font-size: 1.5rem;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state__text {
+    color: #6b7280;
+    margin-bottom: 2rem;
+}
+
+/* CTA Section */
+.section--cta {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, #0052cc 0%, #003380 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.section--cta::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+}
+
+.section--cta .container {
+    position: relative;
+    z-index: 2;
+}
+
+.section--cta .section__title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+}
+
+.section--cta .section__title-chinese {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+    opacity: 1;
+    font-weight: 600;
+}
+
+.section--cta .section__subtitle {
+    font-size: 1.25rem;
+    color: #ffffff;
+    opacity: 1;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+}
+
+.cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    justify-content: center;
+    margin-top: 2.5rem;
+}
+
+.cta-buttons .btn {
+    min-width: 200px;
+    padding: 1.125rem 2.5rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    text-decoration: none;
+}
+
+.cta-buttons .btn-primary {
+    background: white;
+    color: #0052cc;
+    border: 2px solid white;
+}
+
+.cta-buttons .btn-primary:hover {
+    background: #f7fafc;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+}
+
+.cta-buttons .btn-outline-primary {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+}
+
+.cta-buttons .btn-outline-primary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .page-layout {
+        gap: 1.5rem;
+    }
+
+    .page-layout__sidebar {
+        flex: 0 0 240px;
+        min-width: 240px;
+        max-width: 240px;
+    }
+
+    .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-layout {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .page-layout__sidebar {
+        flex: none;
+        width: 100%;
+        min-width: 100%;
+        max-width: 100%;
+        order: -1;
+    }
+
+    .page-layout__main {
+        width: 100%;
+    }
+
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section--cta .section__title {
+        font-size: 1.875rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cta-buttons .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // 懒加载 AOS 动画库
+    (function() {
+        var script = document.createElement('script');
+        script.src = 'https://unpkg.com/aos@2.3.1/dist/aos.js';
+        script.defer = true;
+        script.onload = function() {
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true,
+                offset: 100,
+                disable: function() {
+                    return window.innerWidth < 768 && 'ontouchstart' in window;
+                }
+            });
+        };
+        document.body.appendChild(script);
+    })();
+</script>
+{% endblock %}

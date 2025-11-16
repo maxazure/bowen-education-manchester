@@ -1,0 +1,1018 @@
+{% extends "base.html" %}
+
+{% block title %}中文学校 | 博文集团 Bowen Education Group{% endblock %}
+
+{% block meta_description %}博文中文学校提供从启蒙班到GCSE的完整中文教育课程，采用中西融汇的教学理念。专业师资团队，系统课程体系，传承中华文化，培养双语人才。{% endblock %}
+
+{% block meta_keywords %}博文中文学校,中文课程,GCSE中文,中文教育,曼彻斯特中文学校,华裔教育{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+{% include 'components/hero_main_column.html' %}
+
+<!-- Hero Stats -->
+<section class="school-stats">
+    <div class="container">
+        <div class="stats-grid" data-aos="fade-up">
+            <div class="stat-item">
+                <div class="stat-item__number">2018</div>
+                <div class="stat-item__label"><span lang="zh-CN">成立年份</span></div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item__number">500+</div>
+                <div class="stat-item__label"><span lang="zh-CN">在读学生</span></div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item__number">100%</div>
+                <div class="stat-item__label"><span lang="zh-CN">GCSE通过率</span></div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item__number">15+</div>
+                <div class="stat-item__label"><span lang="zh-CN">专业教师</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Introduction Section -->
+<section class="section section--intro">
+    <div class="container">
+        <div class="intro-box" data-aos="fade-up">
+            <div class="intro-box__icon">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h2 class="intro-box__title">
+                <span lang="zh-CN">关于博文中文学校</span>
+                <span class="intro-box__title-sub" lang="en-GB">About Our Chinese School</span>
+            </h2>
+            <p class="intro-box__text">
+                <span lang="zh-CN">博文中文学校秉承"中西融汇，博学致远"的教育理念，为在英国的华裔子弟提供系统的中文教育。我们的课程涵盖从启蒙班到GCSE考试的完整体系，由经验丰富的专业教师团队授课，致力于传承中华文化，培养具有国际视野的双语人才。</span>
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Main Content Section with Two-Column Layout -->
+<section id="courses-section" class="section section--main">
+    <div class="container">
+        <div class="page-layout">
+            <!-- Left Sidebar Navigation -->
+            <aside class="page-layout__sidebar">
+                <nav class="quick-nav" aria-label="快速导航">
+                    <h3 class="quick-nav__title">
+                        <i class="fas fa-compass"></i> <span lang="zh-CN">快速导航</span>
+                    </h3>
+                    <ul class="quick-nav__list">
+                        <li class="quick-nav__item">
+                            <a href="#courses-section" class="quick-nav__link active">
+                                <i class="fas fa-book"></i> <span lang="zh-CN">我们的课程</span>
+                            </a>
+                        </li>
+                        <li class="quick-nav__item">
+                            <a href="#dates-section" class="quick-nav__link">
+                                <i class="fas fa-calendar-alt"></i> <span lang="zh-CN">重要日期</span>
+                            </a>
+                        </li>
+                        <li class="quick-nav__item">
+                            <a href="#community-section" class="quick-nav__link">
+                                <i class="fas fa-users"></i> <span lang="zh-CN">家校合作</span>
+                            </a>
+                        </li>
+                        <li class="quick-nav__item">
+                            <a href="#features-section" class="quick-nav__link">
+                                <i class="fas fa-star"></i> <span lang="zh-CN">学校特色</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="quick-nav__cta">
+                        <p lang="zh-CN">需要咨询？</p>
+                        <a href="tel:01619693071" class="btn btn--small btn--block">
+                            <i class="fas fa-phone"></i> 0161 969 3071
+                        </a>
+                    </div>
+                </nav>
+            </aside>
+
+            <!-- Right Main Content -->
+            <div class="page-layout__main">
+                <!-- Courses Section -->
+                <div class="content-section" id="courses">
+                    <div class="section-header">
+                        <div class="section-header__badge">
+                            <i class="fas fa-book-open"></i> <span lang="zh-CN">我们的课程</span>
+                        </div>
+                        <h2 class="section-header__title">
+                            <span lang="zh-CN">完整的中文教育体系</span>
+                        </h2>
+                        <p class="section-header__subtitle">
+                            <span lang="en-GB">From Beginner to GCSE - A Complete Curriculum</span>
+                        </p>
+                    </div>
+
+                    <div class="cards-grid">
+                        <!-- Course Card -->
+                        <article class="module-card" data-aos="fade-up">
+                            <div class="module-card__badge">
+                                <i class="fas fa-award"></i> <span lang="zh-CN">核心课程</span>
+                            </div>
+                            <div class="module-card__icon">
+                                <i class="fas fa-book-reader"></i>
+                            </div>
+                            <h3 class="module-card__title">
+                                <span lang="zh-CN">课程设置</span>
+                            </h3>
+                            <p class="module-card__title-en" lang="en-GB">Curriculum</p>
+                            <p class="module-card__description">
+                                <span lang="zh-CN">从启蒙班到GCSE，完整的中文课程体系。涵盖拼音、汉字、阅读、写作等全方位能力培养。</span>
+                            </p>
+                            <ul class="module-card__features">
+                                <li><i class="fas fa-check-circle"></i> <span lang="zh-CN">启蒙班（3-5岁）</span></li>
+                                <li><i class="fas fa-check-circle"></i> <span lang="zh-CN">基础班（6-10岁）</span></li>
+                                <li><i class="fas fa-check-circle"></i> <span lang="zh-CN">GCSE备考（11-16岁）</span></li>
+                            </ul>
+                            <a href="/school-curriculum/" class="module-card__link">
+                                <span lang="zh-CN">查看完整课程</span> <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </article>
+                    </div>
+                </div>
+
+                <!-- Dates Section -->
+                <div class="content-section" id="dates-section">
+                    <div class="section-header">
+                        <div class="section-header__badge">
+                            <i class="fas fa-calendar-alt"></i> <span lang="zh-CN">重要日期</span>
+                        </div>
+                        <h2 class="section-header__title">
+                            <span lang="zh-CN">学期安排与重要日期</span>
+                        </h2>
+                        <p class="section-header__subtitle">
+                            <span lang="en-GB">Term Dates & Important Events</span>
+                        </p>
+                    </div>
+
+                    <div class="cards-grid">
+                        <!-- Term Dates Card -->
+                        <article class="module-card" data-aos="fade-up" data-aos-delay="100">
+                            <div class="module-card__badge">
+                                <i class="fas fa-clock"></i> <span lang="zh-CN">时间表</span>
+                            </div>
+                            <div class="module-card__icon">
+                                <i class="fas fa-calendar-check"></i>
+                            </div>
+                            <h3 class="module-card__title">
+                                <span lang="zh-CN">学期日期</span>
+                            </h3>
+                            <p class="module-card__title-en" lang="en-GB">Term Dates</p>
+                            <p class="module-card__description">
+                                <span lang="zh-CN">查看新学期开课时间、假期安排和重要活动日期，帮助您合理规划孩子的学习时间。</span>
+                            </p>
+                            <ul class="module-card__features">
+                                <li><i class="fas fa-check-circle"></i> <span lang="zh-CN">学期开课时间</span></li>
+                                <li><i class="fas fa-check-circle"></i> <span lang="zh-CN">假期安排</span></li>
+                                <li><i class="fas fa-check-circle"></i> <span lang="zh-CN">重要活动日历</span></li>
+                            </ul>
+                            <a href="/school-term-dates/" class="module-card__link">
+                                <span lang="zh-CN">查看完整日期</span> <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </article>
+                    </div>
+                </div>
+
+                <!-- Community Section -->
+                <div class="content-section" id="community-section">
+                    <div class="section-header">
+                        <div class="section-header__badge">
+                            <i class="fas fa-handshake"></i> <span lang="zh-CN">家校合作</span>
+                        </div>
+                        <h2 class="section-header__title">
+                            <span lang="zh-CN">家长教师协会</span>
+                        </h2>
+                        <p class="section-header__subtitle">
+                            <span lang="en-GB">Parent-Teacher Association</span>
+                        </p>
+                    </div>
+
+                    <div class="cards-grid">
+                        <!-- PTA Card -->
+                        <article class="module-card" data-aos="fade-up" data-aos-delay="200">
+                            <div class="module-card__badge">
+                                <i class="fas fa-heart"></i> <span lang="zh-CN">社区</span>
+                            </div>
+                            <div class="module-card__icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3 class="module-card__title">
+                                <span lang="zh-CN">PTA家长教师协会</span>
+                            </h3>
+                            <p class="module-card__title-en" lang="en-GB">PTA</p>
+                            <p class="module-card__description">
+                                <span lang="zh-CN">家校携手，共同促进孩子成长。通过PTA活动，加强家长与学校的沟通，组织文化活动，支持教学发展。</span>
+                            </p>
+                            <ul class="module-card__features">
+                                <li><i class="fas fa-check-circle"></i> <span lang="zh-CN">家校沟通平台</span></li>
+                                <li><i class="fas fa-check-circle"></i> <span lang="zh-CN">文化活动组织</span></li>
+                                <li><i class="fas fa-check-circle"></i> <span lang="zh-CN">教学支持项目</span></li>
+                            </ul>
+                            <a href="/school-pta/" class="module-card__link">
+                                <span lang="zh-CN">了解更多详情</span> <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </article>
+                    </div>
+                </div>
+
+                <!-- Features Section -->
+                <div class="content-section" id="features-section">
+                    <div class="section-header">
+                        <div class="section-header__badge">
+                            <i class="fas fa-star"></i> <span lang="zh-CN">学校特色</span>
+                        </div>
+                        <h2 class="section-header__title">
+                            <span lang="zh-CN">为什么选择博文中文学校？</span>
+                        </h2>
+                        <p class="section-header__subtitle">
+                            <span lang="en-GB">What Makes Us Special</span>
+                        </p>
+                    </div>
+
+                    <div class="features-grid">
+                        <div class="feature-item" data-aos="fade-up">
+                            <div class="feature-item__icon">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                            </div>
+                            <h4 class="feature-item__title"><span lang="zh-CN">专业师资</span></h4>
+                            <p class="feature-item__text"><span lang="zh-CN">经验丰富的专业教师团队，持有教师资格证书</span></p>
+                        </div>
+                        <div class="feature-item" data-aos="fade-up" data-aos-delay="100">
+                            <div class="feature-item__icon">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <h4 class="feature-item__title"><span lang="zh-CN">系统课程</span></h4>
+                            <p class="feature-item__text"><span lang="zh-CN">从启蒙到GCSE的完整教学体系，循序渐进</span></p>
+                        </div>
+                        <div class="feature-item" data-aos="fade-up" data-aos-delay="200">
+                            <div class="feature-item__icon">
+                                <i class="fas fa-user-clock"></i>
+                            </div>
+                            <h4 class="feature-item__title"><span lang="zh-CN">灵活时间</span></h4>
+                            <p class="feature-item__text"><span lang="zh-CN">周末上课，不影响孩子正常学习和生活</span></p>
+                        </div>
+                        <div class="feature-item" data-aos="fade-up" data-aos-delay="300">
+                            <div class="feature-item__icon">
+                                <i class="fas fa-certificate"></i>
+                            </div>
+                            <h4 class="feature-item__title"><span lang="zh-CN">考试认证</span></h4>
+                            <p class="feature-item__text"><span lang="zh-CN">GCSE普通话官方考试中心，100%通过率</span></p>
+                        </div>
+                        <div class="feature-item" data-aos="fade-up" data-aos-delay="400">
+                            <div class="feature-item__icon">
+                                <i class="fas fa-users-cog"></i>
+                            </div>
+                            <h4 class="feature-item__title"><span lang="zh-CN">小班教学</span></h4>
+                            <p class="feature-item__text"><span lang="zh-CN">每班不超过15人，确保教学质量和个性化关注</span></p>
+                        </div>
+                        <div class="feature-item" data-aos="fade-up" data-aos-delay="500">
+                            <div class="feature-item__icon">
+                                <i class="fas fa-university"></i>
+                            </div>
+                            <h4 class="feature-item__title"><span lang="zh-CN">大学合作</span></h4>
+                            <p class="feature-item__text"><span lang="zh-CN">与河南大学合作，提供师资培训和文化交流</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Banner Section -->
+<section class="section section--cta-banner">
+    <div class="container">
+        <div class="cta-banner" data-aos="fade-up">
+            <div class="cta-banner__content">
+                <div class="cta-banner__icon">
+                    <i class="fas fa-door-open"></i>
+                </div>
+                <div class="cta-banner__text">
+                    <h2 class="cta-banner__title">
+                        <span lang="zh-CN">准备加入博文大家庭？</span>
+                    </h2>
+                    <p class="cta-banner__subtitle">
+                        <span lang="en-GB">Ready to Join Bowen Family?</span>
+                    </p>
+                    <p class="cta-banner__description">
+                        <span lang="zh-CN">欢迎预约参观我们的校区，了解课程详情，与老师面对面交流</span>
+                    </p>
+                </div>
+            </div>
+            <div class="cta-banner__actions">
+                <a href="/contact" class="btn btn--cta-primary">
+                    <i class="fas fa-calendar-check"></i> <span lang="zh-CN">预约参观</span>
+                </a>
+                <a href="tel:01619693071" class="btn btn--cta-secondary">
+                    <i class="fas fa-phone"></i> 0161 969 3071
+                </a>
+                <a href="mailto:info@boweneducation.co.uk" class="btn btn--cta-secondary">
+                    <i class="fas fa-envelope"></i> <span lang="zh-CN">发送邮件</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_css %}
+<link rel="preload" href="https://unpkg.com/aos@2.3.1/dist/aos.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</noscript>
+<style>
+/* ========================================
+   School Stats Section
+======================================== */
+.school-stats {
+    background: linear-gradient(to bottom, #f7fafc 0%, #ffffff 100%);
+    padding: 3rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-item__number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #0052cc;
+    margin-bottom: 0.5rem;
+}
+
+.stat-item__label {
+    font-size: 0.95rem;
+    color: #4a5568;
+    font-weight: 500;
+}
+
+/* ========================================
+   Introduction Section
+======================================== */
+.section--intro {
+    padding: 4rem 0;
+    background: linear-gradient(to bottom, #f7fafc 0%, #ffffff 100%);
+}
+
+.intro-box {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 3rem;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.intro-box__icon {
+    font-size: 3rem;
+    color: #0052cc;
+    margin-bottom: 1.5rem;
+}
+
+.intro-box__title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+}
+
+.intro-box__title-sub {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: #6b7280;
+    margin-top: 0.5rem;
+}
+
+.intro-box__text {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: #4a5568;
+    margin-top: 1.5rem;
+}
+
+/* ========================================
+   Main Content - Two Column Layout
+======================================== */
+.section--main {
+    padding: 4rem 0;
+    background: #ffffff;
+}
+
+.page-layout {
+    display: flex;
+    gap: 3rem;
+    align-items: flex-start;
+}
+
+.page-layout__sidebar {
+    flex: 0 0 280px;
+    min-width: 280px;
+    max-width: 280px;
+    position: sticky;
+    top: 100px;
+}
+
+.page-layout__main {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Quick Navigation */
+.quick-nav {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 2px solid #e5e7eb;
+}
+
+.quick-nav__title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.quick-nav__list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+}
+
+.quick-nav__item {
+    margin-bottom: 0.5rem;
+}
+
+.quick-nav__link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    color: #4a5568;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.quick-nav__link:hover {
+    background: #f7fafc;
+    color: #0052cc;
+}
+
+.quick-nav__link.active {
+    background: rgba(0, 82, 204, 0.1);
+    color: #0052cc;
+    border-left: 3px solid #0052cc;
+}
+
+.quick-nav__cta {
+    padding-top: 1.5rem;
+    border-top: 2px solid #e5e7eb;
+}
+
+.quick-nav__cta p {
+    font-size: 0.95rem;
+    color: #6b7280;
+    margin-bottom: 0.75rem;
+}
+
+/* Content Sections */
+.content-section {
+    margin-bottom: 4rem;
+    scroll-margin-top: 120px;
+}
+
+.section-header {
+    margin-bottom: 2.5rem;
+}
+
+.section-header__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: rgba(0, 82, 204, 0.1);
+    color: #0052cc;
+    border-radius: 2rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.section-header__title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+}
+
+.section-header__subtitle {
+    font-size: 1.125rem;
+    color: #6b7280;
+}
+
+/* Cards Grid */
+.cards-grid {
+    display: grid;
+    gap: 2rem;
+}
+
+/* Module Card - Enhanced */
+.module-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 2px solid #e5e7eb;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.module-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+    border-color: #0052cc;
+}
+
+.module-card__badge {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: #0052cc;
+    color: white;
+    border-radius: 2rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.module-card__icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(0, 82, 204, 0.1);
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: #0052cc;
+    margin-bottom: 1.5rem;
+}
+
+.module-card__title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+}
+
+.module-card__title-en {
+    font-size: 1.125rem;
+    color: #6b7280;
+    margin-bottom: 1.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+.module-card__description {
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: #4a5568;
+    margin-bottom: 1.5rem;
+}
+
+.module-card__features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem 0;
+}
+
+.module-card__features li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    color: #4a5568;
+    font-size: 1rem;
+}
+
+.module-card__features i {
+    color: #10b981;
+    font-size: 1.125rem;
+}
+
+.module-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.875rem 2rem;
+    background: #0052cc;
+    color: white;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.module-card__link:hover {
+    background: #003d99;
+    gap: 0.875rem;
+}
+
+/* Features Grid */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.feature-item {
+    background: white;
+    padding: 2rem 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    border: 2px solid #e5e7eb;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-color: #0052cc;
+}
+
+.feature-item__icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(0, 82, 204, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    color: #0052cc;
+    margin: 0 auto 1.25rem;
+}
+
+.feature-item__title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 0.75rem;
+}
+
+.feature-item__text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #6b7280;
+}
+
+/* ========================================
+   CTA Banner Section
+======================================== */
+.section--cta-banner {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, #0052cc 0%, #003380 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.section--cta-banner::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+}
+
+.cta-banner {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 1.5rem;
+    padding: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+    position: relative;
+    z-index: 2;
+}
+
+.cta-banner__content {
+    flex: 1;
+    color: white;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+}
+
+.cta-banner__icon {
+    font-size: 4rem;
+    opacity: 0.9;
+}
+
+.cta-banner__title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.cta-banner__subtitle {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    margin-bottom: 0.75rem;
+}
+
+.cta-banner__description {
+    font-size: 1.0625rem;
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+.cta-banner__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-width: 250px;
+}
+
+.btn--cta-primary {
+    background: white;
+    color: #0052cc;
+    padding: 1rem 1.5rem;
+    font-weight: 600;
+    border: 2px solid white;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    transition: all 0.3s ease;
+}
+
+.btn--cta-primary:hover {
+    background: #f7fafc;
+    transform: translateX(4px);
+}
+
+.btn--cta-secondary {
+    background: transparent;
+    color: white;
+    padding: 1rem 1.5rem;
+    font-weight: 600;
+    border: 2px solid white;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    transition: all 0.3s ease;
+}
+
+.btn--cta-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateX(4px);
+}
+
+/* Button Utilities */
+.btn--small {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.95rem;
+}
+
+.btn--block {
+    width: 100%;
+    justify-content: center;
+}
+
+/* ========================================
+   Responsive Design
+======================================== */
+@media (max-width: 992px) {
+    .hero__title-main {
+        font-size: 2.5rem;
+    }
+
+    .hero__title-sub {
+        font-size: 1.25rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .page-layout {
+        gap: 2rem;
+    }
+
+    .page-layout__sidebar {
+        flex: 0 0 240px;
+        min-width: 240px;
+        max-width: 240px;
+    }
+
+    .features-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .hero--school {
+        min-height: 500px;
+    }
+
+    .hero__content {
+        padding: 4rem 1rem 2rem;
+    }
+
+    .hero__title-main {
+        font-size: 2rem;
+    }
+
+    .hero__title-sub {
+        font-size: 1.125rem;
+    }
+
+    .hero__tagline {
+        font-size: 1.25rem;
+    }
+
+    .hero__actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn--hero-primary,
+    .btn--hero-outline {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .stat-item__number {
+        font-size: 2rem;
+    }
+
+    .page-layout {
+        flex-direction: column;
+    }
+
+    .page-layout__sidebar {
+        flex: none;
+        width: 100%;
+        min-width: 100%;
+        max-width: 100%;
+        position: static;
+        order: -1;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cta-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .cta-banner__content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .cta-banner__actions {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero__title-main {
+        font-size: 1.75rem;
+    }
+
+    .intro-box {
+        padding: 2rem 1.5rem;
+    }
+
+    .section-header__title {
+        font-size: 1.5rem;
+    }
+
+    .module-card {
+        padding: 1.5rem;
+    }
+
+    .module-card__badge {
+        position: static;
+        margin-bottom: 1rem;
+    }
+
+    .cta-banner__title {
+        font-size: 1.5rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // 懒加载 AOS 动画库
+    (function() {
+        var script = document.createElement('script');
+        script.src = 'https://unpkg.com/aos@2.3.1/dist/aos.js';
+        script.defer = true;
+        script.onload = function() {
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true,
+                offset: 100,
+                disable: function() {
+                    return window.innerWidth < 768 && 'ontouchstart' in window;
+                }
+            });
+        };
+        document.body.appendChild(script);
+    })();
+
+    // 快速导航高亮
+    (function() {
+        const sections = document.querySelectorAll('.content-section');
+        const navLinks = document.querySelectorAll('.quick-nav__link');
+
+        function highlightNav() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= sectionTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', highlightNav, { passive: true });
+    })();
+
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

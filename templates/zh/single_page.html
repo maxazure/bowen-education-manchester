@@ -1,0 +1,502 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.title }} | 博文教育集团 Bowen Education Group{% endblock %}
+
+{% block meta_description %}{{ page.seo_description or page.subtitle or (page.title ~ ' - 博文教育集团为您提供优质的中文教育服务') }}{% endblock %}
+
+{% block meta_keywords %}{{ page.keywords or '博文教育集团,中文教育,曼彻斯特中文学校' }}{% endblock %}
+
+{% block og_title %}{{ page.title }} | 博文教育集团 Bowen Education Group{% endblock %}
+
+{% block og_description %}{{ page.seo_description or page.subtitle or (page.title ~ ' - 博文教育集团为您提供优质的中文教育服务') }}{% endblock %}
+
+{% block og_image %}{% if page.hero_media %}{{ page.hero_media.path_original }}{% else %}/static/images/hero-default.jpg{% endif %}{% endblock %}
+
+{% block structured_data %}
+{{ super() }}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "{{ page.title }}",
+    "description": "{{ page.seo_description or page.subtitle or page.title }}",
+    "url": "{{ request.url }}",
+    "inLanguage": ["en-GB", "zh-CN"],
+    "isPartOf": {
+        "@type": "WebSite",
+        "name": "Bowen Education Group",
+        "alternateName": "博文教育集团",
+        "url": "{{ request.base_url }}"
+    },
+    "publisher": {
+        "@type": "EducationalOrganization",
+        "name": "Bowen Education Group",
+        "alternateName": "博文教育集团"
+    },
+    "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "首页",
+                "item": "{{ request.base_url }}"
+            }{% if parent_column %},
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "{{ parent_column.name }}",
+                "item": "{{ request.base_url }}{{ parent_column.slug }}"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "{{ page.title }}",
+                "item": "{{ request.url }}"
+            }{% else %},
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "{{ page.title }}",
+                "item": "{{ request.url }}"
+            }{% endif %}
+        ]
+    }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+{% set hero_title = page.title %}
+{% set hero_subtitle = page.subtitle %}
+{% include 'components/hero_standard.html' %}
+
+<!-- Content Section -->
+<section class="section section--content">
+    <div class="container">
+        {% if parent_column %}
+        <!-- Two-column layout with sidebar -->
+        <div class="page-layout">
+            <!-- Left Sidebar Navigation -->
+            <aside class="page-layout__sidebar">
+                {% include 'components/sidebar_nav.html' %}
+            </aside>
+
+            <!-- Right Main Content -->
+            <div class="page-layout__main">
+                <article class="single-page-content" data-aos="fade-up">
+                    {{ page.content_html|safe }}
+                </article>
+            </div>
+        </div>
+        {% else %}
+        <!-- Single column layout without sidebar -->
+        <div class="page-layout page-layout--single">
+            <article class="single-page-content" data-aos="fade-up">
+                {{ page.content_html|safe }}
+            </article>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section section--cta" aria-labelledby="cta-title">
+    <div class="container text-center" data-aos="fade-up">
+        <h2 id="cta-title" class="section__title">
+            <span lang="en-GB">Ready to Join Our Community?</span>
+        </h2>
+        <h3 class="section__title-chinese">
+            <span lang="zh-CN">准备加入我们的大家庭？</span>
+        </h3>
+        <p class="section__subtitle">
+            <span lang="en-GB">Discover how we can help you achieve your language learning goals</span>
+        </p>
+        <div class="cta-buttons" role="group" aria-label="Contact actions">
+            <a href="/contact"
+               class="btn btn-primary btn-lg"
+               aria-label="Book a visit to Bowen Education Group">
+                <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                <span lang="en-GB">Book a Visit</span>
+            </a>
+            <a href="tel:01619693071"
+               class="btn btn-outline-primary btn-lg"
+               aria-label="Call Bowen Education Group at 0161 969 3071">
+                <i class="fas fa-phone" aria-hidden="true"></i>
+                <span>0161 969 3071</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_css %}
+<!-- Preload critical resources -->
+<link rel="preload" href="https://unpkg.com/aos@2.3.1/dist/aos.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</noscript>
+<style>
+/* 页面布局系统 - 两栏布局 */
+.section--content {
+    padding: 3rem 0;
+    background: linear-gradient(to bottom, #ffffff 0%, #f7fafc 100%);
+}
+
+/* 主布局容器 - 使用 Flexbox 实现两栏布局 */
+.page-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    position: relative;
+}
+
+/* 左侧边栏 - 固定宽度 */
+.page-layout__sidebar {
+    flex: 0 0 280px;
+    min-width: 280px;
+    max-width: 280px;
+}
+
+/* 右侧主内容区 - 自适应宽度 */
+.page-layout__main {
+    flex: 1;
+    min-width: 0; /* 防止flex子元素溢出 */
+    max-width: 100%; /* 确保不超出容器 */
+}
+
+/* 单栏布局（无侧边栏） */
+.page-layout--single {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* 确保 container 有正确的最大宽度 */
+.section--content .container {
+    max-width: 1200px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* 单页内容排版优化 - 增强可读性 */
+.single-page-content {
+    line-height: 1.8;
+    color: #2d3748;
+    background: white;
+    padding: 2.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.single-page-content h2 {
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a202c;
+    padding-bottom: 0.75rem;
+    border-bottom: 3px solid #0052cc;
+}
+
+.single-page-content h2:first-child {
+    margin-top: 0;
+}
+
+.single-page-content h3 {
+    margin-top: 2.5rem;
+    margin-bottom: 1.25rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.single-page-content p {
+    margin-bottom: 1.5rem;
+    font-size: 1.0625rem;
+}
+
+.single-page-content ul,
+.single-page-content ol {
+    margin-bottom: 2rem;
+    padding-left: 2rem;
+}
+
+.single-page-content li {
+    margin-bottom: 0.875rem;
+    line-height: 1.8;
+}
+
+.single-page-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+    margin: 2.5rem 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* 图片加载优化 */
+    opacity: 0;
+    transition: opacity 0.3s ease-in;
+}
+
+.single-page-content img.loaded,
+.single-page-content img[loading="lazy"] {
+    opacity: 1;
+}
+
+/* 性能优化：减少重绘 */
+.single-page-content * {
+    will-change: auto;
+}
+
+.cta-buttons .btn {
+    will-change: transform, box-shadow;
+}
+
+.single-page-content blockquote {
+    border-left: 4px solid #0052cc;
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: #4a5568;
+}
+
+/* CTA 区域视觉强化 */
+.section--cta {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, #0052cc 0%, #003380 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.section--cta::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+}
+
+.section--cta::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -5%;
+    width: 400px;
+    height: 400px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 50%;
+}
+
+.section--cta .container {
+    position: relative;
+    z-index: 2;
+}
+
+.section--cta .section__title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+}
+
+.section--cta .section__title-chinese {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+    opacity: 1;
+    font-weight: 600;
+}
+
+.section--cta .section__subtitle {
+    font-size: 1.25rem;
+    color: #ffffff;
+    opacity: 1;
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.6;
+}
+
+/* CTA 按钮优化 - 增强交互效果 */
+.cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    justify-content: center;
+    margin-top: 2.5rem;
+}
+
+.cta-buttons .btn {
+    min-width: 200px;
+    padding: 1.125rem 2.5rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    text-decoration: none;
+}
+
+.cta-buttons .btn-primary {
+    background: white;
+    color: #0052cc;
+    border: 2px solid white;
+}
+
+.cta-buttons .btn-primary:hover {
+    background: #f7fafc;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+}
+
+.cta-buttons .btn-outline-primary {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+}
+
+.cta-buttons .btn-outline-primary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+}
+
+/* 响应式优化 */
+@media (max-width: 992px) {
+    .page-layout {
+        gap: 1.5rem;
+    }
+
+    .page-layout__sidebar {
+        flex: 0 0 240px;
+        min-width: 240px;
+    }
+
+    .single-page-content {
+        padding: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    /* 移动端改为纵向堆叠布局 */
+    .page-layout {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .page-layout__sidebar {
+        flex: none;
+        width: 100%;
+        min-width: 100%;
+        order: -1; /* 确保侧边栏在上方 */
+    }
+
+    .page-layout__main {
+        width: 100%;
+    }
+
+    .single-page-content {
+        padding: 1.5rem;
+    }
+
+    .single-page-content h2 {
+        font-size: 1.625rem;
+        margin-top: 2rem;
+    }
+
+    .section--cta .section__title {
+        font-size: 1.875rem;
+    }
+
+    .section--cta .section__title-chinese {
+        font-size: 1.5rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cta-buttons .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .single-page-content {
+        padding: 1.25rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<!-- 延迟加载非关键 JavaScript -->
+<script>
+    // 懒加载 AOS 动画库
+    (function() {
+        var script = document.createElement('script');
+        script.src = 'https://unpkg.com/aos@2.3.1/dist/aos.js';
+        script.defer = true;
+        script.onload = function() {
+            // 初始化动画
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true,
+                offset: 100,
+                disable: function() {
+                    // 在低端设备上禁用动画以提升性能
+                    return window.innerWidth < 768 && 'ontouchstart' in window;
+                }
+            });
+        };
+        document.body.appendChild(script);
+    })();
+
+    // 图片懒加载优化
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    if (img.dataset.src) {
+                        img.src = img.dataset.src;
+                        img.classList.add('loaded');
+                        observer.unobserve(img);
+                    }
+                }
+            });
+        });
+
+        // 监听所有带有 data-src 属性的图片
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            imageObserver.observe(img);
+        });
+    }
+
+    // 优化滚动性能
+    let ticking = false;
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                // 在这里处理滚动相关的逻辑
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, { passive: true });
+</script>
+{% endblock %}

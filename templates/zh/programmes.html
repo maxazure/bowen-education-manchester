@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}政府项目 - 博文教育集团 Bowen Education Group{% endblock %}
+
+{% block meta_description %}博文教育集团参与多项政府合作项目，包括HAF项目和公园活动等{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+{% include 'components/hero_main_column.html' %}
+
+<!-- Content Section -->
+<section class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <div class="content-box" data-aos="fade-up">
+                    <h2>政府合作项目</h2>
+                    <p>博文教育集团积极参与政府合作项目，致力于为社区提供优质的教育和文化服务。</p>
+
+                    <h3 class="mt-4">主要项目</h3>
+                    <ul>
+                        <li><strong>HAF项目</strong> - Holiday Activities and Food programme</li>
+                        <li><strong>公园活动</strong> - 社区文化推广活动</li>
+                        <li><strong>学校合作</strong> - 与英国政府合作开展文化教育项目</li>
+                    </ul>
+
+                    <p class="mt-4">详细内容正在完善中，敬请期待。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section section--cta-dark">
+    <div class="container">
+        <div class="cta-box cta-box--centered" data-aos="fade-up">
+            <h2 class="cta-box__title">想了解更多？</h2>
+            <p class="cta-box__description">联系我们获取详细信息</p>
+            <a href="/contact" class="btn btn--primary btn--large">联系我们</a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

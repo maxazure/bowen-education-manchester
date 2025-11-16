@@ -1,0 +1,836 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - 博文教育集团 Bowen Education Group | 联系我们{% endblock %}
+
+{% block meta_description %}Contact 博文教育集团 Bowen Education Group in Manchester. Visit us at Sale or call 0161 969 3071. We're here to answer your questions about Chinese language courses. 联系曼彻斯特博文教育集团。{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+{% include 'components/hero_main_column.html' %}
+
+<!-- Contact Info Section -->
+<section class="section section--contact-info bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-2-4 col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="contact-info-card">
+                    <div class="contact-info-card__icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <h3 class="contact-info-card__title">Visit Us</h3>
+                    <h4 class="contact-info-card__title-chinese">地址</h4>
+                    <p class="contact-info-card__text">
+                        1/F, 2A Curzon Road<br>
+                        Sale, Manchester<br>
+                        M33 7DR
+                    </p>
+                    <p class="contact-info-card__text-chinese">
+                        英国曼彻斯特<br>
+                        塞尔市科尔森路2A号<br>
+                        一楼
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-2-4 col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="contact-info-card">
+                    <div class="contact-info-card__icon">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <h3 class="contact-info-card__title">Call Us</h3>
+                    <h4 class="contact-info-card__title-chinese">电话</h4>
+                    <p class="contact-info-card__text">
+                        <a href="tel:01619693071" class="contact-info-card__link">
+                            0161 969 3071
+                        </a>
+                    </p>
+                    <p class="contact-info-card__text-chinese">
+                        周一至周六: 9:00-18:00
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-2-4 col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="contact-info-card">
+                    <div class="contact-info-card__icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3 class="contact-info-card__title">Email Us</h3>
+                    <h4 class="contact-info-card__title-chinese">邮箱</h4>
+                    <p class="contact-info-card__text">
+                        <a href="mailto:info@boweneducation.org" class="contact-info-card__link">
+                            info@boweneducation.org
+                        </a>
+                    </p>
+                    <p class="contact-info-card__text-chinese">
+                        24小时内回复
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-2-4 col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="400">
+                <div class="contact-info-card">
+                    <div class="contact-info-card__icon">
+                        <i class="fab fa-weixin"></i>
+                    </div>
+                    <h3 class="contact-info-card__title">WeChat</h3>
+                    <h4 class="contact-info-card__title-chinese">微信</h4>
+                    <p class="contact-info-card__text">
+                        <strong>BowenEducation</strong>
+                    </p>
+                    <p class="contact-info-card__text-chinese">
+                        微信咨询
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-2-4 col-md-4 col-sm-6 mb-4" data-aos="fade-up" data-aos-delay="500">
+                <div class="contact-info-card">
+                    <div class="contact-info-card__icon">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <h3 class="contact-info-card__title">WhatsApp</h3>
+                    <h4 class="contact-info-card__title-chinese">WhatsApp</h4>
+                    <p class="contact-info-card__text">
+                        <a href="https://wa.me/441619693071" class="contact-info-card__link" target="_blank">
+                            0161 969 3071
+                        </a>
+                    </p>
+                    <p class="contact-info-card__text-chinese">
+                        快速联系我们
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Form & Map Section -->
+<section class="section section--contact-form">
+    <div class="container">
+        <div class="row">
+            <!-- Contact Form -->
+            <div class="col-lg-6 mb-4 mb-lg-0" data-aos="fade-right">
+                <div class="contact-form-wrapper">
+                    <h2 class="section__title">Send Us a Message</h2>
+                    <h3 class="section__title-chinese">发送消息</h3>
+                    <p class="section__subtitle">
+                        Have a question? Fill out the form below and we'll get back to you as soon as possible.
+                    </p>
+                    <p class="section__subtitle-chinese">
+                        有问题吗？填写下面的表格，我们会尽快回复您。
+                    </p>
+
+                    {% if success_message %}
+                    <div class="alert alert-success" role="alert">
+                        <i class="fas fa-check-circle"></i>
+                        <strong>Success!</strong> {{ success_message }}
+                    </div>
+                    {% endif %}
+
+                    {% if error_message %}
+                    <div class="alert alert-danger" role="alert">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <strong>Error!</strong> {{ error_message }}
+                    </div>
+                    {% endif %}
+
+                    <form method="POST" action="/contact/submit" class="contact-form" id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Full Name / 姓名 <span class="text-danger">*</span></label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="name"
+                                   name="name"
+                                   required
+                                   placeholder="Enter your full name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email / 邮箱 <span class="text-danger">*</span></label>
+                            <input type="email"
+                                   class="form-control"
+                                   id="email"
+                                   name="email"
+                                   required
+                                   placeholder="your.email@example.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone Number / 电话</label>
+                            <input type="tel"
+                                   class="form-control"
+                                   id="phone"
+                                   name="phone"
+                                   placeholder="0161 XXX XXXX">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">Subject / 主题 <span class="text-danger">*</span></label>
+                            <select class="form-control" id="subject" name="subject" required>
+                                <option value="">Select a subject / 选择主题</option>
+                                <option value="course_inquiry">Course Inquiry / 课程咨询</option>
+                                <option value="enrollment">Enrollment / 报名注册</option>
+                                <option value="tuition_centre">Tuition Centre / 辅导中心</option>
+                                <option value="events">Events & Activities / 活动与赛事</option>
+                                <option value="partnership">Partnership / 合作</option>
+                                <option value="feedback">Feedback / 反馈建议</option>
+                                <option value="other">Other / 其他</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Message / 留言 <span class="text-danger">*</span></label>
+                            <textarea class="form-control"
+                                      id="message"
+                                      name="message"
+                                      rows="6"
+                                      required
+                                      placeholder="Tell us how we can help you..."></textarea>
+                        </div>
+
+                        <div class="form-group form-check">
+                            <input type="checkbox"
+                                   class="form-check-input"
+                                   id="consent"
+                                   name="consent"
+                                   required>
+                            <label class="form-check-label" for="consent">
+                                I consent to Bowen Education Group storing my information for contact purposes.
+                                <br>
+                                <small class="text-chinese">我同意博文教育集团存储我的信息以便联系。</small>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-lg btn-block">
+                                <i class="fas fa-paper-plane"></i> Send Message / 发送消息
+                            </button>
+                        </div>
+
+                        <p class="form-note">
+                            <small>
+                                <i class="fas fa-lock"></i>
+                                Your information is secure and will never be shared with third parties.
+                                <br>
+                                <span class="text-chinese">您的信息是安全的，不会与第三方分享。</span>
+                            </small>
+                        </p>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Map & Additional Info -->
+            <div class="col-lg-6" data-aos="fade-left">
+                <div class="map-wrapper mb-4">
+                    <h2 class="section__title">Find Us</h2>
+                    <h3 class="section__title-chinese">找到我们</h3>
+
+                    <!-- Google Maps Embed -->
+                    <div class="map-container">
+                        <iframe
+                            src="https://www.google.com/maps?q=2A+Curzon+Road,Sale,Manchester+M33+7DR,UK&output=embed"
+                            width="100%"
+                            height="400"
+                            style="border:0; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+
+                    <div class="directions mt-3">
+                        <h4>Getting Here / 如何到达</h4>
+                        <div class="directions-item">
+                            <i class="fas fa-train"></i>
+                            <div>
+                                <strong>By Train:</strong> Sale Metrolink Station (5 min walk)
+                                <br>
+                                <small class="text-chinese">乘火车：Sale轻轨站（步行5分钟）</small>
+                            </div>
+                        </div>
+                        <div class="directions-item">
+                            <i class="fas fa-bus"></i>
+                            <div>
+                                <strong>By Bus:</strong> Routes 17, 18, 263 stop nearby
+                                <br>
+                                <small class="text-chinese">乘公交：17、18、263路附近停靠</small>
+                            </div>
+                        </div>
+                        <div class="directions-item">
+                            <i class="fas fa-car"></i>
+                            <div>
+                                <strong>By Car:</strong> Free parking available on Curzon Road
+                                <br>
+                                <small class="text-chinese">开车：科尔森路有免费停车位</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="quick-links">
+                    <h4>Quick Links / 快速链接</h4>
+                    <ul class="quick-links__list">
+                        <li>
+                            <a href="/courses">
+                                <i class="fas fa-chevron-right"></i> Browse Our Courses / 浏览课程
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/about">
+                                <i class="fas fa-chevron-right"></i> About Our School / 关于我们
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/events">
+                                <i class="fas fa-chevron-right"></i> Upcoming Events / 即将举办的活动
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/faq">
+                                <i class="fas fa-chevron-right"></i> Frequently Asked Questions / 常见问题
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="section section--faq bg-light">
+    <div class="container">
+        <div class="section__header text-center" data-aos="fade-up">
+            <h2 class="section__title">Common Questions</h2>
+            <h3 class="section__title-chinese">常见问题</h3>
+            <p class="section__subtitle">
+                Quick answers to questions you may have
+            </p>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6 mb-3" data-aos="fade-up" data-aos-delay="100">
+                <div class="faq-item">
+                    <h4 class="faq-item__question">
+                        <i class="fas fa-question-circle"></i>
+                        What age groups do you teach?
+                    </h4>
+                    <p class="faq-item__answer">
+                        We offer courses for all ages, from Foundation (ages 4-6) to A-Level (ages 16-18),
+                        as well as adult learners. Each programme is tailored to the specific age group.
+                    </p>
+                    <p class="faq-item__answer-chinese">
+                        我们为所有年龄段提供课程，从基础班（4-6岁）到A-Level（16-18岁），以及成人学习者。
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-6 mb-3" data-aos="fade-up" data-aos-delay="200">
+                <div class="faq-item">
+                    <h4 class="faq-item__question">
+                        <i class="fas fa-question-circle"></i>
+                        Do you offer trial lessons?
+                    </h4>
+                    <p class="faq-item__answer">
+                        Yes! We offer free trial lessons for new students. This allows you to experience
+                        our teaching style and meet our teachers before enrolling.
+                    </p>
+                    <p class="faq-item__answer-chinese">
+                        是的！我们为新学生提供免费试听课，让您在报名前体验我们的教学风格并认识我们的老师。
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-6 mb-3" data-aos="fade-up" data-aos-delay="300">
+                <div class="faq-item">
+                    <h4 class="faq-item__question">
+                        <i class="fas fa-question-circle"></i>
+                        What are your class sizes?
+                    </h4>
+                    <p class="faq-item__answer">
+                        We maintain small class sizes with a maximum of 12 students per class to ensure
+                        personalized attention and effective learning.
+                    </p>
+                    <p class="faq-item__answer-chinese">
+                        我们保持小班教学，每班最多12名学生，确保个性化关注和有效学习。
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-6 mb-3" data-aos="fade-up" data-aos-delay="400">
+                <div class="faq-item">
+                    <h4 class="faq-item__question">
+                        <i class="fas fa-question-circle"></i>
+                        How do I enroll my child?
+                    </h4>
+                    <p class="faq-item__answer">
+                        Simply fill out the contact form above, call us, or email us to schedule an
+                        assessment. We'll help you find the right class for your child's level.
+                    </p>
+                    <p class="faq-item__answer-chinese">
+                        只需填写上面的联系表格、致电或发送电子邮件安排评估。我们会帮您找到适合孩子水平的课程。
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4" data-aos="fade-up">
+            <a href="/faq" class="btn btn-outline-primary">
+                View All FAQs / 查看所有常见问题
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section section--cta">
+    <div class="container text-center" data-aos="fade-up">
+        <h2 class="section__title">Ready to Get Started?</h2>
+        <h3 class="section__title-chinese">准备开始了吗？</h3>
+        <p class="section__subtitle">
+            Book your free trial lesson today and discover the joy of learning Chinese
+        </p>
+        <div class="cta-buttons">
+            <a href="/booking" class="btn btn-primary btn-lg">
+                <i class="fas fa-calendar-check"></i> Book Free Trial / 预约免费试听
+            </a>
+            <a href="tel:01619693071" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-phone"></i> 0161 969 3071
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<style>
+/* Custom styles for 5-column layout */
+.col-lg-2-4 {
+    flex: 0 0 20%;
+    max-width: 20%;
+    padding: 0 15px;
+}
+
+/* Enhanced Contact Info Cards */
+.contact-info-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    height: 100%;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0,82,204,0.1);
+}
+
+.contact-info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0,82,204,0.15);
+    border-color: #0052cc;
+}
+
+.contact-info-card__icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0052cc, #0066ff);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+.contact-info-card__title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 0.25rem;
+}
+
+.contact-info-card__title-chinese {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #0052cc;
+    margin-bottom: 0.75rem;
+}
+
+.contact-info-card__text {
+    font-size: 0.9rem;
+    color: #4a5568;
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+}
+
+.contact-info-card__text-chinese {
+    font-size: 0.85rem;
+    color: #6b7280;
+    line-height: 1.4;
+}
+
+.contact-info-card__link {
+    color: #0052cc;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.contact-info-card__link:hover {
+    color: #0066ff;
+}
+
+/* Enhanced Map Container */
+.map-container {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+}
+
+.map-container iframe {
+    width: 100%;
+    height: 400px;
+    border: none;
+}
+
+/* Quick Contact Buttons */
+.quick-contact-buttons .btn {
+    border-radius: 8px;
+    padding: 0.75rem 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    color: white;
+}
+
+.quick-contact-buttons .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.quick-contact-buttons .btn small {
+    font-weight: 400;
+    opacity: 0.9;
+}
+
+/* Enhanced Contact Form */
+.contact-form-wrapper {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,82,204,0.1);
+}
+
+.contact-form .form-control {
+    border-radius: 8px;
+    border: 2px solid #e5e7eb;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.contact-form .form-control:focus {
+    border-color: #0052cc;
+    box-shadow: 0 0 0 0.2rem rgba(0,82,204,0.1);
+}
+
+.contact-form .btn-primary {
+    background: linear-gradient(135deg, #0052cc, #0066ff);
+    border: none;
+    padding: 1rem 2rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.contact-form .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,82,204,0.25);
+}
+
+.contact-form .btn-primary:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Form Message Styles */
+.form-message {
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1rem;
+    font-weight: 500;
+    animation: slideDown 0.3s ease;
+    transition: opacity 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-message i {
+    font-size: 1.25rem;
+}
+
+.form-message--success {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    border-left: 4px solid #047857;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.form-message--error {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: white;
+    border-left: 4px solid #b91c1c;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+/* Enhanced FAQ Section */
+.faq-item {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid #0052cc;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.faq-item__question {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.faq-item__question i {
+    color: #0052cc;
+}
+
+.faq-item__answer {
+    color: #4a5568;
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+}
+
+.faq-item__answer-chinese {
+    color: #6b7280;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .col-lg-2-4 {
+        flex: 0 0 33.333333%;
+        max-width: 33.333333%;
+    }
+}
+
+@media (max-width: 768px) {
+    .col-lg-2-4 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+
+    .contact-info-card {
+        margin-bottom: 1.5rem;
+    }
+
+    .quick-contact-buttons .btn {
+        margin-bottom: 0.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .col-lg-2-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+/* Alert styling */
+.alert {
+    border-radius: 8px;
+    border: none;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+    color: #065f46;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #fee2e2, #fecaca);
+    color: #991b1b;
+}
+
+/* Directions styling */
+.directions-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.directions-item:last-child {
+    border-bottom: none;
+}
+
+.directions-item i {
+    color: #0052cc;
+    font-size: 1.1rem;
+    margin-top: 0.1rem;
+    width: 20px;
+}
+
+.directions-item strong {
+    color: #1a202c;
+}
+
+/* Quick Links */
+.quick-links__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.quick-links__list li {
+    margin-bottom: 0.5rem;
+}
+
+.quick-links__list a {
+    color: #4a5568;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.quick-links__list a:hover {
+    color: #0052cc;
+    background: #f0f9ff;
+    padding-left: 0.5rem;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 800,
+        easing: 'ease-in-out',
+        once: true,
+        offset: 100
+    });
+
+    // Form validation and AJAX submission
+    document.getElementById('contactForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const consent = document.getElementById('consent');
+        if (!consent.checked) {
+            showMessage('Please consent to our data storage policy before submitting.', 'error');
+            return false;
+        }
+
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
+
+        try {
+            // Disable submit button and show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending... / 发送中...';
+
+            // Get form data
+            const formData = new FormData(this);
+
+            // Submit form via AJAX
+            const response = await fetch('/contact/submit', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Show success message
+                showMessage(result.message || 'Your message has been sent successfully! / 您的消息已成功发送！', 'success');
+                // Reset form
+                this.reset();
+            } else {
+                // Show error message
+                showMessage(result.message || 'Sorry, there was an error. Please try again. / 抱歉，发生错误。请重试。', 'error');
+            }
+
+        } catch (error) {
+            console.error('Form submission error:', error);
+            showMessage('Sorry, there was an error sending your message. Please try again later. / 抱歉，发送消息时出错。请稍后再试。', 'error');
+        } finally {
+            // Re-enable submit button
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalBtnText;
+        }
+    });
+
+    // Show message function
+    function showMessage(message, type) {
+        // Remove existing message if any
+        const existingMsg = document.querySelector('.form-message');
+        if (existingMsg) {
+            existingMsg.remove();
+        }
+
+        // Create message element
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `form-message form-message--${type}`;
+        messageDiv.innerHTML = `
+            <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+            <span>${message}</span>
+        `;
+
+        // Insert message before form
+        const form = document.getElementById('contactForm');
+        form.parentNode.insertBefore(messageDiv, form);
+
+        // Scroll to message
+        messageDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // Auto-hide success message after 5 seconds
+        if (type === 'success') {
+            setTimeout(() => {
+                messageDiv.style.opacity = '0';
+                setTimeout(() => messageDiv.remove(), 300);
+            }, 5000);
+        }
+    }
+</script>
+{% endblock %}

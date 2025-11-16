@@ -1,0 +1,274 @@
+{% extends "base.html" %}
+
+{% block title %}Photo Gallery - 照片画廊 | {{ site.site_name }}{% endblock %}
+
+{% block meta_description %}Browse our collection of photos from Chinese School, Chess Club, Badminton Club, and community events. 浏览博文教育的相册集锦。{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero hero--content">
+    <div class="hero__overlay"></div>
+    <div class="hero__background" style="background-image: url('/static/images/hero-gallery.jpg');"></div>
+    <div class="container">
+        <div class="hero__content">
+            <h1 class="hero__title" data-aos="fade-up">
+                <span class="hero__title-main">Photo Gallery</span>
+                <span class="hero__title-chinese">照片画廊</span>
+            </h1>
+            <p class="hero__subtitle" data-aos="fade-up" data-aos-delay="100">
+                Capturing Moments, Celebrating Achievements
+            </p>
+            <p class="hero__subtitle-chinese" data-aos="fade-up" data-aos-delay="150">
+                记录精彩瞬间，庆祝每一个成就
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Gallery Grid Section -->
+<section class="section section--gallery-grid">
+    <div class="container">
+        {% if galleries and galleries|length > 0 %}
+        <div class="row">
+            {% for gallery in galleries %}
+            <div class="col-lg-6 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
+                <div class="gallery-card">
+                    <a href="/{{ gallery.slug }}" class="gallery-card__link">
+                        <div class="gallery-card__image-wrapper">
+                            {% if gallery.cover_media_id and gallery.cover_media %}
+                            <img src="{{ gallery.cover_media.path_medium or gallery.cover_media.path_original }}"
+                                 alt="{{ gallery.title }}"
+                                 class="gallery-card__image"
+                                 loading="lazy">
+                            {% else %}
+                            <div class="gallery-card__image gallery-card__image--placeholder">
+                                <i class="fas fa-images fa-3x"></i>
+                            </div>
+                            {% endif %}
+                            <div class="gallery-card__overlay">
+                                <div class="gallery-card__info">
+                                    <i class="fas fa-images gallery-card__icon"></i>
+                                    <span class="gallery-card__count">{{ gallery.image_count or 0 }} 张照片</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="gallery-card__content">
+                            <h3 class="gallery-card__title">{{ gallery.title }}</h3>
+                            {% if gallery.description %}
+                            <p class="gallery-card__description">{{ gallery.description }}</p>
+                            {% endif %}
+                            <div class="gallery-card__meta">
+                                {% if gallery.category %}
+                                <span class="gallery-card__category">
+                                    <i class="fas fa-tag"></i> {{ gallery.category }}
+                                </span>
+                                {% endif %}
+                                <span class="gallery-card__views">
+                                    <i class="fas fa-eye"></i> {{ gallery.view_count or 0 }} 次浏览
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- Empty State -->
+        <div class="empty-state" data-aos="fade-up">
+            <div class="empty-state__icon">
+                <i class="fas fa-images fa-4x"></i>
+            </div>
+            <h3 class="empty-state__title">No Galleries Yet</h3>
+            <p class="empty-state__description">
+                We're currently organizing our photo collections. Check back soon for exciting photos from our classes, events, and activities!
+            </p>
+            <p class="empty-state__description-chinese">
+                我们正在整理相册。请稍后再来查看精彩的课堂、活动照片！
+            </p>
+            <a href="/contact" class="btn btn-primary mt-4">
+                Contact Us
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<style>
+/* Gallery Card Styles */
+.section--gallery-grid {
+    padding: 4rem 0;
+}
+
+.gallery-card {
+    background: var(--color-white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-base);
+    height: 100%;
+}
+
+.gallery-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-xl);
+}
+
+.gallery-card__link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.gallery-card__image-wrapper {
+    position: relative;
+    width: 100%;
+    padding-top: 66.67%; /* 3:2 aspect ratio */
+    overflow: hidden;
+    background: var(--color-gray-100);
+}
+
+.gallery-card__image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-base);
+}
+
+.gallery-card__image--placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-gray-400);
+    background: linear-gradient(135deg, var(--color-gray-100), var(--color-gray-200));
+}
+
+.gallery-card:hover .gallery-card__image {
+    transform: scale(1.05);
+}
+
+.gallery-card__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
+    display: flex;
+    align-items: flex-end;
+    padding: 1.5rem;
+    opacity: 0;
+    transition: opacity var(--transition-base);
+}
+
+.gallery-card:hover .gallery-card__overlay {
+    opacity: 1;
+}
+
+.gallery-card__info {
+    color: var(--color-white);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.gallery-card__icon {
+    font-size: 1.2rem;
+}
+
+.gallery-card__count {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.gallery-card__content {
+    padding: 1.5rem;
+}
+
+.gallery-card__title {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--color-primary);
+}
+
+.gallery-card__description {
+    font-size: var(--font-size-base);
+    color: var(--color-gray-600);
+    margin-bottom: 1rem;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.gallery-card__meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-500);
+}
+
+.gallery-card__category,
+.gallery-card__views {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.empty-state__icon {
+    color: var(--color-gray-300);
+    margin-bottom: 2rem;
+}
+
+.empty-state__title {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--color-gray-700);
+}
+
+.empty-state__description {
+    font-size: var(--font-size-lg);
+    color: var(--color-gray-600);
+    line-height: 1.8;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state__description-chinese {
+    font-family: var(--font-chinese);
+    font-size: var(--font-size-base);
+    color: var(--color-gray-500);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .gallery-card__title {
+        font-size: var(--font-size-lg);
+    }
+
+    .gallery-card__content {
+        padding: 1rem;
+    }
+
+    .empty-state {
+        padding: 3rem 1rem;
+    }
+}
+</style>
+
+{% endblock %}

@@ -1,0 +1,696 @@
+{% extends "base.html" %}
+
+{% block title %}博文活动 - Bowen Education Group{% endblock %}
+
+{% block meta_description %}博文集团定期举办各类文化活动、培训班、体育比赛等，包括中国新年庆典、国际象棋训练营、羽毛球比赛、HSK考试等{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+{% include 'components/hero_main_column.html' %}
+
+<!-- Quick Navigation -->
+<div class="quick-nav">
+    <div class="container">
+        <div class="quick-nav__buttons">
+            <a href="#upcoming-events" class="btn btn--primary">近期活动</a>
+            <a href="#event-types" class="btn btn--secondary">活动类型</a>
+        </div>
+    </div>
+</div>
+
+<!-- Upcoming Events Section -->
+<section id="upcoming-events" class="section section--upcoming-events">
+    <div class="container">
+        <div class="section-header text-center" data-aos="fade-up">
+            <h2 class="section__title">
+                <span lang="zh-CN">近期活动</span>
+                <span class="section__title-sub" lang="en-GB">Upcoming Events</span>
+            </h2>
+            <p class="section__subtitle">参与我们的精彩活动，体验文化与学习的乐趣</p>
+        </div>
+
+        <div class="events-grid">
+            {% if events %}
+                {% for event in events %}
+                <div class="event-card" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
+                    {% if event.is_featured %}
+                    <div class="event-badge">
+                        <i class="fas fa-star"></i> 精选活动
+                    </div>
+                    {% endif %}
+
+                    <div class="event-header">
+                        <div class="event-type">
+                            {% if event.event_type == 'cultural' %}
+                                <i class="fas fa-torii-gate"></i> 文化活动
+                            {% elif event.event_type == 'workshop' %}
+                                <i class="fas fa-chalkboard-teacher"></i> 培训营
+                            {% elif event.event_type == 'competition' %}
+                                <i class="fas fa-trophy"></i> 比赛
+                            {% elif event.event_type == 'exam' %}
+                                <i class="fas fa-clipboard-list"></i> 考试
+                            {% elif event.event_type == 'seminar' %}
+                                <i class="fas fa-microphone"></i> 讲座
+                            {% elif event.event_type == 'camp' %}
+                                <i class="fas fa-campground"></i> 夏令营
+                            {% endif %}
+                        </div>
+                        {% if not event.is_free %}
+                        <div class="event-price">
+                            {% if event.early_bird_price and event.early_bird_deadline %}
+                                <span class="early-bird">早鸟价 £{{ "%.0f"|format(event.early_bird_price) }}</span>
+                            {% endif %}
+                            £{{ "%.0f"|format(event.ticket_price) }}
+                        </div>
+                        {% else %}
+                        <div class="event-price free">免费</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="event-content">
+                        <h3 class="event-title">{{ event.title }}</h3>
+
+                        <div class="event-datetime">
+                            <i class="fas fa-calendar"></i>
+                            <span>{{ event.start_datetime.strftime('%Y年%m月%d日') }}</span>
+                            {% if event.start_datetime.strftime('%H:%M') != '00:00' %}
+                                <span>{{ event.start_datetime.strftime('%H:%M') }} - {{ event.end_datetime.strftime('%H:%M') }}</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="event-location">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>{{ event.venue_name or '待定' }}</span>
+                        </div>
+
+                        <p class="event-summary">{{ event.summary or event.description[:150] + '...' }}</p>
+
+                        {% if event.max_attendees %}
+                        <div class="event-capacity">
+                            <i class="fas fa-users"></i>
+                            <span>限 {{ event.max_attendees }} 人</span>
+                            {% if event.current_attendees >= event.max_attendees %}
+                                <span class="status-full">已满</span>
+                            {% else %}
+                                <span class="status-available">还有 {{ event.max_attendees - event.current_attendees }} 个名额</span>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+
+                        <div class="event-actions">
+                            {% if event.current_attendees < event.max_attendees or not event.max_attendees %}
+                                <a href="/events/{{ event.slug }}" class="btn btn-primary">查看详情</a>
+                            {% else %}
+                                <button class="btn btn-secondary" disabled>已满员</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-events" data-aos="fade-up">
+                    <div class="no-events-icon">📅</div>
+                    <h3>暂无近期活动</h3>
+                    <p>我们正在筹备更多精彩活动，敬请关注！</p>
+                    <a href="/contact" class="btn btn-primary">联系我们</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Event Types Section -->
+<section id="event-types" class="section section--event-types">
+    <div class="container">
+        <div class="section-header text-center" data-aos="fade-up">
+            <h2 class="section__title">
+                <span lang="zh-CN">活动类型</span>
+                <span class="section__title-sub" lang="en-GB">Event Types</span>
+            </h2>
+            <p class="section__subtitle">我们提供多种类型的活动，满足不同需求</p>
+        </div>
+
+        <div class="event-types-grid">
+            <div class="event-type-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="event-type-icon">
+                    <i class="fas fa-torii-gate"></i>
+                </div>
+                <h3>文化活动</h3>
+                <p>传统节日庆典、中华文化体验、艺术表演等</p>
+                <div class="event-type-examples">
+                    <span>春节联欢</span>
+                    <span>中秋庆典</span>
+                    <span>文化进校园</span>
+                </div>
+            </div>
+
+            <div class="event-type-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="event-type-icon">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                <h3>培训课程</h3>
+                <p>专业技能培训、学习方法指导、能力提升课程</p>
+                <div class="event-type-examples">
+                    <span>国际象棋营</span>
+                    <span>中文培训</span>
+                    <span>家长教育</span>
+                </div>
+            </div>
+
+            <div class="event-type-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="event-type-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <h3>体育比赛</h3>
+                <p>竞技比赛、友谊赛、体育交流活动</p>
+                <div class="event-type-examples">
+                    <span>羽毛球赛</span>
+                    <span>象棋比赛</span>
+                    <span>体育友谊赛</span>
+                </div>
+            </div>
+
+            <div class="event-type-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="event-type-icon">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <h3>考试测评</h3>
+                <p>水平考试、模拟测试、能力评估</p>
+                <div class="event-type-examples">
+                    <span>HSK考试</span>
+                    <span>模拟测试</span>
+                    <span>水平评估</span>
+                </div>
+            </div>
+
+            <div class="event-type-card" data-aos="fade-up" data-aos-delay="500">
+                <div class="event-type-icon">
+                    <i class="fas fa-campground"></i>
+                </div>
+                <h3>夏令营营</h3>
+                <p>假期营、文化体验营、综合活动营</p>
+                <div class="event-type-examples">
+                    <span>中文文化营</span>
+                    <span>体育训练营</span>
+                    <span>综合夏令营</span>
+                </div>
+            </div>
+
+            <div class="event-type-card" data-aos="fade-up" data-aos-delay="600">
+                <div class="event-type-icon">
+                    <i class="fas fa-microphone"></i>
+                </div>
+                <h3>讲座研讨会</h3>
+                <p>教育讲座、专业研讨、经验分享</p>
+                <div class="event-type-examples">
+                    <span>家长教育</span>
+                    <span>文化讲座</span>
+                    <span>教育研讨</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Past Events Highlights Section -->
+<section class="section section--past-events">
+    <div class="container">
+        <div class="section-header text-center" data-aos="fade-up">
+            <h2 class="section__title">
+                <span lang="zh-CN">往期活动回顾</span>
+                <span class="section__title-sub" lang="en-GB">Past Events Highlights</span>
+            </h2>
+            <p class="section__subtitle">精彩瞬间，美好回忆</p>
+        </div>
+
+        <div class="highlights-grid">
+            <div class="highlight-item" data-aos="fade-up" data-aos-delay="100">
+                <div class="highlight-image">
+                    <img src="/static/images/events/past-event-1.jpg" alt="春节联欢会">
+                </div>
+                <div class="highlight-content">
+                    <h4>2024年春节联欢会</h4>
+                    <p>精彩的传统文艺表演，美味的中国美食，温馨的节日氛围</p>
+                </div>
+            </div>
+
+            <div class="highlight-item" data-aos="fade-up" data-aos-delay="200">
+                <div class="highlight-image">
+                    <img src="/static/images/events/past-event-2.jpg" alt="国际象棋比赛">
+                </div>
+                <div class="highlight-content">
+                    <h4>国际象棋公开赛</h4>
+                    <p>激烈的比赛，专业的裁判，优秀的棋手参与</p>
+                </div>
+            </div>
+
+            <div class="highlight-item" data-aos="fade-up" data-aos-delay="300">
+                <div class="highlight-image">
+                    <img src="/static/images/events/past-event-3.jpg" alt="中文文化营">
+                </div>
+                <div class="highlight-content">
+                    <h4>中文文化体验营</h4>
+                    <p>孩子们在快乐中学习中文，体验传统文化</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section section--cta-events">
+    <div class="container">
+        <div class="cta-box text-center" data-aos="fade-up">
+            <h2 class="cta-box__title">参与博文精彩活动</h2>
+            <p class="cta-box__subtitle">
+                丰富文化生活 · 提升专业技能 · 培养兴趣爱好<br>
+                与我们一同成长，创造美好回忆！
+            </p>
+            <div class="cta-box__buttons">
+                <a href="/contact" class="btn btn-primary btn-large">
+                    <i class="fas fa-phone"></i> 联系我们
+                </a>
+                <a href="/events-henan" class="btn btn-outline-primary btn-large">
+                    <i class="fas fa-graduation-cap"></i> 合作项目
+                </a>
+            </div>
+            <div class="contact-info">
+                <p><strong>活动咨询：</strong>0161 969 3071</p>
+                <p><strong>邮箱：</strong>events@boweneducation.org</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Events Page Styles */
+
+/* Quick Navigation */
+.quick-nav {
+    padding: 1.5rem 0;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.quick-nav__buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Upcoming Events Section */
+.section--upcoming-events {
+    padding: 5rem 0;
+    background: #f8f9fa;
+}
+
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.event-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+    position: relative;
+    border: 2px solid transparent;
+}
+
+.event-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+}
+
+.event-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    z-index: 2;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.event-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1.5rem;
+    padding-bottom: 0;
+}
+
+.event-type {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #f8f9fa;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.event-type i {
+    color: #1e3a8a;
+}
+
+.event-price {
+    text-align: right;
+}
+
+.event-price.free {
+    background: #10b981;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.event-price .early-bird {
+    display: block;
+    font-size: 0.8rem;
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+
+.event-content {
+    padding: 1.5rem;
+    padding-top: 1rem;
+}
+
+.event-title {
+    color: #1e3a8a;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+}
+
+.event-datetime,
+.event-location {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    color: #6c757d;
+    font-size: 0.95rem;
+}
+
+.event-datetime i,
+.event-location i {
+    width: 16px;
+    text-align: center;
+}
+
+.event-summary {
+    color: #6c757d;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.event-capacity {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.status-full {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.status-available {
+    color: #10b981;
+    font-weight: 500;
+}
+
+.event-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.no-events {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.no-events-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.no-events h3 {
+    color: #1e3a8a;
+    margin-bottom: 1rem;
+}
+
+.no-events p {
+    color: #6c757d;
+    margin-bottom: 2rem;
+}
+
+/* Event Types Section */
+.section--event-types {
+    padding: 5rem 0;
+}
+
+.event-types-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.event-type-card {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+    border: 2px solid transparent;
+}
+
+.event-type-card:hover {
+    transform: translateY(-8px);
+    border-color: #1e3a8a;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
+}
+
+.event-type-icon {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    color: white;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 2rem;
+}
+
+.event-type-card h3 {
+    color: #1e3a8a;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+}
+
+.event-type-card p {
+    color: #6c757d;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.event-type-examples {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.event-type-examples span {
+    background: #f8f9fa;
+    color: #1e3a8a;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* Past Events Section */
+.section--past-events {
+    padding: 5rem 0;
+    background: #f8f9fa;
+}
+
+.highlights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.highlight-item {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s;
+}
+
+.highlight-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.highlight-image {
+    height: 200px;
+    overflow: hidden;
+}
+
+.highlight-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.highlight-item:hover .highlight-image img {
+    transform: scale(1.1);
+}
+
+.highlight-content {
+    padding: 1.5rem;
+}
+
+.highlight-content h4 {
+    color: #1e3a8a;
+    margin-bottom: 0.75rem;
+    font-size: 1.2rem;
+}
+
+.highlight-content p {
+    color: #6c757d;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* CTA Section */
+.section--cta-events {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    color: white;
+}
+
+.cta-box__title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: white;
+}
+
+.cta-box__subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
+}
+
+.cta-box__buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.btn-primary {
+    background: white;
+    color: #1e3a8a;
+    border: 2px solid white;
+}
+
+.btn-primary:hover {
+    background: #f8f9fa;
+    color: #1e3a8a;
+}
+
+.btn-outline-primary {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+}
+
+.btn-outline-primary:hover {
+    background: white;
+    color: #1e3a8a;
+}
+
+.btn-large {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.contact-info {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.contact-info p {
+    margin-bottom: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .events-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .event-types-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .highlights-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .quick-nav__buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .cta-box__buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .cta-box__buttons .btn {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+</style>
+
+{% endblock %}

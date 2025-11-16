@@ -1,0 +1,131 @@
+<!--
+  Standard Hero Component
+  统一的Hero区域组件，支持从栏目或页面获取背景图片
+-->
+
+{% set hero_title = hero_title or (page.title if page is defined else column.name) %}
+{% set hero_subtitle = hero_subtitle or (page.subtitle if page is defined else (column.description if column is defined else none)) %}
+{# 背景图片优先级: 明确传入的 hero_image > page.hero_media > column.hero_media > 默认图片 #}
+{% if not hero_image %}
+    {% if page is defined and page.hero_media %}
+        {% set hero_image = page.hero_media.path_original %}
+    {% elif column is defined and column.hero_media %}
+        {% set hero_image = column.hero_media.path_original %}
+    {% else %}
+        {% set hero_image = '/static/images/hero-default.jpg' %}
+    {% endif %}
+{% endif %}
+
+<section class="hero hero--content" aria-labelledby="page-title">
+    <div class="hero__overlay" aria-hidden="true"></div>
+    <div class="hero__background"
+         role="img"
+         aria-label="{{ hero_title }}"
+         style="background-image: url('{{ hero_image }}');"
+         loading="lazy"></div>
+    <div class="container">
+        <div class="hero__content">
+            <h1 id="page-title" class="hero__title" data-aos="fade-up">
+                <span lang="zh-CN">{{ hero_title }}</span>
+            </h1>
+            {% if hero_subtitle %}
+            <p class="hero__subtitle" data-aos="fade-up" data-aos-delay="100">
+                <span lang="zh-CN">{{ hero_subtitle }}</span>
+            </p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<style>
+/* Hero Banner 标准样式 */
+.hero--content {
+    position: relative;
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
+.hero__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.hero__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0, 82, 204, 0.65) 0%, rgba(0, 51, 128, 0.55) 100%);
+}
+
+.hero__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+    padding: 2.5rem 1rem;
+}
+
+.hero__title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero__subtitle {
+    font-size: 1.125rem;
+    font-weight: 400;
+    max-width: 800px;
+    margin: 0 auto;
+    opacity: 0.95;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+    .hero--content {
+        min-height: 200px;
+    }
+
+    .hero__content {
+        padding: 2rem 1rem;
+    }
+
+    .hero__title {
+        font-size: 1.75rem;
+    }
+
+    .hero__subtitle {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero--content {
+        min-height: 180px;
+    }
+
+    .hero__content {
+        padding: 1.5rem 1rem;
+    }
+
+    .hero__title {
+        font-size: 1.5rem;
+    }
+
+    .hero__subtitle {
+        font-size: 0.9375rem;
+    }
+}
+</style>

@@ -1,0 +1,303 @@
+{% extends "base.html" %}
+
+{% block title %}{{ column.name }} - {{ site.site_name }}{% endblock %}
+
+{% block meta_description %}{{ column.name }} - Comprehensive overview of our programmes and services{% endblock %}
+
+{% block extra_css %}
+<style>
+/* Overview Page Styles */
+.page-header {
+    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+    color: white;
+    padding: 4rem 0 3rem;
+    text-align: center;
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.page-header p {
+    font-size: 1.125rem;
+    opacity: 0.9;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Overview Sections */
+.overview-section {
+    padding: 4rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.overview-section:last-child {
+    border-bottom: none;
+}
+
+.overview-section:nth-child(even) {
+    background: #f9fafb;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.section-header h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e3a8a;
+    margin-bottom: 0.5rem;
+}
+
+.section-header p {
+    font-size: 1.125rem;
+    color: #6b7280;
+}
+
+/* Content Grid for Posts/Products */
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.content-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.content-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.content-card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.content-card-body {
+    padding: 1.5rem;
+}
+
+.content-card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1e3a8a;
+    margin-bottom: 0.5rem;
+}
+
+.content-card-summary {
+    color: #6b7280;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.content-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.875rem;
+    color: #9ca3af;
+}
+
+/* Single Page Content */
+.single-page-content {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.single-page-content h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1e3a8a;
+    margin-bottom: 1rem;
+}
+
+/* View All Link */
+.view-all-link {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.btn-view-all {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: #3b82f6;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+
+.btn-view-all:hover {
+    background: #2563eb;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #9ca3af;
+}
+
+.empty-state svg {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="page-header">
+    <div class="container">
+        <h1>{{ column.name }}</h1>
+        <p>Explore our comprehensive range of programmes and services</p>
+    </div>
+</section>
+
+<!-- Overview Sections -->
+{% for section in sections %}
+<section class="overview-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>{{ section.column_name }}</h2>
+        </div>
+
+        {% if section.column_type == 'POST' and section.content_items %}
+            <!-- Posts Grid -->
+            <div class="content-grid">
+                {% for post in section.content_items %}
+                <article class="content-card">
+                    {% if post.cover_media %}
+                    <img src="{{ post.cover_media.path_medium or post.cover_media.path_original }}"
+                         alt="{{ post.title }}"
+                         class="content-card-image">
+                    {% else %}
+                    <div class="content-card-image" style="background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);"></div>
+                    {% endif %}
+                    <div class="content-card-body">
+                        <h3 class="content-card-title">{{ post.title }}</h3>
+                        {% if post.summary %}
+                        <p class="content-card-summary">{{ post.summary[:120] }}{% if post.summary|length > 120 %}...{% endif %}</p>
+                        {% endif %}
+                        <div class="content-card-meta">
+                            <span>{{ post.published_at.strftime('%Y-%m-%d') if post.published_at else '' }}</span>
+                            <a href="/{{ section.column_slug }}/{{ post.slug }}/" class="text-primary">Read More →</a>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+
+            <div class="view-all-link">
+                <a href="/{{ section.column_slug }}/" class="btn-view-all">
+                    View All {{ section.column_name }}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+
+        {% elif section.column_type == 'PRODUCT' and section.content_items %}
+            <!-- Products Grid -->
+            <div class="content-grid">
+                {% for product in section.content_items %}
+                <article class="content-card">
+                    {% if product.cover_media %}
+                    <img src="{{ product.cover_media.path_medium or product.cover_media.path_original }}"
+                         alt="{{ product.name }}"
+                         class="content-card-image">
+                    {% else %}
+                    <div class="content-card-image" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);"></div>
+                    {% endif %}
+                    <div class="content-card-body">
+                        <h3 class="content-card-title">{{ product.name }}</h3>
+                        {% if product.summary %}
+                        <p class="content-card-summary">{{ product.summary[:120] }}{% if product.summary|length > 120 %}...{% endif %}</p>
+                        {% endif %}
+                        <div class="content-card-meta">
+                            {% if product.price_text %}
+                            <span class="text-primary font-semibold">{{ product.price_text }}</span>
+                            {% endif %}
+                            <a href="/{{ section.column_slug }}/{{ product.slug }}/" class="text-primary">Learn More →</a>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+
+            <div class="view-all-link">
+                <a href="/{{ section.column_slug }}/" class="btn-view-all">
+                    View All {{ section.column_name }}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+
+        {% elif section.column_type == 'SINGLE_PAGE' and section.content %}
+            <!-- Single Page Content -->
+            <div class="single-page-content">
+                {% if section.content.subtitle %}
+                <h3>{{ section.content.subtitle }}</h3>
+                {% endif %}
+                <div class="prose">
+                    {{ section.content.content_html|safe }}
+                </div>
+                <div class="view-all-link">
+                    <a href="/{{ section.column_slug }}/" class="btn-view-all">
+                        View Full Page
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+        {% else %}
+            <!-- Empty State -->
+            <div class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                </svg>
+                <p>Content coming soon for {{ section.column_name }}</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+{% endfor %}
+
+{% if not sections %}
+<section class="overview-section">
+    <div class="container">
+        <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            <p>No content sections available yet</p>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %}
