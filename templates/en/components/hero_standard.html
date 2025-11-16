@@ -1,11 +1,11 @@
 <!--
   Standard Hero Component
-  统一的Hero区域组件，支持从栏目或页面获取背景图片
+  Unified Hero section component, supports loading background images from columns or pages
 -->
 
 {% set hero_title = hero_title or (page.title if page is defined else column.name) %}
 {% set hero_subtitle = hero_subtitle or (page.subtitle if page is defined else (column.description if column is defined else none)) %}
-{# 背景图片优先级: 明确传入的 hero_image > page.hero_media > column.hero_media > 默认图片 #}
+{# Background image priority: explicitly passed hero_image > page.hero_media > column.hero_media > default image #}
 {% if not hero_image %}
     {% if page is defined and page.hero_media %}
         {% set hero_image = page.hero_media.path_original %}
@@ -26,11 +26,11 @@
     <div class="container">
         <div class="hero__content">
             <h1 id="page-title" class="hero__title" data-aos="fade-up">
-                <span lang="zh-CN">{{ hero_title }}</span>
+                {{ hero_title }}
             </h1>
             {% if hero_subtitle %}
             <p class="hero__subtitle" data-aos="fade-up" data-aos-delay="100">
-                <span lang="zh-CN">{{ hero_subtitle }}</span>
+                {{ hero_subtitle }}
             </p>
             {% endif %}
         </div>
@@ -38,7 +38,7 @@
 </section>
 
 <style>
-/* Hero Banner 标准样式 */
+/* Hero Banner Standard Styles */
 .hero--content {
     position: relative;
     min-height: 250px;
@@ -92,7 +92,7 @@
     opacity: 0.95;
 }
 
-/* 响应式 */
+/* Responsive */
 @media (max-width: 768px) {
     .hero--content {
         min-height: 200px;

@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}{{ page.title }} | 博文教育集团 Bowen Education Group{% endblock %}
+{% block title %}{{ page.title }} | Bowen Education Group{% endblock %}
 
-{% block meta_description %}{{ page.seo_description or page.subtitle or (page.title ~ ' - 博文教育集团为您提供优质的中文教育服务') }}{% endblock %}
+{% block meta_description %}{{ page.seo_description or page.subtitle or (page.title ~ ' - Bowen Education Group provides quality Chinese education services') }}{% endblock %}
 
-{% block meta_keywords %}{{ page.keywords or '博文教育集团,中文教育,曼彻斯特中文学校' }}{% endblock %}
+{% block meta_keywords %}{{ page.keywords or 'Bowen Education Group,Chinese Education,Manchester Chinese School' }}{% endblock %}
 
-{% block og_title %}{{ page.title }} | 博文教育集团 Bowen Education Group{% endblock %}
+{% block og_title %}{{ page.title }} | Bowen Education Group{% endblock %}
 
-{% block og_description %}{{ page.seo_description or page.subtitle or (page.title ~ ' - 博文教育集团为您提供优质的中文教育服务') }}{% endblock %}
+{% block og_description %}{{ page.seo_description or page.subtitle or (page.title ~ ' - Bowen Education Group provides quality Chinese education services') }}{% endblock %}
 
 {% block og_image %}{% if page.hero_media %}{{ page.hero_media.path_original }}{% else %}/static/images/hero-default.jpg{% endif %}{% endblock %}
 
@@ -25,13 +25,11 @@
     "isPartOf": {
         "@type": "WebSite",
         "name": "Bowen Education Group",
-        "alternateName": "博文教育集团",
         "url": "{{ request.base_url }}"
     },
     "publisher": {
         "@type": "EducationalOrganization",
-        "name": "Bowen Education Group",
-        "alternateName": "博文教育集团"
+        "name": "Bowen Education Group"
     },
     "breadcrumb": {
         "@type": "BreadcrumbList",
@@ -39,14 +37,14 @@
             {
                 "@type": "ListItem",
                 "position": 1,
-                "name": "首页",
-                "item": "{{ request.base_url }}"
+                "name": "Home",
+                "item": "{{ request.base_url }}en/"
             }{% if parent_column %},
             {
                 "@type": "ListItem",
                 "position": 2,
                 "name": "{{ parent_column.name }}",
-                "item": "{{ request.base_url }}{{ parent_column.slug }}"
+                "item": "{{ request.base_url }}en/{{ parent_column.slug }}"
             },
             {
                 "@type": "ListItem",
@@ -106,20 +104,17 @@
 <section class="section section--cta" aria-labelledby="cta-title">
     <div class="container text-center" data-aos="fade-up">
         <h2 id="cta-title" class="section__title">
-            <span lang="en-GB">Ready to Join Our Community?</span>
+            Ready to Join Our Community?
         </h2>
-        <h3 class="section__title-chinese">
-            <span lang="zh-CN">准备加入我们的大家庭？</span>
-        </h3>
         <p class="section__subtitle">
-            <span lang="en-GB">Discover how we can help you achieve your language learning goals</span>
+            Discover how we can help you achieve your language learning goals
         </p>
         <div class="cta-buttons" role="group" aria-label="Contact actions">
-            <a href="/contact"
+            <a href="/en/contact"
                class="btn btn-primary btn-lg"
                aria-label="Book a visit to Bowen Education Group">
                 <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                <span lang="en-GB">Book a Visit</span>
+                <span>Book a Visit</span>
             </a>
             <a href="tel:01619693071"
                class="btn btn-outline-primary btn-lg"
@@ -142,13 +137,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </noscript>
 <style>
-/* 页面布局系统 - 两栏布局 */
+/* Page Layout System - Two Column Layout */
 .section--content {
     padding: 3rem 0;
     background: linear-gradient(to bottom, #ffffff 0%, #f7fafc 100%);
 }
 
-/* 主布局容器 - 使用 Flexbox 实现两栏布局 */
+/* Main Layout Container - Two Column Layout with Flexbox */
 .page-layout {
     display: flex;
     gap: 2rem;
@@ -156,27 +151,27 @@
     position: relative;
 }
 
-/* 左侧边栏 - 固定宽度 */
+/* Left Sidebar - Fixed Width */
 .page-layout__sidebar {
     flex: 0 0 280px;
     min-width: 280px;
     max-width: 280px;
 }
 
-/* 右侧主内容区 - 自适应宽度 */
+/* Right Main Content Area - Flexible Width */
 .page-layout__main {
     flex: 1;
-    min-width: 0; /* 防止flex子元素溢出 */
-    max-width: 100%; /* 确保不超出容器 */
+    min-width: 0; /* Prevent flex child overflow */
+    max-width: 100%; /* Ensure not exceeding container */
 }
 
-/* 单栏布局（无侧边栏） */
+/* Single Column Layout (No Sidebar) */
 .page-layout--single {
     max-width: 900px;
     margin: 0 auto;
 }
 
-/* 确保 container 有正确的最大宽度 */
+/* Ensure container has correct max-width */
 .section--content .container {
     max-width: 1200px;
     padding-left: 15px;
@@ -185,7 +180,7 @@
     margin-right: auto;
 }
 
-/* 单页内容排版优化 - 增强可读性 */
+/* Single Page Content Typography - Enhanced Readability */
 .single-page-content {
     line-height: 1.8;
     color: #2d3748;
@@ -239,7 +234,7 @@
     border-radius: 0.75rem;
     margin: 2.5rem 0;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    /* 图片加载优化 */
+    /* Image loading optimization */
     opacity: 0;
     transition: opacity 0.3s ease-in;
 }
@@ -249,7 +244,7 @@
     opacity: 1;
 }
 
-/* 性能优化：减少重绘 */
+/* Performance optimization: reduce repaints */
 .single-page-content * {
     will-change: auto;
 }
@@ -266,7 +261,7 @@
     color: #4a5568;
 }
 
-/* CTA 区域视觉强化 */
+/* CTA Section Visual Enhancement */
 .section--cta {
     padding: 5rem 0;
     background: linear-gradient(135deg, #0052cc 0%, #003380 100%);
@@ -309,13 +304,6 @@
     color: #ffffff;
 }
 
-.section--cta .section__title-chinese {
-    font-size: 1.75rem;
-    margin-bottom: 1.5rem;
-    color: #ffffff;
-    opacity: 1;
-    font-weight: 600;
-}
 
 .section--cta .section__subtitle {
     font-size: 1.25rem;
@@ -326,7 +314,7 @@
     line-height: 1.6;
 }
 
-/* CTA 按钮优化 - 增强交互效果 */
+/* CTA Button Optimization - Enhanced Interaction */
 .cta-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -372,7 +360,7 @@
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
 }
 
-/* 响应式优化 */
+/* Responsive Optimization */
 @media (max-width: 992px) {
     .page-layout {
         gap: 1.5rem;
@@ -389,7 +377,7 @@
 }
 
 @media (max-width: 768px) {
-    /* 移动端改为纵向堆叠布局 */
+    /* Mobile: Change to vertical stacked layout */
     .page-layout {
         flex-direction: column;
         gap: 1.5rem;
@@ -399,7 +387,7 @@
         flex: none;
         width: 100%;
         min-width: 100%;
-        order: -1; /* 确保侧边栏在上方 */
+        order: -1; /* Ensure sidebar is on top */
     }
 
     .page-layout__main {
@@ -417,10 +405,6 @@
 
     .section--cta .section__title {
         font-size: 1.875rem;
-    }
-
-    .section--cta .section__title-chinese {
-        font-size: 1.5rem;
     }
 
     .cta-buttons {
@@ -443,22 +427,22 @@
 {% endblock %}
 
 {% block extra_js %}
-<!-- 延迟加载非关键 JavaScript -->
+<!-- Defer loading non-critical JavaScript -->
 <script>
-    // 懒加载 AOS 动画库
+    // Lazy load AOS animation library
     (function() {
         var script = document.createElement('script');
         script.src = 'https://unpkg.com/aos@2.3.1/dist/aos.js';
         script.defer = true;
         script.onload = function() {
-            // 初始化动画
+            // Initialize animation
             AOS.init({
                 duration: 800,
                 easing: 'ease-in-out',
                 once: true,
                 offset: 100,
                 disable: function() {
-                    // 在低端设备上禁用动画以提升性能
+                    // Disable animations on low-end devices for better performance
                     return window.innerWidth < 768 && 'ontouchstart' in window;
                 }
             });
@@ -466,7 +450,7 @@
         document.body.appendChild(script);
     })();
 
-    // 图片懒加载优化
+    // Image lazy loading optimization
     if ('IntersectionObserver' in window) {
         const imageObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
@@ -481,18 +465,18 @@
             });
         });
 
-        // 监听所有带有 data-src 属性的图片
+        // Monitor all images with data-src attribute
         document.querySelectorAll('img[data-src]').forEach(img => {
             imageObserver.observe(img);
         });
     }
 
-    // 优化滚动性能
+    // Optimize scroll performance
     let ticking = false;
     window.addEventListener('scroll', function() {
         if (!ticking) {
             window.requestAnimationFrame(function() {
-                // 在这里处理滚动相关的逻辑
+                // Handle scroll related logic here
                 ticking = false;
             });
             ticking = true;

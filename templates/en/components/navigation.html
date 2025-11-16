@@ -1,7 +1,7 @@
 <!--
   Navigation Component
-  可复用的导航菜单组件，支持二级下拉菜单
-  使用Alpine.js管理交互状态
+  Reusable navigation menu component with two-level dropdown support
+  Manages interaction state using Alpine.js
 -->
 
 <nav
@@ -188,20 +188,20 @@
 <script>
 /**
  * Navigation Menu Alpine.js Component
- * 管理导航菜单的状态和交互
+ * Manages navigation menu state and interaction
  */
 function navigationMenu() {
     return {
-        // 移动菜单开关状态
+        // Mobile menu open/close state
         mobileMenuOpen: false,
         lastFocused: null,
 
         /**
-         * 切换移动菜单
+         * Toggle mobile menu
          */
         toggleMobileMenu() {
             this.mobileMenuOpen = !this.mobileMenuOpen;
-            // 切换body类来禁用滚动
+            // Toggle body class to disable scrolling
             document.body.classList.toggle('mobile-menu-open', this.mobileMenuOpen);
             if (this.mobileMenuOpen) {
                 this.lastFocused = document.activeElement;
@@ -214,7 +214,7 @@ function navigationMenu() {
         },
 
         /**
-         * 关闭移动菜单
+         * Close mobile menu
          */
         closeMobileMenu() {
             this.mobileMenuOpen = false;
@@ -223,10 +223,10 @@ function navigationMenu() {
         },
 
         /**
-         * 初始化
+         * Initialize
          */
         init() {
-            // 监听ESC键关闭移动菜单
+            // Listen for ESC key to close mobile menu
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && this.mobileMenuOpen) {
                     this.closeMobileMenu();
@@ -243,7 +243,7 @@ function navigationMenu() {
                 }
             });
 
-            // 监听路由变化关闭移动菜单
+            // Listen for route changes to close mobile menu
             window.addEventListener('popstate', () => {
                 this.closeMobileMenu();
             });
@@ -253,10 +253,10 @@ function navigationMenu() {
 </script>
 
 <style>
-/* Alpine.js cloak - 防止内容闪烁 */
+/* Alpine.js cloak - Prevent content flash */
 [x-cloak] { display: none !important; }
 
-/* 下拉菜单动画辅助类 */
+/* Dropdown menu animation helper */
 .dropdown-menu {
     transform-origin: top;
 }
@@ -265,7 +265,7 @@ function navigationMenu() {
     transform-origin: top;
 }
 
-/* 汉堡菜单动画 */
+/* Hamburger menu animation */
 .hamburger-line {
     transition: all 0.3s ease;
 }
@@ -282,7 +282,7 @@ function navigationMenu() {
     transform: rotate(-45deg) translate(7px, -7px);
 }
 
-/* 禁用body滚动 */
+/* Disable body scroll */
 body.mobile-menu-open {
     overflow: hidden;
 }

@@ -1,18 +1,18 @@
 <!--
-  主栏目 Hero 组件
-  用于主栏目(school, chess, badminton, programmes, events, contact)的统一 Hero 展示
-  支持从 column 对象读取配置，包括双语标题、标语、CTA按钮等
-  不包含统计数据栏
+  Main Column Hero Component
+  Used for main columns (school, chess, badminton, programmes, events, contact)
+  Supports reading configuration from column object, including bilingual titles, taglines, CTA buttons, etc.
+  Does not include statistics bar
 -->
 
-{# 获取 Hero 配置，优先使用栏目配置，支持变量覆盖 #}
+{# Get Hero configuration, prioritize column configuration, support variable override #}
 {% set h_title = hero_title or (column.hero_title if column.hero_title else column.name) %}
 {% set h_title_en = hero_title_en or column.hero_title_en %}
 {% set h_tagline = hero_tagline or column.hero_tagline %}
 {% set h_cta_text = hero_cta_text or column.hero_cta_text %}
 {% set h_cta_url = hero_cta_url or column.hero_cta_url %}
 
-{# 背景图片优先级: 明确传入的 hero_image > column.hero_media > 默认图片 #}
+{# Background image priority: explicitly passed hero_image > column.hero_media > default image #}
 {% if not hero_image %}
     {% if column.hero_media %}
         {% set hero_image = column.hero_media.path_original %}
@@ -30,14 +30,14 @@
     <div class="container">
         <div class="hero__content">
             <h1 id="main-column-title" class="hero__title" data-aos="fade-up">
-                <span class="hero__title-main" lang="zh-CN">{{ h_title }}</span>
+                <span class="hero__title-main">{{ h_title }}</span>
                 {% if h_title_en %}
-                <span class="hero__title-sub" lang="en-GB">{{ h_title_en }}</span>
+                <span class="hero__title-sub">{{ h_title_en }}</span>
                 {% endif %}
             </h1>
             {% if h_tagline %}
             <p class="hero__tagline" data-aos="fade-up" data-aos-delay="100">
-                <span lang="zh-CN">{{ h_tagline }}</span>
+                {{ h_tagline }}
             </p>
             {% endif %}
             {% if h_cta_text and h_cta_url %}
@@ -54,7 +54,7 @@
 
 <style>
 /* ========================================
-   主栏目 Hero 组件样式
+   Main Column Hero Component Styles
 ======================================== */
 .hero--main-column {
     position: relative;
@@ -155,7 +155,7 @@
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
 }
 
-/* 响应式设计 */
+/* Responsive Design */
 @media (max-width: 992px) {
     .hero--main-column {
         min-height: 400px;

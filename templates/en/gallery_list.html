@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
-{% block title %}Photo Gallery - 照片画廊 | {{ site.site_name }}{% endblock %}
+{% block title %}Photo Gallery | {{ site.site_name }}{% endblock %}
 
-{% block meta_description %}Browse our collection of photos from Chinese School, Chess Club, Badminton Club, and community events. 浏览博文教育的相册集锦。{% endblock %}
+{% block meta_description %}Browse our collection of photos from Chinese School, Chess Club, Badminton Club, and community events.{% endblock %}
 
 {% block content %}
 
@@ -14,13 +14,9 @@
         <div class="hero__content">
             <h1 class="hero__title" data-aos="fade-up">
                 <span class="hero__title-main">Photo Gallery</span>
-                <span class="hero__title-chinese">照片画廊</span>
             </h1>
             <p class="hero__subtitle" data-aos="fade-up" data-aos-delay="100">
                 Capturing Moments, Celebrating Achievements
-            </p>
-            <p class="hero__subtitle-chinese" data-aos="fade-up" data-aos-delay="150">
-                记录精彩瞬间，庆祝每一个成就
             </p>
         </div>
     </div>
@@ -34,7 +30,7 @@
             {% for gallery in galleries %}
             <div class="col-lg-6 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
                 <div class="gallery-card">
-                    <a href="/{{ gallery.slug }}" class="gallery-card__link">
+                    <a href="/en/{{ gallery.slug }}" class="gallery-card__link">
                         <div class="gallery-card__image-wrapper">
                             {% if gallery.cover_media_id and gallery.cover_media %}
                             <img src="{{ gallery.cover_media.path_medium or gallery.cover_media.path_original }}"
@@ -49,7 +45,7 @@
                             <div class="gallery-card__overlay">
                                 <div class="gallery-card__info">
                                     <i class="fas fa-images gallery-card__icon"></i>
-                                    <span class="gallery-card__count">{{ gallery.image_count or 0 }} 张照片</span>
+                                    <span class="gallery-card__count">{{ gallery.image_count or 0 }} Photos</span>
                                 </div>
                             </div>
                         </div>
@@ -65,7 +61,7 @@
                                 </span>
                                 {% endif %}
                                 <span class="gallery-card__views">
-                                    <i class="fas fa-eye"></i> {{ gallery.view_count or 0 }} 次浏览
+                                    <i class="fas fa-eye"></i> {{ gallery.view_count or 0 }} Views
                                 </span>
                             </div>
                         </div>
@@ -84,10 +80,7 @@
             <p class="empty-state__description">
                 We're currently organizing our photo collections. Check back soon for exciting photos from our classes, events, and activities!
             </p>
-            <p class="empty-state__description-chinese">
-                我们正在整理相册。请稍后再来查看精彩的课堂、活动照片！
-            </p>
-            <a href="/contact" class="btn btn-primary mt-4">
+            <a href="/en/contact" class="btn btn-primary mt-4">
                 Contact Us
             </a>
         </div>
@@ -249,11 +242,6 @@
     margin-bottom: 0.5rem;
 }
 
-.empty-state__description-chinese {
-    font-family: var(--font-chinese);
-    font-size: var(--font-size-base);
-    color: var(--color-gray-500);
-}
 
 /* Responsive */
 @media (max-width: 768px) {

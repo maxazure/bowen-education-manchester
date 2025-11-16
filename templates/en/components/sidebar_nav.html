@@ -1,15 +1,15 @@
 <!--
   Sidebar Navigation Component
-  显示父栏目和子栏目的侧边导航
+  Displays parent and child column navigation
 -->
 
 {% if parent_column %}
 <aside class="sidebar-nav">
     <!-- Parent Column Link -->
     <div class="sidebar-header">
-        <a href="/{{ parent_column.slug }}/" class="sidebar-parent-link">
+        <a href="/en/{{ parent_column.slug }}/" class="sidebar-parent-link">
             <h3>{{ parent_column.name }}</h3>
-            
+
         </a>
     </div>
 
@@ -20,7 +20,7 @@
             {% for sibling in sibling_columns %}
             <li class="sidebar-menu-item">
                 <a
-                    href="/{{ sibling.slug }}/"
+                    href="/en/{{ sibling.slug }}/"
                     class="sidebar-menu-link{% if column and column.id == sibling.id %} active{% endif %}"
                 >
                     <span class="sidebar-menu-icon">
@@ -61,7 +61,7 @@
     <!-- Registration Button (only show if explicitly passed show_register_button variable) -->
     {% if show_register_button and parent_column %}
     <div class="sidebar-cta">
-        <a href="{{ register_button_url or ('/contact') }}" class="sidebar-register-btn">
+        <a href="{{ register_button_url or ('/en/contact') }}" class="sidebar-register-btn">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                 <circle cx="8.5" cy="7" r="4"></circle>
@@ -69,8 +69,8 @@
                 <line x1="23" y1="11" x2="17" y2="11"></line>
             </svg>
             <div class="sidebar-register-text">
-                <strong>{{ register_button_text or '立即报名' }}</strong>
-                <small>{{ register_button_subtext or '联系我们' }}</small>
+                <strong>{{ register_button_text or 'Register Now' }}</strong>
+                <small>{{ register_button_subtext or 'Contact Us' }}</small>
             </div>
         </a>
     </div>
@@ -81,7 +81,7 @@
 <style>
 /* Sidebar Navigation Styles */
 .sidebar-nav {
-    width: 100%; /* 改为100%适应父容器 */
+    width: 100%; /* Changed to 100% to fit parent container */
     background: var(--color-white, #ffffff);
     border-radius: var(--radius-lg, 0.75rem);
     box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1));
