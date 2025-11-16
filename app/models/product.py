@@ -33,6 +33,7 @@ class ProductCategory(BaseModel):
         Integer, ForeignKey("product_category.id"), nullable=True, comment="父分类ID"
     )
     name = Column(String(100), nullable=False, comment="分类名称")
+    name_en = Column(String(100), nullable=True, comment="分类英文名称")
     slug = Column(String(100), nullable=False, comment="分类Slug")
     sort_order = Column(Integer, default=0, nullable=False, comment="排序序号")
     is_visible = Column(Boolean, default=True, nullable=False, comment="是否可见")
@@ -57,13 +58,17 @@ class Product(BaseModel):
         Integer, ForeignKey("site_column.id"), nullable=False, comment="关联栏目ID"
     )
     name = Column(String(200), nullable=False, comment="产品名称")
+    name_en = Column(String(200), nullable=True, comment="产品英文名称")
     slug = Column(String(200), nullable=False, comment="产品Slug")
     summary = Column(Text, nullable=True, comment="产品卖点/简述")
+    summary_en = Column(Text, nullable=True, comment="产品英文简述")
     description_html = Column(Text, nullable=False, comment="详细说明HTML")
+    description_html_en = Column(Text, nullable=True, comment="英文详细说明HTML")
     cover_media_id = Column(
         Integer, ForeignKey("media_file.id"), nullable=True, comment="封面图ID"
     )
     price_text = Column(String(100), nullable=True, comment="价格文本")
+    price_text_en = Column(String(100), nullable=True, comment="英文价格文本")
     availability_status = Column(
         Enum("in_stock", "out_of_stock", "inquiry", name="product_availability"),
         default="in_stock",
@@ -78,7 +83,9 @@ class Product(BaseModel):
         comment="状态",
     )
     seo_title = Column(String(200), nullable=True, comment="SEO标题")
+    seo_title_en = Column(String(200), nullable=True, comment="英文SEO标题")
     seo_description = Column(Text, nullable=True, comment="SEO描述")
+    seo_description_en = Column(Text, nullable=True, comment="英文SEO描述")
     published_at = Column(DateTime, nullable=True, comment="上线时间")
 
     # 关系

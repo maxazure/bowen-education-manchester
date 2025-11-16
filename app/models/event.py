@@ -28,9 +28,12 @@ class Event(BaseModel):
 
     # 基本信息
     title = Column(String(200), nullable=False, comment="活动标题")
+    title_en = Column(String(200), nullable=True, comment="活动英文标题")
     slug = Column(String(200), nullable=False, comment="活动Slug")
     description = Column(Text, nullable=False, comment="活动描述")
+    description_en = Column(Text, nullable=True, comment="活动英文描述")
     summary = Column(Text, nullable=True, comment="活动简介")
+    summary_en = Column(Text, nullable=True, comment="活动英文简介")
 
     # 活动类型
     event_type = Column(
@@ -65,6 +68,7 @@ class Event(BaseModel):
         comment="活动形式",
     )
     venue_name = Column(String(200), nullable=True, comment="场地名称")
+    venue_name_en = Column(String(200), nullable=True, comment="场地英文名称")
     venue_address = Column(String(500), nullable=True, comment="场地地址")
     venue_city = Column(String(100), nullable=True, comment="城市")
     venue_postal_code = Column(String(20), nullable=True, comment="邮编")
@@ -115,7 +119,9 @@ class Event(BaseModel):
 
     # SEO
     seo_title = Column(String(200), nullable=True, comment="SEO标题")
+    seo_title_en = Column(String(200), nullable=True, comment="英文SEO标题")
     seo_description = Column(Text, nullable=True, comment="SEO描述")
+    seo_description_en = Column(Text, nullable=True, comment="英文SEO描述")
 
     # 其他
     tags = Column(String(255), nullable=True, comment="标签(逗号分隔)")

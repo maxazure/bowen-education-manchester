@@ -37,17 +37,17 @@
                         {% endif %}
                         <div class="product-card__content">
                             <h2 class="product-card__title">
-                                {{ product.name }}
+                                {{ product.name_en or product.name }}
                             </h2>
                             <p class="product-card__summary">
-                                {{ product.summary or (product.description_html|striptags|truncate(150)) }}
+                                {{ product.summary_en or product.summary or (product.description_html_en or product.description_html|striptags|truncate(150)) }}
                             </p>
-                            {% if product.price_text %}
-                            <p class="product-card__price">{{ product.price_text }}</p>
+                            {% if product.price_text_en or product.price_text %}
+                            <p class="product-card__price">{{ product.price_text_en or product.price_text }}</p>
                             {% endif %}
                             <a href="/en/{{ column.slug }}/{{ product.slug }}"
                                class="product-card__link"
-                               aria-label="Learn more about {{ product.name }}">
+                               aria-label="Learn more about {{ product.name_en or product.name }}">
                                 Learn More →
                             </a>
                         </div>
@@ -80,17 +80,17 @@
                     {% endif %}
                     <div class="product-card__content">
                         <h2 class="product-card__title">
-                            {{ product.name }}
+                            {{ product.name_en or product.name }}
                         </h2>
                         <p class="product-card__summary">
-                            {{ product.summary or (product.description_html|striptags|truncate(150)) }}
+                            {{ product.summary_en or product.summary or (product.description_html_en or product.description_html|striptags|truncate(150)) }}
                         </p>
-                        {% if product.price_text %}
-                        <p class="product-card__price">{{ product.price_text }}</p>
+                        {% if product.price_text_en or product.price_text %}
+                        <p class="product-card__price">{{ product.price_text_en or product.price_text }}</p>
                         {% endif %}
                         <a href="/en/{{ column.slug }}/{{ product.slug }}"
                            class="product-card__link"
-                           aria-label="Learn more about {{ product.name }}">
+                           aria-label="Learn more about {{ product.name_en or product.name }}">
                             Learn More →
                         </a>
                     </div>

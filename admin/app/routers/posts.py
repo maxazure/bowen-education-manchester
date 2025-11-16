@@ -147,6 +147,13 @@ async def create_post(
     category_ids: str = Form(""),  # 逗号分隔的分类 ID
     seo_title: Optional[str] = Form(None),
     seo_description: Optional[str] = Form(None),
+    # 英文字段
+    title_en: Optional[str] = Form(None),
+    summary_en: Optional[str] = Form(None),
+    content_markdown_en: Optional[str] = Form(None),
+    seo_title_en: Optional[str] = Form(None),
+    seo_description_en: Optional[str] = Form(None),
+    # 其他字段
     is_recommended: bool = Form(False),
     is_pinned: bool = Form(False),
     status: str = Form("draft"),
@@ -157,10 +164,15 @@ async def create_post(
         if not slug:
             slug = generate_slug(title, db)
 
-        # 转换 Markdown 为 HTML
+        # 转换中文 Markdown 为 HTML
         content_html = ""
         if content_markdown:
             content_html = markdown_to_html(content_markdown)
+
+        # 转换英文 Markdown 为 HTML
+        content_html_en = ""
+        if content_markdown_en:
+            content_html_en = markdown_to_html(content_markdown_en)
 
         # 创建文章
         post = Post(
@@ -173,6 +185,14 @@ async def create_post(
             cover_media_id=cover_media_id,
             seo_title=seo_title,
             seo_description=seo_description,
+            # 英文字段
+            title_en=title_en,
+            summary_en=summary_en,
+            content_markdown_en=content_markdown_en,
+            content_html_en=content_html_en,
+            seo_title_en=seo_title_en,
+            seo_description_en=seo_description_en,
+            # 其他字段
             is_recommended=is_recommended,
             is_pinned=is_pinned,
             status=status,
@@ -262,6 +282,13 @@ async def update_post(
     category_ids: str = Form(""),
     seo_title: Optional[str] = Form(None),
     seo_description: Optional[str] = Form(None),
+    # 英文字段
+    title_en: Optional[str] = Form(None),
+    summary_en: Optional[str] = Form(None),
+    content_markdown_en: Optional[str] = Form(None),
+    seo_title_en: Optional[str] = Form(None),
+    seo_description_en: Optional[str] = Form(None),
+    # 其他字段
     is_recommended: bool = Form(False),
     is_pinned: bool = Form(False),
     status: str = Form("draft"),
@@ -277,12 +304,17 @@ async def update_post(
         if not slug:
             slug = generate_slug(title, db, exclude_id=post_id)
 
-        # 转换 Markdown 为 HTML
+        # 转换中文 Markdown 为 HTML
         content_html = post.content_html
         if content_markdown:
             content_html = markdown_to_html(content_markdown)
 
-        # 更新字段
+        # 转换英文 Markdown 为 HTML
+        content_html_en = post.content_html_en if hasattr(post, 'content_html_en') else ""
+        if content_markdown_en:
+            content_html_en = markdown_to_html(content_markdown_en)
+
+        # 更新中文字段
         post.column_id = column_id
         post.title = title
         post.slug = slug
@@ -292,6 +324,16 @@ async def update_post(
         post.cover_media_id = cover_media_id
         post.seo_title = seo_title
         post.seo_description = seo_description
+
+        # 更新英文字段
+        post.title_en = title_en
+        post.summary_en = summary_en
+        post.content_markdown_en = content_markdown_en
+        post.content_html_en = content_html_en
+        post.seo_title_en = seo_title_en
+        post.seo_description_en = seo_description_en
+
+        # 更新其他字段
         post.is_recommended = is_recommended
         post.is_pinned = is_pinned
         post.status = status

@@ -26,6 +26,47 @@
         color: #333;
     }
 
+    .page-subtitle {
+        font-size: 14px;
+        color: #6c757d;
+        margin-top: 5px;
+    }
+
+    /* Tab 导航样式 */
+    .language-tabs {
+        margin-bottom: 2rem;
+        border-bottom: 2px solid #dee2e6;
+    }
+
+    .language-tabs .nav-link {
+        font-weight: 500;
+        color: #6c757d;
+        padding: 1rem 1.5rem;
+        border: none;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s ease;
+    }
+
+    .language-tabs .nav-link:hover {
+        color: #0d6efd;
+        background-color: #f8f9fa;
+    }
+
+    .language-tabs .nav-link.active {
+        color: #0d6efd;
+        background-color: transparent;
+        border-bottom-color: #0d6efd;
+    }
+
+    .language-tabs .nav-link i {
+        margin-right: 0.5rem;
+    }
+
+    /* Tab 内容容器 */
+    .tab-content {
+        padding-top: 1.5rem;
+    }
+
     .btn {
         padding: 10px 20px;
         border: none;
@@ -85,6 +126,7 @@
     }
 
     .form-group input[type="text"],
+    .form-group input[type="number"],
     .form-group textarea,
     .form-group select {
         width: 100%;
@@ -103,28 +145,6 @@
         margin-bottom: 20px;
     }
 
-    .preview-container {
-        margin-top: 20px;
-        padding: 20px;
-        border: 1px solid #dee2e6;
-        border-radius: 4px;
-        background: #f8f9fa;
-    }
-
-    .preview-title {
-        font-size: 16px;
-        font-weight: 600;
-        margin-bottom: 10px;
-        color: #495057;
-    }
-
-    .preview-content {
-        background: white;
-        padding: 20px;
-        border-radius: 4px;
-        min-height: 200px;
-    }
-
     .form-actions {
         display: flex;
         gap: 10px;
@@ -141,6 +161,8 @@
 
     .sidebar-section:last-child {
         border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
     }
 
     .sidebar-section-title {
@@ -169,7 +191,8 @@
     }
 
     .CodeMirror {
-        height: 400px;
+        min-height: 400px;
+        max-height: 600px;
         border: 1px solid #ced4da;
         border-radius: 4px;
     }
@@ -183,37 +206,98 @@
 {% block content %}
 <div class="form-container">
     <div class="page-header">
-        <h1 class="page-title">{% if mode == 'edit' %}编辑单页{% else %}新建单页{% endif %}</h1>
+        <div>
+            <h1 class="page-title">{% if mode == 'edit' %}编辑单页{% else %}新建单页{% endif %}</h1>
+            <p class="page-subtitle">{% if mode == 'edit' %}更新单页内容（支持中英双语编辑）{% else %}创建新的单页内容（支持中英双语编辑）{% endif %}</p>
+        </div>
         <a href="/admin/pages" class="btn btn-secondary">返回列表</a>
     </div>
 
     <form method="POST" action="{% if mode == 'edit' %}/admin/pages/{{ page.id }}{% else %}/admin/pages{% endif %}" id="pageForm">
         <div class="form-row">
             <div class="form-main">
-                <div class="form-group">
-                    <label for="title">标题 *</label>
-                    <input type="text" id="title" name="title" required value="{{ page.title if page else '' }}">
-                </div>
+                <!-- 语言切换 Tab -->
+                <ul class="nav nav-tabs language-tabs" id="languageTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="zh-tab" data-bs-toggle="tab" data-bs-target="#zh-content" type="button" role="tab" aria-controls="zh-content" aria-selected="true">
+                            <i class="bi bi-translate"></i>中文内容
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="en-tab" data-bs-toggle="tab" data-bs-target="#en-content" type="button" role="tab" aria-controls="en-content" aria-selected="false">
+                            <i class="bi bi-globe"></i>English Content
+                        </button>
+                    </li>
+                </ul>
 
-                <div class="form-group">
-                    <label for="slug">URL Slug *</label>
-                    <input type="text" id="slug" name="slug" required value="{{ page.slug if page and page.slug else '' }}">
-                    <div class="help-text">留空将自动生成。只能包含字母、数字和连字符。</div>
-                </div>
+                <!-- Tab 内容 -->
+                <div class="tab-content" id="languageTabContent">
+                    <!-- 中文内容 Tab -->
+                    <div class="tab-pane fade show active" id="zh-content" role="tabpanel" aria-labelledby="zh-tab">
+                        <div class="form-group">
+                            <label for="title">标题 <span style="color: red;">*</span></label>
+                            <input type="text" id="title" name="title" required value="{{ page.title if page else '' }}" placeholder="请输入中文标题">
+                        </div>
 
-                <div class="form-group">
-                    <label for="subtitle">副标题</label>
-                    <input type="text" id="subtitle" name="subtitle" value="{{ page.subtitle if page and page.subtitle else '' }}">
-                </div>
+                        <div class="form-group">
+                            <label for="slug">URL Slug <span style="color: red;">*</span></label>
+                            <input type="text" id="slug" name="slug" required value="{{ page.slug if page and page.slug else '' }}" placeholder="留空自动生成">
+                            <div class="help-text">留空将自动生成。只能包含字母、数字和连字符。</div>
+                        </div>
 
-                <div class="form-group markdown-editor">
-                    <label for="content_markdown">内容 (Markdown) *</label>
-                    <textarea id="content_markdown" name="content_markdown" required>{{ page.content_markdown if page and page.content_markdown else '' }}</textarea>
-                </div>
+                        <div class="form-group">
+                            <label for="subtitle">副标题</label>
+                            <input type="text" id="subtitle" name="subtitle" value="{{ page.subtitle if page and page.subtitle else '' }}" placeholder="请输入中文副标题">
+                        </div>
 
-                <div class="preview-container" id="previewContainer" style="display: none;">
-                    <div class="preview-title">实时预览</div>
-                    <div class="preview-content" id="previewContent"></div>
+                        <div class="form-group markdown-editor">
+                            <label for="content_markdown">内容 (Markdown) <span style="color: red;">*</span></label>
+                            <textarea id="content_markdown" name="content_markdown" required>{{ page.content_markdown if page and page.content_markdown else '' }}</textarea>
+                            <div class="help-text">支持 Markdown 格式编辑，实时预览内容效果</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="seo_title">SEO 标题</label>
+                            <input type="text" id="seo_title" name="seo_title" value="{{ page.seo_title if page and page.seo_title else '' }}" placeholder="留空使用页面标题">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="seo_description">SEO 描述</label>
+                            <textarea id="seo_description" name="seo_description" rows="3" placeholder="用于搜索引擎显示的描述">{{ page.seo_description if page and page.seo_description else '' }}</textarea>
+                            <div class="help-text">建议长度 120-160 字符，用于搜索引擎结果展示</div>
+                        </div>
+                    </div>
+
+                    <!-- 英文内容 Tab -->
+                    <div class="tab-pane fade" id="en-content" role="tabpanel" aria-labelledby="en-tab">
+                        <div class="form-group">
+                            <label for="title_en">Title (English)</label>
+                            <input type="text" id="title_en" name="title_en" value="{{ page.title_en if page and page.title_en else '' }}" placeholder="Enter English title">
+                            <div class="help-text">Optional - If not provided, Chinese title will be used</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subtitle_en">Subtitle (English)</label>
+                            <input type="text" id="subtitle_en" name="subtitle_en" value="{{ page.subtitle_en if page and page.subtitle_en else '' }}" placeholder="Enter English subtitle">
+                        </div>
+
+                        <div class="form-group markdown-editor">
+                            <label for="content_markdown_en">Content (Markdown)</label>
+                            <textarea id="content_markdown_en" name="content_markdown_en">{{ page.content_markdown_en if page and page.content_markdown_en else '' }}</textarea>
+                            <div class="help-text">Supports Markdown format with live preview</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="seo_title_en">SEO Title</label>
+                            <input type="text" id="seo_title_en" name="seo_title_en" value="{{ page.seo_title_en if page and page.seo_title_en else '' }}" placeholder="Leave empty to use page title">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="seo_description_en">SEO Description</label>
+                            <textarea id="seo_description_en" name="seo_description_en" rows="3" placeholder="Description for search engines">{{ page.seo_description_en if page and page.seo_description_en else '' }}</textarea>
+                            <div class="help-text">Recommended length: 120-160 characters for search results</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -238,7 +322,7 @@
                 <div class="sidebar-section">
                     <div class="sidebar-section-title">栏目关联</div>
                     <div class="form-group">
-                        <label for="column_id">所属栏目 *</label>
+                        <label for="column_id">所属栏目 <span style="color: red;">*</span></label>
                         <select id="column_id" name="column_id" required>
                             <option value="">-- 选择栏目 --</option>
                             {% for column in columns %}
@@ -254,24 +338,16 @@
                     <div class="sidebar-section-title">Hero 设置</div>
                     <div class="form-group">
                         <label for="hero_media_id">背景图 ID</label>
-                        <input type="number" id="hero_media_id" name="hero_media_id" value="{{ page.hero_media_id if page and page.hero_media_id else '' }}">
+                        <input type="number" id="hero_media_id" name="hero_media_id" value="{{ page.hero_media_id if page and page.hero_media_id else '' }}" placeholder="输入媒体库图片的 ID">
                         <div class="help-text">输入媒体库图片的 ID</div>
                     </div>
                 </div>
 
                 <div class="sidebar-section">
-                    <div class="sidebar-section-title">SEO 设置</div>
-                    <div class="form-group">
-                        <label for="seo_title">SEO 标题</label>
-                        <input type="text" id="seo_title" name="seo_title" value="{{ page.seo_title if page and page.seo_title else '' }}">
-                    </div>
-                    <div class="form-group">
-                        <label for="seo_description">SEO 描述</label>
-                        <textarea id="seo_description" name="seo_description" rows="3">{{ page.seo_description if page and page.seo_description else '' }}</textarea>
-                    </div>
+                    <div class="sidebar-section-title">其他 SEO 设置</div>
                     <div class="form-group">
                         <label for="seo_keywords">SEO 关键词</label>
-                        <input type="text" id="seo_keywords" name="seo_keywords" value="{{ page.seo_keywords if page and page.seo_keywords else '' }}">
+                        <input type="text" id="seo_keywords" name="seo_keywords" value="{{ page.seo_keywords if page and page.seo_keywords else '' }}" placeholder="用逗号分隔多个关键词">
                         <div class="help-text">用逗号分隔多个关键词</div>
                     </div>
                 </div>
@@ -280,7 +356,7 @@
 
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">{% if mode == 'edit' %}更新单页{% else %}创建单页{% endif %}</button>
-            <button type="button" class="btn btn-secondary" onclick="window.location.href='/pages'">取消</button>
+            <button type="button" class="btn btn-secondary" onclick="window.location.href='/admin/pages'">取消</button>
         </div>
     </form>
 </div>
@@ -288,5 +364,97 @@
 
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
-<script src="/static/js/pages.js"></script>
+<script>
+(function() {
+    'use strict';
+
+    // 初始化中文 Markdown 编辑器
+    const easyMDE_zh = new EasyMDE({
+        element: document.getElementById('content_markdown'),
+        spellChecker: false,
+        autosave: {
+            enabled: true,
+            uniqueId: 'page-content-zh-' + ({% if page %}{{ page.id }}{% else %}0{% endif %}),
+            delay: 5000,
+        },
+        placeholder: '请输入中文单页内容，支持 Markdown 格式...',
+        minHeight: '400px',
+        maxHeight: '600px',
+        toolbar: [
+            'bold', 'italic', 'heading', '|',
+            'quote', 'unordered-list', 'ordered-list', '|',
+            'link', 'image', '|',
+            'preview', 'side-by-side', 'fullscreen', '|',
+            'guide'
+        ],
+        status: ['autosave', 'lines', 'words', 'cursor'],
+        renderingConfig: {
+            codeSyntaxHighlighting: true,
+        }
+    });
+
+    // 初始化英文 Markdown 编辑器
+    const easyMDE_en = new EasyMDE({
+        element: document.getElementById('content_markdown_en'),
+        spellChecker: false,
+        autosave: {
+            enabled: true,
+            uniqueId: 'page-content-en-' + ({% if page %}{{ page.id }}{% else %}0{% endif %}),
+            delay: 5000,
+        },
+        placeholder: 'Enter English page content, supports Markdown format...',
+        minHeight: '400px',
+        maxHeight: '600px',
+        toolbar: [
+            'bold', 'italic', 'heading', '|',
+            'quote', 'unordered-list', 'ordered-list', '|',
+            'link', 'image', '|',
+            'preview', 'side-by-side', 'fullscreen', '|',
+            'guide'
+        ],
+        status: ['autosave', 'lines', 'words', 'cursor'],
+        renderingConfig: {
+            codeSyntaxHighlighting: true,
+        }
+    });
+
+    // 表单提交处理
+    const form = document.getElementById('pageForm');
+
+    form.addEventListener('submit', function(event) {
+        // 确保从 EasyMDE 编辑器获取最新内容
+        document.getElementById('content_markdown').value = easyMDE_zh.value();
+        document.getElementById('content_markdown_en').value = easyMDE_en.value();
+    });
+
+    // 防止意外离开页面
+    let formChanged = false;
+
+    form.addEventListener('change', function() {
+        formChanged = true;
+    });
+
+    easyMDE_zh.codemirror.on('change', function() {
+        formChanged = true;
+    });
+
+    easyMDE_en.codemirror.on('change', function() {
+        formChanged = true;
+    });
+
+    window.addEventListener('beforeunload', function(e) {
+        if (formChanged) {
+            e.preventDefault();
+            e.returnValue = '';
+            return '';
+        }
+    });
+
+    // 表单提交后清除警告
+    form.addEventListener('submit', function() {
+        formChanged = false;
+    });
+
+})();
+</script>
 {% endblock %}

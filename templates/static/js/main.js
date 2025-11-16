@@ -1,6 +1,6 @@
 /**
  * Bowen Education Group - Main JavaScript
- * 博文集团 - 主要 JavaScript 文件
+ * 博文教育集团 - 主要 JavaScript 文件
  *
  * Handles all interactive features for the website
  */

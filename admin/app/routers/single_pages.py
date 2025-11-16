@@ -100,6 +100,13 @@ async def create_page(
     seo_title: Optional[str] = Form(None),
     seo_description: Optional[str] = Form(None),
     seo_keywords: Optional[str] = Form(None),
+    # 英文字段
+    title_en: Optional[str] = Form(None),
+    subtitle_en: Optional[str] = Form(None),
+    content_markdown_en: Optional[str] = Form(None),
+    seo_title_en: Optional[str] = Form(None),
+    seo_description_en: Optional[str] = Form(None),
+    # 其他字段
     status: str = Form("draft"),
     db: Session = Depends(get_db),
 ):
@@ -117,6 +124,11 @@ async def create_page(
         seo_title: SEO 标题
         seo_description: SEO 描述
         seo_keywords: SEO 关键词
+        title_en: 英文标题
+        subtitle_en: 英文副标题
+        content_markdown_en: 英文 Markdown 内容
+        seo_title_en: 英文 SEO 标题
+        seo_description_en: 英文 SEO 描述
         status: 状态 (draft/published)
         db: 数据库会话
 
@@ -133,8 +145,13 @@ async def create_page(
             if existing:
                 raise HTTPException(status_code=400, detail="Slug 已存在")
 
-        # 转换 Markdown 为 HTML
+        # 转换中文 Markdown 为 HTML
         content_html = single_page_service.markdown_to_html(content_markdown)
+
+        # 转换英文 Markdown 为 HTML
+        content_html_en = ""
+        if content_markdown_en:
+            content_html_en = single_page_service.markdown_to_html(content_markdown_en)
 
         # 创建单页
         page = SinglePage(
@@ -148,6 +165,14 @@ async def create_page(
             seo_title=seo_title,
             seo_description=seo_description,
             seo_keywords=seo_keywords,
+            # 英文字段
+            title_en=title_en,
+            subtitle_en=subtitle_en,
+            content_markdown_en=content_markdown_en,
+            content_html_en=content_html_en,
+            seo_title_en=seo_title_en,
+            seo_description_en=seo_description_en,
+            # 其他字段
             status=status,
             published_at=datetime.now() if status == "published" else None,
         )
@@ -217,6 +242,13 @@ async def update_page(
     seo_title: Optional[str] = Form(None),
     seo_description: Optional[str] = Form(None),
     seo_keywords: Optional[str] = Form(None),
+    # 英文字段
+    title_en: Optional[str] = Form(None),
+    subtitle_en: Optional[str] = Form(None),
+    content_markdown_en: Optional[str] = Form(None),
+    seo_title_en: Optional[str] = Form(None),
+    seo_description_en: Optional[str] = Form(None),
+    # 其他字段
     status: str = Form("draft"),
     db: Session = Depends(get_db),
 ):
@@ -246,10 +278,15 @@ async def update_page(
         if existing:
             raise HTTPException(status_code=400, detail="Slug 已存在")
 
-        # 转换 Markdown 为 HTML
+        # 转换中文 Markdown 为 HTML
         content_html = single_page_service.markdown_to_html(content_markdown)
 
-        # 更新字段
+        # 转换英文 Markdown 为 HTML
+        content_html_en = ""
+        if content_markdown_en:
+            content_html_en = single_page_service.markdown_to_html(content_markdown_en)
+
+        # 更新中文字段
         page.column_id = column_id
         page.title = title
         page.slug = slug
@@ -260,6 +297,14 @@ async def update_page(
         page.seo_title = seo_title
         page.seo_description = seo_description
         page.seo_keywords = seo_keywords
+
+        # 更新英文字段
+        page.title_en = title_en
+        page.subtitle_en = subtitle_en
+        page.content_markdown_en = content_markdown_en
+        page.content_html_en = content_html_en
+        page.seo_title_en = seo_title_en
+        page.seo_description_en = seo_description_en
 
         # 如果状态从 draft 变为 published,设置发布时间
         if page.status == "draft" and status == "published":

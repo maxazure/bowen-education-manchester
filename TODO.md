@@ -1,5 +1,130 @@
 # TODO 任务列表
 
+
+### [2025-11-16] 完成产品和活动双语支持、品牌名称统一及文档更新
+- [x] Product 模型双语支持 - 完成时间: 2025-11-16 - 负责人: maxazure
+- [x] Event 模型双语支持 - 完成时间: 2025-11-16 - 负责人: maxazure
+- [x] 产品管理后台 Tab 双语编辑界面 - 完成时间: 2025-11-16 - 负责人: maxazure
+- [x] 产品前台英文模板回退逻辑 - 完成时间: 2025-11-16 - 负责人: maxazure
+- [x] 品牌名称统一更新 - 完成时间: 2025-11-16 - 负责人: maxazure
+- [x] README 文档更新 - 完成时间: 2025-11-16 - 负责人: maxazure
+
+  - **任务背景**:
+    - 用户要求继续完成多语言相关工作
+    - 需要为 Product 和 Event 模型添加双语支持
+    - 管理后台需要分离的编辑界面（不能混在一起）
+    - 统一品牌名称为"博文教育集团"
+    - 更新 README 文档，删除不必要内容
+
+  - **数据库迁移详情**:
+    1. **ProductCategory 表新增字段** (1个):
+       - `name_en` VARCHAR(100) - 分类英文名称
+
+    2. **Product 表新增字段** (6个):
+       - `name_en` VARCHAR(200) - 产品英文名称
+       - `summary_en` TEXT - 产品英文简述
+       - `description_html_en` TEXT - 英文详细说明HTML
+       - `price_text_en` VARCHAR(100) - 英文价格文本
+       - `seo_title_en` VARCHAR(200) - 英文SEO标题
+       - `seo_description_en` TEXT - 英文SEO描述
+
+    3. **Event 表新增字段** (6个):
+       - `title_en` VARCHAR(200) - 活动英文标题
+       - `description_en` TEXT - 活动英文描述
+       - `summary_en` TEXT - 活动英文简介
+       - `venue_name_en` VARCHAR(200) - 场地英文名称
+       - `seo_title_en` VARCHAR(200) - 英文SEO标题
+       - `seo_description_en` TEXT - 英文SEO描述
+
+  - **模型更新**:
+    - `app/models/product.py`: ProductCategory 和 Product 模型添加英文字段
+    - `app/models/event.py`: Event 模型添加 6 个英文字段
+    - 所有字段均为 `nullable=True`，保持向后兼容
+
+  - **管理后台更新** (产品管理):
+    - `admin/templates/products/form.html`: 完全重写 (516→603行)
+      - Bootstrap Tab 导航分离中英文编辑区域
+      - 双 EasyMDE Markdown 编辑器（独立实例）
+      - 单次原子提交所有中英文数据
+      - 表单验证和自动保存功能
+
+    - `admin/app/routers/products.py`: 更新路由处理
+      - `create_product`: 添加 6 个英文字段参数处理
+      - `update_product`: 添加 6 个英文字段参数处理
+      - 中英文 Markdown → HTML 双重转换
+
+  - **前台模板更新**:
+    1. `templates/en/product_list.html`:
+       - 产品卡片标题: `{{ product.name_en or product.name }}`
+       - 产品简述: `{{ product.summary_en or product.summary }}`
+       - 价格文本: `{{ product.price_text_en or product.price_text }}`
+       - 侧边栏和主列表区域全部应用回退逻辑
+
+    2. `templates/en/product_detail.html`:
+       - 页面标题: `{{ product.name_en or product.name }}`
+       - Hero 标题和副标题使用英文字段优先
+       - 详细描述: `{{ (product.description_html_en or product.description_html)|safe }}`
+
+  - **品牌名称统一**:
+    - 模板文件批量替换: "博文集团" → "博文教育集团" (7个文件, 9处)
+      - templates/zh/school.html
+      - templates/zh/about.html
+      - templates/zh/tuition.html
+      - templates/zh/events.html
+      - templates/static/css/main.css
+      - templates/static/js/main.js
+      - templates/en/about.html
+
+    - 数据库更新:
+      - site_setting 表: `site_name_chinese` 值更新为 "博文教育集团"
+
+    - 验证结果: 全站 0 处遗留旧名称
+
+  - **README 更新**:
+    - 文件精简: 503行 → 301行
+    - 更新内容:
+      - 组织名称统一为"博文教育集团"
+      - 启动命令修正为统一应用: `uvicorn app.main:app --reload --port 8000`
+      - 删除过时的前后台分离架构说明
+      - 添加双语支持特性文档
+      - 更新版本历史 v1.2.0
+      - 简化故障排除和示例代码
+
+  - **技术实现要点**:
+    - Bootstrap 5 Tab 组件实现中英文编辑界面分离
+    - 双 EasyMDE 实例管理（独立 uniqueId）
+    - Jinja2 `or` 操作符实现英文优先回退逻辑
+    - SQLite ALTER TABLE 动态添加字段
+    - sed 批量文本替换工具
+
+  - **数据统计**:
+    - ProductCategory: 4 个分类（待添加英文名称）
+    - Product: 7 个产品（待添加英文内容）
+    - Event: 8 个活动（待添加英文内容）
+
+  - **测试结果**:
+    - ✅ 数据库迁移成功执行（Product 7字段 + Event 6字段）
+    - ✅ 模型字段正确加载
+    - ✅ 管理后台 Tab 界面正常工作
+    - ✅ 前台模板回退逻辑正确
+    - ✅ 品牌名称全站统一
+    - ✅ README 文档准确反映当前架构
+    - ✅ 服务器正常运行 (http://localhost:8000)
+
+  - **后续工作建议** (非本次任务):
+    - 活动（Event）管理后台添加双语编辑界面
+    - 其他模型双语支持（Gallery、FAQ、TeamMember 等）
+    - 为现有内容添加英文翻译
+    - 英文前台页面全面测试
+
+  - **Git 提交记录**:
+    - `91c9347` - chore: 提交当前项目更新
+    - `846bd7c` - docs: 更新 TODO.md 记录静态资源路径修复
+    - `1fd4f2f` - refactor: 重命名管理后台静态文件目录避免路径冲突
+    - `e39ad22` - docs: 更新 TODO.md 记录单页编辑页面修复
+    - `9f0c9e6` - fix: 修复单页编辑页面显示问题并批量修复数据
+
+
 ## ✅ 已完成
 
 ### [2025-11-16] 实现文章和单页双语内容存储

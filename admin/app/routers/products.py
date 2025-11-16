@@ -148,6 +148,14 @@ async def create_product(
     category_ids: str = Form(""),  # 逗号分隔的分类 ID
     seo_title: Optional[str] = Form(None),
     seo_description: Optional[str] = Form(None),
+    # 英文字段
+    name_en: Optional[str] = Form(None),
+    summary_en: Optional[str] = Form(None),
+    description_markdown_en: Optional[str] = Form(None),
+    price_text_en: Optional[str] = Form(None),
+    seo_title_en: Optional[str] = Form(None),
+    seo_description_en: Optional[str] = Form(None),
+    # 其他字段
     is_recommended: bool = Form(False),
     status: str = Form("draft"),
 ):
@@ -157,10 +165,15 @@ async def create_product(
         if not slug:
             slug = generate_slug(name, db)
 
-        # 转换 Markdown 为 HTML
+        # 转换中文 Markdown 为 HTML
         description_html = ""
         if description_markdown:
             description_html = markdown_to_html(description_markdown)
+
+        # 转换英文 Markdown 为 HTML
+        description_html_en = ""
+        if description_markdown_en:
+            description_html_en = markdown_to_html(description_markdown_en)
 
         # 创建产品
         product = Product(
@@ -174,6 +187,14 @@ async def create_product(
             availability_status=availability_status,
             seo_title=seo_title,
             seo_description=seo_description,
+            # 英文字段
+            name_en=name_en,
+            summary_en=summary_en,
+            description_html_en=description_html_en,
+            price_text_en=price_text_en,
+            seo_title_en=seo_title_en,
+            seo_description_en=seo_description_en,
+            # 其他字段
             is_recommended=is_recommended,
             status=status,
         )
@@ -268,6 +289,14 @@ async def update_product(
     category_ids: str = Form(""),
     seo_title: Optional[str] = Form(None),
     seo_description: Optional[str] = Form(None),
+    # 英文字段
+    name_en: Optional[str] = Form(None),
+    summary_en: Optional[str] = Form(None),
+    description_markdown_en: Optional[str] = Form(None),
+    price_text_en: Optional[str] = Form(None),
+    seo_title_en: Optional[str] = Form(None),
+    seo_description_en: Optional[str] = Form(None),
+    # 其他字段
     is_recommended: bool = Form(False),
     status: str = Form("draft"),
 ):
@@ -281,12 +310,17 @@ async def update_product(
         if not slug:
             slug = generate_slug(name, db, exclude_id=product_id)
 
-        # 转换 Markdown 为 HTML
+        # 转换中文 Markdown 为 HTML
         description_html = ""
         if description_markdown:
             description_html = markdown_to_html(description_markdown)
 
-        # 更新产品
+        # 转换英文 Markdown 为 HTML
+        description_html_en = ""
+        if description_markdown_en:
+            description_html_en = markdown_to_html(description_markdown_en)
+
+        # 更新中文字段
         product.column_id = column_id
         product.name = name
         product.slug = slug
@@ -297,6 +331,16 @@ async def update_product(
         product.availability_status = availability_status
         product.seo_title = seo_title
         product.seo_description = seo_description
+
+        # 更新英文字段
+        product.name_en = name_en
+        product.summary_en = summary_en
+        product.description_html_en = description_html_en
+        product.price_text_en = price_text_en
+        product.seo_title_en = seo_title_en
+        product.seo_description_en = seo_description_en
+
+        # 更新其他字段
         product.is_recommended = is_recommended
         product.status = status
 

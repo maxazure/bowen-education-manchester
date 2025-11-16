@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}{{ product.name }} - Bowen Education Group{% endblock %}
+{% block title %}{{ product.name_en or product.name }} - Bowen Education Group{% endblock %}
 
-{% block meta_description %}{{ product.summary or (product.name ~ ' - ' ~ column.name ~ ' - Bowen Education Group provides quality Chinese language education courses') }}{% endblock %}
+{% block meta_description %}{{ product.summary_en or product.summary or (product.name_en or product.name ~ ' - ' ~ column.name ~ ' - Bowen Education Group provides quality Chinese language education courses') }}{% endblock %}
 
 {% block content %}
 
 <!-- Hero Section -->
-{% set hero_title = product.name %}
-{% set hero_subtitle = product.summary %}
+{% set hero_title = product.name_en or product.name %}
+{% set hero_subtitle = product.summary_en or product.summary %}
 {% set hero_image = product.cover_media.path_original if product.cover_media else None %}
 {% include 'components/hero_standard.html' %}
 
@@ -32,7 +32,7 @@
                             Course Description
                         </h2>
                         <div class="product-description">
-                            {{ product.description_html|safe }}
+                            {{ (product.description_html_en or product.description_html)|safe }}
                         </div>
                     </div>
 

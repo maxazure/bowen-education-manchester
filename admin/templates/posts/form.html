@@ -4,6 +4,48 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+<style>
+/* Tab 导航样式优化 */
+.language-tabs {
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.language-tabs .nav-link {
+    font-weight: 500;
+    color: #6c757d;
+    padding: 1rem 1.5rem;
+    border: none;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.language-tabs .nav-link:hover {
+    color: #0d6efd;
+    background-color: #f8f9fa;
+}
+
+.language-tabs .nav-link.active {
+    color: #0d6efd;
+    background-color: transparent;
+    border-bottom-color: #0d6efd;
+}
+
+.language-tabs .nav-link i {
+    margin-right: 0.5rem;
+}
+
+/* Tab 内容容器 */
+.tab-content {
+    padding-top: 1.5rem;
+}
+
+/* 确保两个 EasyMDE 编辑器独立渲染 */
+.CodeMirror {
+    min-height: 400px;
+    max-height: 600px;
+}
+</style>
 {% endblock %}
 
 {% block content %}
@@ -17,9 +59,9 @@
             </h1>
             <p class="page-subtitle mb-0">
                 {% if post %}
-                更新文章信息和内容
+                更新文章信息和内容（支持中英双语编辑）
                 {% else %}
-                创建一篇新的文章内容
+                创建一篇新的文章内容（支持中英双语编辑）
                 {% endif %}
             </p>
         </div>
@@ -35,132 +77,264 @@
         <div class="form-layout">
             <!-- 左侧主要内容 -->
             <div class="form-main">
-                <!-- 基本信息卡片 -->
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">
-                            <i class="bi bi-info-circle me-2"></i>基本信息
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <!-- 标题 -->
-                        <div class="mb-3">
-                            <label for="title" class="form-label">
-                                文章标题 <span class="text-danger">*</span>
-                            </label>
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="title"
-                                name="title"
-                                value="{{ post.title if post else '' }}"
-                                required
-                                placeholder="请输入文章标题">
-                            <div class="invalid-feedback">
-                                请输入文章标题
+                <!-- 语言切换 Tab -->
+                <ul class="nav nav-tabs language-tabs" id="languageTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="zh-tab" data-bs-toggle="tab" data-bs-target="#zh-content" type="button" role="tab" aria-controls="zh-content" aria-selected="true">
+                            <i class="bi bi-translate"></i>中文内容
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="en-tab" data-bs-toggle="tab" data-bs-target="#en-content" type="button" role="tab" aria-controls="en-content" aria-selected="false">
+                            <i class="bi bi-globe"></i>English Content
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- Tab 内容 -->
+                <div class="tab-content" id="languageTabContent">
+                    <!-- 中文内容 Tab -->
+                    <div class="tab-pane fade show active" id="zh-content" role="tabpanel" aria-labelledby="zh-tab">
+                        <!-- 基本信息卡片 (中文) -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="bi bi-info-circle me-2"></i>基本信息 (中文)
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <!-- 标题 -->
+                                <div class="mb-3">
+                                    <label for="title" class="form-label">
+                                        文章标题 <span class="text-danger">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="title"
+                                        name="title"
+                                        value="{{ post.title if post else '' }}"
+                                        required
+                                        placeholder="请输入中文标题">
+                                    <div class="invalid-feedback">
+                                        请输入文章标题
+                                    </div>
+                                </div>
+
+                                <!-- Slug (共享字段，只在中文 Tab 显示) -->
+                                <div class="mb-3">
+                                    <label for="slug" class="form-label">
+                                        URL Slug
+                                    </label>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="slug"
+                                        name="slug"
+                                        value="{{ post.slug if post else '' }}"
+                                        placeholder="留空自动生成">
+                                    <div class="help-text">
+                                        <i class="bi bi-info-circle"></i>
+                                        <span>URL 友好的标识符，留空将根据标题自动生成</span>
+                                    </div>
+                                </div>
+
+                                <!-- 摘要 -->
+                                <div class="mb-0">
+                                    <label for="summary" class="form-label">
+                                        文章摘要
+                                    </label>
+                                    <textarea
+                                        class="form-control"
+                                        id="summary"
+                                        name="summary"
+                                        rows="3"
+                                        placeholder="请输入中文摘要">{{ post.summary if post else '' }}</textarea>
+                                    <div class="help-text">
+                                        <i class="bi bi-info-circle"></i>
+                                        <span>简短描述文章内容，用于列表展示</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Slug -->
-                        <div class="mb-3">
-                            <label for="slug" class="form-label">
-                                URL Slug
-                            </label>
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="slug"
-                                name="slug"
-                                value="{{ post.slug if post else '' }}"
-                                placeholder="留空自动生成">
-                            <div class="help-text">
-                                <i class="bi bi-info-circle"></i>
-                                <span>URL 友好的标识符，留空将根据标题自动生成</span>
+                        <!-- 文章内容卡片 (中文) -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="bi bi-file-text me-2"></i>文章内容 (中文)
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-0">
+                                    <label for="content_markdown" class="form-label">
+                                        内容 (Markdown) <span class="text-danger">*</span>
+                                    </label>
+                                    <textarea
+                                        id="content_markdown"
+                                        name="content_markdown"
+                                        required>{{ post.content_markdown if post else '' }}</textarea>
+                                    <div class="invalid-feedback">
+                                        请输入文章内容
+                                    </div>
+                                    <div class="help-text">
+                                        <i class="bi bi-markdown"></i>
+                                        <span>支持 Markdown 格式编辑，实时预览内容效果</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- 摘要 -->
-                        <div class="mb-0">
-                            <label for="summary" class="form-label">
-                                文章摘要
-                            </label>
-                            <textarea
-                                class="form-control"
-                                id="summary"
-                                name="summary"
-                                rows="3"
-                                placeholder="请输入文章摘要">{{ post.summary if post else '' }}</textarea>
-                            <div class="help-text">
-                                <i class="bi bi-info-circle"></i>
-                                <span>简短描述文章内容，用于列表展示</span>
+                        <!-- SEO 设置卡片 (中文) -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="bi bi-search me-2"></i>SEO 设置 (中文)
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <!-- SEO 标题 -->
+                                <div class="mb-3">
+                                    <label for="seo_title" class="form-label">
+                                        SEO 标题
+                                    </label>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="seo_title"
+                                        name="seo_title"
+                                        value="{{ post.seo_title if post else '' }}"
+                                        placeholder="留空使用文章标题">
+                                </div>
+
+                                <!-- SEO 描述 -->
+                                <div class="mb-0">
+                                    <label for="seo_description" class="form-label">
+                                        SEO 描述
+                                    </label>
+                                    <textarea
+                                        class="form-control"
+                                        id="seo_description"
+                                        name="seo_description"
+                                        rows="3"
+                                        placeholder="用于搜索引擎显示的描述">{{ post.seo_description if post else '' }}</textarea>
+                                    <div class="help-text">
+                                        <i class="bi bi-info-circle"></i>
+                                        <span>建议长度 120-160 字符，用于搜索引擎结果展示</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- 文章内容卡片 -->
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">
-                            <i class="bi bi-file-text me-2"></i>文章内容
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-0">
-                            <label for="content_markdown" class="form-label">
-                                内容 (Markdown) <span class="text-danger">*</span>
-                            </label>
-                            <textarea
-                                id="content_markdown"
-                                name="content_markdown"
-                                required>{{ post.content_markdown if post else '' }}</textarea>
-                            <div class="invalid-feedback">
-                                请输入文章内容
+                    <!-- 英文内容 Tab -->
+                    <div class="tab-pane fade" id="en-content" role="tabpanel" aria-labelledby="en-tab">
+                        <!-- 基本信息卡片 (英文) -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="bi bi-info-circle me-2"></i>Basic Information (English)
+                                </h5>
                             </div>
-                            <div class="help-text">
-                                <i class="bi bi-markdown"></i>
-                                <span>支持 Markdown 格式编辑，实时预览内容效果</span>
+                            <div class="card-body">
+                                <!-- 英文标题 -->
+                                <div class="mb-3">
+                                    <label for="title_en" class="form-label">
+                                        Article Title (English)
+                                    </label>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="title_en"
+                                        name="title_en"
+                                        value="{{ post.title_en if post else '' }}"
+                                        placeholder="Enter English title">
+                                    <div class="help-text">
+                                        <i class="bi bi-info-circle"></i>
+                                        <span>Optional - If not provided, Chinese title will be used</span>
+                                    </div>
+                                </div>
+
+                                <!-- 英文摘要 -->
+                                <div class="mb-0">
+                                    <label for="summary_en" class="form-label">
+                                        Article Summary (English)
+                                    </label>
+                                    <textarea
+                                        class="form-control"
+                                        id="summary_en"
+                                        name="summary_en"
+                                        rows="3"
+                                        placeholder="Enter English summary">{{ post.summary_en if post else '' }}</textarea>
+                                    <div class="help-text">
+                                        <i class="bi bi-info-circle"></i>
+                                        <span>Brief description for article listing</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <!-- SEO 设置卡片 -->
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">
-                            <i class="bi bi-search me-2"></i>SEO 设置
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <!-- SEO 标题 -->
-                        <div class="mb-3">
-                            <label for="seo_title" class="form-label">
-                                SEO 标题
-                            </label>
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="seo_title"
-                                name="seo_title"
-                                value="{{ post.seo_title if post else '' }}"
-                                placeholder="留空使用文章标题">
+                        <!-- 文章内容卡片 (英文) -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="bi bi-file-text me-2"></i>Article Content (English)
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-0">
+                                    <label for="content_markdown_en" class="form-label">
+                                        Content (Markdown)
+                                    </label>
+                                    <textarea
+                                        id="content_markdown_en"
+                                        name="content_markdown_en">{{ post.content_markdown_en if post else '' }}</textarea>
+                                    <div class="help-text">
+                                        <i class="bi bi-markdown"></i>
+                                        <span>Supports Markdown format with live preview</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <!-- SEO 描述 -->
-                        <div class="mb-0">
-                            <label for="seo_description" class="form-label">
-                                SEO 描述
-                            </label>
-                            <textarea
-                                class="form-control"
-                                id="seo_description"
-                                name="seo_description"
-                                rows="3"
-                                placeholder="用于搜索引擎显示的描述">{{ post.seo_description if post else '' }}</textarea>
-                            <div class="help-text">
-                                <i class="bi bi-info-circle"></i>
-                                <span>建议长度 120-160 字符，用于搜索引擎结果展示</span>
+                        <!-- SEO 设置卡片 (英文) -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">
+                                    <i class="bi bi-search me-2"></i>SEO Settings (English)
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <!-- SEO 标题 -->
+                                <div class="mb-3">
+                                    <label for="seo_title_en" class="form-label">
+                                        SEO Title
+                                    </label>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="seo_title_en"
+                                        name="seo_title_en"
+                                        value="{{ post.seo_title_en if post else '' }}"
+                                        placeholder="Leave empty to use article title">
+                                </div>
+
+                                <!-- SEO 描述 -->
+                                <div class="mb-0">
+                                    <label for="seo_description_en" class="form-label">
+                                        SEO Description
+                                    </label>
+                                    <textarea
+                                        class="form-control"
+                                        id="seo_description_en"
+                                        name="seo_description_en"
+                                        rows="3"
+                                        placeholder="Description for search engines">{{ post.seo_description_en if post else '' }}</textarea>
+                                    <div class="help-text">
+                                        <i class="bi bi-info-circle"></i>
+                                        <span>Recommended length: 120-160 characters for search results</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -172,14 +346,14 @@
                         <i class="bi bi-check-circle me-2"></i>
                         {% if post %}更新文章{% else %}创建文章{% endif %}
                     </button>
-                    <button type="button" class="btn btn-outline-secondary" onclick="window.location.href='/posts'">
+                    <button type="button" class="btn btn-outline-secondary" onclick="window.location.href='/admin/posts'">
                         <i class="bi bi-x-circle me-2"></i>
                         取消
                     </button>
                 </div>
             </div>
 
-            <!-- 右侧侧边栏 -->
+            <!-- 右侧侧边栏 (发布设置和分类 - 共享设置) -->
             <div class="form-sidebar">
                 <!-- 发布设置 -->
                 <div class="card">
@@ -328,16 +502,41 @@
 (function() {
     'use strict';
 
-    // 初始化 EasyMDE Markdown 编辑器
-    const easyMDE = new EasyMDE({
+    // 初始化中文 Markdown 编辑器
+    const easyMDE_zh = new EasyMDE({
         element: document.getElementById('content_markdown'),
         spellChecker: false,
         autosave: {
             enabled: true,
-            uniqueId: 'post-content-' + ({{ post.id if post else 0 }}),
+            uniqueId: 'post-content-zh-' + ({{ post.id if post else 0 }}),
             delay: 5000,
         },
-        placeholder: '请输入文章内容，支持 Markdown 格式...',
+        placeholder: '请输入中文文章内容，支持 Markdown 格式...',
+        minHeight: '400px',
+        maxHeight: '600px',
+        toolbar: [
+            'bold', 'italic', 'heading', '|',
+            'quote', 'unordered-list', 'ordered-list', '|',
+            'link', 'image', '|',
+            'preview', 'side-by-side', 'fullscreen', '|',
+            'guide'
+        ],
+        status: ['autosave', 'lines', 'words', 'cursor'],
+        renderingConfig: {
+            codeSyntaxHighlighting: true,
+        }
+    });
+
+    // 初始化英文 Markdown 编辑器
+    const easyMDE_en = new EasyMDE({
+        element: document.getElementById('content_markdown_en'),
+        spellChecker: false,
+        autosave: {
+            enabled: true,
+            uniqueId: 'post-content-en-' + ({{ post.id if post else 0 }}),
+            delay: 5000,
+        },
+        placeholder: 'Enter English article content, supports Markdown format...',
         minHeight: '400px',
         maxHeight: '600px',
         toolbar: [
@@ -393,8 +592,9 @@
         formData.set('is_recommended', document.getElementById('is_recommended').checked);
         formData.set('is_pinned', document.getElementById('is_pinned').checked);
 
-        // 获取 Markdown 内容
-        formData.set('content_markdown', easyMDE.value());
+        // 获取中文和英文 Markdown 内容
+        formData.set('content_markdown', easyMDE_zh.value());
+        formData.set('content_markdown_en', easyMDE_en.value());
 
         // 显示加载状态
         const submitBtn = form.querySelector('button[type="submit"]');
@@ -413,7 +613,7 @@
 
                 // 延迟跳转到列表页
                 setTimeout(() => {
-                    window.location.href = '/posts';
+                    window.location.href = '/admin/posts';
                 }, 1500);
             } else {
                 showToast('danger', data.message, '错误');
@@ -451,7 +651,11 @@
         formChanged = true;
     });
 
-    easyMDE.codemirror.on('change', function() {
+    easyMDE_zh.codemirror.on('change', function() {
+        formChanged = true;
+    });
+
+    easyMDE_en.codemirror.on('change', function() {
         formChanged = true;
     });
 
