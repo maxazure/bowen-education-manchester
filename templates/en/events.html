@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
-{% block title %}博文活动 - Bowen Education Group{% endblock %}
+{% block title %}Events - Bowen Education Group{% endblock %}
 
-{% block meta_description %}博文集团定期举办各类文化活动、培训班、体育比赛等，包括中国新年庆典、国际象棋训练营、羽毛球比赛、HSK考试等{% endblock %}
+{% block meta_description %}Bowen Education Group regularly hosts various cultural activities, training camps, sports competitions including Chinese New Year celebrations, chess training camps, badminton tournaments, HSK exams and more{% endblock %}
 
 {% block content %}
 
@@ -13,8 +13,8 @@
 <div class="quick-nav">
     <div class="container">
         <div class="quick-nav__buttons">
-            <a href="#upcoming-events" class="btn btn--primary">近期活动</a>
-            <a href="#event-types" class="btn btn--secondary">活动类型</a>
+            <a href="#upcoming-events" class="btn btn--primary">Upcoming Events</a>
+            <a href="#event-types" class="btn btn--secondary">Event Types</a>
         </div>
     </div>
 </div>
@@ -24,10 +24,10 @@
     <div class="container">
         <div class="section-header text-center" data-aos="fade-up">
             <h2 class="section__title">
-                <span lang="zh-CN">近期活动</span>
-                <span class="section__title-sub" lang="en-GB">Upcoming Events</span>
+                Upcoming Events
+                <span class="section__title-sub">Join Our Exciting Events</span>
             </h2>
-            <p class="section__subtitle">参与我们的精彩活动，体验文化与学习的乐趣</p>
+            <p class="section__subtitle">Experience the joy of culture and learning through our exciting events</p>
         </div>
 
         <div class="events-grid">
@@ -36,35 +36,35 @@
                 <div class="event-card" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
                     {% if event.is_featured %}
                     <div class="event-badge">
-                        <i class="fas fa-star"></i> 精选活动
+                        <i class="fas fa-star"></i> Featured Event
                     </div>
                     {% endif %}
 
                     <div class="event-header">
                         <div class="event-type">
                             {% if event.event_type == 'cultural' %}
-                                <i class="fas fa-torii-gate"></i> 文化活动
+                                <i class="fas fa-torii-gate"></i> Cultural Event
                             {% elif event.event_type == 'workshop' %}
-                                <i class="fas fa-chalkboard-teacher"></i> 培训营
+                                <i class="fas fa-chalkboard-teacher"></i> Workshop
                             {% elif event.event_type == 'competition' %}
-                                <i class="fas fa-trophy"></i> 比赛
+                                <i class="fas fa-trophy"></i> Competition
                             {% elif event.event_type == 'exam' %}
-                                <i class="fas fa-clipboard-list"></i> 考试
+                                <i class="fas fa-clipboard-list"></i> Exam
                             {% elif event.event_type == 'seminar' %}
-                                <i class="fas fa-microphone"></i> 讲座
+                                <i class="fas fa-microphone"></i> Seminar
                             {% elif event.event_type == 'camp' %}
-                                <i class="fas fa-campground"></i> 夏令营
+                                <i class="fas fa-campground"></i> Camp
                             {% endif %}
                         </div>
                         {% if not event.is_free %}
                         <div class="event-price">
                             {% if event.early_bird_price and event.early_bird_deadline %}
-                                <span class="early-bird">早鸟价 £{{ "%.0f"|format(event.early_bird_price) }}</span>
+                                <span class="early-bird">Early Bird £{{ "%.0f"|format(event.early_bird_price) }}</span>
                             {% endif %}
                             £{{ "%.0f"|format(event.ticket_price) }}
                         </div>
                         {% else %}
-                        <div class="event-price free">免费</div>
+                        <div class="event-price free">Free</div>
                         {% endif %}
                     </div>
 
@@ -73,7 +73,7 @@
 
                         <div class="event-datetime">
                             <i class="fas fa-calendar"></i>
-                            <span>{{ event.start_datetime.strftime('%Y年%m月%d日') }}</span>
+                            <span>{{ event.start_datetime.strftime('%d %B %Y') }}</span>
                             {% if event.start_datetime.strftime('%H:%M') != '00:00' %}
                                 <span>{{ event.start_datetime.strftime('%H:%M') }} - {{ event.end_datetime.strftime('%H:%M') }}</span>
                             {% endif %}
@@ -81,7 +81,7 @@
 
                         <div class="event-location">
                             <i class="fas fa-map-marker-alt"></i>
-                            <span>{{ event.venue_name or '待定' }}</span>
+                            <span>{{ event.venue_name or 'TBC' }}</span>
                         </div>
 
                         <p class="event-summary">{{ event.summary or event.description[:150] + '...' }}</p>
@@ -89,20 +89,20 @@
                         {% if event.max_attendees %}
                         <div class="event-capacity">
                             <i class="fas fa-users"></i>
-                            <span>限 {{ event.max_attendees }} 人</span>
+                            <span>Max {{ event.max_attendees }} attendees</span>
                             {% if event.current_attendees >= event.max_attendees %}
-                                <span class="status-full">已满</span>
+                                <span class="status-full">Full</span>
                             {% else %}
-                                <span class="status-available">还有 {{ event.max_attendees - event.current_attendees }} 个名额</span>
+                                <span class="status-available">{{ event.max_attendees - event.current_attendees }} spots left</span>
                             {% endif %}
                         </div>
                         {% endif %}
 
                         <div class="event-actions">
                             {% if event.current_attendees < event.max_attendees or not event.max_attendees %}
-                                <a href="/events/{{ event.slug }}" class="btn btn-primary">查看详情</a>
+                                <a href="/en/events/{{ event.slug }}" class="btn btn-primary">View Details</a>
                             {% else %}
-                                <button class="btn btn-secondary" disabled>已满员</button>
+                                <button class="btn btn-secondary" disabled>Fully Booked</button>
                             {% endif %}
                         </div>
                     </div>
@@ -111,9 +111,9 @@
             {% else %}
                 <div class="no-events" data-aos="fade-up">
                     <div class="no-events-icon">📅</div>
-                    <h3>暂无近期活动</h3>
-                    <p>我们正在筹备更多精彩活动，敬请关注！</p>
-                    <a href="/contact" class="btn btn-primary">联系我们</a>
+                    <h3>No Upcoming Events</h3>
+                    <p>We are planning more exciting events, stay tuned!</p>
+                    <a href="/en/contact" class="btn btn-primary">Contact Us</a>
                 </div>
             {% endif %}
         </div>
@@ -125,10 +125,10 @@
     <div class="container">
         <div class="section-header text-center" data-aos="fade-up">
             <h2 class="section__title">
-                <span lang="zh-CN">活动类型</span>
-                <span class="section__title-sub" lang="en-GB">Event Types</span>
+                Event Types
+                <span class="section__title-sub">Diverse Events for Everyone</span>
             </h2>
-            <p class="section__subtitle">我们提供多种类型的活动，满足不同需求</p>
+            <p class="section__subtitle">We offer various types of events to meet different needs</p>
         </div>
 
         <div class="event-types-grid">
@@ -136,12 +136,12 @@
                 <div class="event-type-icon">
                     <i class="fas fa-torii-gate"></i>
                 </div>
-                <h3>文化活动</h3>
-                <p>传统节日庆典、中华文化体验、艺术表演等</p>
+                <h3>Cultural Events</h3>
+                <p>Traditional festival celebrations, Chinese cultural experiences, artistic performances</p>
                 <div class="event-type-examples">
-                    <span>春节联欢</span>
-                    <span>中秋庆典</span>
-                    <span>文化进校园</span>
+                    <span>Chinese New Year</span>
+                    <span>Mid-Autumn Festival</span>
+                    <span>Cultural Programs</span>
                 </div>
             </div>
 
@@ -149,12 +149,12 @@
                 <div class="event-type-icon">
                     <i class="fas fa-chalkboard-teacher"></i>
                 </div>
-                <h3>培训课程</h3>
-                <p>专业技能培训、学习方法指导、能力提升课程</p>
+                <h3>Training Workshops</h3>
+                <p>Professional skills training, learning method guidance, ability enhancement courses</p>
                 <div class="event-type-examples">
-                    <span>国际象棋营</span>
-                    <span>中文培训</span>
-                    <span>家长教育</span>
+                    <span>Chess Camps</span>
+                    <span>Chinese Training</span>
+                    <span>Parent Education</span>
                 </div>
             </div>
 
@@ -162,12 +162,12 @@
                 <div class="event-type-icon">
                     <i class="fas fa-trophy"></i>
                 </div>
-                <h3>体育比赛</h3>
-                <p>竞技比赛、友谊赛、体育交流活动</p>
+                <h3>Sports Competitions</h3>
+                <p>Competitive matches, friendly games, sports exchange activities</p>
                 <div class="event-type-examples">
-                    <span>羽毛球赛</span>
-                    <span>象棋比赛</span>
-                    <span>体育友谊赛</span>
+                    <span>Badminton Tournaments</span>
+                    <span>Chess Competitions</span>
+                    <span>Friendly Matches</span>
                 </div>
             </div>
 
@@ -175,12 +175,12 @@
                 <div class="event-type-icon">
                     <i class="fas fa-clipboard-list"></i>
                 </div>
-                <h3>考试测评</h3>
-                <p>水平考试、模拟测试、能力评估</p>
+                <h3>Exams & Assessments</h3>
+                <p>Level exams, mock tests, ability assessments</p>
                 <div class="event-type-examples">
-                    <span>HSK考试</span>
-                    <span>模拟测试</span>
-                    <span>水平评估</span>
+                    <span>HSK Exams</span>
+                    <span>Mock Tests</span>
+                    <span>Level Assessments</span>
                 </div>
             </div>
 
@@ -188,12 +188,12 @@
                 <div class="event-type-icon">
                     <i class="fas fa-campground"></i>
                 </div>
-                <h3>夏令营营</h3>
-                <p>假期营、文化体验营、综合活动营</p>
+                <h3>Summer Camps</h3>
+                <p>Holiday camps, cultural experience camps, comprehensive activity camps</p>
                 <div class="event-type-examples">
-                    <span>中文文化营</span>
-                    <span>体育训练营</span>
-                    <span>综合夏令营</span>
+                    <span>Chinese Culture Camps</span>
+                    <span>Sports Training Camps</span>
+                    <span>Summer Programmes</span>
                 </div>
             </div>
 
@@ -201,12 +201,12 @@
                 <div class="event-type-icon">
                     <i class="fas fa-microphone"></i>
                 </div>
-                <h3>讲座研讨会</h3>
-                <p>教育讲座、专业研讨、经验分享</p>
+                <h3>Seminars & Talks</h3>
+                <p>Educational seminars, professional discussions, experience sharing</p>
                 <div class="event-type-examples">
-                    <span>家长教育</span>
-                    <span>文化讲座</span>
-                    <span>教育研讨</span>
+                    <span>Parent Education</span>
+                    <span>Cultural Lectures</span>
+                    <span>Education Forums</span>
                 </div>
             </div>
         </div>
@@ -218,40 +218,40 @@
     <div class="container">
         <div class="section-header text-center" data-aos="fade-up">
             <h2 class="section__title">
-                <span lang="zh-CN">往期活动回顾</span>
-                <span class="section__title-sub" lang="en-GB">Past Events Highlights</span>
+                Past Events Highlights
+                <span class="section__title-sub">Memorable Moments</span>
             </h2>
-            <p class="section__subtitle">精彩瞬间，美好回忆</p>
+            <p class="section__subtitle">Exciting moments, wonderful memories</p>
         </div>
 
         <div class="highlights-grid">
             <div class="highlight-item" data-aos="fade-up" data-aos-delay="100">
                 <div class="highlight-image">
-                    <img src="/static/images/events/past-event-1.jpg" alt="春节联欢会">
+                    <img src="/static/images/events/past-event-1.jpg" alt="Chinese New Year Celebration">
                 </div>
                 <div class="highlight-content">
-                    <h4>2024年春节联欢会</h4>
-                    <p>精彩的传统文艺表演，美味的中国美食，温馨的节日氛围</p>
+                    <h4>2024 Chinese New Year Celebration</h4>
+                    <p>Wonderful traditional performances, delicious Chinese cuisine, festive atmosphere</p>
                 </div>
             </div>
 
             <div class="highlight-item" data-aos="fade-up" data-aos-delay="200">
                 <div class="highlight-image">
-                    <img src="/static/images/events/past-event-2.jpg" alt="国际象棋比赛">
+                    <img src="/static/images/events/past-event-2.jpg" alt="Chess Competition">
                 </div>
                 <div class="highlight-content">
-                    <h4>国际象棋公开赛</h4>
-                    <p>激烈的比赛，专业的裁判，优秀的棋手参与</p>
+                    <h4>Chess Open Tournament</h4>
+                    <p>Intense matches, professional referees, excellent player participation</p>
                 </div>
             </div>
 
             <div class="highlight-item" data-aos="fade-up" data-aos-delay="300">
                 <div class="highlight-image">
-                    <img src="/static/images/events/past-event-3.jpg" alt="中文文化营">
+                    <img src="/static/images/events/past-event-3.jpg" alt="Chinese Culture Camp">
                 </div>
                 <div class="highlight-content">
-                    <h4>中文文化体验营</h4>
-                    <p>孩子们在快乐中学习中文，体验传统文化</p>
+                    <h4>Chinese Culture Experience Camp</h4>
+                    <p>Children learning Chinese through fun activities and experiencing traditional culture</p>
                 </div>
             </div>
         </div>
@@ -262,22 +262,22 @@
 <section class="section section--cta-events">
     <div class="container">
         <div class="cta-box text-center" data-aos="fade-up">
-            <h2 class="cta-box__title">参与博文精彩活动</h2>
+            <h2 class="cta-box__title">Join Bowen's Exciting Events</h2>
             <p class="cta-box__subtitle">
-                丰富文化生活 · 提升专业技能 · 培养兴趣爱好<br>
-                与我们一同成长，创造美好回忆！
+                Enrich Cultural Life · Enhance Professional Skills · Develop Interests<br>
+                Grow with us and create wonderful memories!
             </p>
             <div class="cta-box__buttons">
-                <a href="/contact" class="btn btn-primary btn-large">
-                    <i class="fas fa-phone"></i> 联系我们
+                <a href="/en/contact" class="btn btn-primary btn-large">
+                    <i class="fas fa-phone"></i> Contact Us
                 </a>
-                <a href="/events-henan" class="btn btn-outline-primary btn-large">
-                    <i class="fas fa-graduation-cap"></i> 合作项目
+                <a href="/en/events-henan" class="btn btn-outline-primary btn-large">
+                    <i class="fas fa-graduation-cap"></i> Partnership Projects
                 </a>
             </div>
             <div class="contact-info">
-                <p><strong>活动咨询：</strong>0161 969 3071</p>
-                <p><strong>邮箱：</strong>events@boweneducation.org</p>
+                <p><strong>Event Enquiries:</strong> 0161 969 3071</p>
+                <p><strong>Email:</strong> info@boweneducation.co.uk</p>
             </div>
         </div>
     </div>
