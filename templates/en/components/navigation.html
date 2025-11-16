@@ -24,7 +24,7 @@
                     {% endif %}
                 >
                     <a
-                        href="/en/{{ item.slug }}/"
+                        href="{% if item.slug == 'home' %}/en/{% else %}/en/{{ item.slug }}/{% endif %}"
                         class="nav-link{% if column and column.id == item.id %} active{% endif %}"
                         {% if has_children %}
                         :aria-expanded="open.toString()"
@@ -155,7 +155,7 @@
                             >
                                 <!-- Link to parent overview page -->
                                 <li>
-                                    <a href="/en/{{ item.slug }}/" class="mobile-submenu-link parent-link">
+                                    <a href="{% if item.slug == 'home' %}/en/{% else %}/en/{{ item.slug }}/{% endif %}" class="mobile-submenu-link parent-link">
                                         <strong>View All {{ item|column_name }}</strong>
                                     </a>
                                 </li>
@@ -168,7 +168,7 @@
                                 {% endfor %}
                             </ul>
                             {% else %}
-                            <a href="/en/{{ item.slug }}/" class="mobile-nav-link">
+                            <a href="{% if item.slug == 'home' %}/en/{% else %}/en/{{ item.slug }}/{% endif %}" class="mobile-nav-link">
                                 {{ item|column_name }}
                             </a>
                             {% endif %}
