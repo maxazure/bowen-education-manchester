@@ -66,14 +66,14 @@
 
                             <!-- Post Title -->
                             <h3 class="post-item__title">
-                                <a href="/en/{{ column.slug }}/{{ post.slug }}">{{ post.title }}</a>
+                                <a href="/en/{{ column.slug }}/{{ post.slug }}">{{ post.title_en or post.title }}</a>
                             </h3>
 
                             <!-- Post Summary -->
-                            {% if post.summary %}
-                            <p class="post-item__summary">{{ post.summary }}</p>
-                            {% elif post.content_html %}
-                            <p class="post-item__summary">{{ post.content_html|striptags|truncate(150) }}</p>
+                            {% if post.summary_en or post.summary %}
+                            <p class="post-item__summary">{{ post.summary_en or post.summary }}</p>
+                            {% elif post.content_html_en or post.content_html %}
+                            <p class="post-item__summary">{{ (post.content_html_en or post.content_html)|striptags|truncate(150) }}</p>
                             {% endif %}
 
                             <!-- Post Actions -->

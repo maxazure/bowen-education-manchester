@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}{{ page.title }} | Bowen Education Group{% endblock %}
+{% block title %}{{ page.title_en or page.title }} | Bowen Education Group{% endblock %}
 
-{% block meta_description %}{{ page.seo_description or page.subtitle or (page.title ~ ' - Bowen Education Group provides quality Chinese education services') }}{% endblock %}
+{% block meta_description %}{{ page.seo_description_en or page.seo_description or page.subtitle_en or page.subtitle or ((page.title_en or page.title) ~ ' - Bowen Education Group provides quality Chinese education services') }}{% endblock %}
 
 {% block meta_keywords %}{{ page.keywords or 'Bowen Education Group,Chinese Education,Manchester Chinese School' }}{% endblock %}
 
-{% block og_title %}{{ page.title }} | Bowen Education Group{% endblock %}
+{% block og_title %}{{ page.title_en or page.title }} | Bowen Education Group{% endblock %}
 
-{% block og_description %}{{ page.seo_description or page.subtitle or (page.title ~ ' - Bowen Education Group provides quality Chinese education services') }}{% endblock %}
+{% block og_description %}{{ page.seo_description_en or page.seo_description or page.subtitle_en or page.subtitle or ((page.title_en or page.title) ~ ' - Bowen Education Group provides quality Chinese education services') }}{% endblock %}
 
 {% block og_image %}{% if page.hero_media %}{{ page.hero_media.path_original }}{% else %}/static/images/hero-default.jpg{% endif %}{% endblock %}
 
@@ -18,8 +18,8 @@
 {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": "{{ page.title }}",
-    "description": "{{ page.seo_description or page.subtitle or page.title }}",
+    "name": "{{ page.title_en or page.title }}",
+    "description": "{{ page.seo_description_en or page.seo_description or page.subtitle_en or page.subtitle or (page.title_en or page.title) }}",
     "url": "{{ request.url }}",
     "inLanguage": ["en-GB", "zh-CN"],
     "isPartOf": {
@@ -55,7 +55,7 @@
             {
                 "@type": "ListItem",
                 "position": 2,
-                "name": "{{ page.title }}",
+                "name": "{{ page.title_en or page.title }}",
                 "item": "{{ request.url }}"
             }{% endif %}
         ]
@@ -67,8 +67,8 @@
 {% block content %}
 
 <!-- Hero Section -->
-{% set hero_title = page.title %}
-{% set hero_subtitle = page.subtitle %}
+{% set hero_title = page.title_en or page.title %}
+{% set hero_subtitle = page.subtitle_en or page.subtitle %}
 {% include 'components/hero_standard.html' %}
 
 <!-- Content Section -->
@@ -85,7 +85,7 @@
             <!-- Right Main Content -->
             <div class="page-layout__main">
                 <article class="single-page-content" data-aos="fade-up">
-                    {{ page.content_html|safe }}
+                    {{ (page.content_html_en or page.content_html)|safe }}
                 </article>
             </div>
         </div>
@@ -93,7 +93,7 @@
         <!-- Single column layout without sidebar -->
         <div class="page-layout page-layout--single">
             <article class="single-page-content" data-aos="fade-up">
-                {{ page.content_html|safe }}
+                {{ (page.content_html_en or page.content_html)|safe }}
             </article>
         </div>
         {% endif %}

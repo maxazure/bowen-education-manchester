@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}{{ post.title }} - Articles - Bowen Education Group{% endblock %}
+{% block title %}{{ post.title_en or post.title }} - Articles - Bowen Education Group{% endblock %}
 
 {% block content %}
 
 <!-- Hero Section -->
-{% set hero_title = post.title %}
-{% set hero_subtitle = post.summary %}
+{% set hero_title = post.title_en or post.title %}
+{% set hero_subtitle = post.summary_en or post.summary %}
 {% set hero_image = post.cover_media.path_original if post.cover_media else None %}
 {% include 'components/hero_standard.html' %}
 
@@ -24,15 +24,15 @@
             <div class="page-layout__main">
                 <article class="post-content" data-aos="fade-up">
                     <!-- Summary -->
-                    {% if post.summary %}
+                    {% if post.summary_en or post.summary %}
                     <div class="post-summary">
-                        <p class="lead">{{ post.summary }}</p>
+                        <p class="lead">{{ post.summary_en or post.summary }}</p>
                     </div>
                     {% endif %}
-                    
+
                     <!-- Main Content -->
                     <div class="post-body">
-                        {{ post.content_html|safe }}
+                        {{ (post.content_html_en or post.content_html)|safe }}
                     </div>
                     
                     <!-- Tags -->

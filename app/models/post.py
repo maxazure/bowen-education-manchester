@@ -56,13 +56,17 @@ class Post(BaseModel):
         Integer, ForeignKey("site_column.id"), nullable=False, comment="关联栏目ID"
     )
     title = Column(String(200), nullable=False, comment="文章标题")
+    title_en = Column(String(200), nullable=True, comment="文章英文标题")
     slug = Column(String(200), nullable=False, comment="文章Slug")
     summary = Column(Text, nullable=True, comment="文章摘要")
+    summary_en = Column(Text, nullable=True, comment="文章英文摘要")
     cover_media_id = Column(
         Integer, ForeignKey("media_file.id"), nullable=True, comment="封面图ID"
     )
     content_markdown = Column(Text, nullable=True, comment="Markdown原文")
+    content_markdown_en = Column(Text, nullable=True, comment="英文Markdown原文")
     content_html = Column(Text, nullable=False, comment="文章内容HTML")
+    content_html_en = Column(Text, nullable=True, comment="文章英文内容HTML")
     is_recommended = Column(Boolean, default=False, nullable=False, comment="是否推荐")
     is_pinned = Column(Boolean, default=False, nullable=False, comment="是否置顶")
     status = Column(
@@ -72,7 +76,9 @@ class Post(BaseModel):
         comment="状态",
     )
     seo_title = Column(String(200), nullable=True, comment="SEO标题")
+    seo_title_en = Column(String(200), nullable=True, comment="英文SEO标题")
     seo_description = Column(Text, nullable=True, comment="SEO描述")
+    seo_description_en = Column(Text, nullable=True, comment="英文SEO描述")
     published_at = Column(DateTime, nullable=True, comment="发布时间")
     is_approved = Column(Integer, default=0, nullable=False, comment="是否已审核通过(0=待审核,1=已通过)")
     admin_reply = Column(Text, nullable=True, comment="管理员回复内容")
