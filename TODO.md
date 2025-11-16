@@ -2,6 +2,96 @@
 
 ## ✅ 已完成
 
+### [2025-11-16] 实现文章和单页双语内容存储
+- [x] 创建数据库迁移脚本 - 完成时间: 2025-11-16 - 负责人: maxazure
+- [x] 更新 Post 和 SinglePage 模型 - 完成时间: 2025-11-16 - 负责人: maxazure
+- [x] 更新文章和单页英文模板 - 完成时间: 2025-11-16 - 负责人: maxazure
+- [x] 测试双语内容显示功能 - 完成时间: 2025-11-16 - 负责人: maxazure
+
+  - **问题背景**:
+    - 用户询问数据库中文章的英文内容应该如何存储
+    - 需要为 Post 和 SinglePage 实现双语内容支持
+    - 需要与现有 `name_en`、`hero_title_en` 命名保持一致
+
+  - **实施方案**:
+    采用 **`_en` 后缀字段方案**，理由：
+    - 与现有架构一致（SiteColumn 已使用 `name_en`）
+    - 实现简单，查询性能好
+    - 只需支持中英双语，无需复杂多语言架构
+
+  - **数据库迁移详情**:
+    1. **Post 表新增字段** (6个):
+       - `title_en` VARCHAR(200) - 英文标题
+       - `summary_en` TEXT - 英文摘要
+       - `content_html_en` TEXT - 英文内容HTML
+       - `content_markdown_en` TEXT - 英文内容Markdown
+       - `seo_title_en` VARCHAR(200) - 英文SEO标题
+       - `seo_description_en` TEXT - 英文SEO描述
+
+    2. **SinglePage 表新增字段** (6个):
+       - `title_en` VARCHAR(200) - 英文标题
+       - `subtitle_en` VARCHAR(300) - 英文副标题
+       - `content_html_en` TEXT - 英文内容HTML
+       - `content_markdown_en` TEXT - 英文内容Markdown
+       - `seo_title_en` VARCHAR(200) - 英文SEO标题
+       - `seo_description_en` TEXT - 英文SEO描述
+
+  - **模型更新**:
+    - `app/models/post.py`: Post 模型添加 6 个英文字段定义
+    - `app/models/site.py`: SinglePage 模型添加 6 个英文字段定义
+    - 所有字段均为 `nullable=True`，保持向后兼容
+
+  - **模板更新**:
+    1. `templates/en/post_list_universal.html`:
+       - Line 69: `{{ post.title }}` → `{{ post.title_en or post.title }}`
+       - Line 74: `{{ post.summary }}` → `{{ post.summary_en or post.summary }}`
+       - Line 76: `{{ post.content_html }}` → `{{ (post.content_html_en or post.content_html) }}`
+
+    2. `templates/en/post_detail.html`:
+       - Line 3: 页面标题使用 `post.title_en or post.title`
+       - Line 8-9: Hero 标题和副标题使用英文字段优先
+       - Line 29: 摘要使用 `post.summary_en or post.summary`
+       - Line 35: 内容使用 `(post.content_html_en or post.content_html)`
+
+    3. `templates/en/single_page.html`:
+       - Line 3: 页面标题使用 `page.title_en or page.title`
+       - Line 5: Meta 描述使用英文字段优先
+       - Line 21: 结构化数据使用英文标题
+       - Line 70-71: Hero 标题和副标题使用英文字段
+       - Line 88, 96: 内容使用 `(page.content_html_en or page.content_html)`
+
+  - **回退机制**:
+    - 使用 Jinja2 的 `or` 操作符：`{{ field_en or field }}`
+    - 当英文字段为 `None` 或空时，自动回退到中文字段
+    - 保证在英文内容未填充时，页面仍能正常显示中文内容
+
+  - **测试结果**:
+    - ✅ 数据库迁移成功执行
+    - ✅ Post 表添加 6 个字段，验证通过
+    - ✅ SinglePage 表添加 6 个字段，验证通过
+    - ✅ 模型定义正确加载英文字段
+    - ✅ 模板正确使用回退逻辑
+    - ✅ 英文字段为空时显示中文内容（符合预期）
+    - ✅ 服务器正常运行无错误
+
+  - **数据统计**:
+    - Post 表：21 篇文章（待添加英文内容）
+    - SinglePage 表：24 个单页（待添加英文内容）
+
+  - **后续工作** (不在本次范围):
+    - 管理后台添加英文字段编辑界面（需 3-4 小时）
+    - 为现有 21 篇文章和 24 个单页创建英文内容（需 1-2 周）
+    - Product、Event 等其他模型的双语支持（按需进行）
+
+  - **技术要点**:
+    - 数据库迁移使用 ALTER TABLE 动态添加字段
+    - SQLAlchemy 模型支持动态字段加载
+    - Jinja2 模板 `or` 操作符实现优雅的回退逻辑
+    - 保持向后兼容性，不影响现有功能
+
+  - **Git 提交记录**:
+    - `5c34e7e` - feat: 实现文章和单页双语内容存储支持
+
 ### [2025-11-16] 修复侧边栏和文章列表页面英文显示问题
 - [x] 修复侧边栏导航显示英文 - 完成时间: 2025-11-16 - 负责人: maxazure
 - [x] 修复 chess-events 页面英文显示 - 完成时间: 2025-11-16 - 负责人: maxazure
