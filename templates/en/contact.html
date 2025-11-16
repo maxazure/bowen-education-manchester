@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
-{% block title %}Contact Us - 博文教育集团 Bowen Education Group | 联系我们{% endblock %}
+{% block title %}Contact Us | Bowen Education Group{% endblock %}
 
-{% block meta_description %}Contact 博文教育集团 Bowen Education Group in Manchester. Visit us at Sale or call 0161 969 3071. We're here to answer your questions about Chinese language courses. 联系曼彻斯特博文教育集团。{% endblock %}
+{% block meta_description %}Contact Bowen Education Group in Manchester. Visit us at Sale or call 0161 969 3071. We're here to answer your questions about Chinese language courses and educational programs.{% endblock %}
 
 {% block content %}
 
@@ -19,16 +19,10 @@
                         <i class="fas fa-map-marker-alt"></i>
                     </div>
                     <h3 class="contact-info-card__title">Visit Us</h3>
-                    <h4 class="contact-info-card__title-chinese">地址</h4>
                     <p class="contact-info-card__text">
                         1/F, 2A Curzon Road<br>
                         Sale, Manchester<br>
-                        M33 7DR
-                    </p>
-                    <p class="contact-info-card__text-chinese">
-                        英国曼彻斯特<br>
-                        塞尔市科尔森路2A号<br>
-                        一楼
+                        M33 7DR, UK
                     </p>
                 </div>
             </div>
@@ -39,14 +33,13 @@
                         <i class="fas fa-phone"></i>
                     </div>
                     <h3 class="contact-info-card__title">Call Us</h3>
-                    <h4 class="contact-info-card__title-chinese">电话</h4>
                     <p class="contact-info-card__text">
                         <a href="tel:01619693071" class="contact-info-card__link">
                             0161 969 3071
                         </a>
                     </p>
-                    <p class="contact-info-card__text-chinese">
-                        周一至周六: 9:00-18:00
+                    <p class="contact-info-card__text">
+                        Mon-Sat: 9:00-18:00
                     </p>
                 </div>
             </div>
@@ -57,14 +50,13 @@
                         <i class="fas fa-envelope"></i>
                     </div>
                     <h3 class="contact-info-card__title">Email Us</h3>
-                    <h4 class="contact-info-card__title-chinese">邮箱</h4>
                     <p class="contact-info-card__text">
                         <a href="mailto:info@boweneducation.org" class="contact-info-card__link">
                             info@boweneducation.org
                         </a>
                     </p>
-                    <p class="contact-info-card__text-chinese">
-                        24小时内回复
+                    <p class="contact-info-card__text">
+                        Reply within 24 hours
                     </p>
                 </div>
             </div>
@@ -75,12 +67,11 @@
                         <i class="fab fa-weixin"></i>
                     </div>
                     <h3 class="contact-info-card__title">WeChat</h3>
-                    <h4 class="contact-info-card__title-chinese">微信</h4>
                     <p class="contact-info-card__text">
                         <strong>BowenEducation</strong>
                     </p>
-                    <p class="contact-info-card__text-chinese">
-                        微信咨询
+                    <p class="contact-info-card__text">
+                        Connect via WeChat
                     </p>
                 </div>
             </div>
@@ -91,14 +82,13 @@
                         <i class="fab fa-whatsapp"></i>
                     </div>
                     <h3 class="contact-info-card__title">WhatsApp</h3>
-                    <h4 class="contact-info-card__title-chinese">WhatsApp</h4>
                     <p class="contact-info-card__text">
                         <a href="https://wa.me/441619693071" class="contact-info-card__link" target="_blank">
                             0161 969 3071
                         </a>
                     </p>
-                    <p class="contact-info-card__text-chinese">
-                        快速联系我们
+                    <p class="contact-info-card__text">
+                        Quick contact via WhatsApp
                     </p>
                 </div>
             </div>
@@ -114,12 +104,8 @@
             <div class="col-lg-6 mb-4 mb-lg-0" data-aos="fade-right">
                 <div class="contact-form-wrapper">
                     <h2 class="section__title">Send Us a Message</h2>
-                    <h3 class="section__title-chinese">发送消息</h3>
                     <p class="section__subtitle">
                         Have a question? Fill out the form below and we'll get back to you as soon as possible.
-                    </p>
-                    <p class="section__subtitle-chinese">
-                        有问题吗？填写下面的表格，我们会尽快回复您。
                     </p>
 
                     {% if success_message %}
@@ -136,9 +122,9 @@
                     </div>
                     {% endif %}
 
-                    <form method="POST" action="/contact/submit" class="contact-form" id="contactForm">
+                    <form method="POST" action="/en/contact/submit" class="contact-form" id="contactForm">
                         <div class="form-group">
-                            <label for="name">Full Name / 姓名 <span class="text-danger">*</span></label>
+                            <label for="name">Full Name <span class="text-danger">*</span></label>
                             <input type="text"
                                    class="form-control"
                                    id="name"
@@ -148,7 +134,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="email">Email / 邮箱 <span class="text-danger">*</span></label>
+                            <label for="email">Email <span class="text-danger">*</span></label>
                             <input type="email"
                                    class="form-control"
                                    id="email"
@@ -158,7 +144,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="phone">Phone Number / 电话</label>
+                            <label for="phone">Phone Number</label>
                             <input type="tel"
                                    class="form-control"
                                    id="phone"
@@ -167,21 +153,21 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="subject">Subject / 主题 <span class="text-danger">*</span></label>
+                            <label for="subject">Subject <span class="text-danger">*</span></label>
                             <select class="form-control" id="subject" name="subject" required>
-                                <option value="">Select a subject / 选择主题</option>
-                                <option value="course_inquiry">Course Inquiry / 课程咨询</option>
-                                <option value="enrollment">Enrollment / 报名注册</option>
-                                <option value="tuition_centre">Tuition Centre / 辅导中心</option>
-                                <option value="events">Events & Activities / 活动与赛事</option>
-                                <option value="partnership">Partnership / 合作</option>
-                                <option value="feedback">Feedback / 反馈建议</option>
-                                <option value="other">Other / 其他</option>
+                                <option value="">Select a subject</option>
+                                <option value="course_inquiry">Course Inquiry</option>
+                                <option value="enrollment">Enrollment</option>
+                                <option value="tuition_centre">Tuition Centre</option>
+                                <option value="events">Events & Activities</option>
+                                <option value="partnership">Partnership</option>
+                                <option value="feedback">Feedback</option>
+                                <option value="other">Other</option>
                             </select>
                         </div>
 
                         <div class="form-group">
-                            <label for="message">Message / 留言 <span class="text-danger">*</span></label>
+                            <label for="message">Message <span class="text-danger">*</span></label>
                             <textarea class="form-control"
                                       id="message"
                                       name="message"
@@ -198,14 +184,12 @@
                                    required>
                             <label class="form-check-label" for="consent">
                                 I consent to Bowen Education Group storing my information for contact purposes.
-                                <br>
-                                <small class="text-chinese">我同意博文教育集团存储我的信息以便联系。</small>
                             </label>
                         </div>
 
                         <div class="form-group">
                             <button type="submit" class="btn btn-primary btn-lg btn-block">
-                                <i class="fas fa-paper-plane"></i> Send Message / 发送消息
+                                <i class="fas fa-paper-plane"></i> Send Message
                             </button>
                         </div>
 
@@ -213,8 +197,6 @@
                             <small>
                                 <i class="fas fa-lock"></i>
                                 Your information is secure and will never be shared with third parties.
-                                <br>
-                                <span class="text-chinese">您的信息是安全的，不会与第三方分享。</span>
                             </small>
                         </p>
                     </form>
@@ -225,7 +207,6 @@
             <div class="col-lg-6" data-aos="fade-left">
                 <div class="map-wrapper mb-4">
                     <h2 class="section__title">Find Us</h2>
-                    <h3 class="section__title-chinese">找到我们</h3>
 
                     <!-- Google Maps Embed -->
                     <div class="map-container">
@@ -241,29 +222,23 @@
                     </div>
 
                     <div class="directions mt-3">
-                        <h4>Getting Here / 如何到达</h4>
+                        <h4>Getting Here</h4>
                         <div class="directions-item">
                             <i class="fas fa-train"></i>
                             <div>
                                 <strong>By Train:</strong> Sale Metrolink Station (5 min walk)
-                                <br>
-                                <small class="text-chinese">乘火车：Sale轻轨站（步行5分钟）</small>
                             </div>
                         </div>
                         <div class="directions-item">
                             <i class="fas fa-bus"></i>
                             <div>
                                 <strong>By Bus:</strong> Routes 17, 18, 263 stop nearby
-                                <br>
-                                <small class="text-chinese">乘公交：17、18、263路附近停靠</small>
                             </div>
                         </div>
                         <div class="directions-item">
                             <i class="fas fa-car"></i>
                             <div>
                                 <strong>By Car:</strong> Free parking available on Curzon Road
-                                <br>
-                                <small class="text-chinese">开车：科尔森路有免费停车位</small>
                             </div>
                         </div>
                     </div>
@@ -271,26 +246,26 @@
 
                 <!-- Quick Links -->
                 <div class="quick-links">
-                    <h4>Quick Links / 快速链接</h4>
+                    <h4>Quick Links</h4>
                     <ul class="quick-links__list">
                         <li>
-                            <a href="/courses">
-                                <i class="fas fa-chevron-right"></i> Browse Our Courses / 浏览课程
+                            <a href="/en/courses/">
+                                <i class="fas fa-chevron-right"></i> Browse Our Courses
                             </a>
                         </li>
                         <li>
-                            <a href="/about">
-                                <i class="fas fa-chevron-right"></i> About Our School / 关于我们
+                            <a href="/en/about/">
+                                <i class="fas fa-chevron-right"></i> About Our School
                             </a>
                         </li>
                         <li>
-                            <a href="/events">
-                                <i class="fas fa-chevron-right"></i> Upcoming Events / 即将举办的活动
+                            <a href="/en/events/">
+                                <i class="fas fa-chevron-right"></i> Upcoming Events
                             </a>
                         </li>
                         <li>
-                            <a href="/faq">
-                                <i class="fas fa-chevron-right"></i> Frequently Asked Questions / 常见问题
+                            <a href="/en/faq/">
+                                <i class="fas fa-chevron-right"></i> Frequently Asked Questions
                             </a>
                         </li>
                     </ul>
@@ -305,7 +280,6 @@
     <div class="container">
         <div class="section__header text-center" data-aos="fade-up">
             <h2 class="section__title">Common Questions</h2>
-            <h3 class="section__title-chinese">常见问题</h3>
             <p class="section__subtitle">
                 Quick answers to questions you may have
             </p>
@@ -322,9 +296,6 @@
                         We offer courses for all ages, from Foundation (ages 4-6) to A-Level (ages 16-18),
                         as well as adult learners. Each programme is tailored to the specific age group.
                     </p>
-                    <p class="faq-item__answer-chinese">
-                        我们为所有年龄段提供课程，从基础班（4-6岁）到A-Level（16-18岁），以及成人学习者。
-                    </p>
                 </div>
             </div>
 
@@ -337,9 +308,6 @@
                     <p class="faq-item__answer">
                         Yes! We offer free trial lessons for new students. This allows you to experience
                         our teaching style and meet our teachers before enrolling.
-                    </p>
-                    <p class="faq-item__answer-chinese">
-                        是的！我们为新学生提供免费试听课，让您在报名前体验我们的教学风格并认识我们的老师。
                     </p>
                 </div>
             </div>
@@ -354,9 +322,6 @@
                         We maintain small class sizes with a maximum of 12 students per class to ensure
                         personalized attention and effective learning.
                     </p>
-                    <p class="faq-item__answer-chinese">
-                        我们保持小班教学，每班最多12名学生，确保个性化关注和有效学习。
-                    </p>
                 </div>
             </div>
 
@@ -370,16 +335,13 @@
                         Simply fill out the contact form above, call us, or email us to schedule an
                         assessment. We'll help you find the right class for your child's level.
                     </p>
-                    <p class="faq-item__answer-chinese">
-                        只需填写上面的联系表格、致电或发送电子邮件安排评估。我们会帮您找到适合孩子水平的课程。
-                    </p>
                 </div>
             </div>
         </div>
 
         <div class="text-center mt-4" data-aos="fade-up">
-            <a href="/faq" class="btn btn-outline-primary">
-                View All FAQs / 查看所有常见问题
+            <a href="/en/faq/" class="btn btn-outline-primary">
+                View All FAQs
                 <i class="fas fa-arrow-right"></i>
             </a>
         </div>
@@ -390,13 +352,12 @@
 <section class="section section--cta">
     <div class="container text-center" data-aos="fade-up">
         <h2 class="section__title">Ready to Get Started?</h2>
-        <h3 class="section__title-chinese">准备开始了吗？</h3>
         <p class="section__subtitle">
             Book your free trial lesson today and discover the joy of learning Chinese
         </p>
         <div class="cta-buttons">
-            <a href="/booking" class="btn btn-primary btn-lg">
-                <i class="fas fa-calendar-check"></i> Book Free Trial / 预约免费试听
+            <a href="/en/booking/" class="btn btn-primary btn-lg">
+                <i class="fas fa-calendar-check"></i> Book Free Trial
             </a>
             <a href="tel:01619693071" class="btn btn-outline-primary btn-lg">
                 <i class="fas fa-phone"></i> 0161 969 3071
@@ -768,13 +729,13 @@
         try {
             // Disable submit button and show loading state
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending... / 发送中...';
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
 
             // Get form data
             const formData = new FormData(this);
 
             // Submit form via AJAX
-            const response = await fetch('/contact/submit', {
+            const response = await fetch('/en/contact/submit', {
                 method: 'POST',
                 body: formData
             });
@@ -783,17 +744,17 @@
 
             if (result.success) {
                 // Show success message
-                showMessage(result.message || 'Your message has been sent successfully! / 您的消息已成功发送！', 'success');
+                showMessage(result.message || 'Your message has been sent successfully!', 'success');
                 // Reset form
                 this.reset();
             } else {
                 // Show error message
-                showMessage(result.message || 'Sorry, there was an error. Please try again. / 抱歉，发生错误。请重试。', 'error');
+                showMessage(result.message || 'Sorry, there was an error. Please try again.', 'error');
             }
 
         } catch (error) {
             console.error('Form submission error:', error);
-            showMessage('Sorry, there was an error sending your message. Please try again later. / 抱歉，发送消息时出错。请稍后再试。', 'error');
+            showMessage('Sorry, there was an error sending your message. Please try again later.', 'error');
         } finally {
             // Re-enable submit button
             submitBtn.disabled = false;

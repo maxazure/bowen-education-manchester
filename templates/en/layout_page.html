@@ -122,11 +122,11 @@ try{
       e.preventDefault();
       if(!this.checkValidity()){ e.stopPropagation(); this.classList.add('was-validated'); return; }
       const data = Object.fromEntries(new FormData(this));
-      const btn = this.querySelector('button[type="submit"]'); const text = btn.innerHTML; btn.innerHTML='发送中... Sending...'; btn.disabled=true;
+      const btn = this.querySelector('button[type="submit"]'); const text = btn.innerHTML; btn.innerHTML='Sending...'; btn.disabled=true;
       try{
-        const resp = await fetch('/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
-        if(resp.ok){ alert('感谢您的留言！我们会尽快回复您。'); this.reset(); this.classList.remove('was-validated'); } else { alert('提交失败，请稍后重试或直接致电我们。'); }
-      }catch(err){ alert('提交失败，请稍后重试。'); }
+        const resp = await fetch('/en/api/contact',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
+        if(resp.ok){ alert('Thank you for your message! We will get back to you soon.'); this.reset(); this.classList.remove('was-validated'); } else { alert('Submission failed. Please try again later or call us directly.'); }
+      }catch(err){ alert('Submission failed. Please try again later.'); }
       finally{ btn.innerHTML=text; btn.disabled=false; }
     });
   }
