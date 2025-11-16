@@ -65,3 +65,13 @@ htmlcov/
 .DS_Store
 .AppleDouble
 .LSOverride
+
+# Tools & Temporary files
+.trae/
+cookies.txt
+
+# Migration scripts (可选：如果不想提交可以取消注释)
+# add_*.py
+# fix_*.py
+# translate_*.py
+# optimize_*.py
