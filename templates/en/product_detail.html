@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
-{% block title %}{{ product.name }} - 博文教育集团 Bowen Education Group{% endblock %}
+{% block title %}{{ product.name }} - Bowen Education Group{% endblock %}
 
-{% block meta_description %}{{ product.summary or (product.name ~ ' - ' ~ column.name ~ ' - 博文教育集团提供优质的中文教育课程') }}{% endblock %}
+{% block meta_description %}{{ product.summary or (product.name ~ ' - ' ~ column.name ~ ' - Bowen Education Group provides quality Chinese language education courses') }}{% endblock %}
 
 {% block content %}
 
@@ -29,7 +29,7 @@
                     <div class="product-section">
                         <h2 class="product-section__title">
                             <i class="fas fa-info-circle"></i>
-                            课程介绍
+                            Course Description
                         </h2>
                         <div class="product-description">
                             {{ product.description_html|safe }}
@@ -40,35 +40,35 @@
                     <div class="product-section">
                         <h2 class="product-section__title">
                             <i class="fas fa-star"></i>
-                            课程特色
+                            Course Features
                         </h2>
                         <div class="course-features">
                             <div class="feature-item">
                                 <i class="fas fa-users feature-icon"></i>
                                 <div class="feature-content">
-                                    <h4>小班教学</h4>
-                                    <p>每班最多12名学生，确保个性化关注</p>
+                                    <h4>Small Classes</h4>
+                                    <p>Maximum 12 students per class, ensuring personalised attention</p>
                                 </div>
                             </div>
                             <div class="feature-item">
                                 <i class="fas fa-graduation-cap feature-icon"></i>
                                 <div class="feature-content">
-                                    <h4>专业师资</h4>
-                                    <p>经验丰富的资深教师团队</p>
+                                    <h4>Professional Teachers</h4>
+                                    <p>Experienced and qualified teaching staff</p>
                                 </div>
                             </div>
                             <div class="feature-item">
                                 <i class="fas fa-certificate feature-icon"></i>
                                 <div class="feature-content">
-                                    <h4>权威认证</h4>
-                                    <p>符合英国教育标准，证书权威认可</p>
+                                    <h4>Authorised Certification</h4>
+                                    <p>Meets UK education standards, recognised certificates</p>
                                 </div>
                             </div>
                             <div class="feature-item">
                                 <i class="fas fa-book feature-icon"></i>
                                 <div class="feature-content">
-                                    <h4>优质教材</h4>
-                                    <p>采用最新权威教材，内容丰富实用</p>
+                                    <h4>Quality Materials</h4>
+                                    <p>Latest authorised textbooks, comprehensive content</p>
                                 </div>
                             </div>
                         </div>
@@ -78,34 +78,34 @@
                     <div class="product-section">
                         <h2 class="product-section__title">
                             <i class="fas fa-calendar-alt"></i>
-                            课程安排
+                            Course Schedule
                         </h2>
                         <div class="course-schedule">
                             <div class="schedule-item">
                                 <div class="schedule-time">
-                                    <strong>上课时间：</strong>
+                                    <strong>Class Times:</strong>
                                 </div>
                                 <div class="schedule-detail">
-                                    周末班：周六/周日 9:00-12:00 或 14:00-17:00<br>
-                                    平日班：周三/周五 18:30-20:30
+                                    Weekend Classes: Saturdays/Sundays 9:00-12:00 or 14:00-17:00<br>
+                                    Weekday Classes: Wednesdays/Fridays 18:30-20:30
                                 </div>
                             </div>
                             <div class="schedule-item">
                                 <div class="schedule-time">
-                                    <strong>课程时长：</strong>
+                                    <strong>Course Duration:</strong>
                                 </div>
                                 <div class="schedule-detail">
-                                    每学期12周，全年3学期
+                                    12 weeks per term, 3 terms per year
                                 </div>
                             </div>
                             <div class="schedule-item">
                                 <div class="schedule-time">
-                                    <strong>开课日期：</strong>
+                                    <strong>Start Dates:</strong>
                                 </div>
                                 <div class="schedule-detail">
-                                    2025年春季学期：1月11日开课<br>
-                                    2025年夏季学期：4月19日开课<br>
-                                    2025年秋季学期：9月6日开课
+                                    Spring Term 2025: Starts 11 January<br>
+                                    Summer Term 2025: Starts 19 April<br>
+                                    Autumn Term 2025: Starts 6 September
                                 </div>
                             </div>
                         </div>
@@ -115,23 +115,23 @@
                     <div class="product-section">
                         <h2 class="product-section__title">
                             <i class="fas fa-question-circle"></i>
-                            常见问题
+                            Frequently Asked Questions
                         </h2>
                         <div class="product-faq">
                             <div class="faq-item">
                                 <h4 class="faq-question">
                                     <i class="fas fa-question"></i>
-                                    适合什么年龄段的学生？
+                                    What age groups are suitable?
                                 </h4>
                                 <div class="faq-answer">
-                                    <p>我们的课程根据不同年龄段设计，包括：</p>
+                                    <p>Our courses are designed for different age groups, including:</p>
                                     <ul>
-                                        <li>幼儿班：4-6岁</li>
-                                        <li>初级班：7-9岁</li>
-                                        <li>中级班：10-12岁</li>
-                                        <li>高级班：13-15岁</li>
-                                        <li>GCSE/A-Level班：15-18岁</li>
-                                        <li>成人班：18岁以上</li>
+                                        <li>Preschool: Ages 4-6</li>
+                                        <li>Primary: Ages 7-9</li>
+                                        <li>Intermediate: Ages 10-12</li>
+                                        <li>Advanced: Ages 13-15</li>
+                                        <li>GCSE/A-Level: Ages 15-18</li>
+                                        <li>Adults: 18+</li>
                                     </ul>
                                 </div>
                             </div>
@@ -139,36 +139,36 @@
                             <div class="faq-item">
                                 <h4 class="faq-question">
                                     <i class="fas fa-question"></i>
-                                    可以免费试听吗？
+                                    Can I attend a free trial lesson?
                                 </h4>
                                 <div class="faq-answer">
-                                    <p>是的！我们为新学生提供免费试听课。您可以预约试听，了解我们的教学环境和老师的教学风格。</p>
+                                    <p>Yes! We offer free trial lessons for new students. You can book a trial to experience our teaching environment and meet our teachers.</p>
                                 </div>
                             </div>
 
                             <div class="faq-item">
                                 <h4 class="faq-question">
                                     <i class="fas fa-question"></i>
-                                    如何评估孩子的中文水平？
+                                    How do you assess my child's Chinese level?
                                 </h4>
                                 <div class="faq-answer">
-                                    <p>我们会为孩子进行免费的中文水平评估，包括听说读写四个方面的测试，帮助孩子选择最适合的课程级别。</p>
+                                    <p>We provide free Chinese language level assessment covering listening, speaking, reading and writing skills to help place your child in the most suitable class level.</p>
                                 </div>
                             </div>
 
                             <div class="faq-item">
                                 <h4 class="faq-question">
                                     <i class="fas fa-question"></i>
-                                    学费包括哪些内容？
+                                    What does the tuition fee include?
                                 </h4>
                                 <div class="faq-answer">
-                                    <p>学费包括：</p>
+                                    <p>Tuition fees include:</p>
                                     <ul>
-                                        <li>课程教材和学习资料</li>
-                                        <li>课堂教学</li>
-                                        <li>作业批改和反馈</li>
-                                        <li>期中和期末评估</li>
-                                        <li>结业证书</li>
+                                        <li>Course textbooks and learning materials</li>
+                                        <li>Classroom teaching</li>
+                                        <li>Homework marking and feedback</li>
+                                        <li>Mid-term and end-of-term assessments</li>
+                                        <li>Certificate of completion</li>
                                     </ul>
                                 </div>
                             </div>
@@ -178,16 +178,16 @@
                     <!-- CTA Button -->
                     <div class="product-section">
                         <div class="course-cta">
-                            <h3>准备好开始学习了吗？</h3>
-                            <p>立即报名或预约免费试听课</p>
+                            <h3>Ready to Start Learning?</h3>
+                            <p>Enrol now or book a free trial lesson</p>
                             <div class="cta-buttons">
-                                <a href="/contact" class="btn btn-primary btn-lg">
+                                <a href="/en/contact" class="btn btn-primary btn-lg">
                                     <i class="fas fa-user-plus"></i>
-                                    立即报名
+                                    Enrol Now
                                 </a>
-                                <a href="/booking" class="btn btn-outline-primary btn-lg">
+                                <a href="/en/booking" class="btn btn-outline-primary btn-lg">
                                     <i class="fas fa-calendar-check"></i>
-                                    预约试听
+                                    Book Trial
                                 </a>
                             </div>
                         </div>
@@ -203,9 +203,8 @@
 <section class="section section--related-courses bg-light">
     <div class="container">
         <div class="section__header text-center" data-aos="fade-up">
-            <h2 class="section__title">推荐课程</h2>
-            <h3 class="section__title-chinese">可能感兴趣的课程</h3>
-            <p class="section__subtitle">探索更多适合您的课程选择</p>
+            <h2 class="section__title">Related Courses</h2>
+            <p class="section__subtitle">Explore more courses that might interest you</p>
         </div>
 
         <div class="related-courses-grid">
@@ -224,8 +223,8 @@
                     {% if related.price_text %}
                     <p class="related-course-price">{{ related.price_text }}</p>
                     {% endif %}
-                    <a href="/{{ column.slug }}/{{ related.slug }}" class="btn btn-outline-primary btn-sm">
-                        了解详情
+                    <a href="/en/{{ column.slug }}/{{ related.slug }}" class="btn btn-outline-primary btn-sm">
+                        Learn More
                     </a>
                 </div>
             </div>

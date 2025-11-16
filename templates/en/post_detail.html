@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ post.title }} - 博文新闻 - Bowen Education Group{% endblock %}
+{% block title %}{{ post.title }} - Articles - Bowen Education Group{% endblock %}
 
 {% block content %}
 
@@ -38,31 +38,31 @@
                     <!-- Tags -->
                     {% if post.categories %}
                     <div class="post-tags">
-                        <strong>标签：</strong>
+                        <strong>Tags:</strong>
                         {% for category in post.categories %}
-                        <a href="/{{ column.slug }}?category={{ category.id }}" class="tag">{{ category.name }}</a>
+                        <a href="/en/{{ column.slug }}?category={{ category.id }}" class="tag">{{ category.name }}</a>
                         {% endfor %}
                     </div>
                     {% endif %}
-                    
+
                     <!-- Share Buttons -->
                     <div class="post-share">
-                        <strong>分享：</strong>
-                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.url }}" target="_blank" class="share-btn share-btn--facebook" title="分享到Facebook">
+                        <strong>Share:</strong>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.url }}" target="_blank" class="share-btn share-btn--facebook" title="Share on Facebook">
                             <i class="icon-facebook"></i>
                         </a>
-                        <a href="https://twitter.com/intent/tweet?url={{ request.url }}&text={{ post.title }}" target="_blank" class="share-btn share-btn--twitter" title="分享到Twitter">
+                        <a href="https://twitter.com/intent/tweet?url={{ request.url }}&text={{ post.title }}" target="_blank" class="share-btn share-btn--twitter" title="Share on Twitter">
                             <i class="icon-twitter"></i>
                         </a>
-                        <a href="mailto:?subject={{ post.title }}&body=查看这篇文章：{{ request.url }}" class="share-btn share-btn--email" title="通过邮件分享">
+                        <a href="mailto:?subject={{ post.title }}&body=Check out this article: {{ request.url }}" class="share-btn share-btn--email" title="Share by Email">
                             <i class="icon-mail"></i>
                         </a>
                     </div>
-                    
+
                     <!-- Navigation -->
                     <div class="post-navigation">
-                        <a href="/{{ column.slug }}" class="btn btn--secondary">
-                            <i class="icon-arrow-left"></i> 返回列表
+                        <a href="/en/{{ column.slug }}" class="btn btn--secondary">
+                            <i class="icon-arrow-left"></i> Back to List
                         </a>
                     </div>
                 </article>

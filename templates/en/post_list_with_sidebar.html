@@ -2,7 +2,7 @@
 
 {% block title %}{{ column.name }} - Bowen Education Group{% endblock %}
 
-{% block meta_description %}{{ column.description or (column.name ~ ' - 博文教育集团为您提供优质的中文教育服务') }}{% endblock %}
+{% block meta_description %}{{ column.description or (column.name ~ ' - Bowen Education Group provides quality Chinese language education') }}{% endblock %}
 
 {% block content %}
 
@@ -26,30 +26,30 @@
                 <!-- Course System Overview (Only for School Curriculum) -->
                 {% if posts and parent_column and parent_column.slug == 'school' %}
                 <div class="course-system-intro" data-aos="fade-up">
-                    <h2 class="section-title">课程体系 Curriculum System</h2>
-                    <p class="section-subtitle">博文中文学校为不同年龄段的学生提供完整的中文学习路径，从幼儿启蒙到GCSE、A-Level考试准备，帮助学生系统地掌握中文听、说、读、写技能。</p>
+                    <h2 class="section-title">Curriculum System</h2>
+                    <p class="section-subtitle">Bowen Chinese School provides a complete Chinese learning pathway for students of all ages, from early childhood to GCSE and A-Level exam preparation, helping students systematically master listening, speaking, reading, and writing skills.</p>
 
                     <!-- Learning Stages -->
                     <div class="learning-stages">
                         <div class="stage-card">
                             <div class="stage-icon">🌱</div>
-                            <h4 class="stage-title">启蒙阶段 Foundation</h4>
-                            <p class="stage-desc">5-7岁，通过游戏、歌曲培养中文兴趣</p>
+                            <h4 class="stage-title">Foundation</h4>
+                            <p class="stage-desc">Ages 5-7, cultivating Chinese interest through games and songs</p>
                         </div>
                         <div class="stage-card">
                             <div class="stage-icon">📚</div>
-                            <h4 class="stage-title">进阶阶段 Primary</h4>
-                            <p class="stage-desc">8-10岁，系统学习中文知识</p>
+                            <h4 class="stage-title">Primary</h4>
+                            <p class="stage-desc">Ages 8-10, systematic Chinese language learning</p>
                         </div>
                         <div class="stage-card">
                             <div class="stage-icon">🎯</div>
-                            <h4 class="stage-title">考试阶段 Exam</h4>
-                            <p class="stage-desc">GCSE/A-Level，专业考试准备</p>
+                            <h4 class="stage-title">Exam Preparation</h4>
+                            <p class="stage-desc">GCSE/A-Level, professional exam preparation</p>
                         </div>
                         <div class="stage-card">
                             <div class="stage-icon">🌏</div>
-                            <h4 class="stage-title">高级阶段 Advanced</h4>
-                            <p class="stage-desc">HSK/粤语，深入学习中华文化</p>
+                            <h4 class="stage-title">Advanced</h4>
+                            <p class="stage-desc">HSK/Cantonese, deep dive into Chinese culture</p>
                         </div>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                                 <img src="/static/images/courses/default-course.jpg" alt="{{ post.title }}" loading="lazy">
                                 {% endif %}
                                 {% if post.is_recommended %}
-                                <span class="course-badge course-badge--recommended">推荐课程</span>
+                                <span class="course-badge course-badge--recommended">Featured</span>
                                 {% endif %}
                             </div>
 
@@ -78,17 +78,17 @@
                                 <div class="course-meta">
                                     <span class="course-age-tag">
                                         <i class="fas fa-users"></i>
-                                        {% if '5-7' in post.summary %}5-7岁
-                                        {% elif '8-10' in post.summary %}8-10岁
-                                        {% elif '14-16' in post.summary %}14-16岁
-                                        {% elif '16-18' in post.summary %}16-18岁
-                                        {% else %}全年龄{% endif %}
+                                        {% if '5-7' in post.summary %}Ages 5-7
+                                        {% elif '8-10' in post.summary %}Ages 8-10
+                                        {% elif '14-16' in post.summary %}Ages 14-16
+                                        {% elif '16-18' in post.summary %}Ages 16-18
+                                        {% else %}All Ages{% endif %}
                                     </span>
                                 </div>
 
                                 <!-- Title -->
                                 <h3 class="course-card__title">
-                                    <a href="/{{ column.slug }}/{{ post.slug }}">{{ post.title }}</a>
+                                    <a href="/en/{{ column.slug }}/{{ post.slug }}">{{ post.title }}</a>
                                 </h3>
 
                                 <!-- Summary -->
@@ -99,28 +99,28 @@
                                 <!-- Features Tags -->
                                 <div class="course-features">
                                     {% if 'GCSE' in post.title or 'A-Level' in post.title %}
-                                    <span class="feature-tag">考试导向</span>
-                                    <span class="feature-tag">高通过率</span>
+                                    <span class="feature-tag">Exam-focused</span>
+                                    <span class="feature-tag">High Pass Rate</span>
                                     {% elif 'Foundation' in post.title or 'Primary' in post.title %}
-                                    <span class="feature-tag">小班教学</span>
-                                    <span class="feature-tag">沉浸式环境</span>
+                                    <span class="feature-tag">Small Classes</span>
+                                    <span class="feature-tag">Immersive</span>
                                     {% elif 'HSK' in post.title %}
-                                    <span class="feature-tag">分级教学</span>
-                                    <span class="feature-tag">官方认证</span>
+                                    <span class="feature-tag">Level-based</span>
+                                    <span class="feature-tag">Certified</span>
                                     {% elif 'Cantonese' in post.title %}
-                                    <span class="feature-tag">口语优先</span>
+                                    <span class="feature-tag">Speaking Focus</span>
                                     {% if 'Beginner' in post.title %}
-                                    <span class="feature-tag">零基础</span>
+                                    <span class="feature-tag">Beginner</span>
                                     {% else %}
-                                    <span class="feature-tag">考试准备</span>
+                                    <span class="feature-tag">Exam Prep</span>
                                     {% endif %}
                                     {% endif %}
                                 </div>
 
                                 <!-- Action Buttons -->
                                 <div class="course-actions">
-                                    <a href="/{{ column.slug }}/{{ post.slug }}" class="btn btn-outline-primary btn-sm">查看详情</a>
-                                    <a href="/contact/?course={{ post.slug }}" class="btn btn-primary btn-sm">立即报名</a>
+                                    <a href="/en/{{ column.slug }}/{{ post.slug }}" class="btn btn-outline-primary btn-sm">View Details</a>
+                                    <a href="/en/contact/?course={{ post.slug }}" class="btn btn-primary btn-sm">Enrol Now</a>
                                 </div>
                             </div>
                         </div>
@@ -128,9 +128,9 @@
                     {% else %}
                         <div class="empty-state" data-aos="fade-up">
                             <div class="empty-state__icon">📚</div>
-                            <h3 class="empty-state__title">暂无课程</h3>
-                            <p class="empty-state__text">课程内容正在更新中，敬请期待。</p>
-                            <a href="/" class="btn btn-primary">返回首页</a>
+                            <h3 class="empty-state__title">No Courses</h3>
+                            <p class="empty-state__text">Course content is being updated. Please check back soon.</p>
+                            <a href="/en/" class="btn btn-primary">Back to Home</a>
                         </div>
                     {% endif %}
                 </div>
@@ -138,11 +138,11 @@
                 <!-- CTA Box -->
                 {% if posts %}
                 <div class="trial-cta-box" data-aos="fade-up">
-                    <h3 class="trial-cta__title">预约试听课 Book a Trial Lesson</h3>
-                    <p class="trial-cta__text">想让孩子体验中文学习的乐趣？欢迎预约免费试听课，亲身感受我们的教学特色。</p>
+                    <h3 class="trial-cta__title">Book a Trial Lesson</h3>
+                    <p class="trial-cta__text">Want your child to experience the joy of learning Chinese? Book a free trial lesson and discover our unique teaching approach.</p>
                     <div class="trial-cta__buttons">
-                        <a href="/contact" class="btn btn-primary">预约试听课</a>
-                        <a href="/school-term-dates" class="btn btn-outline-primary">查看学期安排</a>
+                        <a href="/en/contact" class="btn btn-primary">Book Trial Lesson</a>
+                        <a href="/en/school-term-dates" class="btn btn-outline-primary">View Term Dates</a>
                     </div>
                 </div>
                 {% endif %}
@@ -155,26 +155,23 @@
 <section class="section section--cta" aria-labelledby="cta-title">
     <div class="container text-center" data-aos="fade-up">
         <h2 id="cta-title" class="section__title">
-            <span lang="en-GB">Ready to Join Our Community?</span>
+            Ready to Join Our Community?
         </h2>
-        <h3 class="section__title-chinese">
-            <span lang="zh-CN">准备加入我们的大家庭？</span>
-        </h3>
         <p class="section__subtitle">
-            <span lang="en-GB">Discover how we can help you achieve your language learning goals</span>
+            Discover how we can help you achieve your language learning goals
         </p>
         <div class="cta-buttons" role="group" aria-label="Contact actions">
-            <a href="/contact"
+            <a href="/en/contact"
                class="btn btn-primary btn-lg"
                aria-label="Book a visit to Bowen Education Group">
                 <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                <span lang="en-GB">Book a Visit</span>
+                Book a Visit
             </a>
             <a href="tel:01619693071"
                class="btn btn-outline-primary btn-lg"
                aria-label="Call Bowen Education Group at 0161 969 3071">
                 <i class="fas fa-phone" aria-hidden="true"></i>
-                <span>0161 969 3071</span>
+                0161 969 3071
             </a>
         </div>
     </div>

@@ -16,11 +16,11 @@
         {% if categories %}
         <div class="news-filters" data-aos="fade-up">
             <div class="news-filters__inner">
-                <a href="/{{ column.slug }}" class="news-filter {% if not current_category_id %}news-filter--active{% endif %}">
-                    全部新闻
+                <a href="/en/{{ column.slug }}" class="news-filter {% if not current_category_id %}news-filter--active{% endif %}">
+                    All Articles
                 </a>
                 {% for category in categories %}
-                <a href="/{{ column.slug }}?category={{ category.id }}" class="news-filter {% if current_category_id == category.id %}news-filter--active{% endif %}">
+                <a href="/en/{{ column.slug }}?category={{ category.id }}" class="news-filter {% if current_category_id == category.id %}news-filter--active{% endif %}">
                     {{ category.name }}
                 </a>
                 {% endfor %}
@@ -35,14 +35,14 @@
                 <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
                     <article class="news-card">
                         <!-- Thumbnail -->
-                        <a href="/{{ column.slug }}/{{ post.slug }}" class="news-card__image">
+                        <a href="/en/{{ column.slug }}/{{ post.slug }}" class="news-card__image">
                             {% if post.cover_media %}
                             <img src="{{ post.cover_media.file_url or post.cover_media.path_original }}" alt="{{ post.title }}">
                             {% else %}
                             <img src="/static/images/news/default-news.jpg" alt="{{ post.title }}">
                             {% endif %}
                             <div class="news-card__overlay">
-                                <span class="news-card__read-more">查看详情 →</span>
+                                <span class="news-card__read-more">View Details →</span>
                             </div>
                         </a>
 
@@ -63,7 +63,7 @@
 
                             <!-- Title -->
                             <h3 class="news-card__title">
-                                <a href="/{{ column.slug }}/{{ post.slug }}">{{ post.title }}</a>
+                                <a href="/en/{{ column.slug }}/{{ post.slug }}">{{ post.title }}</a>
                             </h3>
 
                             <!-- Summary -->
@@ -72,8 +72,8 @@
                             </p>
 
                             <!-- Read More Link -->
-                            <a href="/{{ column.slug }}/{{ post.slug }}" class="news-card__link">
-                                阅读全文 <i class="icon-arrow-right"></i>
+                            <a href="/en/{{ column.slug }}/{{ post.slug }}" class="news-card__link">
+                                Read More <i class="icon-arrow-right"></i>
                             </a>
                         </div>
                     </article>
@@ -83,9 +83,9 @@
                 <div class="col-12">
                     <div class="news-empty" data-aos="fade-up">
                         <div class="news-empty__icon">📰</div>
-                        <h3 class="news-empty__title">暂无新闻</h3>
-                        <p class="news-empty__text">内容正在更新中，敬请期待。</p>
-                        <a href="/" class="btn btn--primary">返回首页</a>
+                        <h3 class="news-empty__title">No Articles</h3>
+                        <p class="news-empty__text">Content is being updated. Please check back soon.</p>
+                        <a href="/en/" class="btn btn--primary">Back to Home</a>
                     </div>
                 </div>
             {% endif %}
@@ -104,13 +104,13 @@
 <section class="section section--cta" style="background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);">
     <div class="container">
         <div class="cta-box text-center" data-aos="fade-up">
-            <h2 class="cta-box__title">了解更多关于博文教育集团</h2>
+            <h2 class="cta-box__title">Learn More About Bowen Education Group</h2>
             <p class="cta-box__text">
-                想了解我们的课程、活动或合作机会？欢迎随时与我们联系。
+                Interested in our courses, activities or partnership opportunities? Feel free to contact us anytime.
             </p>
             <div class="cta-box__buttons">
-                <a href="/contact" class="btn btn--white">联系我们</a>
-                <a href="/about" class="btn btn--outline-white">关于我们</a>
+                <a href="/en/contact" class="btn btn--white">Contact Us</a>
+                <a href="/en/about" class="btn btn--outline-white">About Us</a>
             </div>
         </div>
     </div>

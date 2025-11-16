@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
-{% block title %}{{ column.name }} | 博文教育集团 Bowen Education Group{% endblock %}
+{% block title %}{{ column.name }} | Bowen Education Group{% endblock %}
 
-{% block meta_description %}{{ column.description or (column.name ~ ' - 博文教育集团为您提供优质的课程和服务') }}{% endblock %}
+{% block meta_description %}{{ column.description or (column.name ~ ' - Bowen Education Group provides quality courses and services') }}{% endblock %}
 
 {% block content %}
 
@@ -37,7 +37,7 @@
                         {% endif %}
                         <div class="product-card__content">
                             <h2 class="product-card__title">
-                                <span lang="zh-CN">{{ product.name }}</span>
+                                {{ product.name }}
                             </h2>
                             <p class="product-card__summary">
                                 {{ product.summary or (product.description_html|striptags|truncate(150)) }}
@@ -45,10 +45,10 @@
                             {% if product.price_text %}
                             <p class="product-card__price">{{ product.price_text }}</p>
                             {% endif %}
-                            <a href="/{{ column.slug }}/{{ product.slug }}"
+                            <a href="/en/{{ column.slug }}/{{ product.slug }}"
                                class="product-card__link"
-                               aria-label="了解 {{ product.name }} 详情">
-                                <span lang="zh-CN">了解详情</span> →
+                               aria-label="Learn more about {{ product.name }}">
+                                Learn More →
                             </a>
                         </div>
                     </article>
@@ -56,9 +56,9 @@
                 {% else %}
                     <div class="empty-state">
                         <div class="empty-state__icon">📚</div>
-                        <h3 class="empty-state__title" lang="zh-CN">暂无课程</h3>
-                        <p class="empty-state__text" lang="zh-CN">课程正在更新中，敬请期待。</p>
-                        <a href="/" class="btn btn-primary">返回首页</a>
+                        <h3 class="empty-state__title">No Courses</h3>
+                        <p class="empty-state__text">Courses are being updated. Please check back soon.</p>
+                        <a href="/en/" class="btn btn-primary">Back to Home</a>
                     </div>
                 {% endif %}
                 </div>
@@ -80,7 +80,7 @@
                     {% endif %}
                     <div class="product-card__content">
                         <h2 class="product-card__title">
-                            <span lang="zh-CN">{{ product.name }}</span>
+                            {{ product.name }}
                         </h2>
                         <p class="product-card__summary">
                             {{ product.summary or (product.description_html|striptags|truncate(150)) }}
@@ -88,10 +88,10 @@
                         {% if product.price_text %}
                         <p class="product-card__price">{{ product.price_text }}</p>
                         {% endif %}
-                        <a href="/{{ column.slug }}/{{ product.slug }}"
+                        <a href="/en/{{ column.slug }}/{{ product.slug }}"
                            class="product-card__link"
-                           aria-label="了解 {{ product.name }} 详情">
-                            <span lang="zh-CN">了解详情</span> →
+                           aria-label="Learn more about {{ product.name }}">
+                            Learn More →
                         </a>
                     </div>
                 </article>
@@ -99,9 +99,9 @@
             {% else %}
                 <div class="empty-state">
                     <div class="empty-state__icon">📚</div>
-                    <h3 class="empty-state__title" lang="zh-CN">暂无课程</h3>
-                    <p class="empty-state__text" lang="zh-CN">课程正在更新中，敬请期待。</p>
-                    <a href="/" class="btn btn-primary">返回首页</a>
+                    <h3 class="empty-state__title">No Courses</h3>
+                    <p class="empty-state__text">Courses are being updated. Please check back soon.</p>
+                    <a href="/en/" class="btn btn-primary">Back to Home</a>
                 </div>
             {% endif %}
             </div>
@@ -114,26 +114,23 @@
 <section class="section section--cta" aria-labelledby="cta-title">
     <div class="container text-center" data-aos="fade-up">
         <h2 id="cta-title" class="section__title">
-            <span lang="zh-CN">想了解更多？</span>
+            Want to Learn More?
         </h2>
-        <h3 class="section__title-chinese">
-            <span lang="en-GB">Want to Learn More?</span>
-        </h3>
         <p class="section__subtitle">
-            <span lang="zh-CN">联系我们获取详细课程信息</span>
+            Contact us for detailed course information
         </p>
         <div class="cta-buttons" role="group" aria-label="Contact actions">
-            <a href="/contact"
+            <a href="/en/contact"
                class="btn btn-primary btn-lg"
-               aria-label="联系博文教育集团获取课程信息">
+               aria-label="Contact Bowen Education Group for course information">
                 <i class="fas fa-envelope" aria-hidden="true"></i>
-                <span lang="zh-CN">联系我们</span>
+                Contact Us
             </a>
             <a href="tel:01619693071"
                class="btn btn-outline-primary btn-lg"
-               aria-label="致电博文教育集团 0161 969 3071">
+               aria-label="Call Bowen Education Group at 0161 969 3071">
                 <i class="fas fa-phone" aria-hidden="true"></i>
-                <span>0161 969 3071</span>
+                0161 969 3071
             </a>
         </div>
     </div>
