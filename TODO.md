@@ -2315,3 +2315,68 @@
 
 **最后更新**: 2025-11-13 16:45
 **当前状态**: 管理后台样式系统更新完成 - admin.css 完全重写（1430行），基于 Bootstrap 5 设计规范，26个CSS变量，24个样式分类，完整的响应式支持，已创建使用文档
+
+### [2025-11-16] 英文模板文件中文文本清理 (部分完成)
+- [x] 清理 school.html 中的所有中文文本 - 完成时间: 2025-11-16 - 负责人: maxazure
+- [x] 清理 contact.html 中的所有中文文本 - 完成时间: 2025-11-16 - 负责人: maxazure
+- [x] 清理 programmes.html 中的所有中文文本 - 完成时间: 2025-11-16 - 负责人: maxazure
+- [x] 清理 layout_page.html 中的所有中文文本 - 完成时间: 2025-11-16 - 负责人: maxazure
+- [ ] 清理 tuition.html 中的中文文本(96处) - 优先级: 高
+- [ ] 清理 events.html 中的中文文本(75处) - 优先级: 高
+- [ ] 清理 single_page.html 中的中文文本(33处) - 优先级: 中
+- [ ] 清理其他模板文件中的中文文本 - 优先级: 中
+
+  - **任务背景**:
+    - 实现中英双语独立模板系统
+    - 英文模板目录 `/templates/en/` 需要完全清理中文内容
+    - 已完成模板: home.html, components/navigation.html, partials/header.html, partials/footer.html
+    
+  - **已完成清理** (4个主要文件):
+    1. **school.html** - 中文学校页面
+       - 移除所有 `<span lang="zh-CN">中文文本</span>` 标签
+       - 将中文标题、标签、按钮转换为英文
+       - 更新内部链接添加 `/en/` 前缀
+       - 清理JavaScript中的中文注释
+       
+    2. **contact.html** - 联系页面
+       - 移除双语标题和说明
+       - 清理表单字段中的中文标签
+       - 更新表单提交URL为 `/en/contact/submit`
+       - 清理FAQ和CTA部分的中文文本
+       
+    3. **programmes.html** - 政府项目页面
+       - 转换页面标题和描述为英文
+       - 更新项目列表和链接
+       - 清理CTA部分的中文文本
+       
+    4. **layout_page.html** - 布局页面
+       - 清理JavaScript中的中文提示信息
+       - 更新API请求URL为 `/en/api/contact`
+       
+  - **待清理文件统计**:
+    - tuition.html: 96处中文
+    - events.html: 75处中文  
+    - single_page.html: 33处中文
+    - post_detail.html: 7处中文
+    - 其他组件和partials文件
+    
+  - **清理规则**:
+    1. 移除所有 `<span lang="zh-CN">中文文本</span>` 及其中文内容
+    2. 保留 `<span lang="en-GB">英文文本</span>` 的内容但移除lang属性
+    3. 将中文标题、标签、按钮文本替换为英文
+    4. 将中文注释替换为英文注释
+    5. 更新所有内部链接URL，添加 `/en/` 前缀
+    6. 保持HTML结构、CSS样式和JavaScript代码不变
+    
+  - **技术实现**:
+    - 使用正则表达式检测中文字符: `[\u4e00-\u9fff]`
+    - 系统化逐文件清理和验证
+    - Git提交记录清理进度
+    
+  - **下一步**:
+    - 继续清理 tuition.html (最多中文，96处)
+    - 清理 events.html (75处)
+    - 清理剩余模板文件
+    - 验证所有文件无中文字符
+    - 生成最终清理报告
+
