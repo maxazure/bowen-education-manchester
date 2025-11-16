@@ -46,6 +46,7 @@ class SiteColumn(BaseModel):
     __tablename__ = "site_column"
 
     name = Column(String(100), nullable=False, comment="栏目名称")
+    name_en = Column(String(100), nullable=True, comment="栏目英文名称")
     slug = Column(String(100), unique=True, nullable=False, comment="URL Slug")
     column_type = Column(Enum(ColumnType), nullable=False, comment="栏目类型")
     parent_id = Column(

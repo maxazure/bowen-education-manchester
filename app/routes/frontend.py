@@ -125,12 +125,14 @@ async def homepage_en(request: Request, db: Session = Depends(get_db)):
     context = get_base_context(request, db, lang=lang)
     templates_engine = get_template_engine(lang)
 
+    # TEMPORARY: Disable layout system for English homepage to test cleaned templates
+    # TODO: Update database layouts to remove Chinese content
     # 优先使用已发布的布局进行渲染
-    from app.models.layout import LayoutScope
-    published_layout = layout_render_service.get_published_layout(db, LayoutScope.HOME)
-    if published_layout:
-        html = layout_render_service.render_layout_html(db, published_layout)
-        return templates_engine.TemplateResponse("layout_page.html", {"request": request, **context, "layout_html": html})
+    # from app.models.layout import LayoutScope
+    # published_layout = layout_render_service.get_published_layout(db, LayoutScope.HOME)
+    # if published_layout:
+    #     html = layout_render_service.render_layout_html(db, published_layout)
+    #     return templates_engine.TemplateResponse("layout_page.html", {"request": request, **context, "layout_html": html})
 
     # Get homepage column
     home_column = site_service.get_column_by_slug(db, "home")
@@ -178,6 +180,9 @@ async def column_page_generic(
     # Exclude admin paths - they should be handled by admin router
     if column_slug.startswith("admin"):
         raise HTTPException(status_code=404, detail="Page not found")
+
+    # Remove trailing slash from column_slug for database lookup
+    column_slug = column_slug.rstrip('/')
 
     column = site_service.get_column_by_slug(db, column_slug)
 

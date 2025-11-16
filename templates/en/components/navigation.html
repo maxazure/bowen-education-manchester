@@ -30,7 +30,7 @@
                         :aria-expanded="open.toString()"
                         {% endif %}
                     >
-                        {{ item.name }}
+                        {{ item|column_name }}
                         {% if has_children %}
                         <svg
                             class="dropdown-icon"
@@ -64,7 +64,7 @@
                         {% for child in has_children %}
                         <li>
                             <a href="/en/{{ child.slug }}/" class="dropdown-item">
-                                {{ child.name }}
+                                {{ child|column_name }}
                             </a>
                         </li>
                         {% endfor %}
@@ -156,20 +156,20 @@
                                 <!-- Link to parent overview page -->
                                 <li>
                                     <a href="/en/{{ item.slug }}/" class="mobile-submenu-link parent-link">
-                                        <strong>View All {{ item.name }}</strong>
+                                        <strong>View All {{ item|column_name }}</strong>
                                     </a>
                                 </li>
                                 {% for child in has_children %}
                                 <li>
                                     <a href="/en/{{ child.slug }}/" class="mobile-submenu-link">
-                                        {{ child.name }}
+                                        {{ child|column_name }}
                                     </a>
                                 </li>
                                 {% endfor %}
                             </ul>
                             {% else %}
                             <a href="/en/{{ item.slug }}/" class="mobile-nav-link">
-                                {{ item.name }}
+                                {{ item|column_name }}
                             </a>
                             {% endif %}
                         </li>

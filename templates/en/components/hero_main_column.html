@@ -5,11 +5,12 @@
   Does not include statistics bar
 -->
 
-{# Get Hero configuration, prioritize column configuration, support variable override #}
-{% set h_title = hero_title or (column.hero_title if column.hero_title else column.name) %}
-{% set h_title_en = hero_title_en or column.hero_title_en %}
-{% set h_tagline = hero_tagline or column.hero_tagline %}
-{% set h_cta_text = hero_cta_text or column.hero_cta_text %}
+{# Get Hero configuration for English pages #}
+{# For English version: Use name_en/hero_title_en as main title, hide Chinese title #}
+{% set h_title = hero_title or (column.hero_title_en if column.hero_title_en else (column.name_en if column.name_en else column.name)) %}
+{% set h_title_en = hero_title_en or None %}  {# Don't show Chinese as subtitle in English version #}
+{% set h_tagline = hero_tagline or None %}  {# Hide Chinese tagline in English version #}
+{% set h_cta_text = hero_cta_text or None %}  {# Hide Chinese CTA in English version #}
 {% set h_cta_url = hero_cta_url or column.hero_cta_url %}
 
 {# Background image priority: explicitly passed hero_image > column.hero_media > default image #}

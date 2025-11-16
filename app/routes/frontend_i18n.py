@@ -48,6 +48,16 @@ def get_template_engine(lang: str = "zh") -> Jinja2Templates:
     # 创建模板引擎
     templates = Jinja2Templates(directory=str(lang_dir))
 
+    # 添加栏目名称本地化过滤器
+    def get_column_name(column, lang_code=None):
+        """获取栏目的本地化名称"""
+        use_lang = lang_code or lang
+        if use_lang == "en" and hasattr(column, 'name_en') and column.name_en:
+            return column.name_en
+        return column.name if hasattr(column, 'name') else str(column)
+
+    templates.env.filters["column_name"] = get_column_name
+
     # 为英文模板添加过滤器
     if lang == "en":
         templates.env.filters["remove_chinese"] = remove_chinese
