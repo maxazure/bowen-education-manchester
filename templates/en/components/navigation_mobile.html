@@ -12,16 +12,16 @@
           <li class="mobile-only-item" x-data="{ openSub: false }">
             {% if children %}
             <button class="mobile-only-link" @click="openSub = !openSub" :aria-expanded="openSub.toString()">
-              <span class="nav-chinese">{{ item.name }}</span>
+              <span>{{ item|column_name }}</span>
               <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" :class="{ 'rotate-180': openSub }"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </button>
             <ul class="mobile-only-sub" x-show="openSub" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-96" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 max-h-96" x-transition:leave-end="opacity-0 max-h-0" style="display: none; overflow: hidden;">
               {% for c in children %}
-              <li><a href="/{{ c.slug }}/" class="mobile-only-sub-link">{{ c.name }}</a></li>
+              <li><a href="/en/{{ c.slug }}/" class="mobile-only-sub-link">{{ c|column_name }}</a></li>
               {% endfor %}
             </ul>
             {% else %}
-            <a href="/{{ item.slug }}/" class="mobile-only-link"><span class="nav-chinese">{{ item.name }}</span></a>
+            <a href="{% if item.slug == 'home' %}/en/{% else %}/en/{{ item.slug }}/{% endif %}" class="mobile-only-link"><span>{{ item|column_name }}</span></a>
             {% endif %}
           </li>
         {% endif %}

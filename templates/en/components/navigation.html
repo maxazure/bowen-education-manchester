@@ -125,7 +125,7 @@
                                 aria-expanded="false"
                                 x-bind:aria-expanded="submenuOpen.toString()"
                             >
-                                <span><span class="nav-chinese">{{ item.name }}</span></span>
+                                <span>{{ item|column_name }}</span>
                                 <svg
                                     class="toggle-icon"
                                     width="16"
