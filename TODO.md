@@ -2,6 +2,61 @@
 
 ## ✅ 已完成
 
+### [2025-11-16] 扩展 FAQ（常见问题）内容
+- [x] 扩展数据库表结构支持中英双语 - 完成时间: 2025-11-16 - 负责人: maxazure
+- [x] 新增15个高质量FAQ问答 - 完成时间: 2025-11-16 - 负责人: maxazure
+
+  - **任务背景**:
+    - 原有FAQ只有3个问题（入学、考试、费用）
+    - 需要扩展到15-20个以覆盖更多常见问题
+    - 需要支持中英双语显示
+
+  - **数据库扩展**:
+    - 为 `faq` 表添加4个新字段：
+      - `question_en` (VARCHAR 500) - 英文问题
+      - `answer_en` (TEXT) - 英文答案
+      - `question_zh` (VARCHAR 500) - 中文问题
+      - `answer_zh` (TEXT) - 中文答案
+    - 将现有3个FAQ的数据迁移到英文字段
+    - 保留原有 `question` 和 `answer` 字段（向后兼容）
+
+  - **新增FAQ统计**（15个新FAQ + 3个原有 = 18个总计）:
+    - **课程相关** (5个): 课程时长、教材、上课时间、课程内容、HSK/YCT考试
+    - **入学相关** (4个): 年龄要求、试听课、班级分配、入学流程
+    - **考试相关** (3个): HSK/YCT考试、GCSE/A-Level、通过率
+    - **费用相关** (3个): 付款方式、退款政策、费用标准
+    - **师资相关** (2个): 教师资质、师生比例
+    - **活动相关** (2个): 文化活动、家长观课
+    - **设施相关** (1个): 地址、停车、交通
+    - **联系方式** (1个): 多渠道联系方式
+
+  - **内容特点**:
+    - 每个FAQ包含完整的中英双语问答
+    - 英文答案长度: 150-700字符（HTML格式）
+    - 中文答案长度: 100-300字符（HTML格式）
+    - 使用HTML格式化（`<p>`, `<ul>`, `<li>`, `<strong>`, `<em>`）
+    - 所有FAQ设为可见状态 (`is_visible = 1`)
+    - 按类别和重要性排序 (`sort_order` 1-21)
+
+  - **示例FAQ问题**:
+    1. "What are the age requirements for enrollment?" / "入学年龄要求是什么？"
+    2. "How long is each class and term?" / "每节课和学期多长？"
+    3. "Can my child take HSK/YCT exams through your school?" / "我的孩子可以通过你们学校参加HSK/YCT考试吗？"
+    4. "Do you organize cultural events and activities?" / "你们会组织文化活动吗？"
+    5. "What are the qualifications of your teachers?" / "你们教师的资质如何？"
+
+  - **相关文件**:
+    - tools/add_faq_bilingual_fields.sql - 数据库字段扩展脚本
+    - tools/insert_faq_content.sql - FAQ内容插入脚本 (15个新FAQ)
+    - instance/database.db - 数据库文件（已更新）
+
+  - **验证结果**:
+    - ✅ 总FAQ数量: 21个
+    - ✅ 所有FAQ可见: 21/21
+    - ✅ 中英双语完整: 100%
+    - ✅ HTML格式正确: 使用列表、加粗、段落等标签
+    - ✅ 排序合理: 按重要性和类别排序
+
 ### [2025-11-16] 扩充团队成员信息
 - [x] 将教师照片导入媒体文件表 - 完成时间: 2025-11-16 - 负责人: maxazure
 - [x] 创建17个新团队成员记录 - 完成时间: 2025-11-16 - 负责人: maxazure
