@@ -5,6 +5,31 @@
 
 ## ✅ 已完成
 
+### [2025-11-17] 英文页面中文内容系统性清理
+- [x] 生成英文页面中文内容审计报告 - 完成时间: 2025-11-17 - 负责人: maxazure
+- [x] 修复 Priority 1 问题(Hero区块、页面标题) - 完成时间: 2025-11-17 - 负责人: maxazure
+- [x] 修复 Priority 2 问题(Meta Description) - 完成时间: 2025-11-17 - 负责人: maxazure
+- [x] 修复 Priority 3 问题(课程标题、图片alt标签) - 完成时间: 2025-11-17 - 负责人: maxazure
+
+**修复内容**:
+- 修复2个栏目的Hero区块中文显示(badminton-gallery, programmes-parks)
+- 修复4个页面的<title>标签中文(news, chess-events, chess-news, badminton-events)
+- 修复6个页面的Meta Description中文(about-company, chess-about, chess-courses, chess-resources, events-henan, programmes-haf)
+- 修复7个课程的英文标题(Foundation/Primary Mandarin, GCSE/A-Level Chinese, HSK, Cantonese)
+- 修复school-curriculum页面图片alt标签中文问题
+
+**涉及文件**:
+- templates/en/components/hero_standard.html - Hero逻辑优化
+- templates/en/post_list_with_sidebar.html - 标题和图片alt修复
+- templates/en/post_list_universal.html - 标题和meta修复
+- templates/en/gallery.html - 标题和meta修复
+- instance/database.db - 数据库英文字段更新
+
+**技术要点**:
+- 使用Jinja2的`column_name`自定义过滤器实现i18n
+- 数据库字段优先级: hero_title_en > name_en > name
+- 模板变量回退逻辑: title_en or title
+
 ### [2025-11-17] 更新博文教育简介文字
 - [x] 翻译新的中文简介为英文 - 完成时间: 2025-11-17 - 负责人: maxazure
 - [x] 修改中文首页(templates/zh/home.html)简介区块 - 完成时间: 2025-11-17 - 负责人: maxazure
