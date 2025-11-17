@@ -20,6 +20,16 @@ router = APIRouter(prefix="/pages", tags=["pages"])
 templates = Jinja2Templates(directory="admin/templates")
 
 
+def parse_optional_int(value: Optional[str]) -> Optional[int]:
+    """Convert empty string to None for optional integer fields"""
+    if value == "" or value is None:
+        return None
+    try:
+        return int(value)
+    except (ValueError, TypeError):
+        return None
+
+
 @router.get("", response_class=HTMLResponse)
 async def list_pages(request: Request, db: Session = Depends(get_db)):
     """
@@ -96,7 +106,7 @@ async def create_page(
     slug: Optional[str] = Form(None),
     subtitle: Optional[str] = Form(None),
     content_markdown: str = Form(...),
-    hero_media_id: Optional[int] = Form(None),
+    hero_media_id: Optional[str] = Form(None),
     seo_title: Optional[str] = Form(None),
     seo_description: Optional[str] = Form(None),
     seo_keywords: Optional[str] = Form(None),
@@ -161,7 +171,7 @@ async def create_page(
             subtitle=subtitle,
             content_markdown=content_markdown,
             content_html=content_html,
-            hero_media_id=hero_media_id if hero_media_id else None,
+            hero_media_id=parse_optional_int(hero_media_id),
             seo_title=seo_title,
             seo_description=seo_description,
             seo_keywords=seo_keywords,
@@ -238,7 +248,7 @@ async def update_page(
     slug: str = Form(...),
     subtitle: Optional[str] = Form(None),
     content_markdown: str = Form(...),
-    hero_media_id: Optional[int] = Form(None),
+    hero_media_id: Optional[str] = Form(None),
     seo_title: Optional[str] = Form(None),
     seo_description: Optional[str] = Form(None),
     seo_keywords: Optional[str] = Form(None),
@@ -293,7 +303,7 @@ async def update_page(
         page.subtitle = subtitle
         page.content_markdown = content_markdown
         page.content_html = content_html
-        page.hero_media_id = hero_media_id if hero_media_id else None
+        page.hero_media_id = parse_optional_int(hero_media_id)
         page.seo_title = seo_title
         page.seo_description = seo_description
         page.seo_keywords = seo_keywords
