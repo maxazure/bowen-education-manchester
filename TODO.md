@@ -5,6 +5,39 @@
 
 ## ✅ 已完成
 
+### [2025-11-17] 项目文件清理与目录结构优化
+- [x] 清理备份文件 (*.backup, *.bak, TODO_ARCHIVE_*) - 完成时间: 2025-11-17 - 负责人: maxazure
+- [x] 清理缓存目录 (htmlcov, .mypy_cache等) - 完成时间: 2025-11-17 - 负责人: maxazure
+- [x] 清理空数据库和测试数据库文件 - 完成时间: 2025-11-17 - 负责人: maxazure
+- [x] 清理 .DS_Store 文件 - 完成时间: 2025-11-17 - 负责人: maxazure
+- [x] 归档一次性迁移脚本到 scripts/archive/ - 完成时间: 2025-11-17 - 负责人: maxazure
+- [x] 移动过时文档到 docs/ - 完成时间: 2025-11-17 - 负责人: maxazure
+
+**清理统计**:
+- 删除备份文件: 4个 (frontend.py.backup, home.html.backup, TODO.md.bak, TODO_ARCHIVE_20251117.md)
+- 删除缓存目录: 5个，释放约41M空间 (htmlcov 2.1M, .mypy_cache 39M, .pytest_cache 36K, .ruff_cache 44K, .trae 8.0K)
+- 删除数据库文件: 5个，约414K (app.db, bowen.db, site.db, test_admin.db, database_backup.sql)
+- 删除 .DS_Store 文件: 3个 (app/, .claude/, templates/)
+- 归档迁移脚本: 12个到 scripts/archive/
+- 移动文档: 2个到 docs/ (BILINGUAL_SYSTEM.md, DATABASE_FIX_REPORT.md)
+- 总计删除行数: 6856行代码
+
+**清理效果**:
+- 根目录更加整洁，便于项目维护
+- 释放约41M磁盘空间
+- 重要脚本和文档已归档保留，便于后续参考
+- 优化 .gitignore 配置，防止未来再次出现类似问题
+
+**涉及命令**:
+```bash
+rm -f app/routes/frontend.py.backup templates/home.html.backup
+rm -rf htmlcov .mypy_cache .pytest_cache .ruff_cache .trae .coverage
+rm -f app.db bowen.db site.db test_admin.db database_backup.sql
+find . -name ".DS_Store" -type f -delete
+mkdir -p scripts/archive && mv add_*.py fix_*.py optimize_*.py translate_*.py update_*.py scripts/archive/
+mv DATABASE_FIX_REPORT.md BILINGUAL_SYSTEM.md docs/
+```
+
 ### [2025-11-17] 英文页面中文内容系统性清理（全部完成）
 - [x] 生成英文页面中文内容审计报告 - 完成时间: 2025-11-17 - 负责人: maxazure
 - [x] 修复 Priority 1 问题(Hero区块、页面标题) - 完成时间: 2025-11-17 - 负责人: maxazure
