@@ -5,6 +5,49 @@
 
 ## ✅ 已完成
 
+### [2025-11-18] 修复静态页面缺少侧边栏问题
+- [x] 分析静态页面与动态页面差异 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 修复静态生成器缺少侧边栏数据的问题 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 重新生成静态页面并验证 - 完成时间: 2025-11-18 - 负责人: maxazure
+
+**问题描述**:
+- 静态页面（如 `/zh/about-company/`）缺少左侧侧边栏导航
+- 动态页面有完整的侧边栏，显示父栏目和兄弟栏目
+
+**根本原因**:
+- `app/services/static_generator.py` 的 `_generate_single_page` 方法缺少侧边栏数据查询
+- 动态页面在 `app/routes/frontend.py:212-221` 中有完整的侧边栏逻辑
+- 静态生成器没有查询 `parent_column` 和 `sibling_columns`
+
+**解决方案**:
+- 在 `static_generator.py:300-309` 添加侧边栏数据查询逻辑
+- 检查 `column.parent_id`，如果存在则查询父栏目和兄弟栏目
+- 将 `parent_column` 和 `sibling_columns` 添加到模板上下文
+- 确保静态页面与动态页面渲染逻辑完全一致
+
+**修改内容**:
+```python
+# 添加父栏目和兄弟栏目（用于侧边栏导航）
+if column.parent_id:
+    parent_column = (
+        self.db.query(SiteColumn)
+        .filter(SiteColumn.id == column.parent_id)
+        .first()
+    )
+    context["parent_column"] = parent_column
+    sibling_columns = site_service.get_child_columns(self.db, column.parent_id)
+    context["sibling_columns"] = sibling_columns
+```
+
+**验证结果**:
+- ✅ 静态页面侧边栏正常显示
+- ✅ 显示父栏目"关于博文"和兄弟栏目"博文集团"、"博文新闻"
+- ✅ 静态页面与动态页面完全一致
+- ✅ 对比测试：http://localhost:8002/zh/about-company/ vs http://localhost:8000/zh/about-company/
+
+**相关文件**:
+- `app/services/static_generator.py:300-309` - 添加侧边栏数据查询
+
 ### [2025-11-18] 静态页面管理后台集成与自动触发机制
 - [x] 将静态页面管理集成到admin后台 - 完成时间: 2025-11-18 - 负责人: maxazure
 - [x] 在所有CRUD操作后自动触发静态生成 - 完成时间: 2025-11-18 - 负责人: maxazure
