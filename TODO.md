@@ -4,21 +4,28 @@
 暂无进行中的任务
 
 ## ✅ 已完成
-暂无已完成任务
+
+### [2025-11-17] 英文模板中文内容全面清理
+- [x] 清理 tuition.html 中的中文文本 - 完成时间: 2025-11-16 - 负责人: maxazure
+- [x] 清理 events.html 中的中文文本 - 完成时间: 2025-11-16 - 负责人: maxazure
+- [x] 清理 single_page.html 中的中文文本 - 完成时间: 2025-11-16 - 负责人: maxazure
+- [x] 清理 post_list_with_sidebar.html 注释中的中文 - 完成时间: 2025-11-17 - 负责人: maxazure
+- [x] 清理 post_list_universal.html 注释中的中文 - 完成时间: 2025-11-17 - 负责人: maxazure
+- [x] 删除 home_legacy_20251115.html 遗留文件 - 完成时间: 2025-11-17 - 负责人: maxazure
+
+**清理统计**:
+- 清理文件数: 5个模板文件
+- 删除遗留文件: 1个（home_legacy_20251115.html，530个中文字符）
+- 翻译注释: 5处（JavaScript注释2处，CSS注释3处）
+- templates/en/ 目录现已完全英文化
+
+**清理内容**:
+- tuition.html, events.html, single_page.html: 移除所有 `<span lang="zh-CN">` 标签
+- post_list_with_sidebar.html: 翻译JavaScript注释（懒加载AOS库、图片懒加载优化）
+- post_list_universal.html: 翻译CSS注释（CTA Section、响应式样式）
+- 删除包含530个中文字符的legacy文件
 
 ## 📋 待办事项
-
-### 英文模板中文清理（高优先级）
-- [ ] 清理 tuition.html 中的中文文本(96处) - 优先级: 高 - 预计工时: 2h
-- [ ] 清理 events.html 中的中文文本(75处) - 优先级: 高 - 预计工时: 1.5h
-- [ ] 清理 single_page.html 中的中文文本(33处) - 优先级: 中 - 预计工时: 1h
-- [ ] 清理其他模板文件中的中文文本 - 优先级: 中 - 预计工时: 2h
-
-**清理规则**:
-1. 移除所有 `<span lang="zh-CN">中文文本</span>` 及其中文内容
-2. 保留 `<span lang="en-GB">英文文本</span>` 的内容但移除lang属性
-3. 将中文标题、标签、按钮文本替换为英文
-4. 更新所有内部链接URL，添加 `/en/` 前缀
 
 ### 系统优化
 - [ ] 优化数据库查询性能 - 优先级: 中 - 预计工时: 4h
