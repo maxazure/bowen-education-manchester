@@ -156,6 +156,15 @@ async def homepage_en(request: Request, db: Session = Depends(get_db)):
     return templates_engine.TemplateResponse("home.html", context)
 
 
+@router.get("/zh/{column_slug:path}", response_class=HTMLResponse)
+async def column_page_zh(
+    column_slug: str, request: Request, db: Session = Depends(get_db)
+):
+    """Chinese version of column pages"""
+    # 调用主要的 column_page_generic 函数，传入 lang="zh"
+    return await column_page_generic(column_slug, request, db, lang="zh")
+
+
 @router.get("/en/{column_slug:path}", response_class=HTMLResponse)
 async def column_page_en(
     column_slug: str, request: Request, db: Session = Depends(get_db)
@@ -437,11 +446,34 @@ async def column_page_generic(
     raise HTTPException(status_code=404, detail="Page not found")
 
 
+@router.get("/zh/{column_slug}/{item_slug}", response_class=HTMLResponse)
+async def item_detail_page_zh(
+    column_slug: str, item_slug: str, request: Request, db: Session = Depends(get_db)
+):
+    """Chinese version of item detail page"""
+    return await item_detail_page_generic(column_slug, item_slug, request, db, lang="zh")
+
+
+@router.get("/en/{column_slug}/{item_slug}", response_class=HTMLResponse)
+async def item_detail_page_en(
+    column_slug: str, item_slug: str, request: Request, db: Session = Depends(get_db)
+):
+    """English version of item detail page"""
+    return await item_detail_page_generic(column_slug, item_slug, request, db, lang="en")
+
+
 @router.get("/{column_slug}/{item_slug}", response_class=HTMLResponse)
 async def item_detail_page_short(
     column_slug: str, item_slug: str, request: Request, db: Session = Depends(get_db)
 ):
     """Short URL format for post and product detail pages (e.g., /news/{slug})"""
+    return await item_detail_page_generic(column_slug, item_slug, request, db, lang="zh")
+
+
+async def item_detail_page_generic(
+    column_slug: str, item_slug: str, request: Request, db: Session, lang: str = "zh"
+):
+    """Generic item detail page handler with language support"""
     # Exclude admin paths - they should be handled by admin router
     if column_slug.startswith("admin"):
         raise HTTPException(status_code=404, detail="Page not found")
@@ -455,7 +487,8 @@ async def item_detail_page_short(
     if column.column_type not in [ColumnType.POST, ColumnType.PRODUCT]:
         raise HTTPException(status_code=404, detail="Page not found")
 
-    context = get_base_context(request, db)
+    context = get_base_context(request, db, lang=lang)
+    templates_engine = get_template_engine(lang)
     context["column"] = column
 
     # Handle different column types

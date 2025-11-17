@@ -16,11 +16,11 @@
         {% if categories %}
         <div class="news-filters" data-aos="fade-up">
             <div class="news-filters__inner">
-                <a href="/{{ column.slug }}" class="news-filter {% if not current_category_id %}news-filter--active{% endif %}">
+                <a href="/zh/{{ column.slug }}" class="news-filter {% if not current_category_id %}news-filter--active{% endif %}">
                     全部新闻
                 </a>
                 {% for category in categories %}
-                <a href="/{{ column.slug }}?category={{ category.id }}" class="news-filter {% if current_category_id == category.id %}news-filter--active{% endif %}">
+                <a href="/zh/{{ column.slug }}?category={{ category.id }}" class="news-filter {% if current_category_id == category.id %}news-filter--active{% endif %}">
                     {{ category.name }}
                 </a>
                 {% endfor %}
@@ -35,7 +35,7 @@
                 <div class="col-md-6 col-lg-4 mb-4" data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}">
                     <article class="news-card">
                         <!-- Thumbnail -->
-                        <a href="/{{ column.slug }}/{{ post.slug }}" class="news-card__image">
+                        <a href="/zh/{{ column.slug }}/{{ post.slug }}" class="news-card__image">
                             {% if post.cover_media %}
                             <img src="{{ post.cover_media.file_url or post.cover_media.path_original }}" alt="{{ post.title }}">
                             {% else %}
@@ -63,7 +63,7 @@
 
                             <!-- Title -->
                             <h3 class="news-card__title">
-                                <a href="/{{ column.slug }}/{{ post.slug }}">{{ post.title }}</a>
+                                <a href="/zh/{{ column.slug }}/{{ post.slug }}">{{ post.title }}</a>
                             </h3>
 
                             <!-- Summary -->
@@ -72,7 +72,7 @@
                             </p>
 
                             <!-- Read More Link -->
-                            <a href="/{{ column.slug }}/{{ post.slug }}" class="news-card__link">
+                            <a href="/zh/{{ column.slug }}/{{ post.slug }}" class="news-card__link">
                                 阅读全文 <i class="icon-arrow-right"></i>
                             </a>
                         </div>

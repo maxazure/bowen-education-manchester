@@ -203,7 +203,7 @@
                         {% endif %}
                         <div class="content-card-meta">
                             <span>{{ post.published_at.strftime('%Y-%m-%d') if post.published_at else '' }}</span>
-                            <a href="/{{ section.column_slug }}/{{ post.slug }}/" class="text-primary">Read More →</a>
+                            <a href="/en/{{ section.column_slug }}/{{ post.slug }}/" class="text-primary">Read More →</a>
                         </div>
                     </div>
                 </article>
@@ -211,7 +211,7 @@
             </div>
 
             <div class="view-all-link">
-                <a href="/{{ section.column_slug }}/" class="btn-view-all">
+                <a href="/en/{{ section.column_slug }}/" class="btn-view-all">
                     View All {{ section.column_name }}
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -240,7 +240,7 @@
                             {% if product.price_text %}
                             <span class="text-primary font-semibold">{{ product.price_text }}</span>
                             {% endif %}
-                            <a href="/{{ section.column_slug }}/{{ product.slug }}/" class="text-primary">Learn More →</a>
+                            <a href="/en/{{ section.column_slug }}/{{ product.slug }}/" class="text-primary">Learn More →</a>
                         </div>
                     </div>
                 </article>
@@ -248,7 +248,7 @@
             </div>
 
             <div class="view-all-link">
-                <a href="/{{ section.column_slug }}/" class="btn-view-all">
+                <a href="/en/{{ section.column_slug }}/" class="btn-view-all">
                     View All {{ section.column_name }}
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -266,7 +266,7 @@
                     {{ section.content.content_html|safe }}
                 </div>
                 <div class="view-all-link">
-                    <a href="/{{ section.column_slug }}/" class="btn-view-all">
+                    <a href="/en/{{ section.column_slug }}/" class="btn-view-all">
                         View Full Page
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M5 12h14M12 5l7 7-7 7"/>

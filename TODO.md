@@ -5,6 +5,47 @@
 
 ## ✅ 已完成
 
+### [2025-11-18] 静态页面管理后台集成与自动触发机制
+- [x] 将静态页面管理集成到admin后台 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 在所有CRUD操作后自动触发静态生成 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 修复中文动态路由（/zh/路径）- 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 修复语言切换器URL生成问题 - 完成时间: 2025-11-18 - 负责人: maxazure
+
+**功能实现**:
+- ✅ admin后台新增"静态页面管理"菜单项（/admin/static-pages）
+- ✅ 修改18个CRUD操作自动触发静态生成：
+  - posts.py: 3个操作（create_post, update_post, delete_post）
+  - products.py: 3个操作（create_product, update_product, delete_product）
+  - single_pages.py: 4个操作（create_page, update_page, delete_page, toggle_publish_page）
+  - columns.py: 8个操作（create, update, delete, reorder, toggle_status, batch_update_status, batch_update_nav, batch_delete）
+- ✅ 使用FastAPI BackgroundTasks实现异步生成，不阻塞用户请求
+
+**路由修复**:
+- ✅ 新增 `/zh/{column_slug:path}` 路由支持中文栏目页
+- ✅ 新增 `/zh/{column_slug}/{item_slug}` 路由支持中文详情页
+- ✅ 创建通用处理函数 `column_page_generic` 和 `item_detail_page_generic` 支持多语言
+- ✅ 修复语言切换器从 `/zh/` → `/en/zh/` 的错误
+- ✅ 实现智能路径替换逻辑，正确处理首页和其他页面的语言切换
+
+**相关文件**:
+- 路由注册: `admin/app/main.py:16,56`
+- 菜单项: `admin/templates/components/sidebar.html`
+- CRUD修改:
+  - `admin/app/routers/posts.py` (3个操作)
+  - `admin/app/routers/products.py` (3个操作)
+  - `admin/app/routers/single_pages.py` (4个操作)
+  - `admin/app/routers/columns.py` (8个操作)
+- 前端路由: `app/routes/frontend.py:159,449,473`
+- 模板修复:
+  - `templates/zh/partials/header.html:44`
+  - `templates/en/partials/header.html:44`
+
+**验证结果**:
+- ✅ admin后台可以访问静态页面管理
+- ✅ CRUD操作后自动触发后台静态生成任务
+- ✅ `/zh/news` 等中文路由正常访问
+- ✅ 语言切换器在 `/zh/` 和 `/en/` 之间正确切换
+
 ### [2025-11-18] 静态页面生成功能实现
 - [x] 设计静态页面生成系统架构 - 完成时间: 2025-11-18 - 负责人: maxazure
 - [x] 创建数据库模型（app/models/static_generation.py） - 完成时间: 2025-11-18 - 负责人: maxazure

@@ -6,7 +6,7 @@
 
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Form, HTTPException, Request
+from fastapi import APIRouter, BackgroundTasks, Depends, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
@@ -14,6 +14,7 @@ from sqlalchemy.orm import Session
 from admin.app.database import get_db
 from app.models.site import ColumnType, SiteColumn
 from app.services import column_service
+from admin.app.routers.static_pages import generate_static_task
 
 router = APIRouter(prefix="/columns", tags=["columns"])
 templates = Jinja2Templates(directory="admin/templates")
@@ -80,6 +81,7 @@ async def new_column_page(request: Request, db: Session = Depends(get_db)):
 @router.post("")
 async def create_column(
     request: Request,
+    background_tasks: BackgroundTasks,
     name: str = Form(...),
     slug: Optional[str] = Form(None),
     column_type: str = Form(...),
@@ -150,6 +152,9 @@ async def create_column(
     db.commit()
     db.refresh(column)
 
+    # 触发静态页面生成
+    background_tasks.add_task(generate_static_task, "public", "http://localhost:8000")
+
     # 重定向到列表页
     return RedirectResponse(url="/admin/columns", status_code=303)
 
@@ -193,6 +198,7 @@ async def edit_column_page(
 async def update_column(
     request: Request,
     column_id: int,
+    background_tasks: BackgroundTasks,
     name: str = Form(...),
     slug: str = Form(...),
     column_type: str = Form(...),
@@ -262,12 +268,15 @@ async def update_column(
     db.commit()
     db.refresh(column)
 
+    # 触发静态页面生成
+    background_tasks.add_task(generate_static_task, "public", "http://localhost:8000")
+
     # 重定向到列表页
     return RedirectResponse(url="/admin/columns", status_code=303)
 
 
 @router.delete("/{column_id}")
-async def delete_column(column_id: int, db: Session = Depends(get_db)):
+async def delete_column(column_id: int, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     """
     删除栏目
 
@@ -299,11 +308,14 @@ async def delete_column(column_id: int, db: Session = Depends(get_db)):
     db.delete(column)
     db.commit()
 
+    # 触发静态页面生成
+    background_tasks.add_task(generate_static_task, "public", "http://localhost:8000")
+
     return JSONResponse(content={"message": "栏目删除成功", "id": column_id})
 
 
 @router.post("/reorder")
-async def reorder_columns(request: Request, db: Session = Depends(get_db)):
+async def reorder_columns(request: Request, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     """
     批量更新栏目排序
 
@@ -347,11 +359,14 @@ async def reorder_columns(request: Request, db: Session = Depends(get_db)):
     # 提交事务
     db.commit()
 
+    # 触发静态页面生成
+    background_tasks.add_task(generate_static_task, "public", "http://localhost:8000")
+
     return JSONResponse(content={"message": "排序更新成功", "count": len(order)})
 
 
 @router.post("/{column_id}/toggle")
-async def toggle_column_status(column_id: int, db: Session = Depends(get_db)):
+async def toggle_column_status(column_id: int, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     """
     切换栏目启用/禁用状态
 
@@ -371,6 +386,9 @@ async def toggle_column_status(column_id: int, db: Session = Depends(get_db)):
     column.is_enabled = not column.is_enabled
     db.commit()
 
+    # 触发静态页面生成
+    background_tasks.add_task(generate_static_task, "public", "http://localhost:8000")
+
     return JSONResponse(
         content={
             "message": "状态更新成功",
@@ -381,7 +399,7 @@ async def toggle_column_status(column_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/batch/status")
-async def batch_update_status(request: Request, db: Session = Depends(get_db)):
+async def batch_update_status(request: Request, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     """
     批量更新栏目启用状态
 
@@ -417,6 +435,9 @@ async def batch_update_status(request: Request, db: Session = Depends(get_db)):
 
     db.commit()
 
+    # 触发静态页面生成
+    background_tasks.add_task(generate_static_task, "public", "http://localhost:8000")
+
     action = "启用" if is_enabled else "禁用"
     return JSONResponse(
         content={
@@ -428,7 +449,7 @@ async def batch_update_status(request: Request, db: Session = Depends(get_db)):
 
 
 @router.post("/batch/nav")
-async def batch_update_nav(request: Request, db: Session = Depends(get_db)):
+async def batch_update_nav(request: Request, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     """
     批量更新栏目导航显示状态
 
@@ -464,6 +485,9 @@ async def batch_update_nav(request: Request, db: Session = Depends(get_db)):
 
     db.commit()
 
+    # 触发静态页面生成
+    background_tasks.add_task(generate_static_task, "public", "http://localhost:8000")
+
     action = "显示在导航" if show_in_nav else "不显示在导航"
     return JSONResponse(
         content={
@@ -475,7 +499,7 @@ async def batch_update_nav(request: Request, db: Session = Depends(get_db)):
 
 
 @router.post("/batch/delete")
-async def batch_delete_columns(request: Request, db: Session = Depends(get_db)):
+async def batch_delete_columns(request: Request, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     """
     批量删除栏目
 
@@ -516,6 +540,9 @@ async def batch_delete_columns(request: Request, db: Session = Depends(get_db)):
                 failed_columns.append(column.name)
 
     db.commit()
+
+    # 触发静态页面生成
+    background_tasks.add_task(generate_static_task, "public", "http://localhost:8000")
 
     if failed_columns:
         return JSONResponse(

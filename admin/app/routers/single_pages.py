@@ -7,7 +7,7 @@
 from datetime import datetime
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Form, HTTPException, Request
+from fastapi import APIRouter, BackgroundTasks, Depends, Form, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
@@ -15,6 +15,7 @@ from sqlalchemy.orm import Session
 from admin.app.database import get_db
 from app.models.site import SinglePage, SiteColumn
 from app.services import single_page_service
+from admin.app.routers.static_pages import generate_static_task
 
 router = APIRouter(prefix="/pages", tags=["pages"])
 templates = Jinja2Templates(directory="admin/templates")
@@ -101,6 +102,7 @@ async def new_page_form(request: Request, db: Session = Depends(get_db)):
 @router.post("")
 async def create_page(
     request: Request,
+    background_tasks: BackgroundTasks,
     column_id: int = Form(...),
     title: str = Form(...),
     slug: Optional[str] = Form(None),
@@ -191,6 +193,9 @@ async def create_page(
         db.commit()
         db.refresh(page)
 
+        # 触发静态页面生成
+        background_tasks.add_task(generate_static_task, "public", "http://localhost:8000")
+
         return RedirectResponse(
             url="/admin/pages",
             status_code=303,
@@ -243,6 +248,7 @@ async def edit_page_form(request: Request, page_id: int, db: Session = Depends(g
 async def update_page(
     request: Request,
     page_id: int,
+    background_tasks: BackgroundTasks,
     column_id: int = Form(...),
     title: str = Form(...),
     slug: str = Form(...),
@@ -325,6 +331,9 @@ async def update_page(
         db.commit()
         db.refresh(page)
 
+        # 触发静态页面生成
+        background_tasks.add_task(generate_static_task, "public", "http://localhost:8000")
+
         return RedirectResponse(
             url="/admin/pages",
             status_code=303,
@@ -338,7 +347,7 @@ async def update_page(
 
 
 @router.delete("/{page_id}")
-async def delete_page(page_id: int, db: Session = Depends(get_db)):
+async def delete_page(page_id: int, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     """
     删除单页
 
@@ -366,6 +375,9 @@ async def delete_page(page_id: int, db: Session = Depends(get_db)):
         db.delete(page)
         db.commit()
 
+        # 触发静态页面生成
+        background_tasks.add_task(generate_static_task, "public", "http://localhost:8000")
+
         return JSONResponse(content={"success": True, "message": "删除成功"})
 
     except Exception as e:
@@ -376,7 +388,7 @@ async def delete_page(page_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/{page_id}/publish")
-async def toggle_publish(page_id: int, db: Session = Depends(get_db)):
+async def toggle_publish(page_id: int, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     """
     发布/取消发布单页
 
@@ -407,6 +419,9 @@ async def toggle_publish(page_id: int, db: Session = Depends(get_db)):
 
         # 刷新获取最新状态
         db.refresh(page)
+
+        # 触发静态页面生成
+        background_tasks.add_task(generate_static_task, "public", "http://localhost:8000")
 
         return JSONResponse(
             content={"success": True, "message": message, "status": page.status}
