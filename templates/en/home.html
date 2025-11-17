@@ -1194,7 +1194,7 @@ document.getElementById('contactForm').addEventListener('submit', async function
 
     const submitBtn = this.querySelector('button[type="submit"]');
     const originalText = submitBtn.innerHTML;
-    submitBtn.innerHTML = '发送中... Sending...';
+    submitBtn.innerHTML = 'Sending...';
     submitBtn.disabled = true;
 
     try {
@@ -1207,15 +1207,15 @@ document.getElementById('contactForm').addEventListener('submit', async function
         });
 
         if (response.ok) {
-            alert('感谢您的留言！我们会尽快回复您。\nThank you for your message! We will get back to you soon.');
+            alert('Thank you for your message! We will get back to you soon.');
             this.reset();
             this.classList.remove('was-validated');
         } else {
-            alert('提交失败，请稍后重试或直接致电我们。\nSubmission failed. Please try again later or contact us directly.');
+            alert('Submission failed. Please try again later or contact us directly.');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('提交失败，请稍后重试。\nSubmission failed. Please try again later.');
+        alert('Submission failed. Please try again later.');
     } finally {
         submitBtn.innerHTML = originalText;
         submitBtn.disabled = false;
