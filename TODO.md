@@ -5,6 +5,32 @@
 
 ## ✅ 已完成
 
+### [2025-11-17] 清理单页英文数据（修复后台编辑与前台显示不一致问题）
+- [x] 调研后台单页编辑和前台显示不一致原因 - 完成时间: 2025-11-17 - 负责人: maxazure
+- [x] 备份当前所有单页的英文数据 - 完成时间: 2025-11-17 - 负责人: maxazure
+- [x] 清空所有单页的content_html_en和content_markdown_en字段 - 完成时间: 2025-11-17 - 负责人: maxazure
+
+**问题分析**:
+- 代码逻辑完全正常，字段映射关系正确
+- 数据库中的content_html_en字段包含中英混杂内容（如："博文Chinese学校"、"Teaching特色"等）
+- content_markdown_en字段为空，说明从未通过后台正常编辑
+- 问题根源：可能之前使用自动翻译脚本直接写入了错误的HTML内容
+
+**清理统计**:
+- 影响单页数量: 24个
+- 清空字段: content_html_en, content_markdown_en
+- 备份文件: backup/single_page_en_backup_20251117_174104.txt
+- 更新记录数: 24条
+
+**清理效果**:
+- 所有单页的英文字段已清空，前台英文页面会自动回退显示中文内容
+- 可通过后台"English Content" Tab重新填写纯英文Markdown内容
+- 系统会自动将Markdown转换为HTML并保存
+
+**后续工作**:
+- 需要在后台逐个编辑24个单页，填写英文Markdown内容
+- 建议优先处理重要页面：About Us, Contact Us, 中文学校等
+
 ### [2025-11-17] 英文模板中文内容全面清理
 - [x] 清理 tuition.html 中的中文文本 - 完成时间: 2025-11-16 - 负责人: maxazure
 - [x] 清理 events.html 中的中文文本 - 完成时间: 2025-11-16 - 负责人: maxazure
