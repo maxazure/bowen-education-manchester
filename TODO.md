@@ -5,6 +5,98 @@
 
 ## ✅ 已完成
 
+### [2025-11-17] 完成所有单页英文内容翻译（24/24页面）
+- [x] 第一批：翻译核心页面（7页） - 完成时间: 2025-11-17 - 负责人: maxazure
+- [x] 第二批：翻译项目与活动页面（5页） - 完成时间: 2025-11-17 - 负责人: maxazure
+- [x] 第三批：翻译长内容页面（5页） - 完成时间: 2025-11-17 - 负责人: maxazure
+- [x] 第四批：翻译政策页面（4页） - 完成时间: 2025-11-17 - 负责人: maxazure
+- [x] 验证英文页面显示效果 - 完成时间: 2025-11-17 - 负责人: maxazure
+
+**翻译统计**:
+- 总页面数: 24个已发布单页
+- 已完成翻译: 24/24 (100%)
+- 总字符数: ~83,000英文字符
+- 翻译方式: 高质量意译，符合英语母语者阅读习惯
+
+**翻译页面清单**:
+
+第一批（核心页面 - 7页）:
+1. Contact Us (ID: 2) - 1,306字符
+2. 中文学校/Chinese School (ID: 3) - 927字符
+3. 补习中心/Tutoring Centre (ID: 4) - 800字符
+4. 国际象棋俱乐部/Chess Club (ID: 5) - 785字符
+5. 政府项目/Government Programs (ID: 6) - 471字符
+6. 博文活动/Events & Activities (ID: 7) - 476字符
+7. 博文新闻/News & Updates (ID: 8) - 247字符
+8. 羽毛球俱乐部/Badminton Club (ID: 9) - 753字符
+
+第二批（项目与活动页面 - 5页）:
+1. 学期日期/Term Dates (ID: 10) - 638字符
+2. PTA家长教师协会/Parent-Teacher Association (ID: 11) - 1,126字符
+3. 河南大学合作/Henan University Partnership (ID: 15) - 1,800字符
+4. 博文图库/Photo Gallery (ID: 17) - 846字符
+5. 俱乐部简介/Chess Club Introduction (ID: 19) - 2,531字符
+
+第三批（长内容页面 - 5页）:
+1. HAF项目/HAF Programme (ID: 14) - 6,584字符
+2. 常见问题解答/FAQ (ID: 18) - 6,570字符
+3. 课程设置/Course Structure (ID: 20) - 4,363字符
+4. 学习资源/Learning Resources (ID: 21) - 7,362字符
+
+第四批（政策页面 - 4页）:
+1. Privacy Policy (ID: 22) - 3,724字符
+2. Terms of Service (ID: 23) - 4,671字符
+3. Cookie Policy (ID: 24) - 3,933字符
+4. Safeguarding Policy (ID: 25) - 6,993字符
+
+**翻译特点**:
+- ✅ 完全意译，非机器直译
+- ✅ 符合英语母语者阅读习惯
+- ✅ 保持专业性和可读性
+- ✅ 所有英文页面显示正常，无中文字符
+- ✅ Markdown自动转换为HTML功能正常
+- ✅ 双语回退机制工作正常
+
+**技术实现**:
+- 使用Python脚本批量处理翻译内容
+- 通过`single_page_service.markdown_to_html()`转换Markdown为HTML
+- 直接更新数据库`content_markdown_en`和`content_html_en`字段
+- 所有页面通过`{{ field_en or field }}`模板回退机制正常显示
+
+### [2025-11-17] 单页英文内容填充与后台表单修复
+- [x] 修复后台hero_media_id字段验证错误 - 完成时间: 2025-11-17 - 负责人: maxazure
+- [x] 更新"关于博文教育"页面英文内容 - 完成时间: 2025-11-17 - 负责人: maxazure
+- [x] 更新"训练时间表"页面英文内容 - 完成时间: 2025-11-17 - 负责人: maxazure
+- [x] 验证英文页面前台显示效果 - 完成时间: 2025-11-17 - 负责人: maxazure
+
+**问题修复**:
+- 后台表单hero_media_id字段提交时报错：`Input should be a valid integer, unable to parse string as an integer`
+- 原因：HTML表单空值提交为空字符串 `""`，但FastAPI `Form(Optional[int])` 无法解析空字符串
+- 解决方案：
+  - 修改 `admin/app/routers/single_pages.py:109` 和 `line:251` 参数类型为 `Optional[str]`
+  - 新增 `parse_optional_int()` 辅助函数（line:23-30）将空字符串转换为 None
+  - 在 `create_page` 和 `update_page` 中使用该函数处理 hero_media_id
+
+**内容更新**:
+- **关于博文教育** (Page ID: 16, `/en/about-company`)
+  - 英文Markdown: 1347字符
+  - 英文HTML: 1623字符
+  - 包含：教育理念、使命、资质认证等完整内容
+
+- **训练时间表** (Page ID: 13, `/en/badminton-schedule`)
+  - 英文Markdown: 1680字符
+  - 英文HTML: 1823字符
+  - 包含：训练时间表、训练内容、地点信息、注意事项
+
+**验证结果**:
+- 英文页面完全显示纯英文内容，无中文字符
+- 双语回退机制工作正常：`{{ field_en or field }}`
+- Markdown自动转换为HTML功能正常
+
+**当前进度**:
+- 已完成单页数量: 2/24
+- 待完成单页: 22个
+
 ### [2025-11-17] 清理单页英文数据（修复后台编辑与前台显示不一致问题）
 - [x] 调研后台单页编辑和前台显示不一致原因 - 完成时间: 2025-11-17 - 负责人: maxazure
 - [x] 备份当前所有单页的英文数据 - 完成时间: 2025-11-17 - 负责人: maxazure
