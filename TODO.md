@@ -74,6 +74,48 @@
 - 中文页面：http://localhost:8000/zh/programmes/
 - 英文页面：http://localhost:8000/en/programmes/
 
+### [2025-11-18] 移除政府项目页面统计数据部分
+- [x] 修改中文programmes.html模板移除Stats Section - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 修改英文programmes.html模板移除Stats Section - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 重新生成静态页面并验证 - 完成时间: 2025-11-18 - 负责人: maxazure
+
+**问题描述**:
+- 用户反馈不需要政府项目页面的统计数据部分（Stats Section）
+- 统计数据包含：10+年合作经验、500+受益家庭、20+合作学校、100%社区好评
+- 这部分内容占用页面空间且可能不准确
+
+**解决方案**:
+1. **移除HTML内容**（第12-34行）:
+   - 移除整个 `<section class="section section--stats">` 区域
+   - 移除包含4个统计数据项的 `.stats-grid` 容器
+
+2. **移除CSS样式**（第242-281行）:
+   - 移除 `.section--stats` 样式
+   - 移除 `.stats-grid` 网格布局样式
+   - 移除 `.stat-item` 卡片样式及其悬停效果
+   - 移除 `.stat-item__number` 和 `.stat-item__label` 样式
+
+3. **移除响应式CSS**:
+   - 移除 `@media (max-width: 992px)` 中的 `.stats-grid` 样式
+   - 移除 `@media (max-width: 768px)` 中的 `.stats-grid` 和 `.stat-item__number` 样式
+
+**验证结果**:
+- ✅ 中文模板文件从723行减少到658行
+- ✅ 英文模板文件从731行减少到666行
+- ✅ 静态页面重新生成成功（108页全部成功）
+- ✅ 验证stat-item元素已完全移除（中英文页面均为0个）
+- ✅ 导航卡片部分保持完好（中英文页面各36个nav-card元素）
+- ✅ 页面布局流畅，Stats Section移除后不影响其他部分
+- ✅ 页面仍包含：Hero、Introduction、Nav Cards、Features、CTA Banner
+
+**相关文件**:
+- `templates/zh/programmes.html` - 中文政府项目栏目模板（修改）
+- `templates/en/programmes.html` - 英文政府项目栏目模板（修改）
+
+**页面访问**:
+- 中文页面：http://localhost:8000/zh/programmes/
+- 英文页面：http://localhost:8000/en/programmes/
+
 ### [2025-11-18] 重新设计羽毛球俱乐部栏目综合页面
 - [x] 查看羽毛球栏目结构和子栏目 - 完成时间: 2025-11-18 - 负责人: maxazure
 - [x] 修改中文badminton.html模板 - 完成时间: 2025-11-18 - 负责人: maxazure

@@ -9,30 +9,6 @@
 <!-- Hero Section -->
 {% include 'components/hero_main_column.html' %}
 
-<!-- Stats Section -->
-<section class="section section--stats">
-    <div class="container">
-        <div class="stats-grid" data-aos="fade-up">
-            <div class="stat-item">
-                <div class="stat-item__number">10+</div>
-                <div class="stat-item__label">Years of Partnership</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-item__number">500+</div>
-                <div class="stat-item__label">Families Benefited</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-item__number">20+</div>
-                <div class="stat-item__label">Partner Schools</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-item__number">100%</div>
-                <div class="stat-item__label">Community Satisfaction</div>
-            </div>
-        </div>
-    </div>
-</section>
-
 <!-- Introduction Section -->
 <section class="section section--intro">
     <div class="container">
@@ -246,47 +222,6 @@
 
 <style>
 /* Programmes Page Styles */
-
-/* Stats Section */
-.section--stats {
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-    padding: 3rem 0;
-}
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 2rem;
-    max-width: 1000px;
-    margin: 0 auto;
-}
-
-.stat-item {
-    text-align: center;
-    padding: 1.5rem;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.1);
-    transition: all 0.3s;
-}
-
-.stat-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 24px rgba(217, 119, 6, 0.2);
-}
-
-.stat-item__number {
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: #d97706;
-    margin-bottom: 0.5rem;
-}
-
-.stat-item__label {
-    font-size: 0.95rem;
-    color: #6b7280;
-    font-weight: 500;
-}
 
 /* Introduction Section */
 .section--intro {
@@ -642,10 +577,6 @@
 
 /* Responsive Design */
 @media (max-width: 992px) {
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
     .intro-content {
         grid-template-columns: 1fr;
         gap: 3rem;
@@ -661,15 +592,6 @@
 }
 
 @media (max-width: 768px) {
-    .stats-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-
-    .stat-item__number {
-        font-size: 2rem;
-    }
-
     .intro-text .section__title span:first-child {
         font-size: 2rem;
     }
