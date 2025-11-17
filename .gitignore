@@ -76,3 +76,6 @@ cookies.txt
 # translate_*.py
 # optimize_*.py
 backup/
+
+# Generated static files
+public/
