@@ -63,9 +63,9 @@
                             <!-- Course Image -->
                             <div class="course-card__image">
                                 {% if post.cover_media %}
-                                <img src="{{ post.cover_media.file_url or post.cover_media.path_original }}" alt="{{ post.title }}" loading="lazy">
+                                <img src="{{ post.cover_media.file_url or post.cover_media.path_original }}" alt="{{ post.title_en or post.title }}" loading="lazy">
                                 {% else %}
-                                <img src="/static/images/courses/default-course.jpg" alt="{{ post.title }}" loading="lazy">
+                                <img src="/static/images/courses/default-course.jpg" alt="{{ post.title_en or post.title }}" loading="lazy">
                                 {% endif %}
                                 {% if post.is_recommended %}
                                 <span class="course-badge course-badge--recommended">Featured</span>
