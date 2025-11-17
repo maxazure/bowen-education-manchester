@@ -75,3 +75,4 @@ cookies.txt
 # fix_*.py
 # translate_*.py
 # optimize_*.py
+backup/
