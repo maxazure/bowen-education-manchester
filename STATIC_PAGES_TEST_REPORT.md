@@ -109,17 +109,35 @@
 - [x] 段落格式正常
 - [x] 文字排版清晰
 
-## 发现的问题
+## 发现并修复的问题
 
-### 1. Favicon 404 错误
-**问题**: `/static/images/favicon.ico` 返回 404
-**影响程度**: ⚠️ 低（不影响页面功能，仅浏览器标签页图标缺失）
-**建议**: 添加 favicon.ico 到 `templates/static/images/` 目录
-
-### 2. OG URL Meta 标签问题
+### 1. ✅ OG URL Meta 标签问题 - 已修复
 **问题**: `<meta property="og:url" content="<app.services.static_generator.obj object at 0x...>">`
 **影响程度**: ⚠️ 低（不影响页面显示，仅影响社交媒体分享）
-**建议**: 修复 `static_generator.py` 中 Mock Request 对象的 URL 处理
+**修复方案**:
+- 创建 `MockURL` 类实现 `__str__` 方法
+- 使用 `urljoin` 构建完整 URL
+- 修改 `app/services/static_generator.py:33-45`
+
+**修复后效果**:
+```html
+<!-- 修复前 -->
+<meta property="og:url" content="<app.services.static_generator.obj object at 0x10a2e34d0>">
+
+<!-- 修复后 -->
+<meta property="og:url" content="http://localhost:8000/en/about">
+```
+
+**提交记录**: `31bb4a5` - fix: 修复静态页面OG URL meta标签显示Python对象问题
+
+### 2. ⚠️ Favicon 404 错误 - 待手动添加
+**问题**: `/static/images/favicon.ico` 返回 404
+**影响程度**: ⚠️ 低（不影响页面功能，仅浏览器标签页图标缺失）
+**建议**: 手动添加 favicon.ico 到 `templates/static/images/` 目录
+**解决方法**:
+1. 使用在线工具将 logo.png 转换为 favicon.ico
+2. 或使用 ImageMagick: `convert logo.png -resize 32x32 favicon.ico`
+3. 将生成的 favicon.ico 放到 `templates/static/images/` 目录
 
 ## 性能表现
 
