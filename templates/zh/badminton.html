@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}羽毛球俱乐部 - Bowen Education Group{% endblock %}
+{% block title %}羽毛球俱乐部 Badminton Club | 博文教育集团 Bowen Education Group{% endblock %}
 
 {% block meta_description %}博文羽毛球俱乐部提供专业的羽毛球训练，培养学生羽毛球技能，参加比赛和友谊赛{% endblock %}
 
@@ -9,1172 +9,773 @@
 <!-- Hero Section -->
 {% include 'components/hero_main_column.html' %}
 
-<!-- Quick Navigation -->
-<div class="quick-nav">
+<!-- Stats Bar -->
+<section class="badminton-stats">
     <div class="container">
-        <div class="quick-nav__buttons">
-            <a href="#programs" class="btn btn--primary">了解课程</a>
-            <a href="#contact" class="btn btn--secondary">免费试课</a>
-        </div>
-    </div>
-</div>
-
-<!-- Programs Section -->
-<section id="programs" class="section section--programs">
-    <div class="container">
-        <div class="section-header text-center" data-aos="fade-up">
-            <h2 class="section__title">
-                <span lang="zh-CN">羽毛球训练项目</span>
-                <span class="section__title-sub" lang="en-GB">Training Programs</span>
-            </h2>
-            <p class="section__subtitle">根据不同年龄和技能水平设计的专业训练课程</p>
-        </div>
-
-        <div class="programs-grid">
-            <!-- 初级班 -->
-            <div class="program-card" data-aos="fade-up" data-aos-delay="100">
-                <div class="program-card__header">
-                    <div class="program-card__icon">
-                        <i class="fas fa-seedling"></i>
-                    </div>
-                    <h3 class="program-card__title">初级班</h3>
-                    <p class="program-card__subtitle">Beginner Class</p>
-                </div>
-                <div class="program-card__content">
-                    <div class="program-card__details">
-                        <div class="detail-item">
-                            <i class="fas fa-users"></i>
-                            <span>适合年龄：5-8岁</span>
-                        </div>
-                        <div class="detail-item">
-                            <i class="fas fa-clock"></i>
-                            <span>训练时间：每周六 10:00-11:30</span>
-                        </div>
-                        <div class="detail-item">
-                            <i class="fas fa-user-graduate"></i>
-                            <span>师生比例：1:6</span>
-                        </div>
-                    </div>
-                    <div class="program-card__features">
-                        <h4>训练内容：</h4>
-                        <ul>
-                            <li>基础握拍和站姿训练</li>
-                            <li>正手、反手击球技术</li>
-                            <li>基本发球和接球练习</li>
-                            <li>体能协调性训练</li>
-                            <li>游戏化兴趣培养</li>
-                        </ul>
-                    </div>
-                    <div class="program-card__price">
-                        <span class="price-label">课程费用</span>
-                        <span class="price-amount">£12/次</span>
-                        <span class="price-note">或 £45/月 (4次课)</span>
-                    </div>
+        <div class="stats-grid" data-aos="fade-up">
+            <div class="stat-item">
+                <div class="stat-item__number">8<span>+</span></div>
+                <div class="stat-item__label">
+                    <span lang="zh-CN">年办学经验</span>
                 </div>
             </div>
-
-            <!-- 中级班 -->
-            <div class="program-card" data-aos="fade-up" data-aos-delay="200">
-                <div class="program-card__header">
-                    <div class="program-card__icon">
-                        <i class="fas fa-award"></i>
-                    </div>
-                    <h3 class="program-card__title">中级班</h3>
-                    <p class="program-card__subtitle">Intermediate Class</p>
-                </div>
-                <div class="program-card__content">
-                    <div class="program-card__details">
-                        <div class="detail-item">
-                            <i class="fas fa-users"></i>
-                            <span>适合年龄：9-13岁</span>
-                        </div>
-                        <div class="detail-item">
-                            <i class="fas fa-clock"></i>
-                            <span>训练时间：每周六 13:30-15:30</span>
-                        </div>
-                        <div class="detail-item">
-                            <i class="fas fa-user-graduate"></i>
-                            <span>师生比例：1:8</span>
-                        </div>
-                    </div>
-                    <div class="program-card__features">
-                        <h4>训练内容：</h4>
-                        <ul>
-                            <li>高级技术动作训练</li>
-                            <li>战术意识和比赛策略</li>
-                            <li>单打和双打技术</li>
-                            <li>力量和耐力训练</li>
-                            <li>比赛实战练习</li>
-                        </ul>
-                    </div>
-                    <div class="program-card__price">
-                        <span class="price-label">课程费用</span>
-                        <span class="price-amount">£15/次</span>
-                        <span class="price-note">或 £55/月 (4次课)</span>
-                    </div>
+            <div class="stat-item">
+                <div class="stat-item__number">120<span>+</span></div>
+                <div class="stat-item__label">
+                    <span lang="zh-CN">俱乐部会员</span>
                 </div>
             </div>
-
-            <!-- 高级班 -->
-            <div class="program-card" data-aos="fade-up" data-aos-delay="300">
-                <div class="program-card__header">
-                    <div class="program-card__icon">
-                        <i class="fas fa-trophy"></i>
-                    </div>
-                    <h3 class="program-card__title">高级班</h3>
-                    <p class="program-card__subtitle">Advanced Class</p>
+            <div class="stat-item">
+                <div class="stat-item__number">10<span>+</span></div>
+                <div class="stat-item__label">
+                    <span lang="zh-CN">比赛获奖</span>
                 </div>
-                <div class="program-card__content">
-                    <div class="program-card__details">
-                        <div class="detail-item">
-                            <i class="fas fa-users"></i>
-                            <span>适合年龄：14岁以上</span>
-                        </div>
-                        <div class="detail-item">
-                            <i class="fas fa-clock"></i>
-                            <span>训练时间：每周日 14:00-16:30</span>
-                        </div>
-                        <div class="detail-item">
-                            <i class="fas fa-user-graduate"></i>
-                            <span>师生比例：1:10</span>
-                        </div>
-                    </div>
-                    <div class="program-card__features">
-                        <h4>训练内容：</h4>
-                        <ul>
-                            <li>专业比赛技术训练</li>
-                            <li>高级战术应用</li>
-                            <li>心理素质培养</li>
-                            <li>比赛经验积累</li>
-                            <li>参加地区性比赛</li>
-                        </ul>
-                    </div>
-                    <div class="program-card__price">
-                        <span class="price-label">课程费用</span>
-                        <span class="price-amount">£18/次</span>
-                        <span class="price-note">或 £65/月 (4次课)</span>
-                    </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item__number">5<span>+</span></div>
+                <div class="stat-item__label">
+                    <span lang="zh-CN">专业教练</span>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Facilities Section -->
-<section class="section section--facilities">
+<!-- Introduction Section -->
+<section class="section section--intro">
     <div class="container">
-        <div class="section-header text-center" data-aos="fade-up">
-            <h2 class="section__title">
-                <span lang="zh-CN">专业设施</span>
-                <span class="section__title-sub" lang="en-GB">Professional Facilities</span>
+        <div class="intro-box" data-aos="fade-up">
+            <div class="intro-box__icon">
+                <i class="fas fa-shuttlecock" aria-hidden="true"></i>
+            </div>
+            <h2 class="intro-box__title">
+                <span lang="zh-CN">专业羽毛球训练 培养运动技能</span>
             </h2>
-            <p class="section__subtitle">国际标准的羽毛球训练场地和设备</p>
-        </div>
-
-        <div class="facilities-grid">
-            <div class="facility-item" data-aos="fade-up" data-aos-delay="100">
-                <div class="facility-item__image">
-                    <img src="/static/images/badminton/court-1.jpg" alt="专业羽毛球场地">
-                </div>
-                <div class="facility-item__content">
-                    <h3>国际标准场地</h3>
-                    <p>8个专业羽毛球场地，采用国际标准BWF认证材质，地面弹性适中，确保运动员安全和最佳表现。</p>
-                </div>
-            </div>
-
-            <div class="facility-item" data-aos="fade-up" data-aos-delay="200">
-                <div class="facility-item__image">
-                    <img src="/static/images/badminton/equipment.jpg" alt="专业训练设备">
-                </div>
-                <div class="facility-item__content">
-                    <h3>专业训练设备</h3>
-                    <p>配备专业羽毛球发球机、视频分析系统、体能训练设备，为学员提供全方位的训练支持。</p>
-                </div>
-            </div>
-
-            <div class="facility-item" data-aos="fade-up" data-aos-delay="300">
-                <div class="facility-item__image">
-                    <img src="/static/images/badminton/rest-area.jpg" alt="休息区">
-                </div>
-                <div class="facility-item__content">
-                    <h3>舒适休息区</h3>
-                    <p>设有家长等候区、学员休息室、更衣室和淋浴设施，为学员和家长提供舒适的环境。</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Coaches Section -->
-<section class="section section--coaches">
-    <div class="container">
-        <div class="section-header text-center" data-aos="fade-up">
-            <h2 class="section__title">
-                <span lang="zh-CN">专业教练团队</span>
-                <span class="section__title-sub" lang="en-GB">Professional Coaching Team</span>
-            </h2>
-            <p class="section__subtitle">经验丰富的专业教练，提供高质量训练指导</p>
-        </div>
-
-        <div class="coaches-grid">
-            <!-- 主教练 -->
-            <div class="coach-card" data-aos="fade-up" data-aos-delay="100">
-                <div class="coach-card__image">
-                    <img src="/static/images/badminton/coach-1.jpg" alt="李教练">
-                    <div class="coach-card__overlay">
-                        <div class="coach-credentials">
-                            <span class="credential">国家一级教练</span>
-                            <span class="credential">BWF认证</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="coach-card__content">
-                    <h3 class="coach-card__name">李教练</h3>
-                    <p class="coach-card__title">主教练</p>
-                    <p class="coach-card__bio">
-                        拥有15年羽毛球教学经验，前省队队员，培养多名学生在各级比赛中获奖。擅长青少年基础训练和技术提升。
-                    </p>
-                    <div class="coach-card__achievements">
-                        <h4>主要成就：</h4>
-                        <ul>
-                            <li>2018年英国青少年羽毛球锦标赛优秀教练</li>
-                            <li>2020年曼城羽毛球公开赛冠军导师</li>
-                            <li>培养20余名学生获得地区级比赛奖项</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 助理教练 -->
-            <div class="coach-card" data-aos="fade-up" data-aos-delay="200">
-                <div class="coach-card__image">
-                    <img src="/static/images/badminton/coach-2.jpg" alt="王教练">
-                    <div class="coach-card__overlay">
-                        <div class="coach-credentials">
-                            <span class="credential">国家二级教练</span>
-                            <span class="credential">体能训练师</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="coach-card__content">
-                    <h3 class="coach-card__name">王教练</h3>
-                    <p class="coach-card__title">助理教练</p>
-                    <p class="coach-card__bio">
-                        体育大学毕业，专攻青少年体能训练和运动心理学。教学方法生动有趣，深受学生喜爱。
-                    </p>
-                    <div class="coach-card__achievements">
-                        <h4>专业特长：</h4>
-                        <ul>
-                            <li>青少年体能训练专家</li>
-                            <li>运动心理学辅导</li>
-                            <li>基础技术动作纠正</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Competition Section -->
-<section class="section section--competition">
-    <div class="container">
-        <div class="section-header text-center" data-aos="fade-up">
-            <h2 class="section__title">
-                <span lang="zh-CN">比赛与活动</span>
-                <span class="section__title-sub" lang="en-GB">Competitions & Events</span>
-            </h2>
-            <p class="section__subtitle">丰富的比赛机会，提升实战经验</p>
-        </div>
-
-        <div class="competition-content">
-            <div class="competition-info" data-aos="fade-up">
-                <div class="competition-info__text">
-                    <h3>定期比赛安排</h3>
-                    <p>我们为学员提供丰富的比赛机会，帮助学员积累实战经验，提升竞技水平。</p>
-
-                    <div class="competition-types">
-                        <div class="competition-type">
-                            <div class="competition-type__icon">
-                                <i class="fas fa-medal"></i>
-                            </div>
-                            <div class="competition-type__content">
-                                <h4>内部比赛</h4>
-                                <p>每月组织俱乐部内部联赛，按年龄段和水平分组，让每个学员都有展示自己的机会。</p>
-                            </div>
-                        </div>
-
-                        <div class="competition-type">
-                            <div class="competition-type__icon">
-                                <i class="fas fa-globe"></i>
-                            </div>
-                            <div class="competition-type__content">
-                                <h4>外部比赛</h4>
-                                <p>组织学员参加曼城地区、英国北部的青少年羽毛球比赛，与其他俱乐部交流学习。</p>
-                            </div>
-                        </div>
-
-                        <div class="competition-type">
-                            <div class="competition-type__icon">
-                                <i class="fas fa-users"></i>
-                            </div>
-                            <div class="competition-type__content">
-                                <h4>友谊赛</h4>
-                                <p>定期与其他羽毛球俱乐部举办友谊赛，促进技术交流，增进友谊。</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="competition-achievements" data-aos="fade-up" data-aos-delay="200">
-                <h3>近年比赛成绩</h3>
-                <div class="achievements-grid">
-                    <div class="achievement-item">
-                        <div class="achievement-icon">🏆</div>
-                        <div class="achievement-text">
-                            <strong>2024年曼城青少年赛</strong>
-                            <p>U12组别冠军、U14组别亚军</p>
-                        </div>
-                    </div>
-                    <div class="achievement-item">
-                        <div class="achievement-icon">🥇</div>
-                        <div class="achievement-text">
-                            <strong>2024年英国北部青少年赛</strong>
-                            <p>U16组别冠军、团体赛第三名</p>
-                        </div>
-                    </div>
-                    <div class="achievement-item">
-                        <div class="achievement-icon">🏅</div>
-                        <div class="achievement-text">
-                            <strong>2023年学校羽毛球联赛</strong>
-                            <p>团体赛冠军、多个单项奖牌</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Benefits Section -->
-<section class="section section--benefits">
-    <div class="container">
-        <div class="section-header text-center" data-aos="fade-up">
-            <h2 class="section__title">
-                <span lang="zh-CN">羽毛球训练的益处</span>
-                <span class="section__title-sub" lang="en-GB">Benefits of Badminton Training</span>
-            </h2>
-            <p class="section__subtitle">全面培养孩子的身体素质和综合能力</p>
-        </div>
-
-        <div class="benefits-grid">
-            <div class="benefit-item" data-aos="fade-up" data-aos-delay="100">
-                <div class="benefit-item__icon">
-                    <i class="fas fa-heartbeat"></i>
-                </div>
-                <h3>增强体质</h3>
-                <p>提高心肺功能，增强身体协调性和灵活性，培养健康的体魄。</p>
-            </div>
-
-            <div class="benefit-item" data-aos="fade-up" data-aos-delay="200">
-                <div class="benefit-item__icon">
-                    <i class="fas fa-brain"></i>
-                </div>
-                <h3>提升专注力</h3>
-                <p>羽毛球运动需要高度专注，能够有效培养孩子的注意力和反应能力。</p>
-            </div>
-
-            <div class="benefit-item" data-aos="fade-up" data-aos-delay="300">
-                <div class="benefit-item__icon">
-                    <i class="fas fa-users"></i>
-                </div>
-                <h3>团队协作</h3>
-                <p>双打项目培养团队合作精神，学会与他人配合，提高社交能力。</p>
-            </div>
-
-            <div class="benefit-item" data-aos="fade-up" data-aos-delay="400">
-                <div class="benefit-item__icon">
-                    <i class="fas fa-shield-alt"></i>
-                </div>
-                <h3>坚韧意志</h3>
-                <p>训练和比赛过程中的挑战培养孩子坚韧不拔的意志品质。</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Schedule Section -->
-<section class="section section--schedule">
-    <div class="container">
-        <div class="section-header text-center" data-aos="fade-up">
-            <h2 class="section__title">
-                <span lang="zh-CN">课程时间安排</span>
-                <span class="section__title-sub" lang="en-GB">Training Schedule</span>
-            </h2>
-            <p class="section__subtitle">灵活的训练时间，满足不同家庭需求</p>
-        </div>
-
-        <div class="schedule-table" data-aos="fade-up">
-            <div class="schedule-header">
-                <h3>每周训练安排</h3>
-                <p>学员可根据自己的水平选择适合的训练时间</p>
-            </div>
-
-            <div class="schedule-grid">
-                <div class="schedule-day">
-                    <div class="day-header">周六</div>
-                    <div class="day-schedule">
-                        <div class="time-slot">
-                            <span class="time">10:00-11:30</span>
-                            <span class="class-name">初级班</span>
-                        </div>
-                        <div class="time-slot">
-                            <span class="time">13:30-15:30</span>
-                            <span class="class-name">中级班</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="schedule-day">
-                    <div class="day-header">周日</div>
-                    <div class="day-schedule">
-                        <div class="time-slot">
-                            <span class="time">14:00-16:30</span>
-                            <span class="class-name">高级班</span>
-                        </div>
-                        <div class="time-slot">
-                            <span class="time">16:30-18:00</span>
-                            <span class="class-name">强化训练</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="schedule-notes">
-                <p><strong>特别说明：</strong></p>
-                <ul>
-                    <li>每节课包含15分钟热身和10分钟放松拉伸</li>
-                    <li>每月第一个周末为内部比赛时间</li>
-                    <li>寒暑假期间有集训营，具体时间另行通知</li>
-                    <li>提供一对一私教课程，时间可预约安排</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Contact CTA Section -->
-<section id="contact" class="section section--cta-badminton">
-    <div class="container">
-        <div class="cta-box text-center" data-aos="fade-up">
-            <h2 class="cta-box__title">加入博文羽毛球俱乐部</h2>
-            <p class="cta-box__subtitle">
-                专业训练 · 科学指导 · 全面发展<br>
-                让孩子在羽毛球运动中健康成长！
+            <p class="intro-box__subtitle">
+                <span lang="en-GB">Professional Badminton Training</span>
             </p>
-            <div class="cta-box__buttons">
-                <a href="/contact" class="btn btn-primary btn-large">
-                    <i class="fas fa-phone"></i> 立即报名
+            <p class="intro-box__description">
+                <span lang="zh-CN">博文羽毛球俱乐部成立于2016年，是大曼彻斯特地区领先的青少年羽毛球培训机构。我们拥有专业的教练团队和完善的训练设施，为5岁至成人各年龄段提供系统化、专业化的羽毛球培训。俱乐部定期组织内部比赛和友谊赛，并推荐优秀学员参加地区性和全国性比赛。羽毛球运动不仅能够提高身体素质，还能培养团队协作精神、反应能力和意志品质。</span>
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Section Navigation Cards -->
+<section class="section section--nav-cards">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <h2 class="section-header__title">
+                <span lang="zh-CN">探索我们的服务</span>
+            </h2>
+            <p class="section-header__subtitle">
+                <span lang="en-GB">Explore Our Programmes and Services</span>
+            </p>
+        </div>
+
+        <div class="nav-cards-grid nav-cards-grid--3col">
+            <!-- Card 1: Events -->
+            <article class="nav-card" data-aos="fade-up" data-aos-delay="0">
+                <div class="nav-card__icon">
+                    <i class="fas fa-trophy" aria-hidden="true"></i>
+                </div>
+                <h3 class="nav-card__title" lang="zh-CN">赛事活动</h3>
+                <p class="nav-card__title-en" lang="en-GB">Events</p>
+                <p class="nav-card__description">
+                    <span lang="zh-CN">参加内部比赛、友谊赛和地区性羽毛球赛事，在实战中提升技能和比赛经验。</span>
+                </p>
+                <a href="/zh/badminton-events/" class="nav-card__link">
+                    <span lang="zh-CN">查看活动</span>
+                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
-                <a href="tel:01619693071" class="btn btn-outline-primary btn-large">
-                    <i class="fas fa-calendar"></i> 免费试课
+            </article>
+
+            <!-- Card 2: Schedule -->
+            <article class="nav-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="nav-card__icon">
+                    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                </div>
+                <h3 class="nav-card__title" lang="zh-CN">训练时间表</h3>
+                <p class="nav-card__title-en" lang="en-GB">Schedule</p>
+                <p class="nav-card__description">
+                    <span lang="zh-CN">查看详细的训练课程安排，包括初级、中级、高级班的时间、地点和课程内容。</span>
+                </p>
+                <a href="/zh/badminton-schedule/" class="nav-card__link">
+                    <span lang="zh-CN">查看时间表</span>
+                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
                 </a>
+            </article>
+
+            <!-- Card 3: Gallery -->
+            <article class="nav-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="nav-card__icon">
+                    <i class="fas fa-images" aria-hidden="true"></i>
+                </div>
+                <h3 class="nav-card__title" lang="zh-CN">精彩瞬间</h3>
+                <p class="nav-card__title-en" lang="en-GB">Gallery</p>
+                <p class="nav-card__description">
+                    <span lang="zh-CN">浏览俱乐部的训练和比赛照片，见证学员们的成长和精彩时刻。</span>
+                </p>
+                <a href="/zh/badminton-gallery/" class="nav-card__link">
+                    <span lang="zh-CN">查看相册</span>
+                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </a>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="section section--features">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <h2 class="section-header__title">
+                <span lang="zh-CN">为什么选择博文羽毛球俱乐部</span>
+            </h2>
+            <p class="section-header__subtitle">
+                <span lang="en-GB">Why Choose Bowen Badminton Club</span>
+            </p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-item" data-aos="fade-up" data-aos-delay="50">
+                <div class="feature-item__icon">
+                    <i class="fas fa-chalkboard-teacher" aria-hidden="true"></i>
+                </div>
+                <h4 class="feature-item__title" lang="zh-CN">专业教练团队</h4>
+                <p class="feature-item__description">
+                    <span lang="zh-CN">持证教练，拥有丰富的教学和比赛经验</span>
+                </p>
             </div>
-            <div class="contact-info">
-                <p><strong>咨询热线：</strong>0161 969 3071</p>
-                <p><strong>邮箱：</strong>info@boweneducation.org</p>
-                <p><strong>地址：</strong>Anchor House, Daisy Street, Manchester, M8 5AW</p>
+            <div class="feature-item" data-aos="fade-up" data-aos-delay="100">
+                <div class="feature-item__icon">
+                    <i class="fas fa-users-class" aria-hidden="true"></i>
+                </div>
+                <h4 class="feature-item__title" lang="zh-CN">小班教学</h4>
+                <p class="feature-item__description">
+                    <span lang="zh-CN">师生比例1:8，确保每位学员获得充分指导</span>
+                </p>
+            </div>
+            <div class="feature-item" data-aos="fade-up" data-aos-delay="150">
+                <div class="feature-item__icon">
+                    <i class="fas fa-dumbbell" aria-hidden="true"></i>
+                </div>
+                <h4 class="feature-item__title" lang="zh-CN">完善训练设施</h4>
+                <p class="feature-item__description">
+                    <span lang="zh-CN">标准羽毛球场地和专业训练器材</span>
+                </p>
+            </div>
+            <div class="feature-item" data-aos="fade-up" data-aos-delay="200">
+                <div class="feature-item__icon">
+                    <i class="fas fa-medal" aria-hidden="true"></i>
+                </div>
+                <h4 class="feature-item__title" lang="zh-CN">比赛机会丰富</h4>
+                <p class="feature-item__description">
+                    <span lang="zh-CN">定期组织内部比赛和参加外部赛事</span>
+                </p>
+            </div>
+            <div class="feature-item" data-aos="fade-up" data-aos-delay="250">
+                <div class="feature-item__icon">
+                    <i class="fas fa-calendar-check" aria-hidden="true"></i>
+                </div>
+                <h4 class="feature-item__title" lang="zh-CN">灵活时间安排</h4>
+                <p class="feature-item__description">
+                    <span lang="zh-CN">周末和平日班次，方便家长安排</span>
+                </p>
+            </div>
+            <div class="feature-item" data-aos="fade-up" data-aos-delay="300">
+                <div class="feature-item__icon">
+                    <i class="fas fa-chart-line" aria-hidden="true"></i>
+                </div>
+                <h4 class="feature-item__title" lang="zh-CN">系统化培训</h4>
+                <p class="feature-item__description">
+                    <span lang="zh-CN">从基础到高级，完整的课程体系</span>
+                </p>
             </div>
         </div>
     </div>
 </section>
 
-<style>
-/* Badminton Club Page Styles */
+<!-- CTA Banner -->
+<section class="section--cta-banner">
+    <div class="container">
+        <div class="cta-banner" data-aos="fade-up">
+            <div class="cta-banner__content">
+                <div class="cta-banner__icon">
+                    <i class="fas fa-shuttlecock" aria-hidden="true"></i>
+                </div>
+                <div class="cta-banner__text">
+                    <h2 class="cta-banner__title">
+                        <span lang="zh-CN">预约免费试课</span>
+                    </h2>
+                    <p class="cta-banner__subtitle">
+                        <span lang="en-GB">Book Your Free Trial Lesson</span>
+                    </p>
+                    <p class="cta-banner__description">
+                        <span lang="zh-CN">欢迎5岁以上儿童及青少年参加免费试课，体验羽毛球的乐趣</span>
+                    </p>
+                </div>
+            </div>
+            <div class="cta-banner__actions">
+                <a href="/contact" class="btn btn--cta-primary">
+                    <i class="fas fa-calendar-check" aria-hidden="true"></i>
+                    <span lang="zh-CN">在线预约</span>
+                </a>
+                <a href="tel:01616672668" class="btn btn--cta-secondary">
+                    <i class="fas fa-phone" aria-hidden="true"></i>
+                    <span>0161 667 2668</span>
+                </a>
+                <a href="mailto:info@boweneducation.org" class="btn btn--cta-secondary">
+                    <i class="fas fa-envelope" aria-hidden="true"></i>
+                    <span lang="zh-CN">发送邮件</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
 
-/* Quick Navigation */
-.quick-nav {
-    padding: 1.5rem 0;
-    background: #f8f9fa;
+{% endblock %}
+
+{% block extra_css %}
+<link rel="preload" href="https://unpkg.com/aos@2.3.1/dist/aos.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</noscript>
+<style>
+/* Badminton Stats Section */
+.badminton-stats {
+    background: linear-gradient(to bottom, #f7fafc 0%, #ffffff 100%);
+    padding: 3rem 0;
     border-bottom: 1px solid #e5e7eb;
 }
 
-.quick-nav__buttons {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-/* Programs Section */
-.section--programs {
-    padding: 5rem 0;
-    background: #f8f9fa;
-}
-
-.programs-grid {
+.stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
-    margin-top: 3rem;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
-.program-card {
-    background: white;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.program-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
-}
-
-.program-card__header {
-    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-    color: white;
-    padding: 2rem;
+.stat-item {
     text-align: center;
+    color: #047857;
 }
 
-.program-card__icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-}
-
-.program-card__title {
-    font-size: 1.5rem;
+.stat-item__number {
+    font-size: 2.5rem;
     font-weight: 700;
+    line-height: 1;
     margin-bottom: 0.5rem;
 }
 
-.program-card__subtitle {
-    opacity: 0.9;
-    font-size: 1rem;
+.stat-item__number span {
+    font-size: 1.75rem;
 }
 
-.program-card__content {
-    padding: 2rem;
+.stat-item__label {
+    font-size: 0.95rem;
+    opacity: 0.95;
+    font-weight: 500;
+    color: #1a202c;
 }
 
-.program-card__details {
-    margin-bottom: 1.5rem;
+/* Introduction Section */
+.section--intro {
+    padding: 4rem 0;
+    background: linear-gradient(to bottom, #ffffff 0%, #f7fafc 100%);
 }
 
-.detail-item {
+.intro-box {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    background: white;
+    padding: 3rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.intro-box__icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    background: linear-gradient(135deg, #047857 0%, #10b981 100%);
+    border-radius: 50%;
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 0.75rem;
-    color: #6c757d;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: white;
+    box-shadow: 0 8px 20px rgba(4, 120, 87, 0.3);
 }
 
-.detail-item i {
-    color: #1e3a8a;
-    width: 20px;
-}
-
-.program-card__features h4 {
-    color: #1f2937;
-    margin-bottom: 1rem;
-    font-size: 1.1rem;
-}
-
-.program-card__features ul {
-    list-style: none;
-    padding: 0;
-}
-
-.program-card__features li {
-    padding: 0.5rem 0;
-    padding-left: 1.5rem;
-    position: relative;
-    color: #6c757d;
-}
-
-.program-card__features li::before {
-    content: "✓";
-    color: #1e3a8a;
-    position: absolute;
-    left: 0;
-    font-weight: bold;
-}
-
-.program-card__price {
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid #e5e7eb;
-    text-align: center;
-}
-
-.price-label {
-    display: block;
-    color: #6c757d;
-    font-size: 0.9rem;
+.intro-box__title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a202c;
     margin-bottom: 0.5rem;
 }
 
-.price-amount {
-    display: block;
-    font-size: 2rem;
+.intro-box__subtitle {
+    font-size: 1.375rem;
+    color: #047857;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.intro-box__description {
+    font-size: 1.0625rem;
+    line-height: 1.8;
+    color: #4a5568;
+    text-align: justify;
+}
+
+/* Section Header */
+.section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.section-header__title {
+    font-size: 2.5rem;
     font-weight: 700;
-    color: #1e3a8a;
+    color: #1a202c;
+    margin-bottom: 0.75rem;
 }
 
-.price-note {
-    display: block;
-    color: #6c757d;
-    font-size: 0.9rem;
-    margin-top: 0.25rem;
+.section-header__subtitle {
+    font-size: 1.375rem;
+    color: #047857;
+    font-weight: 600;
 }
 
-/* Facilities Section */
-.section--facilities {
+/* Navigation Cards Section */
+.section--nav-cards {
     padding: 5rem 0;
+    background: #f7fafc;
 }
 
-.facilities-grid {
+.nav-cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
     margin-top: 3rem;
 }
 
-.facility-item {
+.nav-cards-grid--3col {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.nav-card {
     background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s;
-}
-
-.facility-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-}
-
-.facility-item__image {
-    height: 200px;
-    overflow: hidden;
-}
-
-.facility-item__image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s;
-}
-
-.facility-item:hover .facility-item__image img {
-    transform: scale(1.1);
-}
-
-.facility-item__content {
-    padding: 1.5rem;
-}
-
-.facility-item__content h3 {
-    color: #1e3a8a;
-    margin-bottom: 1rem;
-    font-size: 1.3rem;
-}
-
-.facility-item__content p {
-    color: #6c757d;
-    line-height: 1.6;
-}
-
-/* Coaches Section */
-.section--coaches {
-    padding: 5rem 0;
-    background: #f8f9fa;
-}
-
-.coaches-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 3rem;
-    margin-top: 3rem;
-}
-
-.coach-card {
-    background: white;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s;
-}
-
-.coach-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.15);
-}
-
-.coach-card__image {
+    border-radius: 1.25rem;
+    padding: 2.5rem;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
     position: relative;
-    height: 280px;
     overflow: hidden;
 }
 
-.coach-card__image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+.nav-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
 }
 
-.coach-card__overlay {
+.nav-card::before {
+    content: '';
     position: absolute;
-    bottom: 0;
+    top: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(transparent, rgba(30, 58, 138, 0.9));
-    padding: 1.5rem;
-    transform: translateY(100%);
-    transition: transform 0.3s;
+    height: 4px;
+    background: linear-gradient(135deg, #047857 0%, #10b981 100%);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
 }
 
-.coach-card:hover .coach-card__overlay {
-    transform: translateY(0);
+.nav-card:hover::before {
+    transform: scaleX(1);
 }
 
-.coach-credentials {
+.nav-card__icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 0 1.5rem 0;
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    border-radius: 50%;
     display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: #047857;
+    transition: all 0.3s ease;
 }
 
-.credential {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    backdrop-filter: blur(10px);
+.nav-card:hover .nav-card__icon {
+    transform: scale(1.1) rotate(5deg);
 }
 
-.coach-card__content {
-    padding: 2rem;
-}
-
-.coach-card__name {
-    color: #1e3a8a;
+.nav-card__title {
     font-size: 1.5rem;
     font-weight: 700;
+    color: #1a202c;
     margin-bottom: 0.5rem;
 }
 
-.coach-card__title {
-    color: #3b82f6;
-    font-weight: 600;
+.nav-card__title-en {
+    font-size: 1.125rem;
+    color: #6b7280;
     margin-bottom: 1rem;
+    font-weight: 500;
 }
 
-.coach-card__bio {
-    color: #6c757d;
-    line-height: 1.6;
+.nav-card__description {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #4a5568;
     margin-bottom: 1.5rem;
 }
 
-.coach-card__achievements h4 {
-    color: #1f2937;
-    margin-bottom: 0.75rem;
-    font-size: 1rem;
+.nav-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    color: #047857;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.0625rem;
+    transition: gap 0.3s ease;
 }
 
-.coach-card__achievements ul {
-    list-style: none;
-    padding: 0;
+.nav-card__link:hover {
+    gap: 1rem;
 }
 
-.coach-card__achievements li {
-    padding: 0.25rem 0;
-    padding-left: 1.2rem;
-    position: relative;
-    color: #6c757d;
-    font-size: 0.9rem;
-}
-
-.coach-card__achievements li::before {
-    content: "•";
-    color: #1e3a8a;
-    position: absolute;
-    left: 0;
-    font-weight: bold;
-}
-
-/* Competition Section */
-.section--competition {
+/* Features Section */
+.section--features {
     padding: 5rem 0;
+    background: white;
 }
 
-.competition-content {
+/* Features Grid */
+.features-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    margin-top: 3rem;
-    align-items: start;
-}
-
-.competition-info h3 {
-    color: #1e3a8a;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-}
-
-.competition-competition-types {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
     margin-top: 2rem;
 }
 
-.competition-type {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    align-items: flex-start;
-}
-
-.competition-type__icon {
-    background: #1e3a8a;
-    color: white;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    flex-shrink: 0;
-}
-
-.competition-type__content h4 {
-    color: #1e3a8a;
-    margin-bottom: 0.5rem;
-    font-size: 1.1rem;
-}
-
-.competition-type__content p {
-    color: #6c757d;
-    line-height: 1.6;
-}
-
-.competition-achievements {
-    background: #f8f9fa;
-    padding: 2rem;
-    border-radius: 12px;
-}
-
-.competition-achievements h3 {
-    color: #1e3a8a;
-    font-size: 1.3rem;
-    margin-bottom: 1.5rem;
-}
-
-.achievements-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.achievement-item {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-}
-
-.achievement-icon {
-    font-size: 2rem;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.feature-item {
     background: white;
-    border-radius: 50%;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.achievement-text strong {
-    color: #1e3a8a;
-    display: block;
-    margin-bottom: 0.25rem;
-}
-
-.achievement-text p {
-    color: #6c757d;
-    margin: 0;
-    font-size: 0.9rem;
-}
-
-/* Benefits Section */
-.section--benefits {
-    padding: 5rem 0;
-    background: #f8f9fa;
-}
-
-.benefits-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 2rem;
-    margin-top: 3rem;
-}
-
-.benefit-item {
+    border-radius: 1rem;
+    padding: 2rem;
     text-align: center;
-    padding: 2rem;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
-.benefit-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+.feature-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
-.benefit-item__icon {
-    background: #1e3a8a;
-    color: white;
+.feature-item__icon {
     width: 70px;
     height: 70px;
+    margin: 0 auto 1.25rem;
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.8rem;
-    margin: 0 auto 1.5rem;
+    font-size: 2rem;
+    color: #047857;
 }
 
-.benefit-item h3 {
-    color: #1e3a8a;
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
+.feature-item__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 0.75rem;
 }
 
-.benefit-item p {
-    color: #6c757d;
+.feature-item__description {
+    font-size: 0.9375rem;
     line-height: 1.6;
+    color: #6b7280;
 }
 
-/* Schedule Section */
-.section--schedule {
+/* CTA Banner */
+.section--cta-banner {
     padding: 5rem 0;
-}
-
-.schedule-table {
-    max-width: 800px;
-    margin: 3rem auto 0;
-    background: white;
-    border-radius: 16px;
-    padding: 2rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-}
-
-.schedule-header {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.schedule-header h3 {
-    color: #1e3a8a;
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.schedule-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    margin-bottom: 2rem;
-}
-
-.schedule-day {
-    background: #f8f9fa;
-    border-radius: 12px;
+    background: linear-gradient(135deg, #047857 0%, #111827 100%);
+    position: relative;
     overflow: hidden;
 }
 
-.day-header {
-    background: #1e3a8a;
-    color: white;
-    padding: 1rem;
-    text-align: center;
-    font-weight: 600;
-    font-size: 1.1rem;
+.section--cta-banner::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
 }
 
-.day-schedule {
-    padding: 1.5rem;
+.section--cta-banner::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -5%;
+    width: 400px;
+    height: 400px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 50%;
 }
 
-.time-slot {
+.cta-banner {
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 1.5rem;
+    padding: 3rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.75rem 0;
-    border-bottom: 1px solid #e5e7eb;
+    gap: 3rem;
 }
 
-.time-slot:last-child {
-    border-bottom: none;
-}
-
-.time {
-    font-weight: 600;
-    color: #1e3a8a;
-}
-
-.class-name {
-    background: #3b82f6;
-    color: white;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.9rem;
-}
-
-.schedule-notes {
-    background: #f8f9fa;
-    padding: 1.5rem;
-    border-radius: 8px;
-    border-left: 4px solid #1e3a8a;
-}
-
-.schedule-notes p {
-    color: #1e3a8a;
-    font-weight: 600;
-    margin-bottom: 1rem;
-}
-
-.schedule-notes ul {
-    list-style: none;
-    padding: 0;
-}
-
-.schedule-notes li {
-    padding: 0.5rem 0;
-    padding-left: 1.5rem;
-    position: relative;
-    color: #6c757d;
-}
-
-.schedule-notes li::before {
-    content: "•";
-    color: #1e3a8a;
-    position: absolute;
-    left: 0;
-    font-weight: bold;
-}
-
-/* Contact CTA Section */
-.section--cta-badminton {
-    padding: 5rem 0;
-    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-    color: white;
-}
-
-.cta-box__title {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    color: white;
-}
-
-.cta-box__subtitle {
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
-    color: rgba(255, 255, 255, 0.9);
-    line-height: 1.6;
-}
-
-.cta-box__buttons {
+.cta-banner__content {
     display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
+    align-items: center;
+    gap: 2rem;
+    flex: 1;
 }
 
-.btn-primary {
+.cta-banner__icon {
+    width: 90px;
+    height: 90px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.75rem;
+    color: white;
+    flex-shrink: 0;
+}
+
+.cta-banner__title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+}
+
+.cta-banner__subtitle {
+    font-size: 1.375rem;
+    color: #ffffff;
+    margin-bottom: 0.75rem;
+    opacity: 0.95;
+    font-weight: 600;
+}
+
+.cta-banner__description {
+    font-size: 1.0625rem;
+    color: #ffffff;
+    opacity: 0.9;
+}
+
+.cta-banner__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    flex-shrink: 0;
+}
+
+.btn--cta-primary,
+.btn--cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    padding: 0.875rem 2rem;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    min-width: 220px;
+}
+
+.btn--cta-primary {
     background: white;
-    color: #1e3a8a;
+    color: #047857;
     border: 2px solid white;
 }
 
-.btn-primary:hover {
-    background: #f8f9fa;
-    color: #1e3a8a;
+.btn--cta-primary:hover {
+    background: #f7fafc;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
-.btn-outline-primary {
+.btn--cta-secondary {
     background: transparent;
     color: white;
     border: 2px solid white;
 }
 
-.btn-outline-primary:hover {
-    background: white;
-    color: #1e3a8a;
+.btn--cta-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
 }
 
-.btn-large {
-    padding: 1rem 2rem;
-    font-size: 1.1rem;
-    font-weight: 600;
+/* Responsive Design */
+@media (max-width: 992px) {
+    .section-header__title {
+        font-size: 2rem;
+    }
+
+    .section-header__subtitle {
+        font-size: 1.125rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .nav-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+    }
+
+    .cta-banner {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .cta-banner__content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .cta-banner__actions {
+        width: 100%;
+    }
+
+    .btn--cta-primary,
+    .btn--cta-secondary {
+        width: 100%;
+    }
 }
 
-.contact-info {
-    font-size: 0.95rem;
-    color: rgba(255, 255, 255, 0.9);
-}
-
-.contact-info p {
-    margin-bottom: 0.5rem;
-}
-
-/* Responsive */
 @media (max-width: 768px) {
-    .programs-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
+    .section--nav-cards,
+    .section--features {
+        padding: 3rem 0;
     }
 
-    .competition-content {
-        grid-template-columns: 1fr;
-        gap: 2rem;
+    .section-header {
+        margin-bottom: 2rem;
     }
 
-    .coaches-grid {
-        grid-template-columns: 1fr;
-        gap: 2rem;
+    .section-header__title {
+        font-size: 1.75rem;
     }
 
-    .benefits-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
+    .section-header__subtitle {
+        font-size: 1rem;
     }
 
-    .schedule-grid {
+    .stats-grid {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
 
-    .quick-nav__buttons {
-        flex-direction: column;
-        align-items: center;
+    .nav-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
     }
 
-    .cta-box__buttons {
-        flex-direction: column;
-        align-items: center;
+    .nav-card {
+        padding: 2rem;
     }
 
-    .cta-box__buttons .btn {
-        width: 100%;
-        max-width: 300px;
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cta-banner {
+        padding: 2rem 1.5rem;
+    }
+
+    .cta-banner__title {
+        font-size: 1.625rem;
+    }
+
+    .cta-banner__subtitle {
+        font-size: 1.125rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .section--nav-cards,
+    .section--features {
+        padding: 2rem 0;
+    }
+
+    .intro-box {
+        padding: 2rem 1.5rem;
+    }
+
+    .nav-card__icon {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+    }
+
+    .nav-card__title {
+        font-size: 1.25rem;
     }
 }
 </style>
+{% endblock %}
 
+{% block extra_js %}
+<script>
+    // Lazy load AOS animation library
+    (function() {
+        var script = document.createElement('script');
+        script.src = 'https://unpkg.com/aos@2.3.1/dist/aos.js';
+        script.defer = true;
+        script.onload = function() {
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true,
+                offset: 100,
+                disable: function() {
+                    return window.innerWidth < 768 && 'ontouchstart' in window;
+                }
+            });
+        };
+        document.body.appendChild(script);
+    })();
+</script>
 {% endblock %}

@@ -748,7 +748,11 @@ class StaticPageGenerator:
             if child_columns:
                 sections = site_service.get_overview_sections(self.db, column.id)
                 context["sections"] = sections
-                template_name = "overview.html"
+                # 特殊处理：某些栏目即使有子栏目也使用专用模板
+                if column.slug in ["chess", "badminton"]:
+                    template_name = f"{column.slug}.html"
+                else:
+                    template_name = "overview.html"
             else:
                 template_name = f"{column.slug}.html"
 

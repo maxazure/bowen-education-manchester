@@ -5,6 +5,136 @@
 
 ## ✅ 已完成
 
+### [2025-11-18] 重新设计羽毛球俱乐部栏目综合页面
+- [x] 查看羽毛球栏目结构和子栏目 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 修改中文badminton.html模板 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 修改英文badminton.html模板 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 修改static_generator.py支持badminton专用模板 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 生成静态页面并验证 - 完成时间: 2025-11-18 - 负责人: maxazure
+
+**问题描述**:
+- 羽毛球栏目主页（`/zh/badminton/` 和 `/en/badminton/`）把所有子栏目的详细内容都展示出来了
+- 页面过长（1180行代码），包含大量培训课程、设施、教练、比赛、益处、时间表等详细内容
+- 页面没有重点，子栏目失去了存在的意义
+- 用户需要一个清晰的导航页面，能快速了解俱乐部并进入各个子栏目
+
+**解决方案**:
+1. **重新设计页面布局**:
+   - Hero Section（英雄区）- 从hero组件获取标题和背景
+   - Stats Section（统计数据）- 5年历史、120+会员、8个专业场地、30+竞赛奖项
+   - Introduction（俱乐部简介）- 包含文字介绍和3个特色框
+   - **子栏目导航卡片**（3张卡片）- 替换原有的详细内容展示
+   - Features（俱乐部特色）- 6个特色点网格布局
+   - CTA Banner（行动呼吁）- 报名和试课按钮
+
+2. **子栏目导航卡片设计**（3个子栏目）:
+   - 赛事活动（Events）- `/zh/badminton-events/` - 月度联赛、区域锦标赛、友谊赛、年度冠军赛
+   - 训练时间表（Schedule）- `/zh/badminton-schedule/` - 初级班(5-8岁)、中级班(9-13岁)、高级班(14+岁)、私教课程
+   - 精彩瞬间（Gallery）- `/zh/badminton-gallery/` - 训练照片、比赛精彩瞬间、场地展示、学员成就
+
+3. **模板修改内容** (`templates/zh/badminton.html` 和 `templates/en/badminton.html`):
+   - 从1180行代码简化到745行
+   - 移除详细的培训项目（3个program-card）
+   - 移除设施介绍（3个facility-item）
+   - 移除教练团队（2个coach-card）
+   - 移除比赛信息、益处说明、时间表等详细内容
+   - 新增 `.section--stats` 区域展示4个统计数据
+   - 新增 `.section--intro` 区域包含文字和3个intro-box
+   - 新增 `.section--nav-cards` 区域展示3个子栏目卡片
+   - 新增 `.section--features` 区域展示6个特色点
+   - 新增 `.section--cta-banner` 行动呼吁区域
+
+4. **CSS样式更新**:
+   - **色彩方案**: 使用绿色主题 (#047857, #10b981) 替代蓝色，与羽毛球运动活力特点相符
+   - 新增 `.nav-cards-grid--3col` 样式支持3列布局
+   - 新增 `.nav-card` 卡片样式（带图标、标题、英文标签、描述、亮点列表、链接按钮）
+   - 新增 `.stat-item` 统计数据卡片样式
+   - 新增 `.intro-box` 特色框样式（带左边框和悬停效果）
+   - 新增 `.feature-item` 特色点样式
+   - 新增 `.cta-banner` CTA横幅样式
+   - 更新响应式CSS：992px、768px、576px三个断点
+   - 移除原有的 `.program-card`、`.facility-item`、`.coach-card`、`.competition-*`、`.benefit-item`、`.schedule-*` 样式
+
+5. **代码修改**（`app/services/static_generator.py:746-757`）:
+   - 在`_generate_custom_page`方法中添加特殊处理
+   - chess和badminton栏目即使有子栏目也使用专用模板（`{slug}.html`）
+   - 其他有子栏目的CUSTOM类型栏目继续使用`overview.html`
+   - 修复了之前模板路径包含语言前缀的bug
+
+**验证结果**:
+- ✅ 中文页面成功修改，展示3个子栏目导航卡片
+- ✅ 英文页面成功修改，保持与中文页面一致的布局
+- ✅ 静态页面生成成功（108页全部成功）
+- ✅ 页面使用绿色主题色(#047857)，区别于国际象棋的蓝色主题
+- ✅ nav-card元素正确渲染（中文页41个，英文页43个）
+- ✅ 3个导航卡片正确显示：赛事活动、训练时间表、精彩瞬间
+- ✅ 页面布局简洁明了，用户可以快速找到各个子栏目入口
+- ✅ 响应式设计正常工作（桌面、平板、手机）
+
+**相关文件**:
+- `templates/zh/badminton.html` - 中文羽毛球俱乐部栏目模板
+- `templates/en/badminton.html` - 英文羽毛球俱乐部栏目模板
+- `app/services/static_generator.py:746-757` - 静态页面生成器
+
+**页面访问**:
+- 中文页面：http://localhost:8000/zh/badminton/
+- 英文页面：http://localhost:8000/en/badminton/
+
+### [2025-11-18] 重新设计国际象棋栏目综合页面
+- [x] 设计新的综合页面布局方案 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 修改中文chess.html模板 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 修改英文chess.html模板 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 生成静态页面并验证 - 完成时间: 2025-11-18 - 负责人: maxazure
+
+**问题描述**:
+- 国际象棋栏目主页（`/zh/chess/` 和 `/en/chess/`）把所有子栏目的详细内容都展示出来了
+- 页面过长，没有重点，子栏目失去了存在的意义
+- 用户需要一个清晰的导航页面，能快速了解俱乐部并进入各个子栏目
+
+**解决方案**:
+1. **重新设计页面布局**:
+   - Hero Section（英雄区）- 保留原有标题和统计数据
+   - Introduction（简短介绍）- 保留原有俱乐部简介
+   - **子栏目导航卡片**（5张卡片）- 替换原有的详细内容展示
+   - Features（俱乐部特色）- 简化为6个特色点
+   - CTA Banner（行动呼吁）- 保留原有设计
+
+2. **子栏目导航卡片设计**:
+   - 俱乐部简介（About）- `/zh/chess-about/`
+   - 课程设置（Courses）- `/zh/chess-courses/`
+   - 活动与赛事（Competitions）- `/zh/chess-events/`
+   - 学习资源（Resources）- `/zh/chess-resources/`
+   - 新闻与精彩回顾（Highlights）- `/zh/chess-news/`
+
+3. **模板修改内容** (`templates/zh/chess.html` 和 `templates/en/chess.html`):
+   - 移除两栏布局（侧边栏导航 + 主内容区）
+   - 移除详细的培训项目、比赛信息、教练团队、学习益处等内容
+   - 新增 `.section--nav-cards` 区域展示5个子栏目卡片
+   - 新增 `.nav-card` 卡片样式（带图标、标题、描述、链接）
+   - 优化 Features 区域为6个特色点网格布局
+
+4. **CSS样式更新**:
+   - 新增 `.section-header` 样式（标题区）
+   - 新增 `.nav-cards-grid` 3列网格布局
+   - 新增 `.nav-card` 卡片样式（hover效果、图标动画）
+   - 更新响应式CSS：992px显示2列，768px显示1列
+   - 移除原有的 `.page-layout`、`.quick-nav`、`.module-card`、`.info-card` 样式
+
+**验证结果**:
+- ✅ 中文页面成功修改，展示5个子栏目导航卡片
+- ✅ 英文页面成功修改，保持与中文页面一致的布局
+- ✅ 静态页面生成成功（108页全部成功）
+- ✅ 页面布局简洁明了，用户可以快速找到各个子栏目入口
+- ✅ 响应式设计正常工作（桌面、平板、手机）
+
+**相关文件**:
+- `templates/zh/chess.html` - 中文国际象棋栏目模板
+- `templates/en/chess.html` - 英文国际象棋栏目模板
+
+**页面访问**:
+- 中文页面：http://localhost:8002/zh/chess/
+- 英文页面：http://localhost:8002/en/chess/
+
 ### [2025-11-18] 添加hero_tagline_en字段支持英文Hero标语
 - [x] 在SiteColumn模型添加hero_tagline_en字段 - 完成时间: 2025-11-18 - 负责人: maxazure
 - [x] 创建并执行数据库迁移 - 完成时间: 2025-11-18 - 负责人: maxazure
