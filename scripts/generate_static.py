@@ -94,6 +94,21 @@ def main():
         logger.info("开始生成静态页面...")
         log = generator.generate_all()
 
+        # 复制静态资源文件
+        logger.info("-" * 60)
+        logger.info("复制静态资源文件...")
+        import shutil
+        static_source = project_root / "templates" / "static"
+        static_dest = Path(args.output) / "static"
+
+        # 删除旧的静态文件（如果存在）
+        if static_dest.exists():
+            shutil.rmtree(static_dest)
+
+        # 复制静态文件
+        shutil.copytree(static_source, static_dest)
+        logger.info(f"✓ 静态资源已复制到: {static_dest}")
+
         # 显示结果
         logger.info("-" * 60)
         logger.info("生成完成!")
