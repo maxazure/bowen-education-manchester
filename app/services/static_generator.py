@@ -30,11 +30,28 @@ from app.services import layout_service as layout_render_service
 logger = logging.getLogger("docms")
 
 
+class MockURL:
+    """模拟 URL 对象"""
+    def __init__(self, url: str):
+        self._url = url
+        # 解析 URL
+        from urllib.parse import urlparse
+        parsed = urlparse(url)
+        self.path = parsed.path or "/"
+        self.scheme = parsed.scheme or "http"
+        self.netloc = parsed.netloc or "localhost:8000"
+
+    def __str__(self):
+        return self._url
+
+
 class MockRequest:
     """模拟 FastAPI Request 对象用于模板渲染"""
 
     def __init__(self, url: str, base_url: str = "http://localhost:8000"):
-        self.url = type('obj', (object,), {'path': url})()
+        # 构建完整 URL
+        full_url = urljoin(base_url, url) if not url.startswith("http") else url
+        self.url = MockURL(full_url)
         self.base_url = type('obj', (object,), {'scheme': 'http', 'netloc': 'localhost:8000'})()
         self.query_params = {}
         self.path_params = {}
