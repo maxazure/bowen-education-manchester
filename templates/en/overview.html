@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 
-{% block title %}{{ column.name }} - {{ site.site_name }}{% endblock %}
+{% block title %}{{ column.name_en or column.name }} - {{ site.site_name }}{% endblock %}
 
-{% block meta_description %}{{ column.name }} - Comprehensive overview of our programmes and services{% endblock %}
+{% block meta_description %}{{ column.name_en or column.name }} - Comprehensive overview of our programmes and services{% endblock %}
 
 {% block extra_css %}
 <style>
@@ -171,8 +171,8 @@
 <!-- Page Header -->
 <section class="page-header">
     <div class="container">
-        <h1>{{ column.name }}</h1>
-        <p>Explore our comprehensive range of programmes and services</p>
+        <h1>{{ column.hero_title_en or column.hero_title or column.name_en or column.name }}</h1>
+        <p>{{ column.hero_tagline or 'Explore our comprehensive range of programmes and services' }}</p>
     </div>
 </section>
 
@@ -181,7 +181,7 @@
 <section class="overview-section">
     <div class="container">
         <div class="section-header">
-            <h2>{{ section.column_name }}</h2>
+            <h2>{{ section.column_name_en or section.column_name }}</h2>
         </div>
 
         {% if section.column_type == 'POST' and section.content_items %}
@@ -191,7 +191,7 @@
                 <article class="content-card">
                     {% if post.cover_media %}
                     <img src="{{ post.cover_media.path_medium or post.cover_media.path_original }}"
-                         alt="{{ post.title }}"
+                         alt="{{ post.title_en or post.title }}"
                          class="content-card-image">
                     {% else %}
                     <div class="content-card-image" style="background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);"></div>
@@ -212,7 +212,7 @@
 
             <div class="view-all-link">
                 <a href="/en/{{ section.column_slug }}/" class="btn-view-all">
-                    View All {{ section.column_name }}
+                    View All {{ section.column_name_en or section.column_name }}
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
@@ -226,15 +226,15 @@
                 <article class="content-card">
                     {% if product.cover_media %}
                     <img src="{{ product.cover_media.path_medium or product.cover_media.path_original }}"
-                         alt="{{ product.name }}"
+                         alt="{{ product.name_en or product.name }}"
                          class="content-card-image">
                     {% else %}
                     <div class="content-card-image" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);"></div>
                     {% endif %}
                     <div class="content-card-body">
-                        <h3 class="content-card-title">{{ product.name }}</h3>
-                        {% if product.summary %}
-                        <p class="content-card-summary">{{ product.summary[:120] }}{% if product.summary|length > 120 %}...{% endif %}</p>
+                        <h3 class="content-card-title">{{ product.name_en or product.name }}</h3>
+                        {% if product.summary_en or product.summary %}
+                        <p class="content-card-summary">{{ (product.summary_en or product.summary)[:120] }}{% if (product.summary_en or product.summary)|length > 120 %}...{% endif %}</p>
                         {% endif %}
                         <div class="content-card-meta">
                             {% if product.price_text %}
@@ -249,7 +249,7 @@
 
             <div class="view-all-link">
                 <a href="/en/{{ section.column_slug }}/" class="btn-view-all">
-                    View All {{ section.column_name }}
+                    View All {{ section.column_name_en or section.column_name }}
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
@@ -259,11 +259,11 @@
         {% elif section.column_type == 'SINGLE_PAGE' and section.content %}
             <!-- Single Page Content -->
             <div class="single-page-content">
-                {% if section.content.subtitle %}
-                <h3>{{ section.content.subtitle }}</h3>
+                {% if section.content.subtitle_en or section.content.subtitle %}
+                <h3>{{ section.content.subtitle_en or section.content.subtitle }}</h3>
                 {% endif %}
                 <div class="prose">
-                    {{ section.content.content_html|safe }}
+                    {{ (section.content.content_html_en or section.content.content_html)|safe }}
                 </div>
                 <div class="view-all-link">
                     <a href="/en/{{ section.column_slug }}/" class="btn-view-all">
@@ -281,7 +281,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                 </svg>
-                <p>Content coming soon for {{ section.column_name }}</p>
+                <p>Content coming soon for {{ section.column_name_en or section.column_name }}</p>
             </div>
         {% endif %}
     </div>
