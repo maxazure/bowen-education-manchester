@@ -1,0 +1,411 @@
+{% extends "base.html" %}
+
+{% block title %}生成详情 #{{ log.id }} - 静态页面管理{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* 统计卡片样式 */
+    .stat-badge {
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+
+    /* 状态标签 */
+    .page-type-badge {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+    }
+
+    /* 详情表格 */
+    .detail-table th {
+        width: 15%;
+        background-color: var(--bg-light);
+        font-weight: 600;
+    }
+
+    /* 错误消息 */
+    .error-message {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 0.75rem;
+        border-radius: 0.25rem;
+        font-family: monospace;
+        font-size: 0.875rem;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    /* 进度环 */
+    .progress-ring {
+        transform: rotate(-90deg);
+    }
+
+    .progress-ring-circle {
+        transition: stroke-dashoffset 0.35s;
+        transform-origin: 50% 50%;
+    }
+
+    /* 响应式 */
+    @media (max-width: 767.98px) {
+        .detail-table th {
+            width: 30%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- 页面头部 -->
+<div class="mb-4">
+    <div class="d-flex align-items-center mb-2">
+        <a href="/admin/static-pages" class="btn btn-outline-secondary btn-sm me-3">
+            <i class="bi bi-arrow-left me-1"></i>返回列表
+        </a>
+        <h1 class="page-title mb-0">生成详情 #{{ log.id }}</h1>
+    </div>
+    <p class="page-subtitle mb-0">查看静态页面生成的详细信息</p>
+</div>
+
+<!-- 基本信息卡片 -->
+<div class="card mb-4">
+    <div class="card-header bg-light">
+        <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>基本信息</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered detail-table mb-0">
+            <tr>
+                <th>任务 ID</th>
+                <td>{{ log.id }}</td>
+                <th>生成类型</th>
+                <td>
+                    <span class="badge {% if log.generation_type == 'full' %}bg-primary{% else %}bg-info{% endif %}">
+                        {% if log.generation_type == 'full' %}
+                        <i class="bi bi-globe me-1"></i>全站生成
+                        {% else %}
+                        <i class="bi bi-file-earmark me-1"></i>部分生成
+                        {% endif %}
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th>任务状态</th>
+                <td>
+                    {% if log.status == 'completed' %}
+                    <span class="badge bg-success">
+                        <i class="bi bi-check-circle me-1"></i>已完成
+                    </span>
+                    {% elif log.status == 'running' %}
+                    <span class="badge bg-info">
+                        <i class="bi bi-arrow-clockwise me-1"></i>生成中
+                    </span>
+                    {% elif log.status == 'failed' %}
+                    <span class="badge bg-danger">
+                        <i class="bi bi-x-circle me-1"></i>失败
+                    </span>
+                    {% else %}
+                    <span class="badge bg-warning">
+                        <i class="bi bi-exclamation-triangle me-1"></i>部分成功
+                    </span>
+                    {% endif %}
+                </td>
+                <th>开始时间</th>
+                <td>
+                    <i class="bi bi-calendar me-1"></i>
+                    {{ log.start_time.strftime('%Y-%m-%d %H:%M:%S') if log.start_time else '-' }}
+                </td>
+            </tr>
+            <tr>
+                <th>结束时间</th>
+                <td>
+                    <i class="bi bi-calendar-check me-1"></i>
+                    {{ log.end_time.strftime('%Y-%m-%d %H:%M:%S') if log.end_time else '进行中' }}
+                </td>
+                <th>耗时</th>
+                <td>
+                    {% if log.start_time and log.end_time %}
+                    <i class="bi bi-stopwatch me-1"></i>
+                    {{ ((log.end_time - log.start_time).total_seconds())|round(2) }} 秒
+                    {% else %}
+                    -
+                    {% endif %}
+                </td>
+            </tr>
+            {% if log.error_message %}
+            <tr>
+                <th>错误信息</th>
+                <td colspan="3">
+                    <div class="error-message">{{ log.error_message }}</div>
+                </td>
+            </tr>
+            {% endif %}
+        </table>
+    </div>
+</div>
+
+<!-- 统计信息 -->
+<div class="row mb-4">
+    <div class="col-md-4 mb-3">
+        <div class="card stat-card bg-primary-light h-100">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon bg-primary text-white me-3">
+                    <i class="bi bi-files"></i>
+                </div>
+                <div>
+                    <div class="stat-label">总页面数</div>
+                    <div class="stat-badge text-primary">{{ log.total_pages }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card stat-card bg-success-light h-100">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon bg-success text-white me-3">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+                <div>
+                    <div class="stat-label">成功生成</div>
+                    <div class="stat-badge text-success">{{ success_count }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card stat-card {% if failed_count > 0 %}bg-danger-light{% else %}bg-light{% endif %} h-100">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon {% if failed_count > 0 %}bg-danger{% else %}bg-secondary{% endif %} text-white me-3">
+                    <i class="bi bi-x-circle"></i>
+                </div>
+                <div>
+                    <div class="stat-label">生成失败</div>
+                    <div class="stat-badge {% if failed_count > 0 %}text-danger{% else %}text-secondary{% endif %}">{{ failed_count }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 页面类型统计 -->
+{% if type_stats %}
+<div class="card mb-4">
+    <div class="card-header bg-light">
+        <h5 class="mb-0"><i class="bi bi-bar-chart me-2"></i>页面类型统计</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-sm table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>页面类型</th>
+                        <th class="text-center">总计</th>
+                        <th class="text-center">成功</th>
+                        <th class="text-center">失败</th>
+                        <th>成功率</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for type_name, stats in type_stats.items() %}
+                    <tr>
+                        <td>
+                            <span class="badge page-type-badge bg-secondary">{{ type_name }}</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge bg-primary-subtle text-primary">{{ stats.total }}</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge bg-success-subtle text-success">{{ stats.success }}</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge bg-danger-subtle text-danger">{{ stats.failed }}</span>
+                        </td>
+                        <td>
+                            <div class="progress" style="height: 20px;">
+                                <div class="progress-bar {% if stats.failed > 0 %}bg-warning{% else %}bg-success{% endif %}"
+                                     style="width: {{ (stats.success / stats.total * 100)|round }}%">
+                                    {{ (stats.success / stats.total * 100)|round }}%
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- 生成详情列表 -->
+<div class="card">
+    <div class="card-header bg-light">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="bi bi-list-ul me-2"></i>生成详情</h5>
+            <span class="badge bg-secondary">共 {{ total }} 条</span>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover table-striped mb-0">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">ID</th>
+                        <th style="width: 120px;">页面类型</th>
+                        <th style="width: 100px;">页面ID</th>
+                        <th style="width: 80px;">语言</th>
+                        <th>URL 路径</th>
+                        <th>文件路径</th>
+                        <th style="width: 100px;">状态</th>
+                        <th style="width: 100px;">耗时</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if details %}
+                    {% for detail in details %}
+                    <tr class="{% if detail.status == 'failed' %}table-danger{% endif %}">
+                        <td>{{ detail.id }}</td>
+                        <td>
+                            <span class="badge page-type-badge bg-secondary">{{ detail.page_type }}</span>
+                        </td>
+                        <td>{{ detail.page_id if detail.page_id else '-' }}</td>
+                        <td>
+                            <span class="badge {% if detail.language == 'zh' %}bg-info{% else %}bg-primary{% endif %}">
+                                {{ detail.language|upper }}
+                            </span>
+                        </td>
+                        <td>
+                            <code class="text-primary">{{ detail.url_path }}</code>
+                        </td>
+                        <td>
+                            <small class="text-muted">{{ detail.file_path }}</small>
+                        </td>
+                        <td>
+                            {% if detail.status == 'success' %}
+                            <span class="badge bg-success">
+                                <i class="bi bi-check"></i> 成功
+                            </span>
+                            {% else %}
+                            <span class="badge bg-danger">
+                                <i class="bi bi-x"></i> 失败
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if detail.generation_time %}
+                            <small class="text-muted">{{ detail.generation_time|round(3) }}s</small>
+                            {% else %}
+                            <small class="text-muted">-</small>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% if detail.error_message %}
+                    <tr class="table-danger">
+                        <td colspan="8">
+                            <small class="text-muted">错误信息:</small>
+                            <div class="error-message mt-1">{{ detail.error_message }}</div>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="8">
+                            <div class="text-center py-4 text-muted">
+                                <i class="bi bi-inbox"></i>
+                                <p class="mt-2 mb-0">暂无详情记录</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 分页 -->
+    {% if total_pages > 1 %}
+    <div class="card-footer bg-light">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="text-muted">
+                <small>第 {{ page }} / {{ total_pages }} 页 (共 {{ total }} 条)</small>
+            </div>
+            <nav aria-label="详情分页">
+                <ul class="pagination mb-0">
+                    {% if page > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page - 1 }}">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">
+                            <i class="bi bi-chevron-left"></i>
+                        </span>
+                    </li>
+                    {% endif %}
+
+                    {% set start_page = [1, page - 2]|max %}
+                    {% set end_page = [total_pages, page + 2]|min %}
+
+                    {% if start_page > 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1">1</a>
+                    </li>
+                    {% if start_page > 2 %}
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                    {% endif %}
+                    {% endif %}
+
+                    {% for p in range(start_page, end_page + 1) %}
+                    <li class="page-item {% if p == page %}active{% endif %}">
+                        <a class="page-link" href="?page={{ p }}">{{ p }}</a>
+                    </li>
+                    {% endfor %}
+
+                    {% if end_page < total_pages %}
+                    {% if end_page < total_pages - 1 %}
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                    {% endif %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ total_pages }}">{{ total_pages }}</a>
+                    </li>
+                    {% endif %}
+
+                    {% if page < total_pages %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page + 1 }}">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">
+                            <i class="bi bi-chevron-right"></i>
+                        </span>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// 页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', function() {
+    // 如果任务还在运行，每5秒刷新一次页面
+    {% if log.status == 'running' %}
+    setTimeout(() => location.reload(), 5000);
+    {% endif %}
+});
+</script>
+{% endblock %}
