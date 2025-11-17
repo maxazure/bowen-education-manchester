@@ -5,6 +5,75 @@
 
 ## ✅ 已完成
 
+### [2025-11-18] 重新设计政府项目栏目页面
+- [x] 查看programmes栏目结构和子栏目 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 修改中文programmes.html模板 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 修改英文programmes.html模板 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 修改static_generator.py支持programmes专用模板 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 生成静态页面并验证 - 完成时间: 2025-11-18 - 负责人: maxazure
+
+**问题描述**:
+- 政府项目栏目主页（`/zh/programmes/` 和 `/en/programmes/`）内容过于简单
+- 只有47行代码，缺乏详细信息和视觉吸引力
+- 页面结构简陋，不能有效展示政府合作项目的价值和优势
+- 用户需要一个专业、信息丰富的页面来了解HAF项目和公园活动
+
+**解决方案**:
+1. **重新设计页面布局**:
+   - Hero Section（英雄区）- 从hero组件获取标题和背景
+   - Stats Section（统计数据）- 10+年合作、500+受益家庭、20+合作学校、100%社区好评
+   - Introduction（项目简介）- 包含文字介绍和3个特色框
+   - **子栏目导航卡片**（2张卡片）- 展示HAF项目和公园活动
+   - Features（项目优势）- 6个优势点网格布局
+   - CTA Banner（行动呼吁）- 咨询和了解报名条件按钮
+
+2. **子栏目导航卡片设计**（2个子栏目）:
+   - HAF项目（HAF Program）- `/zh/programmes-haf/` - 政府全额资助、营养餐食、文化艺术活动、专业教师指导
+   - 公园活动（Park Activities）- `/zh/programmes-parks/` - 免费开放、多元文化展示、亲子互动、专业艺术表演
+
+3. **模板修改内容** (`templates/zh/programmes.html` 和 `templates/en/programmes.html`):
+   - 从47行代码扩充到723行
+   - 新增 `.section--stats` 区域展示4个统计数据
+   - 新增 `.section--intro` 区域包含文字和3个intro-box
+   - 新增 `.section--nav-cards` 区域展示2个子栏目卡片（2列布局）
+   - 新增 `.section--features` 区域展示6个优势点
+   - 新增 `.section--cta-banner` 行动呼吁区域
+   - 移除简陋的content-box单栏布局
+
+4. **CSS样式更新**:
+   - **色彩方案**: 使用黄色/橙色主题 (#d97706, #f59e0b)，体现政府项目的温暖和公益性
+   - 新增 `.nav-cards-grid--2col` 样式支持2列布局
+   - 新增 `.nav-card` 卡片样式（带图标、标题、英文标签、描述、亮点列表、链接按钮）
+   - 新增 `.stat-item` 统计数据卡片样式
+   - 新增 `.intro-box` 特色框样式（带左边框和悬停效果）
+   - 新增 `.feature-item` 优势点样式
+   - 新增 `.cta-banner` CTA横幅样式
+   - 更新响应式CSS：992px、768px、576px三个断点
+
+5. **代码修改**（`app/services/static_generator.py:752`）:
+   - 在特殊处理列表中添加`"programmes"`
+   - programmes栏目即使有子栏目也使用专用模板（`programmes.html`）
+   - 与chess和badminton保持一致的处理逻辑
+
+**验证结果**:
+- ✅ 中文页面成功修改，展示2个子栏目导航卡片
+- ✅ 英文页面成功修改，保持与中文页面一致的布局
+- ✅ 静态页面生成成功（108页全部成功）
+- ✅ 页面使用黄色/橙色主题(#d97706)，体现政府项目的公益特点
+- ✅ nav-card元素正确渲染（中英文页面各36个）
+- ✅ 2个导航卡片正确显示：HAF项目、公园活动
+- ✅ 页面布局专业且信息丰富，有效展示政府合作项目的价值
+- ✅ 响应式设计正常工作（桌面、平板、手机）
+
+**相关文件**:
+- `templates/zh/programmes.html` - 中文政府项目栏目模板
+- `templates/en/programmes.html` - 英文政府项目栏目模板
+- `app/services/static_generator.py:752` - 静态页面生成器
+
+**页面访问**:
+- 中文页面：http://localhost:8000/zh/programmes/
+- 英文页面：http://localhost:8000/en/programmes/
+
 ### [2025-11-18] 重新设计羽毛球俱乐部栏目综合页面
 - [x] 查看羽毛球栏目结构和子栏目 - 完成时间: 2025-11-18 - 负责人: maxazure
 - [x] 修改中文badminton.html模板 - 完成时间: 2025-11-18 - 负责人: maxazure

@@ -1,46 +1,730 @@
 {% extends "base.html" %}
 
-{% block title %}Government Programmes | Bowen Education Group{% endblock %}
+{% block title %}Government Programs - Bowen Education Group{% endblock %}
 
-{% block meta_description %}Bowen Education Group participates in various government partnership programmes, including HAF projects and community activities.{% endblock %}
+{% block meta_description %}Bowen Education Group participates in various government partnership programs, including HAF programs and park activities, dedicated to providing quality education and cultural services to the community{% endblock %}
 
 {% block content %}
 
 <!-- Hero Section -->
 {% include 'components/hero_main_column.html' %}
 
-<!-- Content Section -->
-<section class="section">
+<!-- Stats Section -->
+<section class="section section--stats">
     <div class="container">
-        <div class="row">
-            <div class="col-lg-8 offset-lg-2">
-                <div class="content-box" data-aos="fade-up">
-                    <h2>Government Partnership Programmes</h2>
-                    <p>Bowen Education Group actively participates in government partnership programmes, committed to providing quality educational and cultural services to the community.</p>
+        <div class="stats-grid" data-aos="fade-up">
+            <div class="stat-item">
+                <div class="stat-item__number">10+</div>
+                <div class="stat-item__label">Years of Partnership</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item__number">500+</div>
+                <div class="stat-item__label">Families Benefited</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item__number">20+</div>
+                <div class="stat-item__label">Partner Schools</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item__number">100%</div>
+                <div class="stat-item__label">Community Satisfaction</div>
+            </div>
+        </div>
+    </div>
+</section>
 
-                    <h3 class="mt-4">Key Programmes</h3>
-                    <ul>
-                        <li><strong>HAF Programme</strong> - Holiday Activities and Food programme</li>
-                        <li><strong>Park Activities</strong> - Community cultural promotion activities</li>
-                        <li><strong>School Partnerships</strong> - Cultural education projects in collaboration with UK government</li>
-                    </ul>
-
-                    <p class="mt-4">Detailed information is being developed. Stay tuned for updates.</p>
+<!-- Introduction Section -->
+<section class="section section--intro">
+    <div class="container">
+        <div class="intro-content">
+            <div class="intro-text" data-aos="fade-right">
+                <h2 class="section__title">
+                    <span>Bowen Government Partnership Programs</span>
+                    <span class="section__title-sub">Serving Community, Preserving Culture</span>
+                </h2>
+                <p class="intro-paragraph">
+                    Bowen Education Group actively participates in UK government partnership programs,
+                    dedicated to providing quality education and cultural services to the local community.
+                    We work closely with Manchester City Council, schools, and community organizations
+                    to deliver diverse community programs.
+                </p>
+                <p class="intro-paragraph">
+                    Through the government-funded HAF (Holiday Activities and Food) program, we provide
+                    holiday activities and nutritious meals for children and young people. Meanwhile,
+                    we organize cultural activities in Manchester's major parks, promoting Chinese-British
+                    cultural exchange and enriching community life.
+                </p>
+                <p class="intro-paragraph">
+                    Our programs not only provide children with opportunities to learn and grow,
+                    but also create platforms for families to participate in community activities
+                    and strengthen neighborhood relationships, contributing to building a harmonious
+                    and diverse community.
+                </p>
+            </div>
+            <div class="intro-boxes" data-aos="fade-left">
+                <div class="intro-box">
+                    <div class="intro-box__icon">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <div class="intro-box__content">
+                        <h3>Government Partnership</h3>
+                        <p>Deep cooperation with Manchester City Council, with government funding and support ensuring program quality</p>
+                    </div>
+                </div>
+                <div class="intro-box">
+                    <div class="intro-box__icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="intro-box__content">
+                        <h3>Community Service</h3>
+                        <p>Reaching grassroots communities, providing free or low-cost quality services to families from diverse backgrounds</p>
+                    </div>
+                </div>
+                <div class="intro-box">
+                    <div class="intro-box__icon">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <div class="intro-box__content">
+                        <h3>Cultural Exchange</h3>
+                        <p>Promoting Chinese-British cultural exchange, preserving Chinese culture, and enhancing multicultural understanding and integration</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- CTA Section -->
-<section class="section section--cta-dark">
+<!-- Navigation Cards Section -->
+<section class="section section--nav-cards">
     <div class="container">
-        <div class="cta-box cta-box--centered" data-aos="fade-up">
-            <h2 class="cta-box__title">Want to Learn More?</h2>
-            <p class="cta-box__description">Contact us for detailed information</p>
-            <a href="/en/contact/" class="btn btn--primary btn--large">Contact Us</a>
+        <div class="section-header text-center" data-aos="fade-up">
+            <h2 class="section__title">
+                <span>Our Programs</span>
+                <span class="section__title-sub">Explore Government Partnership Programs</span>
+            </h2>
+            <p class="section__subtitle">Click to learn more about each program</p>
+        </div>
+
+        <div class="nav-cards-grid nav-cards-grid--2col">
+            <!-- HAF Program Card -->
+            <article class="nav-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="nav-card__icon">
+                    <i class="fas fa-utensils"></i>
+                </div>
+                <h3 class="nav-card__title">HAF Program</h3>
+                <p class="nav-card__title-en">Holiday Activities & Food</p>
+                <p class="nav-card__description">
+                    Government-funded holiday activities and food program providing free holiday activities
+                    and nutritious meals for eligible children and young people, helping them enjoy
+                    meaningful and enriching holidays.
+                </p>
+                <ul class="nav-card__highlights">
+                    <li>Fully government-funded, completely free</li>
+                    <li>Nutritious and balanced meals provided</li>
+                    <li>Rich cultural and artistic activities</li>
+                    <li>Professional teaching team guidance</li>
+                </ul>
+                <a href="/en/programmes-haf/" class="nav-card__link">
+                    Learn More <i class="fas fa-arrow-right"></i>
+                </a>
+            </article>
+
+            <!-- Park Activities Card -->
+            <article class="nav-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="nav-card__icon">
+                    <i class="fas fa-tree"></i>
+                </div>
+                <h3 class="nav-card__title">Park Activities</h3>
+                <p class="nav-card__title-en">Community Cultural Events</p>
+                <p class="nav-card__description">
+                    Community cultural activities held in Manchester's major parks, including Chinese
+                    traditional culture displays, artistic performances, and parent-child interactive games,
+                    providing free cultural experiences for community residents.
+                </p>
+                <ul class="nav-card__highlights">
+                    <li>Free and open to the community</li>
+                    <li>Multicultural displays and exchanges</li>
+                    <li>Parent-child interactions and family activities</li>
+                    <li>Professional artistic performances</li>
+                </ul>
+                <a href="/en/programmes-parks/" class="nav-card__link">
+                    View Activities <i class="fas fa-arrow-right"></i>
+                </a>
+            </article>
         </div>
     </div>
 </section>
+
+<!-- Features Section -->
+<section class="section section--features">
+    <div class="container">
+        <div class="section-header text-center" data-aos="fade-up">
+            <h2 class="section__title">
+                <span>Why Choose Bowen</span>
+                <span class="section__title-sub">Our Advantages</span>
+            </h2>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-item" data-aos="fade-up" data-aos-delay="100">
+                <div class="feature-item__icon">
+                    <i class="fas fa-certificate"></i>
+                </div>
+                <h3>Government Certified</h3>
+                <p>Government-reviewed and certified partner, ensuring program quality and compliance with UK education standards</p>
+            </div>
+
+            <div class="feature-item" data-aos="fade-up" data-aos-delay="200">
+                <div class="feature-item__icon">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <h3>Professional Team</h3>
+                <p>Experienced teachers and activity organizers with relevant qualifications and DBS background checks</p>
+            </div>
+
+            <div class="feature-item" data-aos="fade-up" data-aos-delay="300">
+                <div class="feature-item__icon">
+                    <i class="fas fa-language"></i>
+                </div>
+                <h3>Bilingual Service</h3>
+                <p>Providing Chinese-English bilingual services, helping Chinese families better integrate into the local community</p>
+            </div>
+
+            <div class="feature-item" data-aos="fade-up" data-aos-delay="400">
+                <div class="feature-item__icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h3>Child-Centered</h3>
+                <p>Focusing on child welfare, creating safe, fun, and beneficial growth environments</p>
+            </div>
+
+            <div class="feature-item" data-aos="fade-up" data-aos-delay="500">
+                <div class="feature-item__icon">
+                    <i class="fas fa-project-diagram"></i>
+                </div>
+                <h3>Systematic Planning</h3>
+                <p>Scientific and reasonable activity arrangements, balancing education, fun, and nutritional health</p>
+            </div>
+
+            <div class="feature-item" data-aos="fade-up" data-aos-delay="600">
+                <div class="feature-item__icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3>Community Connection</h3>
+                <p>Building community exchange platforms, promoting mutual understanding and integration among families from different cultural backgrounds</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Banner Section -->
+<section class="section section--cta-banner">
+    <div class="container">
+        <div class="cta-banner" data-aos="zoom-in">
+            <div class="cta-banner__content">
+                <h2 class="cta-banner__title">Join Bowen Government Programs!</h2>
+                <p class="cta-banner__text">
+                    Free quality holiday activities and community cultural experiences -
+                    Let your children enjoy meaningful and enriching holidays!
+                </p>
+                <div class="cta-banner__buttons">
+                    <a href="/en/contact/" class="btn btn--primary btn--large">
+                        <i class="fas fa-phone-alt"></i> Contact Now
+                    </a>
+                    <a href="tel:01619693071" class="btn btn--outline btn--large">
+                        <i class="fas fa-info-circle"></i> Learn Eligibility
+                    </a>
+                </div>
+                <div class="cta-banner__contact">
+                    <span><i class="fas fa-phone"></i> 0161 969 3071</span>
+                    <span><i class="fas fa-envelope"></i> info@boweneducation.org</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Programmes Page Styles */
+
+/* Stats Section */
+.section--stats {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    padding: 3rem 0;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.stat-item {
+    text-align: center;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.1);
+    transition: all 0.3s;
+}
+
+.stat-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(217, 119, 6, 0.2);
+}
+
+.stat-item__number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #d97706;
+    margin-bottom: 0.5rem;
+}
+
+.stat-item__label {
+    font-size: 0.95rem;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+/* Introduction Section */
+.section--intro {
+    padding: 5rem 0;
+    background: white;
+}
+
+.intro-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.intro-text .section__title {
+    margin-bottom: 2rem;
+}
+
+.intro-text .section__title span:first-child {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.intro-text .section__title-sub {
+    font-size: 1.2rem;
+    color: #d97706;
+    font-weight: 600;
+}
+
+.intro-paragraph {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #4b5563;
+    margin-bottom: 1.5rem;
+}
+
+.intro-boxes {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.intro-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: #f9fafb;
+    border-radius: 12px;
+    border-left: 4px solid #d97706;
+    transition: all 0.3s;
+}
+
+.intro-box:hover {
+    background: #fef3c7;
+    transform: translateX(5px);
+}
+
+.intro-box__icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.intro-box__content h3 {
+    font-size: 1.2rem;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.intro-box__content p {
+    color: #6b7280;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Navigation Cards Section */
+.section--nav-cards {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+}
+
+.nav-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+    margin-top: 3rem;
+}
+
+.nav-cards-grid--2col {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.nav-card {
+    background: white;
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: 0 8px 32px rgba(217, 119, 6, 0.1);
+    transition: all 0.3s;
+    border: 2px solid transparent;
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 16px 48px rgba(217, 119, 6, 0.2);
+    border-color: #d97706;
+}
+
+.nav-card__icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%);
+    color: #d97706;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.nav-card__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.nav-card__title-en {
+    font-size: 0.9rem;
+    color: #d97706;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+}
+
+.nav-card__description {
+    color: #6b7280;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+}
+
+.nav-card__highlights {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem 0;
+}
+
+.nav-card__highlights li {
+    padding: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+    color: #4b5563;
+    font-size: 0.95rem;
+}
+
+.nav-card__highlights li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: #d97706;
+    font-weight: bold;
+}
+
+.nav-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: #d97706;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s;
+    align-self: flex-start;
+}
+
+.nav-card__link:hover {
+    background: #b45309;
+    gap: 0.75rem;
+}
+
+.nav-card__link i {
+    font-size: 0.875rem;
+}
+
+/* Features Section */
+.section--features {
+    padding: 5rem 0;
+    background: white;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+    margin-top: 3rem;
+}
+
+.feature-item {
+    text-align: center;
+    padding: 2rem;
+    border-radius: 12px;
+    background: #f9fafb;
+    transition: all 0.3s;
+}
+
+.feature-item:hover {
+    background: #fef3c7;
+    transform: translateY(-5px);
+}
+
+.feature-item__icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 1.5rem;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+}
+
+.feature-item h3 {
+    font-size: 1.2rem;
+    color: #1f2937;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.feature-item p {
+    color: #6b7280;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* CTA Banner Section */
+.section--cta-banner {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+}
+
+.cta-banner {
+    background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+    border-radius: 24px;
+    padding: 4rem 3rem;
+    text-align: center;
+    box-shadow: 0 16px 48px rgba(217, 119, 6, 0.3);
+}
+
+.cta-banner__title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.cta-banner__text {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 2.5rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+.cta-banner__buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+    border: 2px solid transparent;
+}
+
+.btn--large {
+    padding: 1.25rem 2.5rem;
+}
+
+.btn--primary {
+    background: white;
+    color: #d97706;
+    border-color: white;
+}
+
+.btn--primary:hover {
+    background: #fef3c7;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.3);
+}
+
+.btn--outline {
+    background: transparent;
+    color: white;
+    border-color: white;
+}
+
+.btn--outline:hover {
+    background: white;
+    color: #d97706;
+    transform: translateY(-3px);
+}
+
+.cta-banner__contact {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    color: white;
+    font-size: 1rem;
+}
+
+.cta-banner__contact span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.cta-banner__contact i {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .intro-content {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+
+    .nav-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .stat-item__number {
+        font-size: 2rem;
+    }
+
+    .intro-text .section__title span:first-child {
+        font-size: 2rem;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cta-banner {
+        padding: 3rem 2rem;
+    }
+
+    .cta-banner__title {
+        font-size: 2rem;
+    }
+
+    .cta-banner__buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+    }
+
+    .cta-banner__contact {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .section--intro,
+    .section--nav-cards,
+    .section--features,
+    .section--cta-banner {
+        padding: 3rem 0;
+    }
+
+    .nav-card {
+        padding: 2rem;
+    }
+
+    .nav-card__icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+
+    .nav-card__title {
+        font-size: 1.3rem;
+    }
+}
+</style>
 
 {% endblock %}

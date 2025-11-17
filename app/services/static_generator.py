@@ -749,7 +749,7 @@ class StaticPageGenerator:
                 sections = site_service.get_overview_sections(self.db, column.id)
                 context["sections"] = sections
                 # 特殊处理：某些栏目即使有子栏目也使用专用模板
-                if column.slug in ["chess", "badminton"]:
+                if column.slug in ["chess", "badminton", "programmes"]:
                     template_name = f"{column.slug}.html"
                 else:
                     template_name = "overview.html"
