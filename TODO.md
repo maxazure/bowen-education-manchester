@@ -5,6 +5,67 @@
 
 ## ✅ 已完成
 
+### [2025-11-18] 添加hero_tagline_en字段支持英文Hero标语
+- [x] 在SiteColumn模型添加hero_tagline_en字段 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 创建并执行数据库迁移 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 更新admin后台表单支持hero_tagline_en编辑 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 更新所有英文模板使用hero_tagline_en字段 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 重新生成静态页面并验证 - 完成时间: 2025-11-18 - 负责人: maxazure
+
+**问题描述**:
+- 英文页面的Hero标语（hero_tagline）仍然显示中文
+- 数据库模型缺少hero_tagline_en字段
+- 这是修复英文overview模板后遗留的最后一个中文显示问题
+
+**解决方案**:
+1. **数据库模型修改** (`app/models/site.py:76`):
+   - 在SiteColumn模型添加 `hero_tagline_en` 字段
+   - 字段类型: Text, nullable=True, comment='Hero英文标语/口号'
+
+2. **创建数据库迁移** (`migrations/versions/b4e99ed474b9_add_hero_tagline_en_to_site_column.py`):
+   - 使用Alembic创建迁移文件
+   - upgrade: 添加hero_tagline_en列
+   - downgrade: 删除hero_tagline_en列
+   - 成功执行迁移
+
+3. **更新Admin后台**:
+   - **路由处理** (`admin/app/routers/columns.py`):
+     - create_column函数添加hero_tagline_en参数 (line 98, 121, 148)
+     - update_column函数添加hero_tagline_en参数 (line 218, 242, 269)
+   - **表单模板** (`admin/templates/columns/form.html:212-228`):
+     - 添加hero_tagline_en输入框
+     - 占位符: "Professional, Innovative, Excellent"
+     - 帮助文本: "简短的品牌口号或宣传语（英文）"
+
+4. **更新前端模板**（7个英文模板文件）:
+   - `templates/en/overview.html:175` - Page header tagline
+   - `templates/en/post_list.html:9` - Hero subtitle
+   - `templates/en/post_list_universal.html:5,11` - Meta description & Hero subtitle
+   - `templates/en/post_list_with_sidebar.html:5` - Meta description
+   - `templates/en/gallery.html:5,11,71` - Meta description, OG description & Hero subtitle
+   - `templates/en/components/hero_standard.html:7` - Default hero subtitle
+   - `templates/en/components/hero_main_column.html:12` - Main column tagline
+   - **统一回退模式**: `{{ column.hero_tagline_en or column.hero_tagline }}`
+
+**验证结果**:
+- ✅ 数据库迁移成功执行，hero_tagline_en字段已添加
+- ✅ Admin后台表单可以编辑hero_tagline_en
+- ✅ 所有英文模板正确使用回退模式
+- ✅ 静态页面已重新生成（108页全部成功）
+- ✅ 回退机制验证：hero_tagline_en为空时正确显示hero_tagline
+- ✅ 数据填充后将完全显示英文标语
+
+**相关文件**:
+- `app/models/site.py:76` - SiteColumn模型
+- `migrations/versions/b4e99ed474b9_add_hero_tagline_en_to_site_column.py` - 数据库迁移
+- `admin/app/routers/columns.py:98,121,148,218,242,269` - Admin路由
+- `admin/templates/columns/form.html:212-228` - Admin表单
+- 7个英文模板文件 - 前端显示
+
+**后续工作**:
+- 需要通过admin后台为需要英文标语的栏目填写hero_tagline_en内容
+- 建议优先填写主要栏目: Chess, Badminton, Chinese School, Tutoring等
+
 ### [2025-11-18] 修复英文overview模板显示中文内容
 - [x] 检查数据库英文内容完整性 - 完成时间: 2025-11-18 - 负责人: maxazure
 - [x] 修复overview.html模板使用中文字段问题 - 完成时间: 2025-11-18 - 负责人: maxazure
