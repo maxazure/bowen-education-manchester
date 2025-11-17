@@ -5,6 +5,56 @@
 
 ## ✅ 已完成
 
+### [2025-11-18] 修复英文overview模板显示中文内容
+- [x] 检查数据库英文内容完整性 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 修复overview.html模板使用中文字段问题 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 修复site_service.py缺少column_name_en字段 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 重新生成静态页面并验证英文显示 - 完成时间: 2025-11-18 - 负责人: maxazure
+
+**问题描述**:
+- 英文overview页面（如 `/en/chess/`）显示中文内容
+- 数据库中所有英文内容都已填写完整（栏目31/31、单页24/24、文章21/21）
+- 但模板使用了中文字段导致显示错误
+
+**根本原因**:
+- `templates/en/overview.html` 在多处直接使用中文字段（如 `column.name`、`section.column_name`、`post.title` 等）
+- `app/services/site_service.py:get_overview_sections()` 函数返回的section字典缺少 `column_name_en` 字段
+- 没有使用英文字段优先的回退模式 `{{ field_en or field }}`
+
+**解决方案**:
+1. **修改 templates/en/overview.html** (17处修改):
+   - Line 3: 页面标题使用 `column.name_en or column.name`
+   - Line 174: Hero标题使用 `column.hero_title_en or column.hero_title or column.name_en or column.name`
+   - Line 184: Section标题使用 `section.column_name_en or section.column_name`
+   - Line 194, 200: 文章标题使用 `post.title_en or post.title`
+   - Line 201-202: 文章摘要使用 `post.summary_en or post.summary`
+   - Line 215, 252: View All按钮使用 `section.column_name_en or section.column_name`
+   - Line 229, 235: 产品名称使用 `product.name_en or product.name`
+   - Line 236-237: 产品摘要使用 `product.summary_en or product.summary`
+   - Line 262-266: 单页内容使用 `subtitle_en`、`content_html_en`
+   - Line 284: 空状态使用 `section.column_name_en or section.column_name`
+
+2. **修改 app/services/site_service.py** (1处添加):
+   - Line 154: 在section字典中添加 `"column_name_en": child.name_en`
+
+**验证结果**:
+- ✅ 英文overview页面正确显示英文内容
+- ✅ 文章标题、摘要、栏目名称全部英文化
+- ✅ 产品信息正确显示英文
+- ✅ 单页内容正确使用英文字段
+- ✅ 对比测试：http://localhost:8002/en/chess/ 显示 "Bowen Chess Club"、"About"、"Welcome to Bowen Chess Club"
+- ⚠️  已知限制：hero_tagline仍然是中文（数据库模型缺少hero_tagline_en字段）
+
+**相关文件**:
+- `templates/en/overview.html` - 修改17处字段引用
+- `app/services/site_service.py:154` - 添加column_name_en字段
+
+**数据库完整性检查结果**:
+- 栏目（SiteColumn）: 31/31 (100%) - 所有启用栏目都有完整英文翻译
+- 单页（SinglePage）: 24/24 (100%) - 所有已发布单页都有完整英文翻译
+- 文章（Post）: 21/21 (100%) - 所有已发布文章都有完整英文翻译
+- 产品（Product）: 0个已发布产品（无需检查）
+
 ### [2025-11-18] 修复静态页面缺少侧边栏问题
 - [x] 分析静态页面与动态页面差异 - 完成时间: 2025-11-18 - 负责人: maxazure
 - [x] 修复静态生成器缺少侧边栏数据的问题 - 完成时间: 2025-11-18 - 负责人: maxazure
