@@ -297,6 +297,17 @@ class StaticPageGenerator:
             context["column"] = column
             context["page"] = page
 
+            # 添加父栏目和兄弟栏目（用于侧边栏导航）
+            if column.parent_id:
+                parent_column = (
+                    self.db.query(SiteColumn)
+                    .filter(SiteColumn.id == column.parent_id)
+                    .first()
+                )
+                context["parent_column"] = parent_column
+                sibling_columns = site_service.get_child_columns(self.db, column.parent_id)
+                context["sibling_columns"] = sibling_columns
+
             # 检查是否有已发布的布局
             from app.models.layout import LayoutScope
             published_layout = layout_render_service.get_published_layout(
