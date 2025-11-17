@@ -194,7 +194,7 @@
                             <!-- Hero 标语 -->
                             <div class="col-12">
                                 <label for="hero_tagline" class="form-label">
-                                    Hero 标语/口号
+                                    Hero 标语/口号（中文）
                                 </label>
                                 <input
                                     type="text"
@@ -205,7 +205,25 @@
                                     placeholder="例如：专业、创新、卓越">
                                 <div class="help-text">
                                     <i class="bi bi-info-circle"></i>
-                                    <span>简短的品牌口号或宣传语</span>
+                                    <span>简短的品牌口号或宣传语（中文）</span>
+                                </div>
+                            </div>
+
+                            <!-- Hero 英文标语 -->
+                            <div class="col-12">
+                                <label for="hero_tagline_en" class="form-label">
+                                    Hero 标语/口号（英文）
+                                </label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="hero_tagline_en"
+                                    name="hero_tagline_en"
+                                    value="{% if column %}{{ column.hero_tagline_en or '' }}{% endif %}"
+                                    placeholder="例如：Professional, Innovative, Excellent">
+                                <div class="help-text">
+                                    <i class="bi bi-info-circle"></i>
+                                    <span>简短的品牌口号或宣传语（英文）</span>
                                 </div>
                             </div>
 

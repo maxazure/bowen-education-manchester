@@ -2,7 +2,7 @@
 
 {% block title %}{{ column|column_name }} - Bowen Education Group{% endblock %}
 
-{% block meta_description %}{{ column.hero_tagline or (column|column_name ~ ' - Bowen Education Group provides quality Chinese language education') }}{% endblock %}
+{% block meta_description %}{{ column.hero_tagline_en or column.hero_tagline or (column|column_name ~ ' - Bowen Education Group provides quality Chinese language education') }}{% endblock %}
 
 {% block content %}
 

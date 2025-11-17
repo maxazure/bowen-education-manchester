@@ -4,7 +4,7 @@
 -->
 
 {% set hero_title = hero_title if hero_title is defined else (page.title if page is defined else (column.hero_title_en if column is defined and column.hero_title_en else (column|column_name if column is defined else ''))) %}
-{% set hero_subtitle = hero_subtitle if hero_subtitle is defined else (page.subtitle if page is defined else (column.hero_tagline if column is defined and column.hero_tagline else none)) %}
+{% set hero_subtitle = hero_subtitle if hero_subtitle is defined else (page.subtitle if page is defined else ((column.hero_tagline_en or column.hero_tagline) if column is defined else none)) %}
 {# Background image priority: explicitly passed hero_image > page.hero_media > column.hero_media > default image #}
 {% if not hero_image %}
     {% if page is defined and page.hero_media %}

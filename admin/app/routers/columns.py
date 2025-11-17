@@ -95,6 +95,7 @@ async def create_column(
     hero_title: Optional[str] = Form(None),
     hero_title_en: Optional[str] = Form(None),
     hero_tagline: Optional[str] = Form(None),
+    hero_tagline_en: Optional[str] = Form(None),
     hero_cta_text: Optional[str] = Form(None),
     hero_cta_url: Optional[str] = Form(None),
     db: Session = Depends(get_db),
@@ -117,6 +118,7 @@ async def create_column(
         hero_title: Hero 标题
         hero_title_en: Hero 英文标题
         hero_tagline: Hero 标语
+        hero_tagline_en: Hero 英文标语
         hero_cta_text: CTA 按钮文本
         hero_cta_url: CTA 按钮链接
         db: 数据库会话
@@ -143,6 +145,7 @@ async def create_column(
         hero_title=hero_title,
         hero_title_en=hero_title_en,
         hero_tagline=hero_tagline,
+        hero_tagline_en=hero_tagline_en,
         hero_cta_text=hero_cta_text,
         hero_cta_url=hero_cta_url,
     )
@@ -212,6 +215,7 @@ async def update_column(
     hero_title: Optional[str] = Form(None),
     hero_title_en: Optional[str] = Form(None),
     hero_tagline: Optional[str] = Form(None),
+    hero_tagline_en: Optional[str] = Form(None),
     hero_cta_text: Optional[str] = Form(None),
     hero_cta_url: Optional[str] = Form(None),
     db: Session = Depends(get_db),
@@ -235,6 +239,7 @@ async def update_column(
         hero_title: Hero 标题
         hero_title_en: Hero 英文标题
         hero_tagline: Hero 标语
+        hero_tagline_en: Hero 英文标语
         hero_cta_text: CTA 按钮文本
         hero_cta_url: CTA 按钮链接
         db: 数据库会话
@@ -261,6 +266,7 @@ async def update_column(
     column.hero_title = hero_title
     column.hero_title_en = hero_title_en
     column.hero_tagline = hero_tagline
+    column.hero_tagline_en = hero_tagline_en
     column.hero_cta_text = hero_cta_text
     column.hero_cta_url = hero_cta_url
 

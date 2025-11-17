@@ -6,7 +6,7 @@
 
 <!-- Hero Section -->
 {% set hero_title = column.hero_title_en or column.name_en or column.name %}
-{% set hero_subtitle = column.hero_tagline or column.description %}
+{% set hero_subtitle = column.hero_tagline_en or column.hero_tagline or column.description %}
 {% include 'components/hero_standard.html' %}
 
 <!-- Posts List Section -->
