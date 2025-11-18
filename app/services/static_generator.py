@@ -559,7 +559,7 @@ class StaticPageGenerator:
 
             # 根据栏目选择合适的模板
             template_name = "post_list.html"
-            if column.slug == "school-curriculum":
+            if column.slug in ["school-curriculum", "programmes-parks"]:
                 template_name = "post_list_with_sidebar.html"
             elif column.slug in ["chess-events", "chess-news", "news", "badminton-events"]:
                 template_name = "post_list_universal.html"
