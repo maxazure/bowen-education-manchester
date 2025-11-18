@@ -4,19 +4,19 @@
     <!-- Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="description" content="博文教育集团常见问题解答。了解课程报名、费用、上课时间、俱乐部活动等相关信息。">
+    <meta name="description" content="报名与试听 - 博文教育集团为您提供优质的中文教育服务">
     <meta name="keywords" content="博文教育集团,中文教育,曼彻斯特中文学校">
-    <title>常见问题解答 | 博文教育集团 Bowen Education Group | Bowen Education Group</title>
+    <title>报名与试听 | 博文教育集团 Bowen Education Group | Bowen Education Group</title>
 
     <!-- Favicon -->
     <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="/static/images/apple-touch-icon.png">
 
     <!-- Open Graph Tags -->
-    <meta property="og:title" content="常见问题解答 | 博文教育集团 Bowen Education Group">
-    <meta property="og:description" content="博文教育集团常见问题解答。了解课程报名、费用、上课时间、俱乐部活动等相关信息。">
+    <meta property="og:title" content="报名与试听 | 博文教育集团 Bowen Education Group">
+    <meta property="og:description" content="报名与试听 - 博文教育集团为您提供优质的中文教育服务">
     <meta property="og:image" content="/static/images/hero-default.jpg">
-    <meta property="og:url" content="http://localhost:8000/faq">
+    <meta property="og:url" content="http://localhost:8000/school-registration">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Bowen Education Group">
 
@@ -338,9 +338,9 @@
 
 
     <!-- SEO: Language Alternatives -->
-    <link rel="alternate" hreflang="en" href="https://boweneducation.co.uk/en/faq" />
-    <link rel="alternate" hreflang="zh" href="https://boweneducation.co.uk/faq" />
-    <link rel="alternate" hreflang="x-default" href="https://boweneducation.co.uk/faq" />
+    <link rel="alternate" hreflang="en" href="https://boweneducation.co.uk/en/school-registration" />
+    <link rel="alternate" hreflang="zh" href="https://boweneducation.co.uk/school-registration" />
+    <link rel="alternate" hreflang="x-default" href="https://boweneducation.co.uk/school-registration" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -389,9 +389,9 @@
 {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": "常见问题解答",
-    "description": "博文教育集团常见问题解答。了解课程报名、费用、上课时间、俱乐部活动等相关信息。",
-    "url": "http://localhost:8000/faq",
+    "name": "报名与试听",
+    "description": "报名与试听",
+    "url": "http://localhost:8000/school-registration",
     "inLanguage": ["en-GB", "zh-CN"],
     "isPartOf": {
         "@type": "WebSite",
@@ -416,8 +416,14 @@
             {
                 "@type": "ListItem",
                 "position": 2,
-                "name": "常见问题解答",
-                "item": "http://localhost:8000/faq"
+                "name": "中文学校",
+                "item": "&lt;app.services.static_generator.obj object at 0x1089ff8c0&gt;school"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "报名与试听",
+                "item": "http://localhost:8000/school-registration"
             }
         ]
     }
@@ -452,7 +458,7 @@
                     
                 </div>
                 <div class="language-switcher">
-                    <a href="/faq" class="language-toggle" aria-label="Switch to English">
+                    <a href="/school-registration" class="language-toggle" aria-label="Switch to English">
                         <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="10"></circle>
                             <line x1="2" y1="12" x2="22" y2="12"></line>
@@ -1925,18 +1931,14 @@ body.mobile-menu-open {
     <div class="hero__overlay" aria-hidden="true"></div>
     <div class="hero__background"
          role="img"
-         aria-label="常见问题解答"
+         aria-label="报名与试听"
          style="background-image: url('/static/images/hero-default.jpg');"
          loading="lazy"></div>
     <div class="container">
         <div class="hero__content">
             <h1 id="page-title" class="hero__title" data-aos="fade-up">
-                <span lang="zh-CN">常见问题解答</span>
+                <span lang="zh-CN">报名与试听</span>
             </h1>
-            
-            <p class="hero__subtitle" data-aos="fade-up" data-aos-delay="100">
-                <span lang="zh-CN">您关心的问题，我们都有答案</span>
-            </p>
             
         </div>
     </div>
@@ -2039,169 +2041,312 @@ body.mobile-menu-open {
 <section class="section section--content">
     <div class="container">
         
-        <!-- Single column layout without sidebar -->
-        <div class="page-layout page-layout--single">
-            <article class="single-page-content" data-aos="fade-up">
-                
-                <div class="container py-5">
-                    <div class="row">
-                        <div class="col-lg-10 mx-auto">
-                            <h2 class="section-title mb-5">常见问题解答</h2>
+        <!-- Two-column layout with sidebar -->
+        <div class="page-layout">
+            <!-- Left Sidebar Navigation -->
+            <aside class="page-layout__sidebar">
+                <!--
+  Sidebar Navigation Component
+  显示父栏目和子栏目的侧边导航
+-->
 
-                            <div class="accordion" id="faqAccordion">
-                                <!-- 关于课程 -->
-                                <div class="mb-4">
-                                    <h3 class="h4 mb-3">关于课程</h3>
 
-                                    <div class="card mb-3">
-                                        <div class="card-header">
-                                            <h5 class="mb-0">
-                                                <button class="btn btn-link text-start w-100" type="button">
-                                                    如何报名课程？
-                                                </button>
-                                            </h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <p>您可以通过以下方式报名：</p>
-                                            <ul>
-                                                <li>访问我们的联系页面填写报名表</li>
-                                                <li>致电我们的办公室</li>
-                                                <li>发送邮件至我们的官方邮箱</li>
-                                                <li>亲临我们的办公地点现场咨询</li>
-                                            </ul>
-                                        </div>
-                                    </div>
+<aside class="sidebar-nav">
+    <!-- Parent Column Link -->
+    <div class="sidebar-header">
+        <a href="/zh/school/" class="sidebar-parent-link">
+            <h3>中文学校</h3>
 
-                                    <div class="card mb-3">
-                                        <div class="card-header">
-                                            <h5 class="mb-0">
-                                                <button class="btn btn-link text-start w-100" type="button">
-                                                    课程费用是多少？
-                                                </button>
-                                            </h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <p>不同课程的费用有所不同。请访问"补习中心"页面查看具体课程的收费标准，或联系我们获取详细报价。</p>
-                                        </div>
-                                    </div>
+        </a>
+    </div>
 
-                                    <div class="card mb-3">
-                                        <div class="card-header">
-                                            <h5 class="mb-0">
-                                                <button class="btn btn-link text-start w-100" type="button">
-                                                    可以试听课程吗？
-                                                </button>
-                                            </h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <p>是的，我们提供免费试听服务。请提前预约，我们会为您安排合适的试听时间。</p>
-                                        </div>
-                                    </div>
-                                </div>
+    <!-- Child Columns Navigation -->
+    
+    <nav class="sidebar-menu">
+        <ul class="sidebar-menu-list">
+            
+            <li class="sidebar-menu-item">
+                <a
+                    href="/zh/school-curriculum/"
+                    class="sidebar-menu-link"
+                >
+                    <span class="sidebar-menu-icon">
+                        
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                            <polyline points="13 2 13 9 20 9"></polyline>
+                        </svg>
+                        
+                    </span>
+                    <span class="sidebar-menu-text">中文学校课程设置</span>
+                </a>
+            </li>
+            
+            <li class="sidebar-menu-item">
+                <a
+                    href="/zh/school-term-dates/"
+                    class="sidebar-menu-link"
+                >
+                    <span class="sidebar-menu-icon">
+                        
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                            <polyline points="13 2 13 9 20 9"></polyline>
+                        </svg>
+                        
+                    </span>
+                    <span class="sidebar-menu-text">学期日期</span>
+                </a>
+            </li>
+            
+            <li class="sidebar-menu-item">
+                <a
+                    href="/zh/school-pta/"
+                    class="sidebar-menu-link"
+                >
+                    <span class="sidebar-menu-icon">
+                        
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                            <polyline points="13 2 13 9 20 9"></polyline>
+                        </svg>
+                        
+                    </span>
+                    <span class="sidebar-menu-text">PTA家长教师协会</span>
+                </a>
+            </li>
+            
+            <li class="sidebar-menu-item">
+                <a
+                    href="/zh/school-registration/"
+                    class="sidebar-menu-link active"
+                >
+                    <span class="sidebar-menu-icon">
+                        
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                            <polyline points="13 2 13 9 20 9"></polyline>
+                        </svg>
+                        
+                    </span>
+                    <span class="sidebar-menu-text">报名与试听</span>
+                </a>
+            </li>
+            
+        </ul>
+    </nav>
+    
 
-                                <!-- 关于学校 -->
-                                <div class="mb-4">
-                                    <h3 class="h4 mb-3">关于中文学校</h3>
+    <!-- Registration Button (only show if explicitly passed show_register_button variable) -->
+    
+</aside>
 
-                                    <div class="card mb-3">
-                                        <div class="card-header">
-                                            <h5 class="mb-0">
-                                                <button class="btn btn-link text-start w-100" type="button">
-                                                    上课时间是什么时候？
-                                                </button>
-                                            </h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <p>中文学校的课程通常安排在周末。具体上课时间请查看"学期日期"页面或联系我们咨询。</p>
-                                        </div>
-                                    </div>
 
-                                    <div class="card mb-3">
-                                        <div class="card-header">
-                                            <h5 class="mb-0">
-                                                <button class="btn btn-link text-start w-100" type="button">
-                                                    有哪些年龄段的课程？
-                                                </button>
-                                            </h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <p>我们提供从基础启蒙班到A-Level的完整课程体系，适合4岁以上的所有年龄段学生。详情请查看"课程设置"页面。</p>
-                                        </div>
-                                    </div>
-                                </div>
+<style>
+/* Sidebar Navigation Styles */
+.sidebar-nav {
+    width: 100%; /* 改为100%适应父容器 */
+    background: var(--color-white, #ffffff);
+    border-radius: var(--radius-lg, 0.75rem);
+    box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1));
+    overflow: hidden;
+    position: sticky;
+    top: 100px;
+    max-height: calc(100vh - 120px);
+    display: flex;
+    flex-direction: column;
+    --color-primary: #3b82f6;
+}
 
-                                <!-- 关于俱乐部 -->
-                                <div class="mb-4">
-                                    <h3 class="h4 mb-3">关于俱乐部</h3>
+.sidebar-header {
+    padding: var(--spacing-lg, 1.5rem);
+    background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+    color: white;
+}
 
-                                    <div class="card mb-3">
-                                        <div class="card-header">
-                                            <h5 class="mb-0">
-                                                <button class="btn btn-link text-start w-100" type="button">
-                                                    如何加入国际象棋俱乐部？
-                                                </button>
-                                            </h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <p>请访问"国际象棋俱乐部"页面了解详情，或直接联系我们报名。我们欢迎所有水平的棋手加入。</p>
-                                        </div>
-                                    </div>
+.sidebar-parent-link {
+    text-decoration: none;
+    color: white;
+    display: block;
+}
 
-                                    <div class="card mb-3">
-                                        <div class="card-header">
-                                            <h5 class="mb-0">
-                                                <button class="btn btn-link text-start w-100" type="button">
-                                                    羽毛球俱乐部需要自备装备吗？
-                                                </button>
-                                            </h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <p>建议自备球拍和运动鞋。如果暂时没有装备，我们可以提供租借服务。</p>
-                                        </div>
-                                    </div>
-                                </div>
+.sidebar-parent-link:hover h3 {
+    text-decoration: underline;
+}
 
-                                <!-- 其他问题 -->
-                                <div class="mb-4">
-                                    <h3 class="h4 mb-3">其他问题</h3>
+.sidebar-parent-link h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.4;
+    color: #ffffff;
+}
 
-                                    <div class="card mb-3">
-                                        <div class="card-header">
-                                            <h5 class="mb-0">
-                                                <button class="btn btn-link text-start w-100" type="button">
-                                                    学校地址在哪里？
-                                                </button>
-                                            </h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <p>请访问"联系我们"页面查看详细地址和交通信息。</p>
-                                        </div>
-                                    </div>
+.sidebar-subtitle {
+    display: block;
+    font-size: 0.875rem;
+    opacity: 0.9;
+    margin-top: 0.25rem;
+}
 
-                                    <div class="card mb-3">
-                                        <div class="card-header">
-                                            <h5 class="mb-0">
-                                                <button class="btn btn-link text-start w-100" type="button">
-                                                    有停车位吗？
-                                                </button>
-                                            </h5>
-                                        </div>
-                                        <div class="card-body">
-                                            <p>是的，我们提供免费停车位。具体停车信息请在到访前联系我们确认。</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+.sidebar-menu {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-sm, 1rem);
+}
 
-                            <div class="alert alert-primary mt-5">
-                                <h5>没有找到您的问题？</h5>
-                                <p class="mb-0">请访问<a href="/contact" class="alert-link">联系我们</a>页面，我们很乐意为您解答任何疑问。</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-            </article>
+.sidebar-menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-menu-item {
+    margin-bottom: 0.375rem;
+}
+
+.sidebar-menu-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm, 0.75rem);
+    padding: var(--spacing-sm, 0.75rem) var(--spacing-md, 1rem);
+    color: var(--color-gray-800, #374151);
+    text-decoration: none;
+    border-radius: var(--radius-md, 0.5rem);
+    transition: all var(--transition-fast, 0.2s ease);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.sidebar-menu-link:hover {
+    background: #eef6ff;
+    color: var(--color-primary, #0052cc);
+}
+
+.sidebar-menu-link.active {
+    background: #eaf2ff;
+    color: var(--color-primary, #0052cc);
+    font-weight: 600;
+    box-shadow: inset 0 0 0 2px rgba(0, 82, 204, 0.2);
+}
+
+.sidebar-menu-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    opacity: 0.8;
+}
+
+.sidebar-menu-link.active .sidebar-menu-icon {
+    opacity: 1;
+}
+
+.sidebar-menu-text {
+    flex: 1;
+}
+
+/* Registration CTA Button */
+.sidebar-cta {
+    padding: var(--spacing-md, 1rem);
+    margin-top: auto;
+    border-top: 1px solid var(--color-gray-200, #e2e8f0);
+}
+
+.sidebar-register-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md, 1rem);
+    padding: var(--spacing-md, 1rem);
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--radius-md, 0.5rem);
+    transition: all var(--transition-fast, 0.2s ease);
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+}
+
+.sidebar-register-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+.sidebar-register-btn svg {
+    flex-shrink: 0;
+}
+
+.sidebar-register-text {
+    flex: 1;
+    line-height: 1.4;
+}
+
+.sidebar-register-text strong {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.125rem;
+}
+
+.sidebar-register-text small {
+    display: block;
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .sidebar-nav {
+        width: 100%;
+        position: static;
+        margin-bottom: var(--spacing-lg);
+        max-height: none;
+    }
+}
+</style>
+            </aside>
+
+            <!-- Right Main Content -->
+            <div class="page-layout__main">
+                <article class="single-page-content" data-aos="fade-up">
+                    <h2>报名与试听</h2>
+<h3>🌟 欢迎报名加入博文中文学校！</h3>
+<p>博文中文学校欢迎所有有志于学习中文和了解中华文化的学生报名就读。</p>
+<p>我们为每一位新生提供<strong>免费试听课程</strong>，帮助家长和孩子更好地了解课程设置、教师风格与课堂氛围，从而找到最合适的学习路径。</p>
+<h3>📋 报名与试听流程</h3>
+<h4>🔹 第一步：填写报名表</h4>
+<p>家长可通过学校官网或微信扫描二维码填写<strong>线上报名表</strong>，并选择合适的<strong>试听日期与时间段</strong>。</p>
+<p>填写内容包括学生姓名、年龄、中文水平、联系方式及感兴趣的课程类别。</p>
+<h4>🔹 第二步：课程匹配与试听安排</h4>
+<p>学校将根据学生的年龄和语言程度安排合适的试听班级。</p>
+<p>工作人员将在试听前 1–2 天通过邮件或短信确认试听班级、时间与教室信息。</p>
+<h4>🔹 第三步：到校试听体验</h4>
+<p>学生按预约时间到校上课。试听课将由正式教师授课。</p>
+<p>课堂中，教师将观察学生的语言基础与学习兴趣，为后续分班提供参考。</p>
+<h4>🔹 第四步：试听反馈与分班建议</h4>
+<p>试听后，老师将与家长进行沟通，反馈学生的课堂表现与适合的班级级别。</p>
+<p>家长可根据反馈结果选择报名相应课程。</p>
+<h4>🔹 第五步：确认入学与缴费</h4>
+<p>确定班级后，家长完成缴费与注册，学生正式加入博文中文学校。</p>
+<p>教务处将发送入学通知及课表信息，孩子即可正式开始学习之旅。</p>
+<h3>📊 报名方式</h3>
+<h4>1. 扫码填写报名表</h4>
+<p>请扫描二维码填写线上报名表</p>
+<h4>2. Google表格报名</h4>
+<p>通过Google表格在线填写报名信息</p>
+<h4>3. 电话或Email报名</h4>
+<ul>
+<li><strong>电话</strong>：07419898100 / 0161 667 2668</li>
+<li><strong>邮箱</strong>：info@boweneducation.org</li>
+</ul>
+<h3>📍 联系我们</h3>
+<p><strong>地址</strong>：Bowen Chinese School, Forest Park Prep School, 27 Oakfield, Sale, Greater Manchester M33 6NB</p>
+<p><strong>官网</strong>：www.boweneducation.org</p>
+<p><strong>邮箱</strong>：info@boweneducation.org</p>
+<p><strong>电话</strong>：<br />
+- 07419898100<br />
+- 0161 667 2668</p>
+                </article>
+            </div>
         </div>
         
     </div>

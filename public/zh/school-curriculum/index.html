@@ -4,18 +4,18 @@
     <!-- Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="description" content="系统的中文课程体系">
-    <meta name="keywords" content="">
-    <title>中文学校课程设置 - Bowen Education Group | Bowen Education Group</title>
+    <meta name="description" content="课程设置 - 博文教育集团为您提供优质的中文教育服务">
+    <meta name="keywords" content="博文教育集团,中文教育,曼彻斯特中文学校">
+    <title>课程设置 | 博文教育集团 Bowen Education Group | Bowen Education Group</title>
 
     <!-- Favicon -->
     <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="/static/images/apple-touch-icon.png">
 
     <!-- Open Graph Tags -->
-    <meta property="og:title" content="Bowen Education Group">
-    <meta property="og:description" content="">
-    <meta property="og:image" content="">
+    <meta property="og:title" content="课程设置 | 博文教育集团 Bowen Education Group">
+    <meta property="og:description" content="课程设置 - 博文教育集团为您提供优质的中文教育服务">
+    <meta property="og:image" content="/static/images/hero-default.jpg">
     <meta property="og:url" content="http://localhost:8000/school-curriculum">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Bowen Education Group">
@@ -29,6 +29,7 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="/static/css/main.css">
     
+<!-- Preload critical resources -->
 <link rel="preload" href="https://unpkg.com/aos@2.3.1/dist/aos.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript>
@@ -36,12 +37,41 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </noscript>
 <style>
-/* Content Section - 与 single_page.html 保持一致 */
+/* 页面布局系统 - 两栏布局 */
 .section--content {
     padding: 3rem 0;
     background: linear-gradient(to bottom, #ffffff 0%, #f7fafc 100%);
 }
 
+/* 主布局容器 - 使用 Flexbox 实现两栏布局 */
+.page-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    position: relative;
+}
+
+/* 左侧边栏 - 固定宽度 */
+.page-layout__sidebar {
+    flex: 0 0 280px;
+    min-width: 280px;
+    max-width: 280px;
+}
+
+/* 右侧主内容区 - 自适应宽度 */
+.page-layout__main {
+    flex: 1;
+    min-width: 0; /* 防止flex子元素溢出 */
+    max-width: 100%; /* 确保不超出容器 */
+}
+
+/* 单栏布局（无侧边栏） */
+.page-layout--single {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* 确保 container 有正确的最大宽度 */
 .section--content .container {
     max-width: 1200px;
     padding-left: 15px;
@@ -50,286 +80,88 @@
     margin-right: auto;
 }
 
-/* Page Layout - 与 single_page.html 保持一致 */
-.page-layout {
-    display: flex;
-    gap: 2rem;
-    align-items: flex-start;
-    position: relative;
-}
-
-.page-layout__sidebar {
-    flex: 0 0 280px;
-    min-width: 280px;
-    max-width: 280px;
-}
-
-.page-layout__main {
-    flex: 1;
-    min-width: 0;
-    max-width: 100%;
-}
-
-/* Course System Intro */
-.course-system-intro {
-    margin-bottom: 3rem;
-    padding: 2.5rem;
+/* 单页内容排版优化 - 增强可读性 */
+.single-page-content {
+    line-height: 1.8;
+    color: #2d3748;
     background: white;
+    padding: 2.5rem;
     border-radius: 0.75rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.section-title {
+.single-page-content h2 {
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
     font-size: 2rem;
     font-weight: 700;
     color: #1a202c;
-    margin-bottom: 1rem;
     padding-bottom: 0.75rem;
     border-bottom: 3px solid #0052cc;
 }
 
-.section-subtitle {
-    color: #4a5568;
-    font-size: 1.0625rem;
-    line-height: 1.8;
-    margin-bottom: 2rem;
+.single-page-content h2:first-child {
+    margin-top: 0;
 }
 
-/* Learning Stages Grid */
-.learning-stages {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-top: 2rem;
-}
-
-.stage-card {
-    text-align: center;
-    padding: 1.5rem;
-    background: #f7fafc;
-    border-radius: 0.75rem;
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.stage-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 12px rgba(0, 82, 204, 0.15);
-}
-
-.stage-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-}
-
-.stage-title {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #1a202c;
-    margin-bottom: 0.5rem;
-}
-
-.stage-desc {
-    font-size: 0.875rem;
-    color: #4a5568;
-    margin: 0;
-}
-
-/* Courses Grid */
-.courses-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-/* Course Card */
-.course-card {
-    background: white;
-    border-radius: 0.75rem;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s;
-    display: flex;
-    flex-direction: column;
-}
-
-.course-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-}
-
-.course-card__image {
-    position: relative;
-    width: 100%;
-    height: 200px;
-    overflow: hidden;
-}
-
-.course-card__image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.3s;
-}
-
-.course-card:hover .course-card__image img {
-    transform: scale(1.1);
-}
-
-.course-badge {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    padding: 0.5rem 1rem;
-    background: rgba(220, 38, 38, 0.9);
-    color: white;
-    font-size: 0.75rem;
-    font-weight: 600;
-    border-radius: 2rem;
-    backdrop-filter: blur(4px);
-}
-
-.course-badge--recommended {
-    background: rgba(220, 38, 38, 0.9);
-}
-
-.course-card__content {
-    padding: 1.5rem;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.course-meta {
-    margin-bottom: 1rem;
-}
-
-.course-age-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.375rem 0.875rem;
-    background: #e3f2fd;
-    color: #1e3a8a;
-    border-radius: 1.5rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-}
-
-.course-card__title {
-    font-size: 1.25rem;
-    margin-bottom: 0.75rem;
-    line-height: 1.4;
-    min-height: 3rem;
-}
-
-.course-card__title a {
-    color: #1f2937;
-    text-decoration: none;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.course-card__title a:hover {
-    color: #0052cc;
-}
-
-.course-card__summary {
-    color: #6c757d;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin-bottom: 1rem;
-    flex: 1;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.course-features {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-.feature-tag {
-    padding: 0.25rem 0.75rem;
-    background: #f8f9fa;
-    color: #495057;
-    border-radius: 0.25rem;
-    font-size: 0.8125rem;
-}
-
-.course-actions {
-    display: flex;
-    gap: 0.75rem;
-    margin-top: auto;
-}
-
-.course-actions .btn {
-    flex: 1;
-    padding: 0.625rem 1rem;
-    font-size: 0.9375rem;
-}
-
-/* Trial CTA Box */
-.trial-cta-box {
-    margin-top: 3rem;
-    padding: 2.5rem;
-    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
-    border-radius: 0.75rem;
-    text-align: center;
-}
-
-.trial-cta__title {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: #1a202c;
-    margin-bottom: 1rem;
-}
-
-.trial-cta__text {
-    color: #4a5568;
-    font-size: 1.0625rem;
-    line-height: 1.6;
-    margin-bottom: 2rem;
-}
-
-.trial-cta__buttons {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-/* Empty State */
-.empty-state {
-    text-align: center;
-    padding: 4rem 2rem;
-    background: #f8f9fa;
-    border-radius: 0.75rem;
-}
-
-.empty-state__icon {
-    font-size: 4rem;
-    margin-bottom: 1rem;
-}
-
-.empty-state__title {
+.single-page-content h3 {
+    margin-top: 2.5rem;
+    margin-bottom: 1.25rem;
     font-size: 1.5rem;
-    color: #1f2937;
-    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #2d3748;
 }
 
-.empty-state__text {
-    color: #6c757d;
+.single-page-content p {
+    margin-bottom: 1.5rem;
+    font-size: 1.0625rem;
+}
+
+.single-page-content ul,
+.single-page-content ol {
     margin-bottom: 2rem;
+    padding-left: 2rem;
 }
 
-/* CTA Section - 与 single_page.html 保持一致 */
+.single-page-content li {
+    margin-bottom: 0.875rem;
+    line-height: 1.8;
+}
+
+.single-page-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+    margin: 2.5rem 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* 图片加载优化 */
+    opacity: 0;
+    transition: opacity 0.3s ease-in;
+}
+
+.single-page-content img.loaded,
+.single-page-content img[loading="lazy"] {
+    opacity: 1;
+}
+
+/* 性能优化：减少重绘 */
+.single-page-content * {
+    will-change: auto;
+}
+
+.cta-buttons .btn {
+    will-change: transform, box-shadow;
+}
+
+.single-page-content blockquote {
+    border-left: 4px solid #0052cc;
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: #4a5568;
+}
+
+/* CTA 区域视觉强化 */
 .section--cta {
     padding: 5rem 0;
     background: linear-gradient(135deg, #0052cc 0%, #003380 100%);
@@ -389,7 +221,7 @@
     line-height: 1.6;
 }
 
-/* CTA Buttons - 与 single_page.html 保持一致 */
+/* CTA 按钮优化 - 增强交互效果 */
 .cta-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -435,7 +267,7 @@
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
 }
 
-/* Responsive Design */
+/* 响应式优化 */
 @media (max-width: 992px) {
     .page-layout {
         gap: 1.5rem;
@@ -446,12 +278,13 @@
         min-width: 240px;
     }
 
-    .course-system-intro {
+    .single-page-content {
         padding: 2rem;
     }
 }
 
 @media (max-width: 768px) {
+    /* 移动端改为纵向堆叠布局 */
     .page-layout {
         flex-direction: column;
         gap: 1.5rem;
@@ -461,29 +294,20 @@
         flex: none;
         width: 100%;
         min-width: 100%;
-        order: -1;
+        order: -1; /* 确保侧边栏在上方 */
     }
 
     .page-layout__main {
         width: 100%;
     }
 
-    .course-system-intro {
+    .single-page-content {
         padding: 1.5rem;
     }
 
-    .section-title {
+    .single-page-content h2 {
         font-size: 1.625rem;
-    }
-
-    .learning-stages {
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
-    }
-
-    .courses-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
+        margin-top: 2rem;
     }
 
     .section--cta .section__title {
@@ -503,23 +327,11 @@
         width: 100%;
         justify-content: center;
     }
-
-    .trial-cta__buttons {
-        flex-direction: column;
-    }
-
-    .trial-cta__buttons .btn {
-        width: 100%;
-    }
 }
 
 @media (max-width: 576px) {
-    .course-system-intro {
+    .single-page-content {
         padding: 1.25rem;
-    }
-
-    .learning-stages {
-        grid-template-columns: 1fr;
     }
 }
 </style>
@@ -540,13 +352,14 @@
 
     <!-- Structured Data -->
     
+
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "EducationalOrganization",
         "name": "Bowen Education Group",
         "alternateName": "博文教育集团",
-        "url": "&lt;app.services.static_generator.obj object at 0x10bdf74d0&gt;",
+        "url": "&lt;app.services.static_generator.obj object at 0x1089ff770&gt;",
         "logo": "/static/images/logo.png",
         "description": "",
         "address": {
@@ -572,6 +385,51 @@
     }
     </script>
     
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "课程设置",
+    "description": "课程设置",
+    "url": "http://localhost:8000/school-curriculum",
+    "inLanguage": ["en-GB", "zh-CN"],
+    "isPartOf": {
+        "@type": "WebSite",
+        "name": "Bowen Education Group",
+        "alternateName": "博文教育集团",
+        "url": "&lt;app.services.static_generator.obj object at 0x1089ff770&gt;"
+    },
+    "publisher": {
+        "@type": "EducationalOrganization",
+        "name": "Bowen Education Group",
+        "alternateName": "博文教育集团"
+    },
+    "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "首页",
+                "item": "&lt;app.services.static_generator.obj object at 0x1089ff770&gt;"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "中文学校",
+                "item": "&lt;app.services.static_generator.obj object at 0x1089ff770&gt;school"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "课程设置",
+                "item": "http://localhost:8000/school-curriculum"
+            }
+        ]
+    }
+}
+</script>
+
 </head>
 
 <body class="">
@@ -2073,18 +1931,14 @@ body.mobile-menu-open {
     <div class="hero__overlay" aria-hidden="true"></div>
     <div class="hero__background"
          role="img"
-         aria-label="中文学校课程设置"
+         aria-label="课程设置"
          style="background-image: url('/static/images/hero-chinese-school.jpg');"
          loading="lazy"></div>
     <div class="container">
         <div class="hero__content">
             <h1 id="page-title" class="hero__title" data-aos="fade-up">
-                <span lang="zh-CN">中文学校课程设置</span>
+                <span lang="zh-CN">课程设置</span>
             </h1>
-            
-            <p class="hero__subtitle" data-aos="fade-up" data-aos-delay="100">
-                <span lang="zh-CN">系统的中文课程体系</span>
-            </p>
             
         </div>
     </div>
@@ -2183,9 +2037,11 @@ body.mobile-menu-open {
 }
 </style>
 
-<!-- Content Section with Sidebar -->
+<!-- Content Section -->
 <section class="section section--content">
     <div class="container">
+        
+        <!-- Two-column layout with sidebar -->
         <div class="page-layout">
             <!-- Left Sidebar Navigation -->
             <aside class="page-layout__sidebar">
@@ -2217,11 +2073,8 @@ body.mobile-menu-open {
                     <span class="sidebar-menu-icon">
                         
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                            <polyline points="10 9 9 9 8 9"></polyline>
+                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                            <polyline points="13 2 13 9 20 9"></polyline>
                         </svg>
                         
                     </span>
@@ -2260,6 +2113,23 @@ body.mobile-menu-open {
                         
                     </span>
                     <span class="sidebar-menu-text">PTA家长教师协会</span>
+                </a>
+            </li>
+            
+            <li class="sidebar-menu-item">
+                <a
+                    href="/zh/school-registration/"
+                    class="sidebar-menu-link"
+                >
+                    <span class="sidebar-menu-icon">
+                        
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                            <polyline points="13 2 13 9 20 9"></polyline>
+                        </svg>
+                        
+                    </span>
+                    <span class="sidebar-menu-text">报名与试听</span>
                 </a>
             </li>
             
@@ -2437,387 +2307,59 @@ body.mobile-menu-open {
 
             <!-- Right Main Content -->
             <div class="page-layout__main">
-
-                <!-- Course System Overview (Only for School Curriculum) -->
-                
-                <div class="course-system-intro" data-aos="fade-up">
-                    <h2 class="section-title">课程体系 Curriculum System</h2>
-                    <p class="section-subtitle">博文中文学校为不同年龄段的学生提供完整的中文学习路径，从幼儿启蒙到GCSE、A-Level考试准备，帮助学生系统地掌握中文听、说、读、写技能。</p>
-
-                    <!-- Learning Stages -->
-                    <div class="learning-stages">
-                        <div class="stage-card">
-                            <div class="stage-icon">🌱</div>
-                            <h4 class="stage-title">启蒙阶段 Foundation</h4>
-                            <p class="stage-desc">5-7岁，通过游戏、歌曲培养中文兴趣</p>
-                        </div>
-                        <div class="stage-card">
-                            <div class="stage-icon">📚</div>
-                            <h4 class="stage-title">进阶阶段 Primary</h4>
-                            <p class="stage-desc">8-10岁，系统学习中文知识</p>
-                        </div>
-                        <div class="stage-card">
-                            <div class="stage-icon">🎯</div>
-                            <h4 class="stage-title">考试阶段 Exam</h4>
-                            <p class="stage-desc">GCSE/A-Level，专业考试准备</p>
-                        </div>
-                        <div class="stage-card">
-                            <div class="stage-icon">🌏</div>
-                            <h4 class="stage-title">高级阶段 Advanced</h4>
-                            <p class="stage-desc">HSK/粤语，深入学习中华文化</p>
-                        </div>
-                    </div>
-                </div>
-                
-
-                <!-- Posts Grid -->
-                <div class="courses-grid">
-                    
-                        
-                        <div class="course-card" data-aos="fade-up" data-aos-delay="0">
-                            <!-- Course Image -->
-                            <div class="course-card__image">
-                                
-                                <img src="/static/images/courses/post-gcse-cantonese.jpg" alt="GCSE Cantonese / GCSE粤语考试班" loading="lazy">
-                                
-                                
-                            </div>
-
-                            <!-- Course Content -->
-                            <div class="course-card__content">
-                                <!-- Age Tag -->
-                                <div class="course-meta">
-                                    <span class="course-age-tag">
-                                        <i class="fas fa-users"></i>
-                                        14-16岁
-                                        
-                                    </span>
-                                </div>
-
-                                <!-- Title -->
-                                <h3 class="course-card__title">
-                                    <a href="/school-curriculum/gcse-cantonese">GCSE Cantonese / GCSE粤语考试班</a>
-                                </h3>
-
-                                <!-- Summary -->
-                                <p class="course-card__summary">
-                                    Ages 14-16 years. Complete GCSE Cantonese exam preparation for all four language skills.
-                                </p>
-
-                                <!-- Features Tags -->
-                                <div class="course-features">
-                                    
-                                    <span class="feature-tag">考试导向</span>
-                                    <span class="feature-tag">高通过率</span>
-                                    
-                                </div>
-
-                                <!-- Action Buttons -->
-                                <div class="course-actions">
-                                    <a href="/school-curriculum/gcse-cantonese" class="btn btn-outline-primary btn-sm">查看详情</a>
-                                    <a href="/contact/?course=gcse-cantonese" class="btn btn-primary btn-sm">立即报名</a>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="course-card" data-aos="fade-up" data-aos-delay="100">
-                            <!-- Course Image -->
-                            <div class="course-card__image">
-                                
-                                <img src="/static/images/courses/post-beginner-cantonese.jpg" alt="Beginner Cantonese / 粤语初级班" loading="lazy">
-                                
-                                
-                            </div>
-
-                            <!-- Course Content -->
-                            <div class="course-card__content">
-                                <!-- Age Tag -->
-                                <div class="course-meta">
-                                    <span class="course-age-tag">
-                                        <i class="fas fa-users"></i>
-                                        全年龄
-                                    </span>
-                                </div>
-
-                                <!-- Title -->
-                                <h3 class="course-card__title">
-                                    <a href="/school-curriculum/beginner-cantonese">Beginner Cantonese / 粤语初级班</a>
-                                </h3>
-
-                                <!-- Summary -->
-                                <p class="course-card__summary">
-                                    All ages. Learn Cantonese from basics with focus on speaking and listening skills.
-                                </p>
-
-                                <!-- Features Tags -->
-                                <div class="course-features">
-                                    
-                                    <span class="feature-tag">口语优先</span>
-                                    
-                                    <span class="feature-tag">零基础</span>
-                                    
-                                    
-                                </div>
-
-                                <!-- Action Buttons -->
-                                <div class="course-actions">
-                                    <a href="/school-curriculum/beginner-cantonese" class="btn btn-outline-primary btn-sm">查看详情</a>
-                                    <a href="/contact/?course=beginner-cantonese" class="btn btn-primary btn-sm">立即报名</a>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="course-card" data-aos="fade-up" data-aos-delay="200">
-                            <!-- Course Image -->
-                            <div class="course-card__image">
-                                
-                                <img src="/static/images/courses/post-hsk-preparation.jpg" alt="HSK Preparation / HSK汉语水平考试" loading="lazy">
-                                
-                                
-                            </div>
-
-                            <!-- Course Content -->
-                            <div class="course-card__content">
-                                <!-- Age Tag -->
-                                <div class="course-meta">
-                                    <span class="course-age-tag">
-                                        <i class="fas fa-users"></i>
-                                        全年龄
-                                    </span>
-                                </div>
-
-                                <!-- Title -->
-                                <h3 class="course-card__title">
-                                    <a href="/school-curriculum/hsk-preparation">HSK Preparation / HSK汉语水平考试</a>
-                                </h3>
-
-                                <!-- Summary -->
-                                <p class="course-card__summary">
-                                    All ages. Professional HSK exam preparation for all levels (HSK 1-6).
-                                </p>
-
-                                <!-- Features Tags -->
-                                <div class="course-features">
-                                    
-                                    <span class="feature-tag">分级教学</span>
-                                    <span class="feature-tag">官方认证</span>
-                                    
-                                </div>
-
-                                <!-- Action Buttons -->
-                                <div class="course-actions">
-                                    <a href="/school-curriculum/hsk-preparation" class="btn btn-outline-primary btn-sm">查看详情</a>
-                                    <a href="/contact/?course=hsk-preparation" class="btn btn-primary btn-sm">立即报名</a>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="course-card" data-aos="fade-up" data-aos-delay="300">
-                            <!-- Course Image -->
-                            <div class="course-card__image">
-                                
-                                <img src="/static/images/courses/post-a-level-chinese.jpg" alt="A-Level Chinese / A-Level中文课程" loading="lazy">
-                                
-                                
-                            </div>
-
-                            <!-- Course Content -->
-                            <div class="course-card__content">
-                                <!-- Age Tag -->
-                                <div class="course-meta">
-                                    <span class="course-age-tag">
-                                        <i class="fas fa-users"></i>
-                                        16-18岁
-                                        
-                                    </span>
-                                </div>
-
-                                <!-- Title -->
-                                <h3 class="course-card__title">
-                                    <a href="/school-curriculum/a-level-chinese">A-Level Chinese / A-Level中文课程</a>
-                                </h3>
-
-                                <!-- Summary -->
-                                <p class="course-card__summary">
-                                    Ages 16-18 years. Advanced Chinese language and literature study for A-Level qualification.
-                                </p>
-
-                                <!-- Features Tags -->
-                                <div class="course-features">
-                                    
-                                    <span class="feature-tag">考试导向</span>
-                                    <span class="feature-tag">高通过率</span>
-                                    
-                                </div>
-
-                                <!-- Action Buttons -->
-                                <div class="course-actions">
-                                    <a href="/school-curriculum/a-level-chinese" class="btn btn-outline-primary btn-sm">查看详情</a>
-                                    <a href="/contact/?course=a-level-chinese" class="btn btn-primary btn-sm">立即报名</a>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="course-card" data-aos="fade-up" data-aos-delay="400">
-                            <!-- Course Image -->
-                            <div class="course-card__image">
-                                
-                                <img src="/static/images/courses/post-gcse-chinese.jpg" alt="GCSE Chinese / GCSE中文考试班" loading="lazy">
-                                
-                                
-                                <span class="course-badge course-badge--recommended">推荐课程</span>
-                                
-                            </div>
-
-                            <!-- Course Content -->
-                            <div class="course-card__content">
-                                <!-- Age Tag -->
-                                <div class="course-meta">
-                                    <span class="course-age-tag">
-                                        <i class="fas fa-users"></i>
-                                        14-16岁
-                                        
-                                    </span>
-                                </div>
-
-                                <!-- Title -->
-                                <h3 class="course-card__title">
-                                    <a href="/school-curriculum/gcse-chinese">GCSE Chinese / GCSE中文考试班</a>
-                                </h3>
-
-                                <!-- Summary -->
-                                <p class="course-card__summary">
-                                    Ages 14-16 years. Comprehensive GCSE Chinese exam preparation with listening, speaking, reading, and writing.
-                                </p>
-
-                                <!-- Features Tags -->
-                                <div class="course-features">
-                                    
-                                    <span class="feature-tag">考试导向</span>
-                                    <span class="feature-tag">高通过率</span>
-                                    
-                                </div>
-
-                                <!-- Action Buttons -->
-                                <div class="course-actions">
-                                    <a href="/school-curriculum/gcse-chinese" class="btn btn-outline-primary btn-sm">查看详情</a>
-                                    <a href="/contact/?course=gcse-chinese" class="btn btn-primary btn-sm">立即报名</a>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="course-card" data-aos="fade-up" data-aos-delay="500">
-                            <!-- Course Image -->
-                            <div class="course-card__image">
-                                
-                                <img src="/static/images/courses/post-primary-mandarin.jpg" alt="Primary Mandarin / 小学中文进阶班" loading="lazy">
-                                
-                                
-                                <span class="course-badge course-badge--recommended">推荐课程</span>
-                                
-                            </div>
-
-                            <!-- Course Content -->
-                            <div class="course-card__content">
-                                <!-- Age Tag -->
-                                <div class="course-meta">
-                                    <span class="course-age-tag">
-                                        <i class="fas fa-users"></i>
-                                        8-10岁
-                                        
-                                    </span>
-                                </div>
-
-                                <!-- Title -->
-                                <h3 class="course-card__title">
-                                    <a href="/school-curriculum/primary-mandarin">Primary Mandarin / 小学中文进阶班</a>
-                                </h3>
-
-                                <!-- Summary -->
-                                <p class="course-card__summary">
-                                    Ages 8-10 years. Systematic Mandarin learning with reading, writing, and conversation practice.
-                                </p>
-
-                                <!-- Features Tags -->
-                                <div class="course-features">
-                                    
-                                    <span class="feature-tag">小班教学</span>
-                                    <span class="feature-tag">沉浸式环境</span>
-                                    
-                                </div>
-
-                                <!-- Action Buttons -->
-                                <div class="course-actions">
-                                    <a href="/school-curriculum/primary-mandarin" class="btn btn-outline-primary btn-sm">查看详情</a>
-                                    <a href="/contact/?course=primary-mandarin" class="btn btn-primary btn-sm">立即报名</a>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="course-card" data-aos="fade-up" data-aos-delay="600">
-                            <!-- Course Image -->
-                            <div class="course-card__image">
-                                
-                                <img src="/static/images/courses/post-foundation-mandarin.jpg" alt="Foundation Mandarin / 基础中文启蒙班" loading="lazy">
-                                
-                                
-                                <span class="course-badge course-badge--recommended">推荐课程</span>
-                                
-                            </div>
-
-                            <!-- Course Content -->
-                            <div class="course-card__content">
-                                <!-- Age Tag -->
-                                <div class="course-meta">
-                                    <span class="course-age-tag">
-                                        <i class="fas fa-users"></i>
-                                        5-7岁
-                                        
-                                    </span>
-                                </div>
-
-                                <!-- Title -->
-                                <h3 class="course-card__title">
-                                    <a href="/school-curriculum/foundation-mandarin">Foundation Mandarin / 基础中文启蒙班</a>
-                                </h3>
-
-                                <!-- Summary -->
-                                <p class="course-card__summary">
-                                    Ages 5-7 years. Playful introduction to Mandarin through songs, games, and stories.
-                                </p>
-
-                                <!-- Features Tags -->
-                                <div class="course-features">
-                                    
-                                    <span class="feature-tag">小班教学</span>
-                                    <span class="feature-tag">沉浸式环境</span>
-                                    
-                                </div>
-
-                                <!-- Action Buttons -->
-                                <div class="course-actions">
-                                    <a href="/school-curriculum/foundation-mandarin" class="btn btn-outline-primary btn-sm">查看详情</a>
-                                    <a href="/contact/?course=foundation-mandarin" class="btn btn-primary btn-sm">立即报名</a>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-
-                <!-- CTA Box -->
-                
-                <div class="trial-cta-box" data-aos="fade-up">
-                    <h3 class="trial-cta__title">预约试听课 Book a Trial Lesson</h3>
-                    <p class="trial-cta__text">想让孩子体验中文学习的乐趣？欢迎预约免费试听课，亲身感受我们的教学特色。</p>
-                    <div class="trial-cta__buttons">
-                        <a href="/contact" class="btn btn-primary">预约试听课</a>
-                        <a href="/school-term-dates" class="btn btn-outline-primary">查看学期安排</a>
-                    </div>
-                </div>
-                
+                <article class="single-page-content" data-aos="fade-up">
+                    <h2>中文课程设置</h2>
+<h3>🏫 中文课简介</h3>
+<p>博文中文学校的课程体系覆盖从<strong>拼音启蒙</strong>到<strong>高级阅读与写作</strong>的全阶段学习，课程分级清晰、内容循序渐进。</p>
+<p>学校采用系统化的《华文》教材体系，结合<strong>主题式教学（Topic-based Learning）</strong>，让学生在真实语境中学习语言、理解文化。课堂中不仅注重语音、词汇与语法训练，还融入中华历史、传统节日、文化故事与现代生活元素，帮助孩子在"听、说、读、写"四个方面全面提升。</p>
+<p>每周，学生将进行：<br />
+- <strong>两小时《华文》课程学习</strong><br />
+- <strong>一小时语言应用课</strong><br />
+- <strong>半小时一对一网课</strong></p>
+<h3>《华文》教材学习</h3>
+<p>《华文》主课侧重语文基础与阅读写作能力的培养，帮助学生系统掌握中文知识。</p>
+<p>语言应用课则通过互动教学与情景表达，让学生在真实环境中"用中文表达、用中文思考"。</p>
+<p>这种"主课 + 应用课"的教学模式，既保证了语言学习的系统性，又增强了实际运用能力，让学生在课堂内外都能自然地使用中文。</p>
+<p>此外，学校每学年都会组织学生参加 <strong>YCT（青少年汉语考试）</strong>与 <strong>HSK（汉语水平考试）</strong>，以国际标准检验学习成果，让学生在清晰的学习路径中稳步提升。</p>
+<h3>博文中文语言应用课（必修课）</h3>
+<p>语言学习的核心在于应用。博文中文语言应用课旨在让孩子在中文中"用起来、活起来"，通过丰富多样的课堂形式，将语言真正转化为表达与思维的工具。</p>
+<h4>课程内容包括：</h4>
+<ul>
+<li><strong>绘本阅读课</strong>：通过故事培养语感与阅读理解力</li>
+<li><strong>朗诵课</strong>：训练语音语调与语言表现力</li>
+<li><strong>演讲与辩论课</strong>：培养自信表达与逻辑思维</li>
+<li><strong>文化拓展课</strong>：了解中华传统节日与民俗文化</li>
+<li><strong>拼音强化班</strong>：打牢语音基础，提升发音准确性</li>
+<li><strong>偏旁部首强化班</strong>：帮助学生理解汉字构形、提升识字量</li>
+<li><strong>实景体验课</strong>：模拟真实生活情境，在实践中使用中文</li>
+</ul>
+<h4>沉浸式学习体验</h4>
+<p>为实现真正的沉浸式学习体验，学校每周安排：<br />
+- 每周三小时中文沉浸式课堂学习，课堂全程中文交流<br />
+- 每周六半小时免费一对一在线辅导课，由教师针对学生个人需求进行定向提升</p>
+<p>通过"课堂 + 应用 + 个性化辅导"的学习体系，博文中文学校帮助学生最大化练习中文，让语言学习成为他们日常生活的一部分。</p>
+<h3>1对1中文网课（博文学生专享免费）</h3>
+<p>博文中文学校与国内高校的<strong>对外汉语研究团队</strong>深度合作，为在校学生长期提供<strong>免费1对1中文定制网课辅导</strong>。</p>
+<p>课程内容涵盖拼音、会话、写作与文化拓展，由专业教师根据学生年龄、程度与学习目标量身设计。学生可灵活在线学习，巩固课堂知识、强化语言应用，实现线上线下同步成长。</p>
+<p>这一独特的教学支持体系，让博文的每一位学生都能获得持续的关注与个性化指导，真正做到"学有所获，学有所成"。</p>
+<h3>家庭作业班（中文学习支持）</h3>
+<p>为了帮助学生巩固课堂知识、提高学习效率，博文中文学校在每周日下午开设<strong>"家庭作业班"（Homework Support Class）</strong>。</p>
+<p>该课程面向所有在校学生开放，由<strong>博文教育实习生与助教团队</strong>进行一对一或小组式辅导，重点帮助学生完成本周的中文作业，强化课堂所学内容。</p>
+<h4>辅导内容包括：</h4>
+<ul>
+<li>课文复习与生字巩固</li>
+<li>语法与句型讲解</li>
+<li>听说练习与口语表达</li>
+<li>阅读与写作能力提升指导</li>
+<li>作业检查与个性化反馈</li>
+</ul>
+<p>家庭作业班不仅让学生能够在课后及时消化知识、查漏补缺，更大大<strong>减轻了家长在家庭中文辅导中的压力</strong>。</p>
+<p>通过教师与实习助教的协作，学生可以在轻松的学习氛围中巩固知识，养成自主学习与规范书写的良好习惯。</p>
+<p>博文中文学校相信，持续的学习支持是语言成长的重要保障。家庭作业班的设立，使学生在课堂外也能获得系统、温暖且高效的学习陪伴，让中文真正成为他们生活的一部分。</p>
+                </article>
             </div>
         </div>
+        
     </div>
 </section>
 
@@ -3095,6 +2637,7 @@ body.mobile-menu-open {
     <!-- Scripts -->
     <script src="/static/js/main.js"></script>
     
+<!-- 延迟加载非关键 JavaScript -->
 <script>
     // 懒加载 AOS 动画库
     (function() {
@@ -3102,12 +2645,14 @@ body.mobile-menu-open {
         script.src = 'https://unpkg.com/aos@2.3.1/dist/aos.js';
         script.defer = true;
         script.onload = function() {
+            // 初始化动画
             AOS.init({
                 duration: 800,
                 easing: 'ease-in-out',
                 once: true,
                 offset: 100,
                 disable: function() {
+                    // 在低端设备上禁用动画以提升性能
                     return window.innerWidth < 768 && 'ontouchstart' in window;
                 }
             });
@@ -3130,10 +2675,23 @@ body.mobile-menu-open {
             });
         });
 
+        // 监听所有带有 data-src 属性的图片
         document.querySelectorAll('img[data-src]').forEach(img => {
             imageObserver.observe(img);
         });
     }
+
+    // 优化滚动性能
+    let ticking = false;
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                // 在这里处理滚动相关的逻辑
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, { passive: true });
 </script>
 
 
