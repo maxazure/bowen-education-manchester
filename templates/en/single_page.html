@@ -237,11 +237,77 @@
     /* Image loading optimization */
     opacity: 0;
     transition: opacity 0.3s ease-in;
+    /* Click to zoom hint */
+    cursor: pointer;
+}
+
+.single-page-content img:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    transform: scale(1.02);
+    transition: all 0.3s ease;
 }
 
 .single-page-content img.loaded,
 .single-page-content img[loading="lazy"] {
     opacity: 1;
+}
+
+/* Image Zoom Modal */
+.image-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    animation: fadeIn 0.3s ease;
+}
+
+.image-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-modal__content {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    animation: zoomIn 0.3s ease;
+}
+
+.image-modal__close {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    z-index: 10000;
+}
+
+.image-modal__close:hover {
+    color: #ccc;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 /* Performance optimization: reduce repaints */
@@ -482,5 +548,54 @@
             ticking = true;
         }
     }, { passive: true });
+
+    // Image click to zoom functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        // Create modal element
+        const modal = document.createElement('div');
+        modal.className = 'image-modal';
+        modal.innerHTML = `
+            <span class="image-modal__close">&times;</span>
+            <img class="image-modal__content" alt="Zoomed image">
+        `;
+        document.body.appendChild(modal);
+
+        const modalImg = modal.querySelector('.image-modal__content');
+        const closeBtn = modal.querySelector('.image-modal__close');
+
+        // Add click event to all content images
+        const contentImages = document.querySelectorAll('.single-page-content img');
+        contentImages.forEach(img => {
+            img.addEventListener('click', function() {
+                modal.classList.add('active');
+                modalImg.src = this.src;
+                modalImg.alt = this.alt || 'Zoomed image';
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            });
+        });
+
+        // Close modal function
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+
+        // Click close button
+        closeBtn.addEventListener('click', closeModal);
+
+        // Click modal background to close
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Press ESC to close
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+    });
 </script>
 {% endblock %}
