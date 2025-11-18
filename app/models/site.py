@@ -77,9 +77,15 @@ class SiteColumn(BaseModel):
     hero_cta_text = Column(Text, nullable=True, comment="CTA按钮文字")
     hero_cta_url = Column(Text, nullable=True, comment="CTA按钮链接")
 
+    # Gallery关联
+    gallery_id = Column(
+        Integer, ForeignKey("gallery.id"), nullable=True, comment="关联的Gallery ID"
+    )
+
     # 关系
     parent = relationship("SiteColumn", remote_side="SiteColumn.id", backref="children")
     hero_media = relationship("MediaFile", foreign_keys=[hero_media_id])
+    gallery = relationship("Gallery", foreign_keys=[gallery_id])
 
 
 class SinglePage(BaseModel):

@@ -297,6 +297,26 @@
                                 </div>
                             </div>
 
+                            <!-- Gallery关联 -->
+                            <div class="col-12">
+                                <label for="gallery_id" class="form-label">
+                                    关联Gallery相册
+                                </label>
+                                <select class="form-select" id="gallery_id" name="gallery_id">
+                                    <option value="">无（不关联）</option>
+                                    {% for gallery in all_galleries %}
+                                        <option value="{{ gallery.id }}"
+                                                {% if column and column.gallery_id == gallery.id %}selected{% endif %}>
+                                            {{ gallery.title }} ({{ gallery.image_count }}张图片)
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <div class="help-text">
+                                    <i class="bi bi-info-circle"></i>
+                                    <span>为此栏目关联一个Gallery相册，页面底部会自动显示相册照片</span>
+                                </div>
+                            </div>
+
                             <!-- 菜单位置 -->
                             <div class="col-md-6">
                                 <label for="menu_location" class="form-label">

@@ -1,0 +1,378 @@
+{% extends "base.html" %}
+
+{% block title %}{{ column.name }} - Bowen Education Group{% endblock %}
+
+{% block meta_description %}{{ column.description }}{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+{% set hero_title = column.name %}
+{% set hero_subtitle = column.description %}
+{% include 'components/hero_standard.html' %}
+
+<!-- Introduction Section -->
+<section class="section section--intro">
+    <div class="container">
+        <div class="intro-content" data-aos="fade-up">
+            <h2 class="section-title">关于公园活动项目 About Parks Programme</h2>
+            <div class="intro-text">
+                <p>
+                    博文教育集团的公园活动项目为5-11岁的儿童提供丰富多彩的户外学习体验。我们利用曼彻斯特地区的优质公园资源，
+                    通过游戏、运动、艺术和团队活动，让孩子们在大自然中快乐成长。
+                </p>
+                <p>
+                    每个假期，我们都会组织不同主题的公园活动，包括戏剧表演、体育运动、艺术创作、自然探索等。
+                    这些活动不仅让孩子们享受户外时光，更培养了他们的社交能力、创造力和团队合作精神。
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Gallery Photos Section -->
+{% if column.gallery %}
+<section class="section section--gallery-grid">
+    <div class="container">
+        <div class="gallery-header" data-aos="fade-up">
+            <h2 class="section-title">{{ column.gallery.title }}</h2>
+            {% if column.gallery.description %}
+            <p class="section-subtitle">{{ column.gallery.description }}</p>
+            {% endif %}
+            <p class="gallery-count">
+                <i class="fas fa-images"></i> 共 {{ column.gallery.image_count }} 张精彩照片
+            </p>
+        </div>
+
+        <!-- Photos Grid -->
+        <div class="photos-grid" data-aos="fade-up" data-aos-delay="100">
+            {% for image in column.gallery.images[:12] %}
+            <div class="photo-item" data-aos="zoom-in" data-aos-delay="{{ loop.index0 * 50 }}">
+                <div class="photo-card">
+                    <img src="{{ image.media.file_url or image.media.path_medium }}"
+                         alt="{{ image.media.title or column.gallery.title }}"
+                         loading="lazy">
+                    <div class="photo-overlay">
+                        <div class="photo-info">
+                            {% if image.media.title %}
+                            <p class="photo-title">{{ image.media.title }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- View More Button -->
+        <div class="gallery-cta" data-aos="fade-up">
+            <a href="/zh/park-activities/" class="btn btn--primary btn--large">
+                <i class="fas fa-photo-video"></i>
+                查看全部 {{ column.gallery.image_count }} 张照片
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Call to Action Section -->
+<section class="section section--cta" style="background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);">
+    <div class="container">
+        <div class="cta-box text-center" data-aos="fade-up">
+            <h2 class="cta-box__title">加入我们的公园活动</h2>
+            <p class="cta-box__text">
+                想了解更多公园活动信息或报名参加？欢迎随时与我们联系。
+            </p>
+            <div class="cta-box__buttons">
+                <a href="/contact" class="btn btn--white">联系我们</a>
+                <a href="/programmes" class="btn btn--outline-white">查看所有项目</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_css %}
+<link rel="preload" href="https://unpkg.com/aos@2.3.1/dist/aos.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"></noscript>
+
+<style>
+/* Introduction Section */
+.section--intro {
+    padding: 4rem 0;
+    background: #f8f9fa;
+}
+
+.intro-content {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    color: #1f2937;
+    margin-bottom: 2rem;
+    text-align: center;
+    font-weight: 700;
+}
+
+.intro-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #4b5563;
+}
+
+.intro-text p {
+    margin-bottom: 1.5rem;
+}
+
+/* Gallery Grid Section */
+.section--gallery-grid {
+    padding: 5rem 0;
+    background: #fff;
+}
+
+.gallery-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.gallery-header .section-title {
+    font-size: 2.5rem;
+    color: #1f2937;
+    margin-bottom: 1rem;
+}
+
+.gallery-header .section-subtitle {
+    font-size: 1.2rem;
+    color: #6b7280;
+    margin-bottom: 1rem;
+}
+
+.gallery-count {
+    color: #667eea;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.gallery-count i {
+    font-size: 1.3rem;
+}
+
+/* Photos Grid */
+.photos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.photo-item {
+    position: relative;
+    overflow: hidden;
+}
+
+.photo-card {
+    position: relative;
+    width: 100%;
+    padding-bottom: 75%; /* 4:3 aspect ratio */
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+}
+
+.photo-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.photo-card img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.photo-card:hover img {
+    transform: scale(1.1);
+}
+
+.photo-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+    display: flex;
+    align-items: flex-end;
+    padding: 1rem;
+}
+
+.photo-card:hover .photo-overlay {
+    opacity: 1;
+}
+
+.photo-info {
+    color: white;
+    width: 100%;
+}
+
+.photo-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Gallery CTA */
+.gallery-cta {
+    text-align: center;
+}
+
+.btn--primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn--primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    color: white;
+}
+
+.btn--primary i {
+    font-size: 1.2rem;
+}
+
+/* CTA Section */
+.section--cta {
+    padding: 4rem 0;
+    color: #fff;
+}
+
+.cta-box__title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+.cta-box__text {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.cta-box__buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn--white {
+    background: #fff;
+    color: #1e3a8a;
+    padding: 0.875rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.btn--white:hover {
+    background: #f8f9fa;
+    transform: translateY(-2px);
+    color: #1e3a8a;
+}
+
+.btn--outline-white {
+    background: transparent;
+    color: #fff;
+    border: 2px solid #fff;
+    padding: 0.875rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.btn--outline-white:hover {
+    background: #fff;
+    color: #1e3a8a;
+    transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+    .section-title {
+        font-size: 2rem;
+    }
+
+    .intro-text {
+        font-size: 1rem;
+    }
+
+    .photos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1rem;
+    }
+
+    .cta-box__title {
+        font-size: 1.5rem;
+    }
+
+    .cta-box__buttons {
+        flex-direction: column;
+    }
+
+    .cta-box__buttons .btn {
+        width: 100%;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+    .photos-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .photos-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 800,
+        easing: 'ease-in-out',
+        once: true,
+        offset: 100
+    });
+</script>
+{% endblock %}

@@ -312,6 +312,14 @@ async def column_page_generic(
             return templates_engine.TemplateResponse("post_list_with_sidebar.html", context)
         elif column_slug in ["chess-events", "chess-news", "news", "badminton-events"]:
             return templates_engine.TemplateResponse("post_list_universal.html", context)
+        elif column_slug == "programmes-parks" and column.gallery_id:
+            # Load gallery images for programmes-parks page
+            from app.services.gallery_service import GalleryService
+            gallery_service = GalleryService(db)
+            gallery_images = gallery_service.get_gallery_images(column.gallery_id)
+            # Attach images to the gallery object
+            if column.gallery:
+                column.gallery.images = gallery_images
 
         # Check for custom template
         try:

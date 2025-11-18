@@ -13,6 +13,7 @@ from sqlalchemy.orm import Session
 
 from admin.app.database import get_db
 from app.models.site import ColumnType, SiteColumn
+from app.models.gallery import Gallery
 from app.services import column_service
 from admin.app.routers.static_pages import generate_static_task
 
@@ -66,12 +67,16 @@ async def new_column_page(request: Request, db: Session = Depends(get_db)):
     # 获取所有栏目（用于选择父栏目）
     all_columns = column_service.get_all_columns(db, enabled_only=True)
 
+    # 获取所有Gallery（用于关联Gallery）
+    all_galleries = db.query(Gallery).order_by(Gallery.title).all()
+
     return templates.TemplateResponse(
         "columns/form.html",
         {
             "request": request,
             "column": None,
             "all_columns": all_columns,
+            "all_galleries": all_galleries,
             "column_types": ColumnType,
             "mode": "create",
         },
@@ -98,6 +103,7 @@ async def create_column(
     hero_tagline_en: Optional[str] = Form(None),
     hero_cta_text: Optional[str] = Form(None),
     hero_cta_url: Optional[str] = Form(None),
+    gallery_id: Optional[int] = Form(None),
     db: Session = Depends(get_db),
 ):
     """
@@ -148,6 +154,7 @@ async def create_column(
         hero_tagline_en=hero_tagline_en,
         hero_cta_text=hero_cta_text,
         hero_cta_url=hero_cta_url,
+        gallery_id=gallery_id if gallery_id else None,
     )
 
     # 保存到数据库
@@ -185,12 +192,16 @@ async def edit_column_page(
     # 获取所有栏目（用于选择父栏目，但排除自己和自己的子栏目）
     all_columns = column_service.get_all_columns(db, enabled_only=True)
 
+    # 获取所有Gallery（用于关联Gallery）
+    all_galleries = db.query(Gallery).order_by(Gallery.title).all()
+
     return templates.TemplateResponse(
         "columns/form.html",
         {
             "request": request,
             "column": column,
             "all_columns": all_columns,
+            "all_galleries": all_galleries,
             "column_types": ColumnType,
             "mode": "edit",
         },
@@ -218,6 +229,7 @@ async def update_column(
     hero_tagline_en: Optional[str] = Form(None),
     hero_cta_text: Optional[str] = Form(None),
     hero_cta_url: Optional[str] = Form(None),
+    gallery_id: Optional[int] = Form(None),
     db: Session = Depends(get_db),
 ):
     """
@@ -269,6 +281,7 @@ async def update_column(
     column.hero_tagline_en = hero_tagline_en
     column.hero_cta_text = hero_cta_text
     column.hero_cta_url = hero_cta_url
+    column.gallery_id = gallery_id if gallery_id else None
 
     # 保存到数据库
     db.commit()
