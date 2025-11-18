@@ -78,4 +78,4 @@ cookies.txt
 backup/
 
 # Generated static files
-public/
+# public/ - 注释掉，允许提交生成的静态文件以便部署

@@ -1,0 +1,2492 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <!-- Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="Bowen Education Group常见问题解答。了解CourseRegistration、费用、上课时间、俱乐部Event等相关信息。">
+    <meta name="keywords" content="Bowen Education Group,Chinese Education,Manchester Chinese School">
+    <title>Frequently Asked Questions | Bowen Education Group | Bowen Education Group</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/static/images/apple-touch-icon.png">
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Frequently Asked Questions | Bowen Education Group">
+    <meta property="og:description" content="Bowen Education Group常见问题解答。了解CourseRegistration、费用、上课时间、俱乐部Event等相关信息。">
+    <meta property="og:image" content="/static/images/hero-default.jpg">
+    <meta property="og:url" content="http://localhost:8000/en/faq">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Bowen Education Group">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Bowen Education Group">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:image" content="">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/static/css/main.css">
+    
+<!-- Preload critical resources -->
+<link rel="preload" href="https://unpkg.com/aos@2.3.1/dist/aos.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</noscript>
+<style>
+/* Page Layout System - Two Column Layout */
+.section--content {
+    padding: 3rem 0;
+    background: linear-gradient(to bottom, #ffffff 0%, #f7fafc 100%);
+}
+
+/* Main Layout Container - Two Column Layout with Flexbox */
+.page-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    position: relative;
+}
+
+/* Left Sidebar - Fixed Width */
+.page-layout__sidebar {
+    flex: 0 0 280px;
+    min-width: 280px;
+    max-width: 280px;
+}
+
+/* Right Main Content Area - Flexible Width */
+.page-layout__main {
+    flex: 1;
+    min-width: 0; /* Prevent flex child overflow */
+    max-width: 100%; /* Ensure not exceeding container */
+}
+
+/* Single Column Layout (No Sidebar) */
+.page-layout--single {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* Ensure container has correct max-width */
+.section--content .container {
+    max-width: 1200px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Single Page Content Typography - Enhanced Readability */
+.single-page-content {
+    line-height: 1.8;
+    color: #2d3748;
+    background: white;
+    padding: 2.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.single-page-content h2 {
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a202c;
+    padding-bottom: 0.75rem;
+    border-bottom: 3px solid #0052cc;
+}
+
+.single-page-content h2:first-child {
+    margin-top: 0;
+}
+
+.single-page-content h3 {
+    margin-top: 2.5rem;
+    margin-bottom: 1.25rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.single-page-content p {
+    margin-bottom: 1.5rem;
+    font-size: 1.0625rem;
+}
+
+.single-page-content ul,
+.single-page-content ol {
+    margin-bottom: 2rem;
+    padding-left: 2rem;
+}
+
+.single-page-content li {
+    margin-bottom: 0.875rem;
+    line-height: 1.8;
+}
+
+.single-page-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+    margin: 2.5rem 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Image loading optimization */
+    opacity: 0;
+    transition: opacity 0.3s ease-in;
+}
+
+.single-page-content img.loaded,
+.single-page-content img[loading="lazy"] {
+    opacity: 1;
+}
+
+/* Performance optimization: reduce repaints */
+.single-page-content * {
+    will-change: auto;
+}
+
+.cta-buttons .btn {
+    will-change: transform, box-shadow;
+}
+
+.single-page-content blockquote {
+    border-left: 4px solid #0052cc;
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: #4a5568;
+}
+
+/* CTA Section Visual Enhancement */
+.section--cta {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, #0052cc 0%, #003380 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.section--cta::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+}
+
+.section--cta::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -5%;
+    width: 400px;
+    height: 400px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 50%;
+}
+
+.section--cta .container {
+    position: relative;
+    z-index: 2;
+}
+
+.section--cta .section__title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+}
+
+
+.section--cta .section__subtitle {
+    font-size: 1.25rem;
+    color: #ffffff;
+    opacity: 1;
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.6;
+}
+
+/* CTA Button Optimization - Enhanced Interaction */
+.cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    justify-content: center;
+    margin-top: 2.5rem;
+}
+
+.cta-buttons .btn {
+    min-width: 200px;
+    padding: 1.125rem 2.5rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    text-decoration: none;
+}
+
+.cta-buttons .btn-primary {
+    background: white;
+    color: #0052cc;
+    border: 2px solid white;
+}
+
+.cta-buttons .btn-primary:hover {
+    background: #f7fafc;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+}
+
+.cta-buttons .btn-outline-primary {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+}
+
+.cta-buttons .btn-outline-primary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+}
+
+/* Responsive Optimization */
+@media (max-width: 992px) {
+    .page-layout {
+        gap: 1.5rem;
+    }
+
+    .page-layout__sidebar {
+        flex: 0 0 240px;
+        min-width: 240px;
+    }
+
+    .single-page-content {
+        padding: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Mobile: Change to vertical stacked layout */
+    .page-layout {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .page-layout__sidebar {
+        flex: none;
+        width: 100%;
+        min-width: 100%;
+        order: -1; /* Ensure sidebar is on top */
+    }
+
+    .page-layout__main {
+        width: 100%;
+    }
+
+    .single-page-content {
+        padding: 1.5rem;
+    }
+
+    .single-page-content h2 {
+        font-size: 1.625rem;
+        margin-top: 2rem;
+    }
+
+    .section--cta .section__title {
+        font-size: 1.875rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cta-buttons .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .single-page-content {
+        padding: 1.25rem;
+    }
+}
+</style>
+
+
+    <!-- SEO: Language Alternatives -->
+    <link rel="alternate" hreflang="en" href="https://boweneducation.co.uk/en/faq" />
+    <link rel="alternate" hreflang="zh" href="https://boweneducation.co.uk/faq" />
+    <link rel="alternate" hreflang="x-default" href="https://boweneducation.co.uk/faq" />
+
+    <!-- Fonts (English only - removed Chinese fonts) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Analytics -->
+    
+
+    <!-- Structured Data -->
+    
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "EducationalOrganization",
+        "name": "Bowen Education Group",
+        "url": "&lt;app.services.static_generator.obj object at 0x10868b4d0&gt;",
+        "logo": "/static/images/logo.png",
+        "description": "",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "",
+            "addressLocality": "",
+            "addressRegion": "",
+            "postalCode": "",
+            "addressCountry": "GB"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "",
+            "longitude": ""
+        },
+        "telephone": "0161 969 3071",
+        "email": "",
+        "sameAs": [
+            
+            
+            
+        ]
+    }
+    </script>
+    
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Frequently Asked Questions",
+    "description": "Bowen Education Group常见问题解答。了解CourseRegistration、费用、上课时间、俱乐部Event等相关信息。",
+    "url": "http://localhost:8000/en/faq",
+    "inLanguage": ["en-GB", "zh-CN"],
+    "isPartOf": {
+        "@type": "WebSite",
+        "name": "Bowen Education Group",
+        "url": "&lt;app.services.static_generator.obj object at 0x10868b4d0&gt;"
+    },
+    "publisher": {
+        "@type": "EducationalOrganization",
+        "name": "Bowen Education Group"
+    },
+    "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "&lt;app.services.static_generator.obj object at 0x10868b4d0&gt;en/"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Frequently Asked Questions",
+                "item": "http://localhost:8000/en/faq"
+            }
+        ]
+    }
+}
+</script>
+
+</head>
+
+<body class="">
+    <!-- Skip to main content (accessibility) -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header -->
+    <header class="site-header" role="banner">
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-left">
+                
+                <span class="top-bar-item">
+                    <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                    <a href="tel:0161 969 3071">0161 969 3071</a>
+                </span>
+                
+                
+            </div>
+            <div class="top-bar-right">
+                <div class="social-links">
+                    
+                    
+                </div>
+                <div class="language-switcher">
+                    <a href="/zh/faq" class="language-toggle" aria-label="Switch to Chinese">
+                        <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        </svg>
+                        <span>Chinese</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <div class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <!-- Logo -->
+                <div class="header-logo">
+                    <a href="/en/" aria-label="Bowen Education Group Home">
+                        <img src="/static/images/logo.png" alt="Bowen Education Group" height="60">
+                        <span class="logo-text">
+                            <strong>Bowen Education Group</strong>
+                        </span>
+                    </a>
+                </div>
+
+                <!--
+  Navigation Component
+  Reusable navigation menu component with two-level dropdown support
+  Manages interaction state using Alpine.js
+-->
+
+<nav
+    x-data="navigationMenu()"
+    class="main-nav"
+    role="navigation"
+    aria-label="Main navigation"
+>
+    <!-- Desktop Navigation -->
+    <ul class="nav-menu desktop-nav">
+        
+            
+        
+            
+                
+                <li
+                    class="nav-item"
+                    
+                >
+                    <a
+                        href="/en/"
+                        class="nav-link"
+                        
+                    >
+                        Home
+                        
+                    </a>
+                    
+                </li>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+                
+                <li
+                    class="nav-item has-dropdown"
+                    
+                    x-data="{ open: false, closeTimeout: null }"
+                    @mouseenter="clearTimeout(closeTimeout); open = true"
+                    @mouseleave="closeTimeout = setTimeout(() => { open = false }, 600)"
+                    
+                >
+                    <a
+                        href="/en/about/"
+                        class="nav-link"
+                        
+                        :aria-expanded="open.toString()"
+                        
+                    >
+                        About
+                        
+                        <svg
+                            class="dropdown-icon"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            :class="{ 'rotate-180': open }"
+                            style="transition: transform 0.2s;"
+                        >
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                        
+                    </a>
+                    
+                    <ul
+                        class="dropdown-menu"
+                        x-show="open"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-95"
+                        @click.away="open = false"
+                        style="display: none;"
+                        x-cloak
+                    >
+                        
+                        <li>
+                            <a href="/en/about-company/" class="dropdown-item">
+                                Our Story
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="/en/news/" class="dropdown-item">
+                                News
+                            </a>
+                        </li>
+                        
+                    </ul>
+                    
+                </li>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+                
+                <li
+                    class="nav-item has-dropdown"
+                    
+                    x-data="{ open: false, closeTimeout: null }"
+                    @mouseenter="clearTimeout(closeTimeout); open = true"
+                    @mouseleave="closeTimeout = setTimeout(() => { open = false }, 600)"
+                    
+                >
+                    <a
+                        href="/en/school/"
+                        class="nav-link"
+                        
+                        :aria-expanded="open.toString()"
+                        
+                    >
+                        School
+                        
+                        <svg
+                            class="dropdown-icon"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            :class="{ 'rotate-180': open }"
+                            style="transition: transform 0.2s;"
+                        >
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                        
+                    </a>
+                    
+                    <ul
+                        class="dropdown-menu"
+                        x-show="open"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-95"
+                        @click.away="open = false"
+                        style="display: none;"
+                        x-cloak
+                    >
+                        
+                        <li>
+                            <a href="/en/school-curriculum/" class="dropdown-item">
+                                Curriculum
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="/en/school-term-dates/" class="dropdown-item">
+                                Term Dates
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="/en/school-pta/" class="dropdown-item">
+                                PTA
+                            </a>
+                        </li>
+                        
+                    </ul>
+                    
+                </li>
+            
+        
+            
+        
+            
+                
+                <li
+                    class="nav-item"
+                    
+                >
+                    <a
+                        href="/en/tuition/"
+                        class="nav-link"
+                        
+                    >
+                        Tutoring
+                        
+                    </a>
+                    
+                </li>
+            
+        
+            
+                
+                <li
+                    class="nav-item has-dropdown"
+                    
+                    x-data="{ open: false, closeTimeout: null }"
+                    @mouseenter="clearTimeout(closeTimeout); open = true"
+                    @mouseleave="closeTimeout = setTimeout(() => { open = false }, 600)"
+                    
+                >
+                    <a
+                        href="/en/chess/"
+                        class="nav-link"
+                        
+                        :aria-expanded="open.toString()"
+                        
+                    >
+                        Chess
+                        
+                        <svg
+                            class="dropdown-icon"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            :class="{ 'rotate-180': open }"
+                            style="transition: transform 0.2s;"
+                        >
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                        
+                    </a>
+                    
+                    <ul
+                        class="dropdown-menu"
+                        x-show="open"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-95"
+                        @click.away="open = false"
+                        style="display: none;"
+                        x-cloak
+                    >
+                        
+                        <li>
+                            <a href="/en/chess-about/" class="dropdown-item">
+                                About
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="/en/chess-courses/" class="dropdown-item">
+                                Courses
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="/en/chess-events/" class="dropdown-item">
+                                Competitions
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="/en/chess-resources/" class="dropdown-item">
+                                Resources
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="/en/chess-news/" class="dropdown-item">
+                                Highlights
+                            </a>
+                        </li>
+                        
+                    </ul>
+                    
+                </li>
+            
+        
+            
+                
+                <li
+                    class="nav-item has-dropdown"
+                    
+                    x-data="{ open: false, closeTimeout: null }"
+                    @mouseenter="clearTimeout(closeTimeout); open = true"
+                    @mouseleave="closeTimeout = setTimeout(() => { open = false }, 600)"
+                    
+                >
+                    <a
+                        href="/en/badminton/"
+                        class="nav-link"
+                        
+                        :aria-expanded="open.toString()"
+                        
+                    >
+                        Badminton
+                        
+                        <svg
+                            class="dropdown-icon"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            :class="{ 'rotate-180': open }"
+                            style="transition: transform 0.2s;"
+                        >
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                        
+                    </a>
+                    
+                    <ul
+                        class="dropdown-menu"
+                        x-show="open"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-95"
+                        @click.away="open = false"
+                        style="display: none;"
+                        x-cloak
+                    >
+                        
+                        <li>
+                            <a href="/en/badminton-events/" class="dropdown-item">
+                                Events
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="/en/badminton-schedule/" class="dropdown-item">
+                                Schedule
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="/en/badminton-gallery/" class="dropdown-item">
+                                Gallery
+                            </a>
+                        </li>
+                        
+                    </ul>
+                    
+                </li>
+            
+        
+            
+                
+                <li
+                    class="nav-item has-dropdown"
+                    
+                    x-data="{ open: false, closeTimeout: null }"
+                    @mouseenter="clearTimeout(closeTimeout); open = true"
+                    @mouseleave="closeTimeout = setTimeout(() => { open = false }, 600)"
+                    
+                >
+                    <a
+                        href="/en/programmes/"
+                        class="nav-link"
+                        
+                        :aria-expanded="open.toString()"
+                        
+                    >
+                        Programs
+                        
+                        <svg
+                            class="dropdown-icon"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            :class="{ 'rotate-180': open }"
+                            style="transition: transform 0.2s;"
+                        >
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                        
+                    </a>
+                    
+                    <ul
+                        class="dropdown-menu"
+                        x-show="open"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-95"
+                        @click.away="open = false"
+                        style="display: none;"
+                        x-cloak
+                    >
+                        
+                        <li>
+                            <a href="/en/programmes-haf/" class="dropdown-item">
+                                HAF Program
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="/en/programmes-parks/" class="dropdown-item">
+                                Park Activities
+                            </a>
+                        </li>
+                        
+                    </ul>
+                    
+                </li>
+            
+        
+            
+                
+                <li
+                    class="nav-item has-dropdown"
+                    
+                    x-data="{ open: false, closeTimeout: null }"
+                    @mouseenter="clearTimeout(closeTimeout); open = true"
+                    @mouseleave="closeTimeout = setTimeout(() => { open = false }, 600)"
+                    
+                >
+                    <a
+                        href="/en/events/"
+                        class="nav-link"
+                        
+                        :aria-expanded="open.toString()"
+                        
+                    >
+                        Events
+                        
+                        <svg
+                            class="dropdown-icon"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            :class="{ 'rotate-180': open }"
+                            style="transition: transform 0.2s;"
+                        >
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                        
+                    </a>
+                    
+                    <ul
+                        class="dropdown-menu"
+                        x-show="open"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-95"
+                        @click.away="open = false"
+                        style="display: none;"
+                        x-cloak
+                    >
+                        
+                        <li>
+                            <a href="/en/events-henan/" class="dropdown-item">
+                                Henan Partnership
+                            </a>
+                        </li>
+                        
+                    </ul>
+                    
+                </li>
+            
+        
+            
+                
+                <li
+                    class="nav-item"
+                    
+                >
+                    <a
+                        href="/en/contact/"
+                        class="nav-link"
+                        
+                    >
+                        Contact
+                        
+                    </a>
+                    
+                </li>
+            
+        
+    </ul>
+
+    <!-- Mobile Menu Toggle -->
+    <button
+        class="mobile-menu-toggle"
+        @click="toggleMobileMenu()"
+        type="button"
+        aria-expanded="false"
+        x-bind:aria-expanded="mobileMenuOpen.toString()"
+        aria-controls="mobile-menu-panel"
+        aria-label="Menu"
+    >
+        <span class="hamburger-line" :class="{ 'active': mobileMenuOpen }"></span>
+        <span class="hamburger-line" :class="{ 'active': mobileMenuOpen }"></span>
+        <span class="hamburger-line" :class="{ 'active': mobileMenuOpen }"></span>
+    </button>
+
+    <!-- Mobile Menu -->
+    <div
+        class="mobile-menu"
+        x-show="mobileMenuOpen"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 max-h-0"
+        x-transition:enter-end="opacity-100 max-h-menu"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100 max-h-menu"
+        x-transition:leave-end="opacity-0 max-h-0"
+        style="display: none; overflow: hidden;"
+        x-cloak
+        id="mobile-menu-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-hidden="true"
+    >
+        <div class="mobile-nav">
+            <button class="mobile-nav-toggle mobile-nav-close" type="button" @click="closeMobileMenu()" aria-label="Close">Close</button>
+            <ul class="mobile-nav-menu">
+                
+                    
+                
+                    
+                        
+                        <li
+                            class="mobile-nav-item"
+                            x-data="{ submenuOpen: false }"
+                        >
+                            
+                            <a href="/en/" class="mobile-nav-link">
+                                Home
+                            </a>
+                            
+                        </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        
+                        <li
+                            class="mobile-nav-item has-submenu"
+                            x-data="{ submenuOpen: false }"
+                        >
+                            
+                            <button
+                                class="mobile-nav-toggle"
+                                type="button"
+                                @click="submenuOpen = !submenuOpen"
+                                aria-expanded="false"
+                                x-bind:aria-expanded="submenuOpen.toString()"
+                            >
+                                <span>About</span>
+                                <svg
+                                    class="toggle-icon"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    :class="{ 'rotate-180': submenuOpen }"
+                                    style="transition: transform 0.2s;"
+                                >
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <ul
+                                class="mobile-submenu"
+                                x-show="submenuOpen"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 max-h-0"
+                                x-transition:enter-end="opacity-100 max-h-96"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 max-h-96"
+                                x-transition:leave-end="opacity-0 max-h-0"
+                                style="display: none; overflow: hidden;"
+                                x-cloak
+                                aria-hidden="true"
+                            >
+                                <!-- Link to parent overview page -->
+                                <li>
+                                    <a href="/en/about/" class="mobile-submenu-link parent-link">
+                                        <strong>View All About</strong>
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/en/about-company/" class="mobile-submenu-link">
+                                        Our Story
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/en/news/" class="mobile-submenu-link">
+                                        News
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            
+                        </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        
+                        <li
+                            class="mobile-nav-item has-submenu"
+                            x-data="{ submenuOpen: false }"
+                        >
+                            
+                            <button
+                                class="mobile-nav-toggle"
+                                type="button"
+                                @click="submenuOpen = !submenuOpen"
+                                aria-expanded="false"
+                                x-bind:aria-expanded="submenuOpen.toString()"
+                            >
+                                <span>School</span>
+                                <svg
+                                    class="toggle-icon"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    :class="{ 'rotate-180': submenuOpen }"
+                                    style="transition: transform 0.2s;"
+                                >
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <ul
+                                class="mobile-submenu"
+                                x-show="submenuOpen"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 max-h-0"
+                                x-transition:enter-end="opacity-100 max-h-96"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 max-h-96"
+                                x-transition:leave-end="opacity-0 max-h-0"
+                                style="display: none; overflow: hidden;"
+                                x-cloak
+                                aria-hidden="true"
+                            >
+                                <!-- Link to parent overview page -->
+                                <li>
+                                    <a href="/en/school/" class="mobile-submenu-link parent-link">
+                                        <strong>View All School</strong>
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/en/school-curriculum/" class="mobile-submenu-link">
+                                        Curriculum
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/en/school-term-dates/" class="mobile-submenu-link">
+                                        Term Dates
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/en/school-pta/" class="mobile-submenu-link">
+                                        PTA
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            
+                        </li>
+                    
+                
+                    
+                
+                    
+                        
+                        <li
+                            class="mobile-nav-item"
+                            x-data="{ submenuOpen: false }"
+                        >
+                            
+                            <a href="/en/tuition/" class="mobile-nav-link">
+                                Tutoring
+                            </a>
+                            
+                        </li>
+                    
+                
+                    
+                        
+                        <li
+                            class="mobile-nav-item has-submenu"
+                            x-data="{ submenuOpen: false }"
+                        >
+                            
+                            <button
+                                class="mobile-nav-toggle"
+                                type="button"
+                                @click="submenuOpen = !submenuOpen"
+                                aria-expanded="false"
+                                x-bind:aria-expanded="submenuOpen.toString()"
+                            >
+                                <span>Chess</span>
+                                <svg
+                                    class="toggle-icon"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    :class="{ 'rotate-180': submenuOpen }"
+                                    style="transition: transform 0.2s;"
+                                >
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <ul
+                                class="mobile-submenu"
+                                x-show="submenuOpen"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 max-h-0"
+                                x-transition:enter-end="opacity-100 max-h-96"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 max-h-96"
+                                x-transition:leave-end="opacity-0 max-h-0"
+                                style="display: none; overflow: hidden;"
+                                x-cloak
+                                aria-hidden="true"
+                            >
+                                <!-- Link to parent overview page -->
+                                <li>
+                                    <a href="/en/chess/" class="mobile-submenu-link parent-link">
+                                        <strong>View All Chess</strong>
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/en/chess-about/" class="mobile-submenu-link">
+                                        About
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/en/chess-courses/" class="mobile-submenu-link">
+                                        Courses
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/en/chess-events/" class="mobile-submenu-link">
+                                        Competitions
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/en/chess-resources/" class="mobile-submenu-link">
+                                        Resources
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/en/chess-news/" class="mobile-submenu-link">
+                                        Highlights
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            
+                        </li>
+                    
+                
+                    
+                        
+                        <li
+                            class="mobile-nav-item has-submenu"
+                            x-data="{ submenuOpen: false }"
+                        >
+                            
+                            <button
+                                class="mobile-nav-toggle"
+                                type="button"
+                                @click="submenuOpen = !submenuOpen"
+                                aria-expanded="false"
+                                x-bind:aria-expanded="submenuOpen.toString()"
+                            >
+                                <span>Badminton</span>
+                                <svg
+                                    class="toggle-icon"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    :class="{ 'rotate-180': submenuOpen }"
+                                    style="transition: transform 0.2s;"
+                                >
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <ul
+                                class="mobile-submenu"
+                                x-show="submenuOpen"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 max-h-0"
+                                x-transition:enter-end="opacity-100 max-h-96"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 max-h-96"
+                                x-transition:leave-end="opacity-0 max-h-0"
+                                style="display: none; overflow: hidden;"
+                                x-cloak
+                                aria-hidden="true"
+                            >
+                                <!-- Link to parent overview page -->
+                                <li>
+                                    <a href="/en/badminton/" class="mobile-submenu-link parent-link">
+                                        <strong>View All Badminton</strong>
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/en/badminton-events/" class="mobile-submenu-link">
+                                        Events
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/en/badminton-schedule/" class="mobile-submenu-link">
+                                        Schedule
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/en/badminton-gallery/" class="mobile-submenu-link">
+                                        Gallery
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            
+                        </li>
+                    
+                
+                    
+                        
+                        <li
+                            class="mobile-nav-item has-submenu"
+                            x-data="{ submenuOpen: false }"
+                        >
+                            
+                            <button
+                                class="mobile-nav-toggle"
+                                type="button"
+                                @click="submenuOpen = !submenuOpen"
+                                aria-expanded="false"
+                                x-bind:aria-expanded="submenuOpen.toString()"
+                            >
+                                <span>Programs</span>
+                                <svg
+                                    class="toggle-icon"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    :class="{ 'rotate-180': submenuOpen }"
+                                    style="transition: transform 0.2s;"
+                                >
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <ul
+                                class="mobile-submenu"
+                                x-show="submenuOpen"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 max-h-0"
+                                x-transition:enter-end="opacity-100 max-h-96"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 max-h-96"
+                                x-transition:leave-end="opacity-0 max-h-0"
+                                style="display: none; overflow: hidden;"
+                                x-cloak
+                                aria-hidden="true"
+                            >
+                                <!-- Link to parent overview page -->
+                                <li>
+                                    <a href="/en/programmes/" class="mobile-submenu-link parent-link">
+                                        <strong>View All Programs</strong>
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/en/programmes-haf/" class="mobile-submenu-link">
+                                        HAF Program
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/en/programmes-parks/" class="mobile-submenu-link">
+                                        Park Activities
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            
+                        </li>
+                    
+                
+                    
+                        
+                        <li
+                            class="mobile-nav-item has-submenu"
+                            x-data="{ submenuOpen: false }"
+                        >
+                            
+                            <button
+                                class="mobile-nav-toggle"
+                                type="button"
+                                @click="submenuOpen = !submenuOpen"
+                                aria-expanded="false"
+                                x-bind:aria-expanded="submenuOpen.toString()"
+                            >
+                                <span>Events</span>
+                                <svg
+                                    class="toggle-icon"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    :class="{ 'rotate-180': submenuOpen }"
+                                    style="transition: transform 0.2s;"
+                                >
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <ul
+                                class="mobile-submenu"
+                                x-show="submenuOpen"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 max-h-0"
+                                x-transition:enter-end="opacity-100 max-h-96"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 max-h-96"
+                                x-transition:leave-end="opacity-0 max-h-0"
+                                style="display: none; overflow: hidden;"
+                                x-cloak
+                                aria-hidden="true"
+                            >
+                                <!-- Link to parent overview page -->
+                                <li>
+                                    <a href="/en/events/" class="mobile-submenu-link parent-link">
+                                        <strong>View All Events</strong>
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/en/events-henan/" class="mobile-submenu-link">
+                                        Henan Partnership
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            
+                        </li>
+                    
+                
+                    
+                        
+                        <li
+                            class="mobile-nav-item"
+                            x-data="{ submenuOpen: false }"
+                        >
+                            
+                            <a href="/en/contact/" class="mobile-nav-link">
+                                Contact
+                            </a>
+                            
+                        </li>
+                    
+                
+            </ul>
+            <div class="mobile-nav-footer">
+                <a href="/en/contact/" class="btn btn-primary btn-block">Contact Us</a>
+            </div>
+        </div>
+    </div>
+
+    
+</nav>
+
+<script>
+/**
+ * Navigation Menu Alpine.js Component
+ * Manages navigation menu state and interaction
+ */
+function navigationMenu() {
+    return {
+        // Mobile menu open/close state
+        mobileMenuOpen: false,
+        lastFocused: null,
+
+        /**
+         * Toggle mobile menu
+         */
+        toggleMobileMenu() {
+            this.mobileMenuOpen = !this.mobileMenuOpen;
+            // Toggle body class to disable scrolling
+            document.body.classList.toggle('mobile-menu-open', this.mobileMenuOpen);
+            if (this.mobileMenuOpen) {
+                this.lastFocused = document.activeElement;
+                const panel = document.getElementById('mobile-menu-panel');
+                const focusables = panel ? panel.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])') : [];
+                if (focusables.length) focusables[0].focus();
+            } else if (this.lastFocused) {
+                this.lastFocused.focus();
+            }
+        },
+
+        /**
+         * Close mobile menu
+         */
+        closeMobileMenu() {
+            this.mobileMenuOpen = false;
+            document.body.classList.remove('mobile-menu-open');
+            if (this.lastFocused) this.lastFocused.focus();
+        },
+
+        /**
+         * Initialize
+         */
+        init() {
+            // Listen for ESC key to close mobile menu
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && this.mobileMenuOpen) {
+                    this.closeMobileMenu();
+                }
+                if (e.key === 'Tab' && this.mobileMenuOpen) {
+                    const panel = document.getElementById('mobile-menu-panel');
+                    const focusables = panel ? Array.from(panel.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])')) : [];
+                    if (focusables.length) {
+                        const first = focusables[0];
+                        const last = focusables[focusables.length - 1];
+                        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+                        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+                    }
+                }
+            });
+
+            // Listen for route changes to close mobile menu
+            window.addEventListener('popstate', () => {
+                this.closeMobileMenu();
+            });
+        }
+    };
+}
+</script>
+
+<style>
+/* Alpine.js cloak - Prevent content flash */
+[x-cloak] { display: none !important; }
+
+/* Dropdown menu animation helper */
+.dropdown-menu {
+    transform-origin: top;
+}
+
+.mobile-submenu {
+    transform-origin: top;
+}
+
+/* Hamburger menu animation */
+.hamburger-line {
+    transition: all 0.3s ease;
+}
+
+.hamburger-line.active:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger-line.active:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-line.active:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* Disable body scroll */
+body.mobile-menu-open {
+    overflow: hidden;
+}
+</style>
+                <div x-data="{ open: false }" class="mobile-only-wrapper">
+  <button class="mobile-only-toggle" @click="open = !open" :aria-expanded="open.toString()" aria-controls="mobile-only-nav" aria-label="Menu">
+    <span class="hamburger-line" :class="{ 'active': open }"></span>
+    <span class="hamburger-line" :class="{ 'active': open }"></span>
+    <span class="hamburger-line" :class="{ 'active': open }"></span>
+  </button>
+  <div id="mobile-only-nav" class="mobile-only-nav" x-show="open" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-menu" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 max-h-menu" x-transition:leave-end="opacity-0 max-h-0" style="display: none; overflow: hidden;">
+    <ul class="mobile-only-menu">
+      
+        
+      
+        
+          
+          <li class="mobile-only-item" x-data="{ openSub: false }">
+            
+            <a href="/en/" class="mobile-only-link"><span>Home</span></a>
+            
+          </li>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+          
+          <li class="mobile-only-item" x-data="{ openSub: false }">
+            
+            <button class="mobile-only-link" @click="openSub = !openSub" :aria-expanded="openSub.toString()">
+              <span>About</span>
+              <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" :class="{ 'rotate-180': openSub }"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <ul class="mobile-only-sub" x-show="openSub" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-96" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 max-h-96" x-transition:leave-end="opacity-0 max-h-0" style="display: none; overflow: hidden;">
+              
+              <li><a href="/en/about-company/" class="mobile-only-sub-link">Our Story</a></li>
+              
+              <li><a href="/en/news/" class="mobile-only-sub-link">News</a></li>
+              
+            </ul>
+            
+          </li>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+          
+          <li class="mobile-only-item" x-data="{ openSub: false }">
+            
+            <button class="mobile-only-link" @click="openSub = !openSub" :aria-expanded="openSub.toString()">
+              <span>School</span>
+              <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" :class="{ 'rotate-180': openSub }"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <ul class="mobile-only-sub" x-show="openSub" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-96" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 max-h-96" x-transition:leave-end="opacity-0 max-h-0" style="display: none; overflow: hidden;">
+              
+              <li><a href="/en/school-curriculum/" class="mobile-only-sub-link">Curriculum</a></li>
+              
+              <li><a href="/en/school-term-dates/" class="mobile-only-sub-link">Term Dates</a></li>
+              
+              <li><a href="/en/school-pta/" class="mobile-only-sub-link">PTA</a></li>
+              
+            </ul>
+            
+          </li>
+        
+      
+        
+      
+        
+          
+          <li class="mobile-only-item" x-data="{ openSub: false }">
+            
+            <a href="/en/tuition/" class="mobile-only-link"><span>Tutoring</span></a>
+            
+          </li>
+        
+      
+        
+          
+          <li class="mobile-only-item" x-data="{ openSub: false }">
+            
+            <button class="mobile-only-link" @click="openSub = !openSub" :aria-expanded="openSub.toString()">
+              <span>Chess</span>
+              <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" :class="{ 'rotate-180': openSub }"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <ul class="mobile-only-sub" x-show="openSub" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-96" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 max-h-96" x-transition:leave-end="opacity-0 max-h-0" style="display: none; overflow: hidden;">
+              
+              <li><a href="/en/chess-about/" class="mobile-only-sub-link">About</a></li>
+              
+              <li><a href="/en/chess-courses/" class="mobile-only-sub-link">Courses</a></li>
+              
+              <li><a href="/en/chess-events/" class="mobile-only-sub-link">Competitions</a></li>
+              
+              <li><a href="/en/chess-resources/" class="mobile-only-sub-link">Resources</a></li>
+              
+              <li><a href="/en/chess-news/" class="mobile-only-sub-link">Highlights</a></li>
+              
+            </ul>
+            
+          </li>
+        
+      
+        
+          
+          <li class="mobile-only-item" x-data="{ openSub: false }">
+            
+            <button class="mobile-only-link" @click="openSub = !openSub" :aria-expanded="openSub.toString()">
+              <span>Badminton</span>
+              <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" :class="{ 'rotate-180': openSub }"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <ul class="mobile-only-sub" x-show="openSub" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-96" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 max-h-96" x-transition:leave-end="opacity-0 max-h-0" style="display: none; overflow: hidden;">
+              
+              <li><a href="/en/badminton-events/" class="mobile-only-sub-link">Events</a></li>
+              
+              <li><a href="/en/badminton-schedule/" class="mobile-only-sub-link">Schedule</a></li>
+              
+              <li><a href="/en/badminton-gallery/" class="mobile-only-sub-link">Gallery</a></li>
+              
+            </ul>
+            
+          </li>
+        
+      
+        
+          
+          <li class="mobile-only-item" x-data="{ openSub: false }">
+            
+            <button class="mobile-only-link" @click="openSub = !openSub" :aria-expanded="openSub.toString()">
+              <span>Programs</span>
+              <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" :class="{ 'rotate-180': openSub }"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <ul class="mobile-only-sub" x-show="openSub" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-96" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 max-h-96" x-transition:leave-end="opacity-0 max-h-0" style="display: none; overflow: hidden;">
+              
+              <li><a href="/en/programmes-haf/" class="mobile-only-sub-link">HAF Program</a></li>
+              
+              <li><a href="/en/programmes-parks/" class="mobile-only-sub-link">Park Activities</a></li>
+              
+            </ul>
+            
+          </li>
+        
+      
+        
+          
+          <li class="mobile-only-item" x-data="{ openSub: false }">
+            
+            <button class="mobile-only-link" @click="openSub = !openSub" :aria-expanded="openSub.toString()">
+              <span>Events</span>
+              <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" :class="{ 'rotate-180': openSub }"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <ul class="mobile-only-sub" x-show="openSub" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-96" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 max-h-96" x-transition:leave-end="opacity-0 max-h-0" style="display: none; overflow: hidden;">
+              
+              <li><a href="/en/events-henan/" class="mobile-only-sub-link">Henan Partnership</a></li>
+              
+            </ul>
+            
+          </li>
+        
+      
+        
+          
+          <li class="mobile-only-item" x-data="{ openSub: false }">
+            
+            <a href="/en/contact/" class="mobile-only-link"><span>Contact</span></a>
+            
+          </li>
+        
+      
+    </ul>
+  </div>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Overlay -->
+    <div class="search-overlay" id="search-overlay" hidden>
+        <div class="search-overlay-content">
+            <button class="search-close" aria-label="Close search" data-action="close-search">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <form action="/en/search/" method="GET" class="search-form">
+                <input type="search" name="q" placeholder="Search courses, news, events..." aria-label="Search" autofocus>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+        </div>
+    </div>
+
+</header>
+
+<script>
+// Header functionality
+(function() {
+    // Search toggle
+    const searchToggles = document.querySelectorAll('[data-action="toggle-search"]');
+    const searchOverlay = document.getElementById('search-overlay');
+    const searchClose = document.querySelector('[data-action="close-search"]');
+
+    searchToggles.forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            searchOverlay.hidden = false;
+            searchOverlay.querySelector('input[type="search"]').focus();
+        });
+    });
+
+    if (searchClose) {
+        searchClose.addEventListener('click', () => {
+            searchOverlay.hidden = true;
+        });
+    }
+
+    // Language switcher
+    const languageToggle = document.querySelector('.language-toggle');
+    const languageDropdown = document.querySelector('.language-dropdown');
+
+    if (languageToggle && languageDropdown) {
+        languageToggle.addEventListener('click', () => {
+            languageDropdown.hidden = !languageDropdown.hidden;
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.language-switcher')) {
+                languageDropdown.hidden = true;
+            }
+        });
+    }
+})();
+</script>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-content" role="main">
+        
+
+<!-- Hero Section -->
+
+
+<!--
+  Standard Hero Component
+  Unified Hero section component, supports loading background images from columns or pages
+-->
+
+
+
+
+
+    
+        
+    
+
+
+<section class="hero hero--content" aria-labelledby="page-title">
+    <div class="hero__overlay" aria-hidden="true"></div>
+    <div class="hero__background"
+         role="img"
+         aria-label="Frequently Asked Questions"
+         style="background-image: url('/static/images/hero-default.jpg');"
+         loading="lazy"></div>
+    <div class="container">
+        <div class="hero__content">
+            <h1 id="page-title" class="hero__title" data-aos="fade-up">
+                Frequently Asked Questions
+            </h1>
+            
+            <p class="hero__subtitle" data-aos="fade-up" data-aos-delay="100">
+                Everything You Need to Know
+            </p>
+            
+        </div>
+    </div>
+</section>
+
+<style>
+/* Hero Banner Standard Styles */
+.hero--content {
+    position: relative;
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
+.hero__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.hero__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0, 82, 204, 0.65) 0%, rgba(0, 51, 128, 0.55) 100%);
+}
+
+.hero__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+    padding: 2.5rem 1rem;
+}
+
+.hero__title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero__subtitle {
+    font-size: 1.125rem;
+    font-weight: 400;
+    max-width: 800px;
+    margin: 0 auto;
+    opacity: 0.95;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero--content {
+        min-height: 200px;
+    }
+
+    .hero__content {
+        padding: 2rem 1rem;
+    }
+
+    .hero__title {
+        font-size: 1.75rem;
+    }
+
+    .hero__subtitle {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero--content {
+        min-height: 180px;
+    }
+
+    .hero__content {
+        padding: 1.5rem 1rem;
+    }
+
+    .hero__title {
+        font-size: 1.5rem;
+    }
+
+    .hero__subtitle {
+        font-size: 0.9375rem;
+    }
+}
+</style>
+
+<!-- Content Section -->
+<section class="section section--content">
+    <div class="container">
+        
+        <!-- Single column layout without sidebar -->
+        <div class="page-layout page-layout--single">
+            <article class="single-page-content" data-aos="fade-up">
+                <h2>Frequently Asked Questions</h2>
+<h3>About Our Courses</h3>
+<p><strong>How do I enroll?</strong></p>
+<p>You can register through any of these methods:</p>
+<ul>
+<li>Complete the enrollment form on our Contact page</li>
+<li>Call our office directly</li>
+<li>Email us at info@boweneducation.org</li>
+<li>Visit us in person for a consultation</li>
+</ul>
+<p><strong>What are the course fees?</strong></p>
+<p>Fees vary by program. Please visit our specific course pages (Chinese School, Tutoring Centre, Chess Club, Badminton Club) for detailed pricing, or contact us for a personalized quote.</p>
+<p><strong>Do you offer trial lessons?</strong></p>
+<p>Yes! We offer FREE trial lessons for new students in our Chess and Badminton clubs. For other programs, please contact us to discuss trial options.</p>
+<p><strong>What is your refund policy?</strong></p>
+<ul>
+<li>Full refund if you withdraw before the term starts</li>
+<li>Pro-rata refund during the first two weeks of term</li>
+<li>No refunds after the second week of term</li>
+<li>Exceptions may be made for medical or emergency circumstances</li>
+</ul>
+<p><strong>Can I pay in installments?</strong></p>
+<p>Yes, we offer flexible payment plans. Please contact our office to arrange a payment schedule that works for your family.</p>
+<h3>About Chinese School</h3>
+<p><strong>Does my child need prior Chinese language experience?</strong></p>
+<p>No! We welcome students of all backgrounds and language levels. We have classes for complete beginners as well as heritage speakers.</p>
+<p><strong>What age groups do you teach?</strong></p>
+<p>We offer classes for children aged 5-16, organized by age and proficiency level.</p>
+<p><strong>What curriculum do you follow?</strong></p>
+<p>We use a combination of standardized Chinese language textbooks and our own specially developed materials that are relevant to British-Chinese children.</p>
+<p><strong>Do you teach traditional or simplified Chinese?</strong></p>
+<p>We primarily teach simplified Chinese characters, as they are more widely used internationally. However, we can arrange traditional character instruction upon request.</p>
+<p><strong>How will learning Chinese benefit my child?</strong></p>
+<p>Benefits include:<br>
+- Connection to cultural heritage<br>
+- Cognitive development and improved academic performance<br>
+- Future career opportunities in a globalized world<br>
+- Enhanced cultural awareness and confidence</p>
+<h3>About Tutoring Centre</h3>
+<p><strong>What subjects do you offer tutoring for?</strong></p>
+<p>We provide tutoring for:<br>
+- GCSE: Mathematics, Sciences, English, Humanities, Languages<br>
+- A-Level: Mathematics, Further Mathematics, Sciences, Economics, Languages<br>
+- 11+ Exam preparation<br>
+- 13+ Exam preparation</p>
+<p><strong>What is your student-to-teacher ratio?</strong></p>
+<p>We maintain small group sizes (maximum 6 students) or offer one-to-one tutoring for personalized attention.</p>
+<p><strong>How do you assess my child's needs?</strong></p>
+<p>We conduct a free initial assessment to understand your child's current level, learning style, and goals. Based on this, we create a personalized learning plan.</p>
+<p><strong>How quickly will I see results?</strong></p>
+<p>Most students show measurable improvement within 4-6 weeks. However, the pace depends on individual circumstances, current level, and commitment to the program.</p>
+<h3>About Chess Club</h3>
+<p><strong>My child has never played chess. Can they join?</strong></p>
+<p>Absolutely! We welcome complete beginners. Our Beginners Class is specifically designed for children with no prior chess experience.</p>
+<p><strong>How do you determine which class level my child should join?</strong></p>
+<p>We conduct a simple skills assessment (free) to evaluate your child's current chess knowledge and place them in the appropriate class.</p>
+<p><strong>What is ECF rating?</strong></p>
+<p>ECF (English Chess Federation) rating is an official chess rating system used in England. Students can earn ratings by participating in rated tournaments, providing measurable progress and qualification for regional/national competitions.</p>
+<p><strong>Do you organize tournaments?</strong></p>
+<p>Yes! We organize internal club tournaments and also help students enter ECF-rated tournaments and regional competitions.</p>
+<p><strong>What equipment does my child need?</strong></p>
+<p>For classes, all equipment is provided. If your child wants to practice at home, we recommend purchasing a basic chess set (£10-20) and registering for a free account on Lichess.org.</p>
+<h3>About Badminton Club</h3>
+<p><strong>What equipment is needed?</strong></p>
+<p>Students should bring:<br>
+- Sports clothing and non-marking shoes<br>
+- Water bottle<br>
+- Own racket (recommended but not essential for beginners)</p>
+<p><strong>Do you provide rackets?</strong></p>
+<p>We have a limited number of club rackets available for beginners to use during their first few sessions. We recommend purchasing a suitable racket once your child is committed to continuing.</p>
+<p><strong>What is the training structure?</strong></p>
+<p>Training includes:<br>
+- Warm-up and fitness exercises<br>
+- Technical drills (footwork, shots)<br>
+- Tactical training<br>
+- Match play and practice games</p>
+<p><strong>Can my child join if they've never played badminton?</strong></p>
+<p>Yes! We have Beginner Classes specifically for students new to badminton.</p>
+<h3>About Safety &amp; Policies</h3>
+<p><strong>What are your safeguarding policies?</strong></p>
+<p>Child safety is our top priority. All staff undergo DBS checks, we maintain strict safeguarding protocols, and we're registered with Ofsted. View our full Safeguarding Policy for details.</p>
+<p><strong>What is your illness/absence policy?</strong></p>
+<ul>
+<li>Please notify us if your child will be absent</li>
+<li>Missed lessons due to illness cannot be refunded but may be made up subject to availability</li>
+<li>If we cancel a session, a full credit or refund will be provided</li>
+</ul>
+<p><strong>Do you have insurance?</strong></p>
+<p>Yes, we maintain comprehensive public liability insurance and all necessary insurances for our activities.</p>
+<p><strong>What COVID-19 measures are in place?</strong></p>
+<p>We follow current UK government guidelines. Our protocols are regularly updated to ensure the safety of all students and staff.</p>
+<h3>About HAF Programme</h3>
+<p><strong>What is HAF?</strong></p>
+<p>HAF (Holiday Activities and Food) is a government-funded program providing free holiday activities and meals for eligible children during school holidays.</p>
+<p><strong>Who is eligible?</strong></p>
+<p>Children are eligible if they receive benefits-related free school meals. Check with your school or contact us to confirm eligibility.</p>
+<p><strong>How do I register for HAF?</strong></p>
+<p>Registration opens before each school holiday. Contact us or watch for announcements on our website and social media.</p>
+<p><strong>What activities are included?</strong></p>
+<p>Activities vary but typically include:<br>
+- Cultural activities and crafts<br>
+- Sports and physical activities<br>
+- Educational workshops<br>
+- Creative arts<br>
+- Daily nutritious meals</p>
+<h3>Still Have Questions?</h3>
+<p>If you couldn't find the answer to your question here, please don't hesitate to contact us:</p>
+<ul>
+<li><strong>Email:</strong> info@boweneducation.org</li>
+<li><strong>Phone:</strong> 0161 969 3071</li>
+<li><strong>Visit:</strong> Contact page for our full contact details and location</li>
+</ul>
+<p>We're here to help and will respond to your inquiry as quickly as possible!</p>
+            </article>
+        </div>
+        
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="section section--cta" aria-labelledby="cta-title">
+    <div class="container text-center" data-aos="fade-up">
+        <h2 id="cta-title" class="section__title">
+            Ready to Join Our Community?
+        </h2>
+        <p class="section__subtitle">
+            Discover how we can help you achieve your language learning goals
+        </p>
+        <div class="cta-buttons" role="group" aria-label="Contact actions">
+            <a href="/en/contact"
+               class="btn btn-primary btn-lg"
+               aria-label="Book a visit to Bowen Education Group">
+                <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                <span>Book a Visit</span>
+            </a>
+            <a href="tel:01619693071"
+               class="btn btn-outline-primary btn-lg"
+               aria-label="Call Bowen Education Group at 0161 969 3071">
+                <i class="fas fa-phone" aria-hidden="true"></i>
+                <span>0161 969 3071</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+
+    </main>
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer__main">
+            <div class="row">
+                <!-- Quick Links -->
+                <div class="col-lg-4 col-md-4 mb-4">
+                    <div class="footer__section">
+                        <h3 class="footer__heading">Quick Links</h3>
+                        <ul class="footer__links">
+                            <li><a href="/en/">Home</a></li>
+                            <li><a href="/en/about">About Us</a></li>
+                            <li><a href="/en/programmes">Government Programmes</a></li>
+                            <li><a href="/en/events">Events</a></li>
+                            <li><a href="/en/contact">Contact Us</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Legal & Policies -->
+                <div class="col-lg-4 col-md-4 mb-4">
+                    <div class="footer__section">
+                        <h3 class="footer__heading">Legal</h3>
+                        <ul class="footer__links">
+                            <li><a href="/en/privacy-policy">Privacy Policy</a></li>
+                            <li><a href="/en/terms-of-service">Terms of Service</a></li>
+                            <li><a href="/en/cookie-policy">Cookie Policy</a></li>
+                            <li><a href="/en/safeguarding">Safeguarding Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="col-lg-4 col-md-4 mb-4">
+                    <div class="footer__section">
+                        <h3 class="footer__heading">Contact Us</h3>
+                        <ul class="footer__contact">
+                            <li>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>
+                                    1/F, 2A Curzon Road, Sale, Manchester M33 7DR
+                                </span>
+                            </li>
+                            <li>
+                                <i class="fas fa-phone"></i>
+                                <a href="tel:01619693071">0161 969 3071</a>
+                            </li>
+                            <li>
+                                <i class="fas fa-envelope"></i>
+                                <a href="mailto:info@boweneducation.co.uk">info@boweneducation.co.uk</a>
+                            </li>
+                            <li>
+                                <i class="fas fa-clock"></i>
+                                <span>Mon-Fri: 9:00-18:00<br>Sat: 9:00-17:00</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer__bottom">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <p class="footer__copyright">
+                        &copy; 2025 Bowen Education Group. All rights reserved.
+                    </p>
+                </div>
+                <div class="col-lg-6 text-right">
+                    <div class="footer__social">
+                        
+                        
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+/* Footer Styles */
+.footer {
+    background: linear-gradient(135deg, var(--color-gray-900) 0%, var(--color-gray-800) 100%);
+    color: var(--color-white);
+    padding: var(--spacing-4xl) 0 var(--spacing-2xl);
+    margin-top: var(--spacing-4xl);
+}
+
+.footer__main {
+    padding-bottom: var(--spacing-3xl);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer__section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.footer__heading {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-xs);
+    color: var(--color-white);
+}
+
+.footer__heading-chinese {
+    font-family: var(--font-chinese);
+    font-size: var(--font-size-base);
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: var(--spacing-md);
+}
+
+.footer__text,
+.footer__text-chinese {
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-sm);
+}
+
+.footer__text-chinese {
+    font-family: var(--font-chinese);
+}
+
+.footer__links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer__links li {
+    margin-bottom: var(--spacing-sm);
+}
+
+.footer__links a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.footer__links a:hover {
+    color: var(--color-primary-light);
+}
+
+.footer__contact {
+    list-style: none;
+    padding: 0;
+}
+
+.footer__contact li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-md);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.footer__contact i {
+    color: var(--color-primary);
+    margin-right: var(--spacing-sm);
+    margin-top: 4px;
+    flex-shrink: 0;
+}
+
+.footer__contact a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.footer__contact a:hover {
+    color: var(--color-primary-light);
+}
+
+.footer__bottom {
+    padding-top: var(--spacing-2xl);
+}
+
+.footer__copyright {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: var(--font-size-sm);
+    margin: 0;
+}
+
+.footer__copyright .text-chinese {
+    font-family: var(--font-chinese);
+}
+
+.footer__social {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+}
+
+.footer__social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: var(--color-white);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+}
+
+.footer__social-link:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
+    transform: translateY(-2px);
+}
+
+.text-right {
+    text-align: right;
+}
+
+@media (max-width: 992px) {
+    .footer__social {
+        justify-content: flex-start;
+        margin-top: var(--spacing-md);
+    }
+
+    .text-right {
+        text-align: left;
+    }
+}
+</style>
+
+    <!-- Cookie Consent Banner -->
+    
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Scripts -->
+    <script src="/static/js/main.js"></script>
+    
+<!-- Defer loading non-critical JavaScript -->
+<script>
+    // Lazy load AOS animation library
+    (function() {
+        var script = document.createElement('script');
+        script.src = 'https://unpkg.com/aos@2.3.1/dist/aos.js';
+        script.defer = true;
+        script.onload = function() {
+            // Initialize animation
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true,
+                offset: 100,
+                disable: function() {
+                    // Disable animations on low-end devices for better performance
+                    return window.innerWidth < 768 && 'ontouchstart' in window;
+                }
+            });
+        };
+        document.body.appendChild(script);
+    })();
+
+    // Image lazy loading optimization
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    if (img.dataset.src) {
+                        img.src = img.dataset.src;
+                        img.classList.add('loaded');
+                        observer.unobserve(img);
+                    }
+                }
+            });
+        });
+
+        // Monitor all images with data-src attribute
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            imageObserver.observe(img);
+        });
+    }
+
+    // Optimize scroll performance
+    let ticking = false;
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                // Handle scroll related logic here
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, { passive: true });
+</script>
+
+
+    <script>
+        // Cookie banner
+        const cookieBanner = document.getElementById('cookie-banner');
+        const acceptButton = document.getElementById('accept-cookies');
+        const declineButton = document.getElementById('decline-cookies');
+
+        if (cookieBanner && acceptButton && declineButton) {
+            acceptButton.addEventListener('click', () => {
+                localStorage.setItem('cookieConsent', 'accepted');
+                cookieBanner.style.display = 'none';
+            });
+
+            declineButton.addEventListener('click', () => {
+                localStorage.setItem('cookieConsent', 'declined');
+                cookieBanner.style.display = 'none';
+            });
+        }
+    </script>
+</body>
+</html>

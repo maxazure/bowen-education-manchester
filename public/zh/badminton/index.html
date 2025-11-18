@@ -1,0 +1,2820 @@
+<!DOCTYPE html>
+<html lang="zh" class="no-js">
+<head>
+    <!-- Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="博文羽毛球俱乐部提供专业的羽毛球训练，培养学生羽毛球技能，参加比赛和友谊赛">
+    <meta name="keywords" content="">
+    <title>羽毛球俱乐部 Badminton Club | 博文教育集团 Bowen Education Group | Bowen Education Group</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="/static/images/apple-touch-icon.png">
+
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Bowen Education Group">
+    <meta property="og:description" content="">
+    <meta property="og:image" content="">
+    <meta property="og:url" content="http://localhost:8000/badminton">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Bowen Education Group">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Bowen Education Group">
+    <meta name="twitter:description" content="">
+    <meta name="twitter:image" content="">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/static/css/main.css">
+    
+<link rel="preload" href="https://unpkg.com/aos@2.3.1/dist/aos.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</noscript>
+<style>
+/* Badminton Stats Section */
+.badminton-stats {
+    background: linear-gradient(to bottom, #f7fafc 0%, #ffffff 100%);
+    padding: 3rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.stat-item {
+    text-align: center;
+    color: #047857;
+}
+
+.stat-item__number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+}
+
+.stat-item__number span {
+    font-size: 1.75rem;
+}
+
+.stat-item__label {
+    font-size: 0.95rem;
+    opacity: 0.95;
+    font-weight: 500;
+    color: #1a202c;
+}
+
+/* Introduction Section */
+.section--intro {
+    padding: 4rem 0;
+    background: linear-gradient(to bottom, #ffffff 0%, #f7fafc 100%);
+}
+
+.intro-box {
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    background: white;
+    padding: 3rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.intro-box__icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    background: linear-gradient(135deg, #047857 0%, #10b981 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: white;
+    box-shadow: 0 8px 20px rgba(4, 120, 87, 0.3);
+}
+
+.intro-box__title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+}
+
+.intro-box__subtitle {
+    font-size: 1.375rem;
+    color: #047857;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.intro-box__description {
+    font-size: 1.0625rem;
+    line-height: 1.8;
+    color: #4a5568;
+    text-align: justify;
+}
+
+/* Section Header */
+.section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.section-header__title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 0.75rem;
+}
+
+.section-header__subtitle {
+    font-size: 1.375rem;
+    color: #047857;
+    font-weight: 600;
+}
+
+/* Navigation Cards Section */
+.section--nav-cards {
+    padding: 5rem 0;
+    background: #f7fafc;
+}
+
+.nav-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.nav-cards-grid--3col {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.nav-card {
+    background: white;
+    border-radius: 1.25rem;
+    padding: 2.5rem;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+.nav-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, #047857 0%, #10b981 100%);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.nav-card:hover::before {
+    transform: scaleX(1);
+}
+
+.nav-card__icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 0 1.5rem 0;
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    color: #047857;
+    transition: all 0.3s ease;
+}
+
+.nav-card:hover .nav-card__icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.nav-card__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a202c;
+    margin-bottom: 0.5rem;
+}
+
+.nav-card__title-en {
+    font-size: 1.125rem;
+    color: #6b7280;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.nav-card__description {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #4a5568;
+    margin-bottom: 1.5rem;
+}
+
+.nav-card__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    color: #047857;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1.0625rem;
+    transition: gap 0.3s ease;
+}
+
+.nav-card__link:hover {
+    gap: 1rem;
+}
+
+/* Features Section */
+.section--features {
+    padding: 5rem 0;
+    background: white;
+}
+
+/* Features Grid */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.feature-item {
+    background: white;
+    border-radius: 1rem;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.feature-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.feature-item__icon {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 1.25rem;
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #047857;
+}
+
+.feature-item__title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1a202c;
+    margin-bottom: 0.75rem;
+}
+
+.feature-item__description {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: #6b7280;
+}
+
+/* CTA Banner */
+.section--cta-banner {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, #047857 0%, #111827 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.section--cta-banner::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+}
+
+.section--cta-banner::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -5%;
+    width: 400px;
+    height: 400px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 50%;
+}
+
+.cta-banner {
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 1.5rem;
+    padding: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 3rem;
+}
+
+.cta-banner__content {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex: 1;
+}
+
+.cta-banner__icon {
+    width: 90px;
+    height: 90px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.75rem;
+    color: white;
+    flex-shrink: 0;
+}
+
+.cta-banner__title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+}
+
+.cta-banner__subtitle {
+    font-size: 1.375rem;
+    color: #ffffff;
+    margin-bottom: 0.75rem;
+    opacity: 0.95;
+    font-weight: 600;
+}
+
+.cta-banner__description {
+    font-size: 1.0625rem;
+    color: #ffffff;
+    opacity: 0.9;
+}
+
+.cta-banner__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    flex-shrink: 0;
+}
+
+.btn--cta-primary,
+.btn--cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    padding: 0.875rem 2rem;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    min-width: 220px;
+}
+
+.btn--cta-primary {
+    background: white;
+    color: #047857;
+    border: 2px solid white;
+}
+
+.btn--cta-primary:hover {
+    background: #f7fafc;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.btn--cta-secondary {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+}
+
+.btn--cta-secondary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .section-header__title {
+        font-size: 2rem;
+    }
+
+    .section-header__subtitle {
+        font-size: 1.125rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .nav-cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+    }
+
+    .cta-banner {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .cta-banner__content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .cta-banner__actions {
+        width: 100%;
+    }
+
+    .btn--cta-primary,
+    .btn--cta-secondary {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .section--nav-cards,
+    .section--features {
+        padding: 3rem 0;
+    }
+
+    .section-header {
+        margin-bottom: 2rem;
+    }
+
+    .section-header__title {
+        font-size: 1.75rem;
+    }
+
+    .section-header__subtitle {
+        font-size: 1rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .nav-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .nav-card {
+        padding: 2rem;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cta-banner {
+        padding: 2rem 1.5rem;
+    }
+
+    .cta-banner__title {
+        font-size: 1.625rem;
+    }
+
+    .cta-banner__subtitle {
+        font-size: 1.125rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .section--nav-cards,
+    .section--features {
+        padding: 2rem 0;
+    }
+
+    .intro-box {
+        padding: 2rem 1.5rem;
+    }
+
+    .nav-card__icon {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+    }
+
+    .nav-card__title {
+        font-size: 1.25rem;
+    }
+}
+</style>
+
+
+    <!-- SEO: Language Alternatives -->
+    <link rel="alternate" hreflang="en" href="https://boweneducation.co.uk/en/badminton" />
+    <link rel="alternate" hreflang="zh" href="https://boweneducation.co.uk/badminton" />
+    <link rel="alternate" hreflang="x-default" href="https://boweneducation.co.uk/badminton" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Analytics -->
+    
+
+    <!-- Structured Data -->
+    
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "EducationalOrganization",
+        "name": "Bowen Education Group",
+        "alternateName": "博文教育集团",
+        "url": "&lt;app.services.static_generator.obj object at 0x10868b4d0&gt;",
+        "logo": "/static/images/logo.png",
+        "description": "",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "",
+            "addressLocality": "",
+            "addressRegion": "",
+            "postalCode": "",
+            "addressCountry": "GB"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "",
+            "longitude": ""
+        },
+        "telephone": "0161 969 3071",
+        "email": "",
+        "sameAs": [
+            
+            
+            
+        ]
+    }
+    </script>
+    
+</head>
+
+<body class="">
+    <!-- Skip to main content (accessibility) -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header -->
+    <header class="site-header" role="banner">
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="container">
+            <div class="top-bar-left">
+                
+                <span class="top-bar-item">
+                    <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                    </svg>
+                    <a href="tel:0161 969 3071">0161 969 3071</a>
+                </span>
+                
+                
+            </div>
+            <div class="top-bar-right">
+                <div class="social-links">
+                    
+                    
+                </div>
+                <div class="language-switcher">
+                    <a href="/badminton" class="language-toggle" aria-label="Switch to English">
+                        <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        </svg>
+                        <span>English</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <div class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <!-- Logo -->
+                <div class="header-logo">
+                    <a href="/" aria-label="Bowen Education Group Home">
+                        <img src="/static/images/logo.png" alt="Bowen Education Group" height="60">
+                        <span class="logo-text">
+                            <strong>Bowen Education Group</strong>
+                            <small>博文教育集团</small>
+                        </span>
+                    </a>
+                </div>
+
+                <!--
+  Navigation Component
+  可复用的导航菜单组件，支持二级下拉菜单
+  使用Alpine.js管理交互状态
+-->
+
+<nav
+    x-data="navigationMenu()"
+    class="main-nav"
+    role="navigation"
+    aria-label="Main navigation"
+>
+    <!-- Desktop Navigation -->
+    <ul class="nav-menu desktop-nav">
+        
+            
+        
+            
+                
+                <li
+                    class="nav-item"
+                    
+                >
+                    <a
+                        href="/zh/"
+                        class="nav-link"
+                        
+                    >
+                        <span class="nav-link-chinese">首页</span>
+                        
+                    </a>
+                    
+                </li>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+                
+                <li
+                    class="nav-item has-dropdown"
+                    
+                    x-data="{ open: false, closeTimeout: null }"
+                    @mouseenter="clearTimeout(closeTimeout); open = true"
+                    @mouseleave="closeTimeout = setTimeout(() => { open = false }, 600)"
+                    
+                >
+                    <a
+                        href="/zh/about/"
+                        class="nav-link"
+                        
+                        :aria-expanded="open.toString()"
+                        
+                    >
+                        <span class="nav-link-chinese">关于博文</span>
+                        
+                        <svg
+                            class="dropdown-icon"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            :class="{ 'rotate-180': open }"
+                            style="transition: transform 0.2s;"
+                        >
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                        
+                    </a>
+                    
+                    <ul
+                        class="dropdown-menu"
+                        x-show="open"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-95"
+                        @click.away="open = false"
+                        style="display: none;"
+                        x-cloak
+                    >
+                        
+                        <li>
+                            <a href="/zh/about-company/" class="dropdown-item">
+                                博文集团
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="/zh/news/" class="dropdown-item">
+                                博文新闻
+                            </a>
+                        </li>
+                        
+                    </ul>
+                    
+                </li>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+                
+                <li
+                    class="nav-item has-dropdown"
+                    
+                    x-data="{ open: false, closeTimeout: null }"
+                    @mouseenter="clearTimeout(closeTimeout); open = true"
+                    @mouseleave="closeTimeout = setTimeout(() => { open = false }, 600)"
+                    
+                >
+                    <a
+                        href="/zh/school/"
+                        class="nav-link"
+                        
+                        :aria-expanded="open.toString()"
+                        
+                    >
+                        <span class="nav-link-chinese">中文学校</span>
+                        
+                        <svg
+                            class="dropdown-icon"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            :class="{ 'rotate-180': open }"
+                            style="transition: transform 0.2s;"
+                        >
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                        
+                    </a>
+                    
+                    <ul
+                        class="dropdown-menu"
+                        x-show="open"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-95"
+                        @click.away="open = false"
+                        style="display: none;"
+                        x-cloak
+                    >
+                        
+                        <li>
+                            <a href="/zh/school-curriculum/" class="dropdown-item">
+                                中文学校课程设置
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="/zh/school-term-dates/" class="dropdown-item">
+                                学期日期
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="/zh/school-pta/" class="dropdown-item">
+                                PTA家长教师协会
+                            </a>
+                        </li>
+                        
+                    </ul>
+                    
+                </li>
+            
+        
+            
+        
+            
+                
+                <li
+                    class="nav-item"
+                    
+                >
+                    <a
+                        href="/zh/tuition/"
+                        class="nav-link"
+                        
+                    >
+                        <span class="nav-link-chinese">补习中心</span>
+                        
+                    </a>
+                    
+                </li>
+            
+        
+            
+                
+                <li
+                    class="nav-item has-dropdown"
+                    
+                    x-data="{ open: false, closeTimeout: null }"
+                    @mouseenter="clearTimeout(closeTimeout); open = true"
+                    @mouseleave="closeTimeout = setTimeout(() => { open = false }, 600)"
+                    
+                >
+                    <a
+                        href="/zh/chess/"
+                        class="nav-link"
+                        
+                        :aria-expanded="open.toString()"
+                        
+                    >
+                        <span class="nav-link-chinese">国际象棋俱乐部</span>
+                        
+                        <svg
+                            class="dropdown-icon"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            :class="{ 'rotate-180': open }"
+                            style="transition: transform 0.2s;"
+                        >
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                        
+                    </a>
+                    
+                    <ul
+                        class="dropdown-menu"
+                        x-show="open"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-95"
+                        @click.away="open = false"
+                        style="display: none;"
+                        x-cloak
+                    >
+                        
+                        <li>
+                            <a href="/zh/chess-about/" class="dropdown-item">
+                                俱乐部简介
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="/zh/chess-courses/" class="dropdown-item">
+                                国际象棋课程设置
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="/zh/chess-events/" class="dropdown-item">
+                                活动与赛事
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="/zh/chess-resources/" class="dropdown-item">
+                                学习资源
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="/zh/chess-news/" class="dropdown-item">
+                                新闻与精彩回顾
+                            </a>
+                        </li>
+                        
+                    </ul>
+                    
+                </li>
+            
+        
+            
+                
+                <li
+                    class="nav-item has-dropdown"
+                    
+                    x-data="{ open: false, closeTimeout: null }"
+                    @mouseenter="clearTimeout(closeTimeout); open = true"
+                    @mouseleave="closeTimeout = setTimeout(() => { open = false }, 600)"
+                    
+                >
+                    <a
+                        href="/zh/badminton/"
+                        class="nav-link active"
+                        
+                        :aria-expanded="open.toString()"
+                        
+                    >
+                        <span class="nav-link-chinese">羽毛球俱乐部</span>
+                        
+                        <svg
+                            class="dropdown-icon"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            :class="{ 'rotate-180': open }"
+                            style="transition: transform 0.2s;"
+                        >
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                        
+                    </a>
+                    
+                    <ul
+                        class="dropdown-menu"
+                        x-show="open"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-95"
+                        @click.away="open = false"
+                        style="display: none;"
+                        x-cloak
+                    >
+                        
+                        <li>
+                            <a href="/zh/badminton-events/" class="dropdown-item">
+                                赛事活动
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="/zh/badminton-schedule/" class="dropdown-item">
+                                训练时间表
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="/zh/badminton-gallery/" class="dropdown-item">
+                                精彩瞬间
+                            </a>
+                        </li>
+                        
+                    </ul>
+                    
+                </li>
+            
+        
+            
+                
+                <li
+                    class="nav-item has-dropdown"
+                    
+                    x-data="{ open: false, closeTimeout: null }"
+                    @mouseenter="clearTimeout(closeTimeout); open = true"
+                    @mouseleave="closeTimeout = setTimeout(() => { open = false }, 600)"
+                    
+                >
+                    <a
+                        href="/zh/programmes/"
+                        class="nav-link"
+                        
+                        :aria-expanded="open.toString()"
+                        
+                    >
+                        <span class="nav-link-chinese">政府项目</span>
+                        
+                        <svg
+                            class="dropdown-icon"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            :class="{ 'rotate-180': open }"
+                            style="transition: transform 0.2s;"
+                        >
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                        
+                    </a>
+                    
+                    <ul
+                        class="dropdown-menu"
+                        x-show="open"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-95"
+                        @click.away="open = false"
+                        style="display: none;"
+                        x-cloak
+                    >
+                        
+                        <li>
+                            <a href="/zh/programmes-haf/" class="dropdown-item">
+                                HAF项目
+                            </a>
+                        </li>
+                        
+                        <li>
+                            <a href="/zh/programmes-parks/" class="dropdown-item">
+                                公园活动
+                            </a>
+                        </li>
+                        
+                    </ul>
+                    
+                </li>
+            
+        
+            
+                
+                <li
+                    class="nav-item has-dropdown"
+                    
+                    x-data="{ open: false, closeTimeout: null }"
+                    @mouseenter="clearTimeout(closeTimeout); open = true"
+                    @mouseleave="closeTimeout = setTimeout(() => { open = false }, 600)"
+                    
+                >
+                    <a
+                        href="/zh/events/"
+                        class="nav-link"
+                        
+                        :aria-expanded="open.toString()"
+                        
+                    >
+                        <span class="nav-link-chinese">博文活动</span>
+                        
+                        <svg
+                            class="dropdown-icon"
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            :class="{ 'rotate-180': open }"
+                            style="transition: transform 0.2s;"
+                        >
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                        
+                    </a>
+                    
+                    <ul
+                        class="dropdown-menu"
+                        x-show="open"
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 transform scale-100"
+                        x-transition:leave-end="opacity-0 transform scale-95"
+                        @click.away="open = false"
+                        style="display: none;"
+                        x-cloak
+                    >
+                        
+                        <li>
+                            <a href="/zh/events-henan/" class="dropdown-item">
+                                河南大学合作
+                            </a>
+                        </li>
+                        
+                    </ul>
+                    
+                </li>
+            
+        
+            
+                
+                <li
+                    class="nav-item"
+                    
+                >
+                    <a
+                        href="/zh/contact/"
+                        class="nav-link"
+                        
+                    >
+                        <span class="nav-link-chinese">联系我们</span>
+                        
+                    </a>
+                    
+                </li>
+            
+        
+    </ul>
+
+    <!-- Mobile Menu Toggle -->
+    <button
+        class="mobile-menu-toggle"
+        @click="toggleMobileMenu()"
+        type="button"
+        aria-expanded="false"
+        x-bind:aria-expanded="mobileMenuOpen.toString()"
+        aria-controls="mobile-menu-panel"
+        aria-label="Menu"
+    >
+        <span class="hamburger-line" :class="{ 'active': mobileMenuOpen }"></span>
+        <span class="hamburger-line" :class="{ 'active': mobileMenuOpen }"></span>
+        <span class="hamburger-line" :class="{ 'active': mobileMenuOpen }"></span>
+    </button>
+
+    <!-- Mobile Menu -->
+    <div
+        class="mobile-menu"
+        x-show="mobileMenuOpen"
+        x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0 max-h-0"
+        x-transition:enter-end="opacity-100 max-h-menu"
+        x-transition:leave="transition ease-in duration-200"
+        x-transition:leave-start="opacity-100 max-h-menu"
+        x-transition:leave-end="opacity-0 max-h-0"
+        style="display: none; overflow: hidden;"
+        x-cloak
+        id="mobile-menu-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-hidden="true"
+    >
+        <div class="mobile-nav">
+            <button class="mobile-nav-toggle mobile-nav-close" type="button" @click="closeMobileMenu()" aria-label="关闭">关闭</button>
+            <ul class="mobile-nav-menu">
+                
+                    
+                
+                    
+                        
+                        <li
+                            class="mobile-nav-item"
+                            x-data="{ submenuOpen: false }"
+                        >
+                            
+                            <a href="/zh/" class="mobile-nav-link">
+                                <span class="nav-chinese">首页</span>
+                            </a>
+                            
+                        </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        
+                        <li
+                            class="mobile-nav-item has-submenu"
+                            x-data="{ submenuOpen: false }"
+                        >
+                            
+                            <button
+                                class="mobile-nav-toggle"
+                                type="button"
+                                @click="submenuOpen = !submenuOpen"
+                                aria-expanded="false"
+                                x-bind:aria-expanded="submenuOpen.toString()"
+                            >
+                                <span><span class="nav-chinese">关于博文</span></span>
+                                <svg
+                                    class="toggle-icon"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    :class="{ 'rotate-180': submenuOpen }"
+                                    style="transition: transform 0.2s;"
+                                >
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <ul
+                                class="mobile-submenu"
+                                x-show="submenuOpen"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 max-h-0"
+                                x-transition:enter-end="opacity-100 max-h-96"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 max-h-96"
+                                x-transition:leave-end="opacity-0 max-h-0"
+                                style="display: none; overflow: hidden;"
+                                x-cloak
+                                aria-hidden="true"
+                            >
+                                <!-- Link to parent overview page -->
+                                <li>
+                                    <a href="/zh/about/" class="mobile-submenu-link parent-link">
+                                        <strong>查看所有 关于博文</strong>
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/zh/about-company/" class="mobile-submenu-link">
+                                        博文集团
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/zh/news/" class="mobile-submenu-link">
+                                        博文新闻
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            
+                        </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        
+                        <li
+                            class="mobile-nav-item has-submenu"
+                            x-data="{ submenuOpen: false }"
+                        >
+                            
+                            <button
+                                class="mobile-nav-toggle"
+                                type="button"
+                                @click="submenuOpen = !submenuOpen"
+                                aria-expanded="false"
+                                x-bind:aria-expanded="submenuOpen.toString()"
+                            >
+                                <span><span class="nav-chinese">中文学校</span></span>
+                                <svg
+                                    class="toggle-icon"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    :class="{ 'rotate-180': submenuOpen }"
+                                    style="transition: transform 0.2s;"
+                                >
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <ul
+                                class="mobile-submenu"
+                                x-show="submenuOpen"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 max-h-0"
+                                x-transition:enter-end="opacity-100 max-h-96"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 max-h-96"
+                                x-transition:leave-end="opacity-0 max-h-0"
+                                style="display: none; overflow: hidden;"
+                                x-cloak
+                                aria-hidden="true"
+                            >
+                                <!-- Link to parent overview page -->
+                                <li>
+                                    <a href="/zh/school/" class="mobile-submenu-link parent-link">
+                                        <strong>查看所有 中文学校</strong>
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/zh/school-curriculum/" class="mobile-submenu-link">
+                                        中文学校课程设置
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/zh/school-term-dates/" class="mobile-submenu-link">
+                                        学期日期
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/zh/school-pta/" class="mobile-submenu-link">
+                                        PTA家长教师协会
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            
+                        </li>
+                    
+                
+                    
+                
+                    
+                        
+                        <li
+                            class="mobile-nav-item"
+                            x-data="{ submenuOpen: false }"
+                        >
+                            
+                            <a href="/zh/tuition/" class="mobile-nav-link">
+                                <span class="nav-chinese">补习中心</span>
+                            </a>
+                            
+                        </li>
+                    
+                
+                    
+                        
+                        <li
+                            class="mobile-nav-item has-submenu"
+                            x-data="{ submenuOpen: false }"
+                        >
+                            
+                            <button
+                                class="mobile-nav-toggle"
+                                type="button"
+                                @click="submenuOpen = !submenuOpen"
+                                aria-expanded="false"
+                                x-bind:aria-expanded="submenuOpen.toString()"
+                            >
+                                <span><span class="nav-chinese">国际象棋俱乐部</span></span>
+                                <svg
+                                    class="toggle-icon"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    :class="{ 'rotate-180': submenuOpen }"
+                                    style="transition: transform 0.2s;"
+                                >
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <ul
+                                class="mobile-submenu"
+                                x-show="submenuOpen"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 max-h-0"
+                                x-transition:enter-end="opacity-100 max-h-96"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 max-h-96"
+                                x-transition:leave-end="opacity-0 max-h-0"
+                                style="display: none; overflow: hidden;"
+                                x-cloak
+                                aria-hidden="true"
+                            >
+                                <!-- Link to parent overview page -->
+                                <li>
+                                    <a href="/zh/chess/" class="mobile-submenu-link parent-link">
+                                        <strong>查看所有 国际象棋俱乐部</strong>
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/zh/chess-about/" class="mobile-submenu-link">
+                                        俱乐部简介
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/zh/chess-courses/" class="mobile-submenu-link">
+                                        国际象棋课程设置
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/zh/chess-events/" class="mobile-submenu-link">
+                                        活动与赛事
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/zh/chess-resources/" class="mobile-submenu-link">
+                                        学习资源
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/zh/chess-news/" class="mobile-submenu-link">
+                                        新闻与精彩回顾
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            
+                        </li>
+                    
+                
+                    
+                        
+                        <li
+                            class="mobile-nav-item has-submenu"
+                            x-data="{ submenuOpen: false }"
+                        >
+                            
+                            <button
+                                class="mobile-nav-toggle"
+                                type="button"
+                                @click="submenuOpen = !submenuOpen"
+                                aria-expanded="false"
+                                x-bind:aria-expanded="submenuOpen.toString()"
+                            >
+                                <span><span class="nav-chinese">羽毛球俱乐部</span></span>
+                                <svg
+                                    class="toggle-icon"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    :class="{ 'rotate-180': submenuOpen }"
+                                    style="transition: transform 0.2s;"
+                                >
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <ul
+                                class="mobile-submenu"
+                                x-show="submenuOpen"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 max-h-0"
+                                x-transition:enter-end="opacity-100 max-h-96"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 max-h-96"
+                                x-transition:leave-end="opacity-0 max-h-0"
+                                style="display: none; overflow: hidden;"
+                                x-cloak
+                                aria-hidden="true"
+                            >
+                                <!-- Link to parent overview page -->
+                                <li>
+                                    <a href="/zh/badminton/" class="mobile-submenu-link parent-link">
+                                        <strong>查看所有 羽毛球俱乐部</strong>
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/zh/badminton-events/" class="mobile-submenu-link">
+                                        赛事活动
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/zh/badminton-schedule/" class="mobile-submenu-link">
+                                        训练时间表
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/zh/badminton-gallery/" class="mobile-submenu-link">
+                                        精彩瞬间
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            
+                        </li>
+                    
+                
+                    
+                        
+                        <li
+                            class="mobile-nav-item has-submenu"
+                            x-data="{ submenuOpen: false }"
+                        >
+                            
+                            <button
+                                class="mobile-nav-toggle"
+                                type="button"
+                                @click="submenuOpen = !submenuOpen"
+                                aria-expanded="false"
+                                x-bind:aria-expanded="submenuOpen.toString()"
+                            >
+                                <span><span class="nav-chinese">政府项目</span></span>
+                                <svg
+                                    class="toggle-icon"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    :class="{ 'rotate-180': submenuOpen }"
+                                    style="transition: transform 0.2s;"
+                                >
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <ul
+                                class="mobile-submenu"
+                                x-show="submenuOpen"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 max-h-0"
+                                x-transition:enter-end="opacity-100 max-h-96"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 max-h-96"
+                                x-transition:leave-end="opacity-0 max-h-0"
+                                style="display: none; overflow: hidden;"
+                                x-cloak
+                                aria-hidden="true"
+                            >
+                                <!-- Link to parent overview page -->
+                                <li>
+                                    <a href="/zh/programmes/" class="mobile-submenu-link parent-link">
+                                        <strong>查看所有 政府项目</strong>
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/zh/programmes-haf/" class="mobile-submenu-link">
+                                        HAF项目
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/zh/programmes-parks/" class="mobile-submenu-link">
+                                        公园活动
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            
+                        </li>
+                    
+                
+                    
+                        
+                        <li
+                            class="mobile-nav-item has-submenu"
+                            x-data="{ submenuOpen: false }"
+                        >
+                            
+                            <button
+                                class="mobile-nav-toggle"
+                                type="button"
+                                @click="submenuOpen = !submenuOpen"
+                                aria-expanded="false"
+                                x-bind:aria-expanded="submenuOpen.toString()"
+                            >
+                                <span><span class="nav-chinese">博文活动</span></span>
+                                <svg
+                                    class="toggle-icon"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    :class="{ 'rotate-180': submenuOpen }"
+                                    style="transition: transform 0.2s;"
+                                >
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </button>
+                            <ul
+                                class="mobile-submenu"
+                                x-show="submenuOpen"
+                                x-transition:enter="transition ease-out duration-200"
+                                x-transition:enter-start="opacity-0 max-h-0"
+                                x-transition:enter-end="opacity-100 max-h-96"
+                                x-transition:leave="transition ease-in duration-150"
+                                x-transition:leave-start="opacity-100 max-h-96"
+                                x-transition:leave-end="opacity-0 max-h-0"
+                                style="display: none; overflow: hidden;"
+                                x-cloak
+                                aria-hidden="true"
+                            >
+                                <!-- Link to parent overview page -->
+                                <li>
+                                    <a href="/zh/events/" class="mobile-submenu-link parent-link">
+                                        <strong>查看所有 博文活动</strong>
+                                    </a>
+                                </li>
+                                
+                                <li>
+                                    <a href="/zh/events-henan/" class="mobile-submenu-link">
+                                        河南大学合作
+                                    </a>
+                                </li>
+                                
+                            </ul>
+                            
+                        </li>
+                    
+                
+                    
+                        
+                        <li
+                            class="mobile-nav-item"
+                            x-data="{ submenuOpen: false }"
+                        >
+                            
+                            <a href="/zh/contact/" class="mobile-nav-link">
+                                <span class="nav-chinese">联系我们</span>
+                            </a>
+                            
+                        </li>
+                    
+                
+            </ul>
+            <div class="mobile-nav-footer">
+                <a href="/contact/" class="btn btn-primary btn-block">联系我们</a>
+            </div>
+        </div>
+    </div>
+
+    
+</nav>
+
+<script>
+/**
+ * Navigation Menu Alpine.js Component
+ * 管理导航菜单的状态和交互
+ */
+function navigationMenu() {
+    return {
+        // 移动菜单开关状态
+        mobileMenuOpen: false,
+        lastFocused: null,
+
+        /**
+         * 切换移动菜单
+         */
+        toggleMobileMenu() {
+            this.mobileMenuOpen = !this.mobileMenuOpen;
+            // 切换body类来禁用滚动
+            document.body.classList.toggle('mobile-menu-open', this.mobileMenuOpen);
+            if (this.mobileMenuOpen) {
+                this.lastFocused = document.activeElement;
+                const panel = document.getElementById('mobile-menu-panel');
+                const focusables = panel ? panel.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])') : [];
+                if (focusables.length) focusables[0].focus();
+            } else if (this.lastFocused) {
+                this.lastFocused.focus();
+            }
+        },
+
+        /**
+         * 关闭移动菜单
+         */
+        closeMobileMenu() {
+            this.mobileMenuOpen = false;
+            document.body.classList.remove('mobile-menu-open');
+            if (this.lastFocused) this.lastFocused.focus();
+        },
+
+        /**
+         * 初始化
+         */
+        init() {
+            // 监听ESC键关闭移动菜单
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && this.mobileMenuOpen) {
+                    this.closeMobileMenu();
+                }
+                if (e.key === 'Tab' && this.mobileMenuOpen) {
+                    const panel = document.getElementById('mobile-menu-panel');
+                    const focusables = panel ? Array.from(panel.querySelectorAll('a, button, input, select, textarea, [tabindex]:not([tabindex="-1"])')) : [];
+                    if (focusables.length) {
+                        const first = focusables[0];
+                        const last = focusables[focusables.length - 1];
+                        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+                        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+                    }
+                }
+            });
+
+            // 监听路由变化关闭移动菜单
+            window.addEventListener('popstate', () => {
+                this.closeMobileMenu();
+            });
+        }
+    };
+}
+</script>
+
+<style>
+/* Alpine.js cloak - 防止内容闪烁 */
+[x-cloak] { display: none !important; }
+
+/* 下拉菜单动画辅助类 */
+.dropdown-menu {
+    transform-origin: top;
+}
+
+.mobile-submenu {
+    transform-origin: top;
+}
+
+/* 汉堡菜单动画 */
+.hamburger-line {
+    transition: all 0.3s ease;
+}
+
+.hamburger-line.active:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger-line.active:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger-line.active:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -7px);
+}
+
+/* 禁用body滚动 */
+body.mobile-menu-open {
+    overflow: hidden;
+}
+</style>
+                <div x-data="{ open: false }" class="mobile-only-wrapper">
+  <button class="mobile-only-toggle" @click="open = !open" :aria-expanded="open.toString()" aria-controls="mobile-only-nav" aria-label="Menu">
+    <span class="hamburger-line" :class="{ 'active': open }"></span>
+    <span class="hamburger-line" :class="{ 'active': open }"></span>
+    <span class="hamburger-line" :class="{ 'active': open }"></span>
+  </button>
+  <div id="mobile-only-nav" class="mobile-only-nav" x-show="open" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-menu" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 max-h-menu" x-transition:leave-end="opacity-0 max-h-0" style="display: none; overflow: hidden;">
+    <ul class="mobile-only-menu">
+      
+        
+      
+        
+          
+          <li class="mobile-only-item" x-data="{ openSub: false }">
+            
+            <a href="/home/" class="mobile-only-link"><span class="nav-chinese">首页</span></a>
+            
+          </li>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+          
+          <li class="mobile-only-item" x-data="{ openSub: false }">
+            
+            <button class="mobile-only-link" @click="openSub = !openSub" :aria-expanded="openSub.toString()">
+              <span class="nav-chinese">关于博文</span>
+              <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" :class="{ 'rotate-180': openSub }"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <ul class="mobile-only-sub" x-show="openSub" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-96" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 max-h-96" x-transition:leave-end="opacity-0 max-h-0" style="display: none; overflow: hidden;">
+              
+              <li><a href="/about-company/" class="mobile-only-sub-link">博文集团</a></li>
+              
+              <li><a href="/news/" class="mobile-only-sub-link">博文新闻</a></li>
+              
+            </ul>
+            
+          </li>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+          
+          <li class="mobile-only-item" x-data="{ openSub: false }">
+            
+            <button class="mobile-only-link" @click="openSub = !openSub" :aria-expanded="openSub.toString()">
+              <span class="nav-chinese">中文学校</span>
+              <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" :class="{ 'rotate-180': openSub }"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <ul class="mobile-only-sub" x-show="openSub" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-96" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 max-h-96" x-transition:leave-end="opacity-0 max-h-0" style="display: none; overflow: hidden;">
+              
+              <li><a href="/school-curriculum/" class="mobile-only-sub-link">中文学校课程设置</a></li>
+              
+              <li><a href="/school-term-dates/" class="mobile-only-sub-link">学期日期</a></li>
+              
+              <li><a href="/school-pta/" class="mobile-only-sub-link">PTA家长教师协会</a></li>
+              
+            </ul>
+            
+          </li>
+        
+      
+        
+      
+        
+          
+          <li class="mobile-only-item" x-data="{ openSub: false }">
+            
+            <a href="/tuition/" class="mobile-only-link"><span class="nav-chinese">补习中心</span></a>
+            
+          </li>
+        
+      
+        
+          
+          <li class="mobile-only-item" x-data="{ openSub: false }">
+            
+            <button class="mobile-only-link" @click="openSub = !openSub" :aria-expanded="openSub.toString()">
+              <span class="nav-chinese">国际象棋俱乐部</span>
+              <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" :class="{ 'rotate-180': openSub }"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <ul class="mobile-only-sub" x-show="openSub" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-96" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 max-h-96" x-transition:leave-end="opacity-0 max-h-0" style="display: none; overflow: hidden;">
+              
+              <li><a href="/chess-about/" class="mobile-only-sub-link">俱乐部简介</a></li>
+              
+              <li><a href="/chess-courses/" class="mobile-only-sub-link">国际象棋课程设置</a></li>
+              
+              <li><a href="/chess-events/" class="mobile-only-sub-link">活动与赛事</a></li>
+              
+              <li><a href="/chess-resources/" class="mobile-only-sub-link">学习资源</a></li>
+              
+              <li><a href="/chess-news/" class="mobile-only-sub-link">新闻与精彩回顾</a></li>
+              
+            </ul>
+            
+          </li>
+        
+      
+        
+          
+          <li class="mobile-only-item" x-data="{ openSub: false }">
+            
+            <button class="mobile-only-link" @click="openSub = !openSub" :aria-expanded="openSub.toString()">
+              <span class="nav-chinese">羽毛球俱乐部</span>
+              <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" :class="{ 'rotate-180': openSub }"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <ul class="mobile-only-sub" x-show="openSub" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-96" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 max-h-96" x-transition:leave-end="opacity-0 max-h-0" style="display: none; overflow: hidden;">
+              
+              <li><a href="/badminton-events/" class="mobile-only-sub-link">赛事活动</a></li>
+              
+              <li><a href="/badminton-schedule/" class="mobile-only-sub-link">训练时间表</a></li>
+              
+              <li><a href="/badminton-gallery/" class="mobile-only-sub-link">精彩瞬间</a></li>
+              
+            </ul>
+            
+          </li>
+        
+      
+        
+          
+          <li class="mobile-only-item" x-data="{ openSub: false }">
+            
+            <button class="mobile-only-link" @click="openSub = !openSub" :aria-expanded="openSub.toString()">
+              <span class="nav-chinese">政府项目</span>
+              <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" :class="{ 'rotate-180': openSub }"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <ul class="mobile-only-sub" x-show="openSub" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-96" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 max-h-96" x-transition:leave-end="opacity-0 max-h-0" style="display: none; overflow: hidden;">
+              
+              <li><a href="/programmes-haf/" class="mobile-only-sub-link">HAF项目</a></li>
+              
+              <li><a href="/programmes-parks/" class="mobile-only-sub-link">公园活动</a></li>
+              
+            </ul>
+            
+          </li>
+        
+      
+        
+          
+          <li class="mobile-only-item" x-data="{ openSub: false }">
+            
+            <button class="mobile-only-link" @click="openSub = !openSub" :aria-expanded="openSub.toString()">
+              <span class="nav-chinese">博文活动</span>
+              <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" :class="{ 'rotate-180': openSub }"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <ul class="mobile-only-sub" x-show="openSub" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-96" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 max-h-96" x-transition:leave-end="opacity-0 max-h-0" style="display: none; overflow: hidden;">
+              
+              <li><a href="/events-henan/" class="mobile-only-sub-link">河南大学合作</a></li>
+              
+            </ul>
+            
+          </li>
+        
+      
+        
+          
+          <li class="mobile-only-item" x-data="{ openSub: false }">
+            
+            <a href="/contact/" class="mobile-only-link"><span class="nav-chinese">联系我们</span></a>
+            
+          </li>
+        
+      
+    </ul>
+  </div>
+</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Overlay -->
+    <div class="search-overlay" id="search-overlay" hidden>
+        <div class="search-overlay-content">
+            <button class="search-close" aria-label="Close search" data-action="close-search">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <form action="/search/" method="GET" class="search-form">
+                <input type="search" name="q" placeholder="搜索课程、新闻、活动..." aria-label="搜索" autofocus>
+                <button type="submit" class="btn btn-primary">搜索</button>
+            </form>
+        </div>
+    </div>
+
+</header>
+
+<script>
+// Header functionality
+(function() {
+    // Search toggle
+    const searchToggles = document.querySelectorAll('[data-action="toggle-search"]');
+    const searchOverlay = document.getElementById('search-overlay');
+    const searchClose = document.querySelector('[data-action="close-search"]');
+
+    searchToggles.forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            searchOverlay.hidden = false;
+            searchOverlay.querySelector('input[type="search"]').focus();
+        });
+    });
+
+    if (searchClose) {
+        searchClose.addEventListener('click', () => {
+            searchOverlay.hidden = true;
+        });
+    }
+
+    // Language switcher
+    const languageToggle = document.querySelector('.language-toggle');
+    const languageDropdown = document.querySelector('.language-dropdown');
+
+    if (languageToggle && languageDropdown) {
+        languageToggle.addEventListener('click', () => {
+            languageDropdown.hidden = !languageDropdown.hidden;
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.language-switcher')) {
+                languageDropdown.hidden = true;
+            }
+        });
+    }
+})();
+</script>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-content" role="main">
+        
+
+<!-- Hero Section -->
+<!--
+  主栏目 Hero 组件
+  用于主栏目(school, chess, badminton, programmes, events, contact)的统一 Hero 展示
+  支持从 column 对象读取配置，包括双语标题、标语、CTA按钮等
+  不包含统计数据栏
+-->
+
+
+
+
+
+
+
+
+
+
+    
+        
+    
+
+
+<section class="hero hero--main-column" aria-labelledby="main-column-title">
+    <div class="hero__overlay" aria-hidden="true"></div>
+    <div class="hero__background"
+         role="img"
+         aria-label="博文羽毛球俱乐部"
+         style="background-image: url('/static/images/hero-badminton.jpg');"></div>
+    <div class="container">
+        <div class="hero__content">
+            <h1 id="main-column-title" class="hero__title" data-aos="fade-up">
+                <span class="hero__title-main" lang="zh-CN">博文羽毛球俱乐部</span>
+                
+                <span class="hero__title-sub" lang="en-GB">Bowen Badminton Club</span>
+                
+            </h1>
+            
+            <p class="hero__tagline" data-aos="fade-up" data-aos-delay="100">
+                <span lang="zh-CN">专业羽毛球训练 · 培养运动技能 · 健康成长</span>
+            </p>
+            
+            
+            <div class="hero__actions" data-aos="fade-up" data-aos-delay="200">
+                <a href="#programs" class="btn btn--hero-primary">
+                    <i class="fas fa-arrow-right"></i>
+                    <span>了解课程</span>
+                </a>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<style>
+/* ========================================
+   主栏目 Hero 组件样式
+======================================== */
+.hero--main-column {
+    position: relative;
+    min-height: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
+.hero--main-column .hero__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.hero--main-column .hero__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0, 82, 204, 0.85) 0%, rgba(0, 51, 128, 0.75) 100%);
+}
+
+.hero--main-column .hero__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+    padding: 4rem 1rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.hero--main-column .hero__title {
+    margin-bottom: 1rem;
+}
+
+.hero--main-column .hero__title-main {
+    display: block;
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.02em;
+    line-height: 1.2;
+}
+
+.hero--main-column .hero__title-sub {
+    display: block;
+    font-size: 2rem;
+    font-weight: 600;
+    opacity: 0.95;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+    line-height: 1.3;
+}
+
+.hero--main-column .hero__tagline {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 2rem;
+    opacity: 0.95;
+    line-height: 1.4;
+}
+
+.hero--main-column .hero__actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.hero--main-column .btn--hero-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 1rem 2.5rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    background: white;
+    color: #0052cc;
+    border: 2px solid white;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.hero--main-column .btn--hero-primary:hover {
+    background: #f7fafc;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+}
+
+/* 响应式设计 */
+@media (max-width: 992px) {
+    .hero--main-column {
+        min-height: 400px;
+    }
+
+    .hero--main-column .hero__title-main {
+        font-size: 2.75rem;
+    }
+
+    .hero--main-column .hero__title-sub {
+        font-size: 1.625rem;
+    }
+
+    .hero--main-column .hero__tagline {
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero--main-column {
+        min-height: 350px;
+    }
+
+    .hero--main-column .hero__content {
+        padding: 3rem 1rem;
+    }
+
+    .hero--main-column .hero__title-main {
+        font-size: 2.25rem;
+    }
+
+    .hero--main-column .hero__title-sub {
+        font-size: 1.375rem;
+    }
+
+    .hero--main-column .hero__tagline {
+        font-size: 1.125rem;
+    }
+
+    .hero--main-column .hero__actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .hero--main-column .btn--hero-primary {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero--main-column {
+        min-height: 300px;
+    }
+
+    .hero--main-column .hero__content {
+        padding: 2rem 1rem;
+    }
+
+    .hero--main-column .hero__title-main {
+        font-size: 1.875rem;
+    }
+
+    .hero--main-column .hero__title-sub {
+        font-size: 1.125rem;
+    }
+
+    .hero--main-column .hero__tagline {
+        font-size: 1rem;
+    }
+}
+</style>
+
+<!-- Stats Bar -->
+<section class="badminton-stats">
+    <div class="container">
+        <div class="stats-grid" data-aos="fade-up">
+            <div class="stat-item">
+                <div class="stat-item__number">8<span>+</span></div>
+                <div class="stat-item__label">
+                    <span lang="zh-CN">年办学经验</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item__number">120<span>+</span></div>
+                <div class="stat-item__label">
+                    <span lang="zh-CN">俱乐部会员</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item__number">10<span>+</span></div>
+                <div class="stat-item__label">
+                    <span lang="zh-CN">比赛获奖</span>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-item__number">5<span>+</span></div>
+                <div class="stat-item__label">
+                    <span lang="zh-CN">专业教练</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Introduction Section -->
+<section class="section section--intro">
+    <div class="container">
+        <div class="intro-box" data-aos="fade-up">
+            <div class="intro-box__icon">
+                <i class="fas fa-shuttlecock" aria-hidden="true"></i>
+            </div>
+            <h2 class="intro-box__title">
+                <span lang="zh-CN">专业羽毛球训练 培养运动技能</span>
+            </h2>
+            <p class="intro-box__subtitle">
+                <span lang="en-GB">Professional Badminton Training</span>
+            </p>
+            <p class="intro-box__description">
+                <span lang="zh-CN">博文羽毛球俱乐部成立于2016年，是大曼彻斯特地区领先的青少年羽毛球培训机构。我们拥有专业的教练团队和完善的训练设施，为5岁至成人各年龄段提供系统化、专业化的羽毛球培训。俱乐部定期组织内部比赛和友谊赛，并推荐优秀学员参加地区性和全国性比赛。羽毛球运动不仅能够提高身体素质，还能培养团队协作精神、反应能力和意志品质。</span>
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Section Navigation Cards -->
+<section class="section section--nav-cards">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <h2 class="section-header__title">
+                <span lang="zh-CN">探索我们的服务</span>
+            </h2>
+            <p class="section-header__subtitle">
+                <span lang="en-GB">Explore Our Programmes and Services</span>
+            </p>
+        </div>
+
+        <div class="nav-cards-grid nav-cards-grid--3col">
+            <!-- Card 1: Events -->
+            <article class="nav-card" data-aos="fade-up" data-aos-delay="0">
+                <div class="nav-card__icon">
+                    <i class="fas fa-trophy" aria-hidden="true"></i>
+                </div>
+                <h3 class="nav-card__title" lang="zh-CN">赛事活动</h3>
+                <p class="nav-card__title-en" lang="en-GB">Events</p>
+                <p class="nav-card__description">
+                    <span lang="zh-CN">参加内部比赛、友谊赛和地区性羽毛球赛事，在实战中提升技能和比赛经验。</span>
+                </p>
+                <a href="/zh/badminton-events/" class="nav-card__link">
+                    <span lang="zh-CN">查看活动</span>
+                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </a>
+            </article>
+
+            <!-- Card 2: Schedule -->
+            <article class="nav-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="nav-card__icon">
+                    <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                </div>
+                <h3 class="nav-card__title" lang="zh-CN">训练时间表</h3>
+                <p class="nav-card__title-en" lang="en-GB">Schedule</p>
+                <p class="nav-card__description">
+                    <span lang="zh-CN">查看详细的训练课程安排，包括初级、中级、高级班的时间、地点和课程内容。</span>
+                </p>
+                <a href="/zh/badminton-schedule/" class="nav-card__link">
+                    <span lang="zh-CN">查看时间表</span>
+                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </a>
+            </article>
+
+            <!-- Card 3: Gallery -->
+            <article class="nav-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="nav-card__icon">
+                    <i class="fas fa-images" aria-hidden="true"></i>
+                </div>
+                <h3 class="nav-card__title" lang="zh-CN">精彩瞬间</h3>
+                <p class="nav-card__title-en" lang="en-GB">Gallery</p>
+                <p class="nav-card__description">
+                    <span lang="zh-CN">浏览俱乐部的训练和比赛照片，见证学员们的成长和精彩时刻。</span>
+                </p>
+                <a href="/zh/badminton-gallery/" class="nav-card__link">
+                    <span lang="zh-CN">查看相册</span>
+                    <i class="fas fa-arrow-right" aria-hidden="true"></i>
+                </a>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="section section--features">
+    <div class="container">
+        <div class="section-header" data-aos="fade-up">
+            <h2 class="section-header__title">
+                <span lang="zh-CN">为什么选择博文羽毛球俱乐部</span>
+            </h2>
+            <p class="section-header__subtitle">
+                <span lang="en-GB">Why Choose Bowen Badminton Club</span>
+            </p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-item" data-aos="fade-up" data-aos-delay="50">
+                <div class="feature-item__icon">
+                    <i class="fas fa-chalkboard-teacher" aria-hidden="true"></i>
+                </div>
+                <h4 class="feature-item__title" lang="zh-CN">专业教练团队</h4>
+                <p class="feature-item__description">
+                    <span lang="zh-CN">持证教练，拥有丰富的教学和比赛经验</span>
+                </p>
+            </div>
+            <div class="feature-item" data-aos="fade-up" data-aos-delay="100">
+                <div class="feature-item__icon">
+                    <i class="fas fa-users-class" aria-hidden="true"></i>
+                </div>
+                <h4 class="feature-item__title" lang="zh-CN">小班教学</h4>
+                <p class="feature-item__description">
+                    <span lang="zh-CN">师生比例1:8，确保每位学员获得充分指导</span>
+                </p>
+            </div>
+            <div class="feature-item" data-aos="fade-up" data-aos-delay="150">
+                <div class="feature-item__icon">
+                    <i class="fas fa-dumbbell" aria-hidden="true"></i>
+                </div>
+                <h4 class="feature-item__title" lang="zh-CN">完善训练设施</h4>
+                <p class="feature-item__description">
+                    <span lang="zh-CN">标准羽毛球场地和专业训练器材</span>
+                </p>
+            </div>
+            <div class="feature-item" data-aos="fade-up" data-aos-delay="200">
+                <div class="feature-item__icon">
+                    <i class="fas fa-medal" aria-hidden="true"></i>
+                </div>
+                <h4 class="feature-item__title" lang="zh-CN">比赛机会丰富</h4>
+                <p class="feature-item__description">
+                    <span lang="zh-CN">定期组织内部比赛和参加外部赛事</span>
+                </p>
+            </div>
+            <div class="feature-item" data-aos="fade-up" data-aos-delay="250">
+                <div class="feature-item__icon">
+                    <i class="fas fa-calendar-check" aria-hidden="true"></i>
+                </div>
+                <h4 class="feature-item__title" lang="zh-CN">灵活时间安排</h4>
+                <p class="feature-item__description">
+                    <span lang="zh-CN">周末和平日班次，方便家长安排</span>
+                </p>
+            </div>
+            <div class="feature-item" data-aos="fade-up" data-aos-delay="300">
+                <div class="feature-item__icon">
+                    <i class="fas fa-chart-line" aria-hidden="true"></i>
+                </div>
+                <h4 class="feature-item__title" lang="zh-CN">系统化培训</h4>
+                <p class="feature-item__description">
+                    <span lang="zh-CN">从基础到高级，完整的课程体系</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Banner -->
+<section class="section--cta-banner">
+    <div class="container">
+        <div class="cta-banner" data-aos="fade-up">
+            <div class="cta-banner__content">
+                <div class="cta-banner__icon">
+                    <i class="fas fa-shuttlecock" aria-hidden="true"></i>
+                </div>
+                <div class="cta-banner__text">
+                    <h2 class="cta-banner__title">
+                        <span lang="zh-CN">预约免费试课</span>
+                    </h2>
+                    <p class="cta-banner__subtitle">
+                        <span lang="en-GB">Book Your Free Trial Lesson</span>
+                    </p>
+                    <p class="cta-banner__description">
+                        <span lang="zh-CN">欢迎5岁以上儿童及青少年参加免费试课，体验羽毛球的乐趣</span>
+                    </p>
+                </div>
+            </div>
+            <div class="cta-banner__actions">
+                <a href="/contact" class="btn btn--cta-primary">
+                    <i class="fas fa-calendar-check" aria-hidden="true"></i>
+                    <span lang="zh-CN">在线预约</span>
+                </a>
+                <a href="tel:01616672668" class="btn btn--cta-secondary">
+                    <i class="fas fa-phone" aria-hidden="true"></i>
+                    <span>0161 667 2668</span>
+                </a>
+                <a href="mailto:info@boweneducation.org" class="btn btn--cta-secondary">
+                    <i class="fas fa-envelope" aria-hidden="true"></i>
+                    <span lang="zh-CN">发送邮件</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    </main>
+
+    <!-- Footer -->
+    <!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer__main">
+            <div class="row">
+                <!-- Quick Links -->
+                <div class="col-lg-4 col-md-4 mb-4">
+                    <div class="footer__section">
+                        <h3 class="footer__heading">Quick Links</h3>
+                        <h4 class="footer__heading-chinese">快速链接</h4>
+                        <ul class="footer__links">
+                            <li><a href="/home">首页</a></li>
+                            <li><a href="/about">关于我们</a></li>
+                            <li><a href="/programmes">政府项目</a></li>
+                            <li><a href="/events">博文活动</a></li>
+                            <li><a href="/contact">联系我们</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Legal & Policies -->
+                <div class="col-lg-4 col-md-4 mb-4">
+                    <div class="footer__section">
+                        <h3 class="footer__heading">Legal</h3>
+                        <h4 class="footer__heading-chinese">法律条款</h4>
+                        <ul class="footer__links">
+                            <li><a href="/privacy-policy">隐私政策</a></li>
+                            <li><a href="/terms-of-service">使用条款</a></li>
+                            <li><a href="/cookie-policy">Cookie政策</a></li>
+                            <li><a href="/safeguarding">儿童保护政策</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="col-lg-4 col-md-4 mb-4">
+                    <div class="footer__section">
+                        <h3 class="footer__heading">Contact Us</h3>
+                        <h4 class="footer__heading-chinese">联系我们</h4>
+                        <ul class="footer__contact">
+                            <li>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>
+                                    1/F, 2A Curzon Road, Sale, Manchester M33 7DR
+                                </span>
+                            </li>
+                            <li>
+                                <i class="fas fa-phone"></i>
+                                <a href="tel:01619693071">0161 969 3071</a>
+                            </li>
+                            <li>
+                                <i class="fas fa-envelope"></i>
+                                <a href="mailto:info@boweneducation.co.uk">info@boweneducation.co.uk</a>
+                            </li>
+                            <li>
+                                <i class="fas fa-clock"></i>
+                                <span>Mon-Fri: 9:00-18:00<br>Sat: 9:00-17:00</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer__bottom">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <p class="footer__copyright">
+                        &copy; 2025 Bowen Education Group. All rights reserved.
+                        <br>
+                        <small class="text-chinese">© 2025 博文教育集团。保留所有权利。</small>
+                    </p>
+                </div>
+                <div class="col-lg-6 text-right">
+                    <div class="footer__social">
+                        
+                        
+                        
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+/* Footer Styles */
+.footer {
+    background: linear-gradient(135deg, var(--color-gray-900) 0%, var(--color-gray-800) 100%);
+    color: var(--color-white);
+    padding: var(--spacing-4xl) 0 var(--spacing-2xl);
+    margin-top: var(--spacing-4xl);
+}
+
+.footer__main {
+    padding-bottom: var(--spacing-3xl);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer__section {
+    margin-bottom: var(--spacing-lg);
+}
+
+.footer__heading {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-xs);
+    color: var(--color-white);
+}
+
+.footer__heading-chinese {
+    font-family: var(--font-chinese);
+    font-size: var(--font-size-base);
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: var(--spacing-md);
+}
+
+.footer__text,
+.footer__text-chinese {
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+    margin-bottom: var(--spacing-sm);
+}
+
+.footer__text-chinese {
+    font-family: var(--font-chinese);
+}
+
+.footer__links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer__links li {
+    margin-bottom: var(--spacing-sm);
+}
+
+.footer__links a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.footer__links a:hover {
+    color: var(--color-primary-light);
+}
+
+.footer__contact {
+    list-style: none;
+    padding: 0;
+}
+
+.footer__contact li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-md);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.footer__contact i {
+    color: var(--color-primary);
+    margin-right: var(--spacing-sm);
+    margin-top: 4px;
+    flex-shrink: 0;
+}
+
+.footer__contact a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.footer__contact a:hover {
+    color: var(--color-primary-light);
+}
+
+.footer__bottom {
+    padding-top: var(--spacing-2xl);
+}
+
+.footer__copyright {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: var(--font-size-sm);
+    margin: 0;
+}
+
+.footer__copyright .text-chinese {
+    font-family: var(--font-chinese);
+}
+
+.footer__social {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+}
+
+.footer__social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: var(--color-white);
+    text-decoration: none;
+    transition: all var(--transition-fast);
+}
+
+.footer__social-link:hover {
+    background: var(--color-primary);
+    color: var(--color-white);
+    transform: translateY(-2px);
+}
+
+.text-right {
+    text-align: right;
+}
+
+@media (max-width: 992px) {
+    .footer__social {
+        justify-content: flex-start;
+        margin-top: var(--spacing-md);
+    }
+
+    .text-right {
+        text-align: left;
+    }
+}
+</style>
+
+    <!-- Cookie Consent Banner -->
+    
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Scripts -->
+    <script src="/static/js/main.js"></script>
+    
+<script>
+    // Lazy load AOS animation library
+    (function() {
+        var script = document.createElement('script');
+        script.src = 'https://unpkg.com/aos@2.3.1/dist/aos.js';
+        script.defer = true;
+        script.onload = function() {
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true,
+                offset: 100,
+                disable: function() {
+                    return window.innerWidth < 768 && 'ontouchstart' in window;
+                }
+            });
+        };
+        document.body.appendChild(script);
+    })();
+</script>
+
+
+    <script>
+        // Cookie banner
+        const cookieBanner = document.getElementById('cookie-banner');
+        const acceptButton = document.getElementById('accept-cookies');
+        const declineButton = document.getElementById('decline-cookies');
+
+        if (cookieBanner && acceptButton && declineButton) {
+            acceptButton.addEventListener('click', () => {
+                localStorage.setItem('cookieConsent', 'accepted');
+                cookieBanner.style.display = 'none';
+            });
+
+            declineButton.addEventListener('click', () => {
+                localStorage.setItem('cookieConsent', 'declined');
+                cookieBanner.style.display = 'none';
+            });
+        }
+    </script>
+</body>
+</html>
