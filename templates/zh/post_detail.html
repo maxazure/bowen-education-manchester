@@ -40,7 +40,7 @@
                     <div class="post-tags">
                         <strong>标签：</strong>
                         {% for category in post.categories %}
-                        <a href="/{{ column.slug }}?category={{ category.id }}" class="tag">{{ category.name }}</a>
+                        <a href="/zh/{{ column.slug }}?category={{ category.id }}" class="tag">{{ category.name }}</a>
                         {% endfor %}
                     </div>
                     {% endif %}
@@ -61,7 +61,7 @@
                     
                     <!-- Navigation -->
                     <div class="post-navigation">
-                        <a href="/{{ column.slug }}" class="btn btn--secondary">
+                        <a href="/zh/{{ column.slug }}" class="btn btn--secondary">
                             <i class="icon-arrow-left"></i> 返回列表
                         </a>
                     </div>

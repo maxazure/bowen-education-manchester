@@ -2,13 +2,13 @@
 
 {% block title %}{{ column|column_name }} | Bowen Education Group{% endblock %}
 
-{% block meta_description %}{{ column.hero_tagline or (column|column_name ~ ' - Bowen Education Group Gallery') }}{% endblock %}
+{% block meta_description %}{{ column.hero_tagline_en or column.hero_tagline or (column|column_name ~ ' - Bowen Education Group Gallery') }}{% endblock %}
 
 {% block meta_keywords %}{{ column.seo_keywords or 'Bowen Education Group,Gallery,Activities Photos' }}{% endblock %}
 
 {% block og_title %}{{ column|column_name }} | Bowen Education Group{% endblock %}
 
-{% block og_description %}{{ column.hero_tagline or (column|column_name ~ ' - Bowen Education Group Gallery') }}{% endblock %}
+{% block og_description %}{{ column.hero_tagline_en or column.hero_tagline or (column|column_name ~ ' - Bowen Education Group Gallery') }}{% endblock %}
 
 {% block og_image %}{% if column.hero_media %}{{ column.hero_media.path_original }}{% else %}/static/images/hero-default.jpg{% endif %}{% endblock %}
 
@@ -68,7 +68,7 @@
 
 <!-- Hero Section -->
 {% set hero_title = column|column_name %}
-{% set hero_subtitle = column.hero_tagline %}
+{% set hero_subtitle = column.hero_tagline_en or column.hero_tagline %}
 {% include 'components/hero_standard.html' %}
 
 <!-- Gallery Section -->

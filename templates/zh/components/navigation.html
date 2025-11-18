@@ -24,7 +24,7 @@
                     {% endif %}
                 >
                     <a
-                        href="/{{ item.slug }}/"
+                        href="{% if item.slug == 'home' %}/zh/{% else %}/zh/{{ item.slug }}/{% endif %}"
                         class="nav-link{% if column and column.id == item.id %} active{% endif %}"
                         {% if has_children %}
                         :aria-expanded="open.toString()"
@@ -63,7 +63,7 @@
                     >
                         {% for child in has_children %}
                         <li>
-                            <a href="/{{ child.slug }}/" class="dropdown-item">
+                            <a href="/zh/{{ child.slug }}/" class="dropdown-item">
                                 {{ child.name }}
                             </a>
                         </li>
@@ -155,20 +155,20 @@
                             >
                                 <!-- Link to parent overview page -->
                                 <li>
-                                    <a href="/{{ item.slug }}/" class="mobile-submenu-link parent-link">
+                                    <a href="{% if item.slug == 'home' %}/zh/{% else %}/zh/{{ item.slug }}/{% endif %}" class="mobile-submenu-link parent-link">
                                         <strong>查看所有 {{ item.name }}</strong>
                                     </a>
                                 </li>
                                 {% for child in has_children %}
                                 <li>
-                                    <a href="/{{ child.slug }}/" class="mobile-submenu-link">
+                                    <a href="/zh/{{ child.slug }}/" class="mobile-submenu-link">
                                         {{ child.name }}
                                     </a>
                                 </li>
                                 {% endfor %}
                             </ul>
                             {% else %}
-                            <a href="/{{ item.slug }}/" class="mobile-nav-link">
+                            <a href="{% if item.slug == 'home' %}/zh/{% else %}/zh/{{ item.slug }}/{% endif %}" class="mobile-nav-link">
                                 <span class="nav-chinese">{{ item.name }}</span>
                             </a>
                             {% endif %}

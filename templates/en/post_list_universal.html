@@ -2,13 +2,13 @@
 
 {% block title %}{{ column|column_name }} - Bowen Education Group{% endblock %}
 
-{% block meta_description %}{{ column.hero_tagline or (column|column_name ~ ' - Bowen Education Group') }}{% endblock %}
+{% block meta_description %}{{ column.hero_tagline_en or column.hero_tagline or (column|column_name ~ ' - Bowen Education Group') }}{% endblock %}
 
 {% block content %}
 
 <!-- Hero Section -->
 {% set hero_title = column.hero_title_en or column.name_en or column.name %}
-{% set hero_subtitle = column.hero_tagline %}
+{% set hero_subtitle = column.hero_tagline_en or column.hero_tagline %}
 {% include 'components/hero_standard.html' %}
 
 <!-- Content Section with Sidebar -->

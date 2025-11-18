@@ -7,9 +7,9 @@
 <aside class="sidebar-nav">
     <!-- Parent Column Link -->
     <div class="sidebar-header">
-        <a href="/{{ parent_column.slug }}/" class="sidebar-parent-link">
+        <a href="/zh/{{ parent_column.slug }}/" class="sidebar-parent-link">
             <h3>{{ parent_column.name }}</h3>
-            
+
         </a>
     </div>
 
@@ -20,7 +20,7 @@
             {% for sibling in sibling_columns %}
             <li class="sidebar-menu-item">
                 <a
-                    href="/{{ sibling.slug }}/"
+                    href="/zh/{{ sibling.slug }}/"
                     class="sidebar-menu-link{% if column and column.id == sibling.id %} active{% endif %}"
                 >
                     <span class="sidebar-menu-icon">

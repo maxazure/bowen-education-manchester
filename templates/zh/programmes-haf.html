@@ -1,0 +1,412 @@
+{% extends "base.html" %}
+
+{% block title %}HAF项目 - 博文教育集团{% endblock %}
+
+{% block meta_description %}了解博文集团参与的HAF假期活动和食品项目，为儿童提供免费健康餐食和丰富活动{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+{% include 'components/hero_main_column.html' %}
+
+<!-- 主内容区 -->
+<section class="section section--content">
+    <div class="container">
+        {% if parent_column %}
+        <!-- 两栏布局（带侧边栏） -->
+        <div class="page-layout">
+            <!-- 左侧边栏导航 -->
+            <aside class="page-layout__sidebar">
+                {% include 'components/sidebar_nav.html' %}
+            </aside>
+
+            <!-- 右侧主内容 -->
+            <div class="page-layout__main">
+                <article class="article-content" data-aos="fade-up">
+
+                <h2>什么是HAF项目</h2>
+                <p>Holiday Activities and Food (HAF) 项目是英国政府资助的一项重要社区项目，旨在在学校假期期间为符合条件的儿童提供健康食品和有趣的活动。博文集团积极参与该项目，为当地社区的孩子们提供丰富多彩的假期活动。</p>
+
+                <h2>项目目标</h2>
+                <p>HAF项目致力于通过假期活动促进儿童全面发展，我们的主要目标包括：</p>
+                <ul>
+                    <li><strong>健康餐食保障</strong> - 为符合条件的儿童提供免费的健康餐食，确保假期能获得充足营养</li>
+                    <li><strong>身心健康发展</strong> - 通过多样化的体育和文化活动，促进儿童身心健康全面发展</li>
+                    <li><strong>家庭支持</strong> - 为工作家庭提供假期照看支持，减轻家庭负担</li>
+                    <li><strong>教育娱乐结合</strong> - 组织各类教育和娱乐活动，让孩子在假期中继续学习成长</li>
+                </ul>
+
+                <h2>活动内容</h2>
+                <p>我们提供丰富多彩的假期活动体验，包括以下四大类别：</p>
+
+                <h3>中华文化体验</h3>
+                <p>通过传统文化活动，让孩子们了解和传承中华文化：</p>
+                <ul>
+                    <li>书法练习</li>
+                    <li>传统剪纸</li>
+                    <li>中国结制作</li>
+                    <li>古诗词朗诵</li>
+                    <li>传统节日文化学习</li>
+                </ul>
+
+                <h3>体育运动</h3>
+                <p>多样化的体育活动促进儿童身体健康：</p>
+                <ul>
+                    <li>羽毛球训练</li>
+                    <li>国际象棋课程</li>
+                    <li>团队运动游戏</li>
+                    <li>户外活动</li>
+                    <li>体能训练</li>
+                </ul>
+
+                <h3>艺术创作</h3>
+                <p>培养孩子的艺术素养和创造力：</p>
+                <ul>
+                    <li>绘画创作</li>
+                    <li>手工制作</li>
+                    <li>音乐欣赏</li>
+                    <li>戏剧表演</li>
+                    <li>创意设计</li>
+                </ul>
+
+                <h3>教育游戏</h3>
+                <p>寓教于乐的活动让学习变得有趣：</p>
+                <ul>
+                    <li>益智游戏</li>
+                    <li>科学实验</li>
+                    <li>阅读时光</li>
+                    <li>数学游戏</li>
+                    <li>英语角活动</li>
+                </ul>
+
+                <h2>参与资格</h2>
+                <p>HAF项目面向符合以下条件的儿童和青少年：</p>
+                <ul>
+                    <li><strong>年龄要求</strong>：5-16岁儿童和青少年</li>
+                    <li><strong>资格条件</strong>：有资格享受免费校餐（Free School Meals）</li>
+                    <li><strong>地区要求</strong>：居住在Trafford及周边地区</li>
+                </ul>
+                <p>如果您不确定是否符合条件，欢迎联系我们咨询。</p>
+
+                <h2>活动时间</h2>
+                <p>HAF项目在学校假期期间开展，具体安排如下：</p>
+
+                <h3>复活节假期（通常2周）</h3>
+                <p>春季主题活动、户外探索、手工制作等精彩内容。</p>
+
+                <h3>暑假（通常4周）</h3>
+                <p>夏令营、体育竞技、文化体验、艺术创作等丰富活动，让孩子度过充实的暑假时光。</p>
+
+                <h3>圣诞假期（通常1周）</h3>
+                <p>节日庆祝、手工制作、表演活动，充满节日氛围的假期活动。</p>
+
+                <p><em>注意：具体活动日期将根据当地学校假期日历确定，报名信息将通过学校和家长群发布。</em></p>
+
+                <h2>如何报名</h2>
+                <p>如果您对HAF项目感兴趣，想让孩子参加我们的假期活动，请通过以下方式联系我们：</p>
+                <ul>
+                    <li><strong>电话</strong>：0161 969 3071</li>
+                    <li><strong>邮箱</strong>：info@boweneducation.org</li>
+                    <li><strong>访问</strong>：<a href="/zh/contact/">联系我们页面</a></li>
+                </ul>
+                <p>我们的工作人员将为您提供详细的报名信息和资格审核指导，帮助您顺利完成报名流程。</p>
+
+                <h2>为什么选择博文HAF项目</h2>
+                <p>博文教育集团参与HAF项目多年，具有丰富的经验和专业的团队：</p>
+                <ul>
+                    <li><strong>政府认证</strong> - 经政府审核认证的合作伙伴，项目质量有保障</li>
+                    <li><strong>专业团队</strong> - 经验丰富的教师和活动组织者，持有相关资质证书</li>
+                    <li><strong>双语服务</strong> - 提供中英双语服务，帮助华人家庭更好地融入社区</li>
+                    <li><strong>关爱儿童</strong> - 以儿童福利为核心，创造安全、有趣、有益的成长环境</li>
+                    <li><strong>营养餐食</strong> - 每日提供健康营养的午餐和小食</li>
+                    <li><strong>完全免费</strong> - 所有活动和餐食完全免费，减轻家庭负担</li>
+                </ul>
+
+                </article>
+            </div>
+        </div>
+        {% else %}
+        <!-- 单栏布局（无侧边栏） -->
+        <div class="page-layout page-layout--single">
+            <article class="article-content" data-aos="fade-up">
+
+                <h2>什么是HAF项目</h2>
+                <p>Holiday Activities and Food (HAF) 项目是英国政府资助的一项重要社区项目，旨在在学校假期期间为符合条件的儿童提供健康食品和有趣的活动。博文集团积极参与该项目，为当地社区的孩子们提供丰富多彩的假期活动。</p>
+
+                <h2>项目目标</h2>
+                <p>HAF项目致力于通过假期活动促进儿童全面发展，我们的主要目标包括：</p>
+                <ul>
+                    <li><strong>健康餐食保障</strong> - 为符合条件的儿童提供免费的健康餐食，确保假期能获得充足营养</li>
+                    <li><strong>身心健康发展</strong> - 通过多样化的体育和文化活动，促进儿童身心健康全面发展</li>
+                    <li><strong>家庭支持</strong> - 为工作家庭提供假期照看支持，减轻家庭负担</li>
+                    <li><strong>教育娱乐结合</strong> - 组织各类教育和娱乐活动，让孩子在假期中继续学习成长</li>
+                </ul>
+
+                <h2>活动内容</h2>
+                <p>我们提供丰富多彩的假期活动体验，包括以下四大类别：</p>
+
+                <h3>中华文化体验</h3>
+                <p>通过传统文化活动，让孩子们了解和传承中华文化：</p>
+                <ul>
+                    <li>书法练习</li>
+                    <li>传统剪纸</li>
+                    <li>中国结制作</li>
+                    <li>古诗词朗诵</li>
+                    <li>传统节日文化学习</li>
+                </ul>
+
+                <h3>体育运动</h3>
+                <p>多样化的体育活动促进儿童身体健康：</p>
+                <ul>
+                    <li>羽毛球训练</li>
+                    <li>国际象棋课程</li>
+                    <li>团队运动游戏</li>
+                    <li>户外活动</li>
+                    <li>体能训练</li>
+                </ul>
+
+                <h3>艺术创作</h3>
+                <p>培养孩子的艺术素养和创造力：</p>
+                <ul>
+                    <li>绘画创作</li>
+                    <li>手工制作</li>
+                    <li>音乐欣赏</li>
+                    <li>戏剧表演</li>
+                    <li>创意设计</li>
+                </ul>
+
+                <h3>教育游戏</h3>
+                <p>寓教于乐的活动让学习变得有趣：</p>
+                <ul>
+                    <li>益智游戏</li>
+                    <li>科学实验</li>
+                    <li>阅读时光</li>
+                    <li>数学游戏</li>
+                    <li>英语角活动</li>
+                </ul>
+
+                <h2>参与资格</h2>
+                <p>HAF项目面向符合以下条件的儿童和青少年：</p>
+                <ul>
+                    <li><strong>年龄要求</strong>：5-16岁儿童和青少年</li>
+                    <li><strong>资格条件</strong>：有资格享受免费校餐（Free School Meals）</li>
+                    <li><strong>地区要求</strong>：居住在Trafford及周边地区</li>
+                </ul>
+                <p>如果您不确定是否符合条件，欢迎联系我们咨询。</p>
+
+                <h2>活动时间</h2>
+                <p>HAF项目在学校假期期间开展，具体安排如下：</p>
+
+                <h3>复活节假期（通常2周）</h3>
+                <p>春季主题活动、户外探索、手工制作等精彩内容。</p>
+
+                <h3>暑假（通常4周）</h3>
+                <p>夏令营、体育竞技、文化体验、艺术创作等丰富活动，让孩子度过充实的暑假时光。</p>
+
+                <h3>圣诞假期（通常1周）</h3>
+                <p>节日庆祝、手工制作、表演活动，充满节日氛围的假期活动。</p>
+
+                <p><em>注意：具体活动日期将根据当地学校假期日历确定，报名信息将通过学校和家长群发布。</em></p>
+
+                <h2>如何报名</h2>
+                <p>如果您对HAF项目感兴趣，想让孩子参加我们的假期活动，请通过以下方式联系我们：</p>
+                <ul>
+                    <li><strong>电话</strong>：0161 969 3071</li>
+                    <li><strong>邮箱</strong>：info@boweneducation.org</li>
+                    <li><strong>访问</strong>：<a href="/zh/contact/">联系我们页面</a></li>
+                </ul>
+                <p>我们的工作人员将为您提供详细的报名信息和资格审核指导，帮助您顺利完成报名流程。</p>
+
+                <h2>为什么选择博文HAF项目</h2>
+                <p>博文教育集团参与HAF项目多年，具有丰富的经验和专业的团队：</p>
+                <ul>
+                    <li><strong>政府认证</strong> - 经政府审核认证的合作伙伴，项目质量有保障</li>
+                    <li><strong>专业团队</strong> - 经验丰富的教师和活动组织者，持有相关资质证书</li>
+                    <li><strong>双语服务</strong> - 提供中英双语服务，帮助华人家庭更好地融入社区</li>
+                    <li><strong>关爱儿童</strong> - 以儿童福利为核心，创造安全、有趣、有益的成长环境</li>
+                    <li><strong>营养餐食</strong> - 每日提供健康营养的午餐和小食</li>
+                    <li><strong>完全免费</strong> - 所有活动和餐食完全免费，减轻家庭负担</li>
+                </ul>
+
+            </article>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<style>
+/* 单页图文布局样式 - 优化可读性 */
+
+.section--content {
+    padding: 4rem 0;
+    background: #f9fafb;
+}
+
+/* 两栏布局（带侧边栏） */
+.page-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    position: relative;
+}
+
+.page-layout__sidebar {
+    flex: 0 0 250px;
+    position: sticky;
+    top: 100px;
+}
+
+.page-layout__main {
+    flex: 1;
+    min-width: 0;
+}
+
+/* 单栏布局（无侧边栏） */
+.page-layout--single {
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+.article-content {
+    background: white;
+    padding: 3rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    line-height: 1.8;
+    color: #374151;
+}
+
+/* 标题样式 */
+.article-content h2 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 3px solid #d97706;
+}
+
+.article-content h2:first-child {
+    margin-top: 0;
+}
+
+.article-content h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #374151;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+/* 段落样式 */
+.article-content p {
+    font-size: 1.125rem;
+    line-height: 2;
+    margin-bottom: 1.5rem;
+    color: #4b5563;
+}
+
+/* 列表样式 */
+.article-content ul {
+    margin-bottom: 2rem;
+    padding-left: 0;
+    list-style: none;
+}
+
+.article-content ul li {
+    padding-left: 2rem;
+    margin-bottom: 1rem;
+    position: relative;
+    font-size: 1.0625rem;
+    line-height: 1.8;
+    color: #4b5563;
+}
+
+.article-content ul li::before {
+    content: "▸";
+    position: absolute;
+    left: 0.5rem;
+    color: #d97706;
+    font-weight: bold;
+    font-size: 1.125rem;
+}
+
+/* 强调文本 */
+.article-content strong {
+    color: #d97706;
+    font-weight: 600;
+}
+
+/* 斜体文本 */
+.article-content em {
+    color: #6b7280;
+    font-style: italic;
+}
+
+/* 链接样式 */
+.article-content a {
+    color: #d97706;
+    text-decoration: none;
+    border-bottom: 1px solid #fde68a;
+    transition: all 0.2s;
+}
+
+.article-content a:hover {
+    color: #b45309;
+    border-bottom-color: #d97706;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .page-layout {
+        flex-direction: column;
+    }
+
+    .page-layout__sidebar {
+        flex: 0 0 auto;
+        width: 100%;
+        position: static;
+        margin-bottom: 2rem;
+    }
+
+    .article-content {
+        padding: 2rem 1.5rem;
+    }
+
+    .article-content h2 {
+        font-size: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .article-content h3 {
+        font-size: 1.25rem;
+    }
+
+    .article-content p,
+    .article-content ul li {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .section--content {
+        padding: 2rem 0;
+    }
+
+    .article-content {
+        padding: 1.5rem;
+        border-radius: 0;
+    }
+
+    .article-content h2 {
+        font-size: 1.375rem;
+    }
+
+    .article-content ul li {
+        padding-left: 1.5rem;
+    }
+}
+</style>
+
+{% endblock %}

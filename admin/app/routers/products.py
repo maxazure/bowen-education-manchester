@@ -5,7 +5,7 @@
 import math
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Form, HTTPException, Request, status
+from fastapi import APIRouter, BackgroundTasks, Depends, Form, HTTPException, Request, status
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session, joinedload
@@ -15,6 +15,7 @@ from app.models.product import Product, ProductCategory
 from app.models.site import ColumnType, SiteColumn
 from app.services.product_service import can_delete_product, generate_slug
 from app.services.single_page_service import markdown_to_html
+from admin.app.routers.static_pages import generate_static_task
 
 router = APIRouter(prefix="/products", tags=["products"])
 
@@ -136,6 +137,7 @@ async def new_product_form(
 @router.post("", response_class=JSONResponse)
 async def create_product(
     request: Request,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
     column_id: int = Form(...),
     name: str = Form(...),
@@ -215,6 +217,9 @@ async def create_product(
         db.commit()
         db.refresh(product)
 
+        # 触发静态页面生成
+        background_tasks.add_task(generate_static_task, "public", "http://localhost:8000")
+
         return JSONResponse(
             content={
                 "success": True,
@@ -277,6 +282,7 @@ async def edit_product_form(
 async def update_product(
     request: Request,
     product_id: int,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
     column_id: int = Form(...),
     name: str = Form(...),
@@ -359,6 +365,9 @@ async def update_product(
         db.commit()
         db.refresh(product)
 
+        # 触发静态页面生成
+        background_tasks.add_task(generate_static_task, "public", "http://localhost:8000")
+
         return JSONResponse(
             content={
                 "success": True,
@@ -379,6 +388,7 @@ async def update_product(
 @router.delete("/{product_id}", response_class=JSONResponse)
 async def delete_product(
     product_id: int,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
 ):
     """删除产品"""
@@ -397,6 +407,9 @@ async def delete_product(
 
         db.delete(product)
         db.commit()
+
+        # 触发静态页面生成
+        background_tasks.add_task(generate_static_task, "public", "http://localhost:8000")
 
         return JSONResponse(
             content={"success": True, "message": "产品删除成功"},

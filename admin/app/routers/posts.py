@@ -5,7 +5,7 @@
 import math
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Form, HTTPException, Request, status
+from fastapi import APIRouter, BackgroundTasks, Depends, Form, HTTPException, Request, status
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session, joinedload
@@ -16,6 +16,7 @@ from app.models.site import ColumnType, SiteColumn
 from app.services.post_service import (can_delete_post, generate_slug,
                                        publish_post, unpublish_post)
 from app.services.single_page_service import markdown_to_html
+from admin.app.routers.static_pages import generate_static_task
 
 router = APIRouter(prefix="/posts", tags=["posts"])
 
@@ -137,6 +138,7 @@ async def new_post_form(
 @router.post("", response_class=JSONResponse)
 async def create_post(
     request: Request,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
     column_id: int = Form(...),
     title: str = Form(...),
@@ -214,6 +216,9 @@ async def create_post(
         db.commit()
         db.refresh(post)
 
+        # 触发静态页面生成
+        background_tasks.add_task(generate_static_task, "public", "http://localhost:8000")
+
         return JSONResponse(
             content={"success": True, "message": "文章创建成功", "post_id": post.id},
             status_code=status.HTTP_201_CREATED,
@@ -272,6 +277,7 @@ async def edit_post_form(
 async def update_post(
     request: Request,
     post_id: int,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
     column_id: int = Form(...),
     title: str = Form(...),
@@ -352,6 +358,9 @@ async def update_post(
 
         db.commit()
 
+        # 触发静态页面生成
+        background_tasks.add_task(generate_static_task, "public", "http://localhost:8000")
+
         return JSONResponse(
             content={"success": True, "message": "文章更新成功"},
             status_code=status.HTTP_200_OK,
@@ -368,6 +377,7 @@ async def update_post(
 @router.delete("/{post_id}", response_class=JSONResponse)
 async def delete_post(
     post_id: int,
+    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
 ):
     """删除文章"""
@@ -388,6 +398,9 @@ async def delete_post(
 
         db.delete(post)
         db.commit()
+
+        # 触发静态页面生成
+        background_tasks.add_task(generate_static_task, "public", "http://localhost:8000")
 
         return JSONResponse(
             content={"success": True, "message": "文章删除成功"},

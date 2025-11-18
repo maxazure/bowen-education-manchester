@@ -1,0 +1,412 @@
+{% extends "base.html" %}
+
+{% block title %}HAF Program - Bowen Education Group{% endblock %}
+
+{% block meta_description %}Learn about Bowen Group's participation in the HAF (Holiday Activities and Food) program, providing free healthy meals and enriching activities for children{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+{% include 'components/hero_main_column.html' %}
+
+<!-- Main Content -->
+<section class="section section--content">
+    <div class="container">
+        {% if parent_column %}
+        <!-- Two-column layout with sidebar -->
+        <div class="page-layout">
+            <!-- Left Sidebar Navigation -->
+            <aside class="page-layout__sidebar">
+                {% include 'components/sidebar_nav.html' %}
+            </aside>
+
+            <!-- Right Main Content -->
+            <div class="page-layout__main">
+                <article class="article-content" data-aos="fade-up">
+
+                <h2>What is HAF Programme</h2>
+                <p>Holiday Activities and Food (HAF) programme is a key community initiative funded by the UK government, aiming to provide eligible children with healthy meals and engaging activities during school holidays. Bowen Group actively participates in this programme, offering diverse holiday activities to local children.</p>
+
+                <h2>Programme Goals</h2>
+                <p>HAF programme is committed to promoting children's comprehensive development through holiday activities. Our main goals include:</p>
+                <ul>
+                    <li><strong>Healthy Food Security</strong> - Provide free healthy meals to eligible children, ensuring adequate nutrition during holidays</li>
+                    <li><strong>Physical & Mental Development</strong> - Promote children's comprehensive health development through diverse sports and cultural activities</li>
+                    <li><strong>Family Support</strong> - Provide holiday childcare support for working families, reducing family burden</li>
+                    <li><strong>Education & Entertainment</strong> - Organize various educational and recreational activities, allowing children to continue learning during holidays</li>
+                </ul>
+
+                <h2>Activity Content</h2>
+                <p>We offer diverse holiday experiences, including the following four major categories:</p>
+
+                <h3>Chinese Cultural Experience</h3>
+                <p>Through traditional cultural activities, let children understand and preserve Chinese culture:</p>
+                <ul>
+                    <li>Calligraphy Practice</li>
+                    <li>Traditional Paper Cutting</li>
+                    <li>Chinese Knot Making</li>
+                    <li>Poetry Recitation</li>
+                    <li>Traditional Festival Culture Learning</li>
+                </ul>
+
+                <h3>Sports & Athletics</h3>
+                <p>Diverse sports activities promote children's physical health:</p>
+                <ul>
+                    <li>Badminton Training</li>
+                    <li>Chess Lessons</li>
+                    <li>Team Sports Games</li>
+                    <li>Outdoor Activities</li>
+                    <li>Physical Training</li>
+                </ul>
+
+                <h3>Arts & Crafts</h3>
+                <p>Cultivate children's artistic literacy and creativity:</p>
+                <ul>
+                    <li>Painting Creation</li>
+                    <li>Handcrafts</li>
+                    <li>Music Appreciation</li>
+                    <li>Drama Performance</li>
+                    <li>Creative Design</li>
+                </ul>
+
+                <h3>Educational Games</h3>
+                <p>Fun activities that make learning enjoyable:</p>
+                <ul>
+                    <li>Puzzle Games</li>
+                    <li>Science Experiments</li>
+                    <li>Reading Time</li>
+                    <li>Math Games</li>
+                    <li>English Corner Activities</li>
+                </ul>
+
+                <h2>Eligibility Criteria</h2>
+                <p>HAF programme is for children and young people who meet the following criteria:</p>
+                <ul>
+                    <li><strong>Age Requirement</strong>: 5-16 years old children and young people</li>
+                    <li><strong>Eligibility Criteria</strong>: Eligible for Free School Meals</li>
+                    <li><strong>Location Requirement</strong>: Residing in Trafford and surrounding areas</li>
+                </ul>
+                <p>If you're not sure whether you're eligible, please feel free to contact us for consultation.</p>
+
+                <h2>Programme Schedule</h2>
+                <p>HAF programme operates during school holidays, with the following arrangements:</p>
+
+                <h3>Easter Holiday (Typically 2 weeks)</h3>
+                <p>Spring-themed activities, outdoor exploration, craft making and other exciting content.</p>
+
+                <h3>Summer Holiday (Typically 4 weeks)</h3>
+                <p>Summer camps, sports competitions, cultural experiences, arts & crafts and rich activities, making children's summer holidays fulfilling.</p>
+
+                <h3>Christmas Holiday (Typically 1 week)</h3>
+                <p>Festival celebrations, craft making, performance activities filled with holiday atmosphere.</p>
+
+                <p><em>Note: Specific activity dates will be determined according to local school holiday calendars. Registration information will be distributed through schools and parent groups.</em></p>
+
+                <h2>How to Register</h2>
+                <p>If you're interested in HAF programme and want your child to participate in our holiday activities, please contact us through the following methods:</p>
+                <ul>
+                    <li><strong>Phone</strong>: 0161 969 3071</li>
+                    <li><strong>Email</strong>: info@boweneducation.org</li>
+                    <li><strong>Visit</strong>: <a href="/en/contact/">Contact Us Page</a></li>
+                </ul>
+                <p>Our staff will provide you with detailed registration information and eligibility review guidance to help you complete the registration process smoothly.</p>
+
+                <h2>Why Choose Bowen HAF Programme</h2>
+                <p>Bowen Education Group has participated in HAF programme for many years, with extensive experience and a professional team:</p>
+                <ul>
+                    <li><strong>Government Certified</strong> - Government-reviewed and certified partner, ensuring programme quality</li>
+                    <li><strong>Professional Team</strong> - Experienced teachers and activity organizers with relevant qualifications</li>
+                    <li><strong>Bilingual Service</strong> - Providing Chinese-English bilingual services, helping Chinese families better integrate into the community</li>
+                    <li><strong>Child-Centered</strong> - Focusing on child welfare, creating safe, fun, and beneficial growth environments</li>
+                    <li><strong>Nutritious Meals</strong> - Daily provision of healthy and nutritious lunches and snacks</li>
+                    <li><strong>Completely Free</strong> - All activities and meals completely free, reducing family burden</li>
+                </ul>
+
+                </article>
+            </div>
+        </div>
+        {% else %}
+        <!-- Single column layout without sidebar -->
+        <div class="page-layout page-layout--single">
+            <article class="article-content" data-aos="fade-up">
+
+                <h2>What is HAF Programme</h2>
+                <p>Holiday Activities and Food (HAF) programme is a key community initiative funded by the UK government, aiming to provide eligible children with healthy meals and engaging activities during school holidays. Bowen Group actively participates in this programme, offering diverse holiday activities to local children.</p>
+
+                <h2>Programme Goals</h2>
+                <p>HAF programme is committed to promoting children's comprehensive development through holiday activities. Our main goals include:</p>
+                <ul>
+                    <li><strong>Healthy Food Security</strong> - Provide free healthy meals to eligible children, ensuring adequate nutrition during holidays</li>
+                    <li><strong>Physical & Mental Development</strong> - Promote children's comprehensive health development through diverse sports and cultural activities</li>
+                    <li><strong>Family Support</strong> - Provide holiday childcare support for working families, reducing family burden</li>
+                    <li><strong>Education & Entertainment</strong> - Organize various educational and recreational activities, allowing children to continue learning during holidays</li>
+                </ul>
+
+                <h2>Activity Content</h2>
+                <p>We offer diverse holiday experiences, including the following four major categories:</p>
+
+                <h3>Chinese Cultural Experience</h3>
+                <p>Through traditional cultural activities, let children understand and preserve Chinese culture:</p>
+                <ul>
+                    <li>Calligraphy Practice</li>
+                    <li>Traditional Paper Cutting</li>
+                    <li>Chinese Knot Making</li>
+                    <li>Poetry Recitation</li>
+                    <li>Traditional Festival Culture Learning</li>
+                </ul>
+
+                <h3>Sports & Athletics</h3>
+                <p>Diverse sports activities promote children's physical health:</p>
+                <ul>
+                    <li>Badminton Training</li>
+                    <li>Chess Lessons</li>
+                    <li>Team Sports Games</li>
+                    <li>Outdoor Activities</li>
+                    <li>Physical Training</li>
+                </ul>
+
+                <h3>Arts & Crafts</h3>
+                <p>Cultivate children's artistic literacy and creativity:</p>
+                <ul>
+                    <li>Painting Creation</li>
+                    <li>Handcrafts</li>
+                    <li>Music Appreciation</li>
+                    <li>Drama Performance</li>
+                    <li>Creative Design</li>
+                </ul>
+
+                <h3>Educational Games</h3>
+                <p>Fun activities that make learning enjoyable:</p>
+                <ul>
+                    <li>Puzzle Games</li>
+                    <li>Science Experiments</li>
+                    <li>Reading Time</li>
+                    <li>Math Games</li>
+                    <li>English Corner Activities</li>
+                </ul>
+
+                <h2>Eligibility Criteria</h2>
+                <p>HAF programme is for children and young people who meet the following criteria:</p>
+                <ul>
+                    <li><strong>Age Requirement</strong>: 5-16 years old children and young people</li>
+                    <li><strong>Eligibility Criteria</strong>: Eligible for Free School Meals</li>
+                    <li><strong>Location Requirement</strong>: Residing in Trafford and surrounding areas</li>
+                </ul>
+                <p>If you're not sure whether you're eligible, please feel free to contact us for consultation.</p>
+
+                <h2>Programme Schedule</h2>
+                <p>HAF programme operates during school holidays, with the following arrangements:</p>
+
+                <h3>Easter Holiday (Typically 2 weeks)</h3>
+                <p>Spring-themed activities, outdoor exploration, craft making and other exciting content.</p>
+
+                <h3>Summer Holiday (Typically 4 weeks)</h3>
+                <p>Summer camps, sports competitions, cultural experiences, arts & crafts and rich activities, making children's summer holidays fulfilling.</p>
+
+                <h3>Christmas Holiday (Typically 1 week)</h3>
+                <p>Festival celebrations, craft making, performance activities filled with holiday atmosphere.</p>
+
+                <p><em>Note: Specific activity dates will be determined according to local school holiday calendars. Registration information will be distributed through schools and parent groups.</em></p>
+
+                <h2>How to Register</h2>
+                <p>If you're interested in HAF programme and want your child to participate in our holiday activities, please contact us through the following methods:</p>
+                <ul>
+                    <li><strong>Phone</strong>: 0161 969 3071</li>
+                    <li><strong>Email</strong>: info@boweneducation.org</li>
+                    <li><strong>Visit</strong>: <a href="/en/contact/">Contact Us Page</a></li>
+                </ul>
+                <p>Our staff will provide you with detailed registration information and eligibility review guidance to help you complete the registration process smoothly.</p>
+
+                <h2>Why Choose Bowen HAF Programme</h2>
+                <p>Bowen Education Group has participated in HAF programme for many years, with extensive experience and a professional team:</p>
+                <ul>
+                    <li><strong>Government Certified</strong> - Government-reviewed and certified partner, ensuring programme quality</li>
+                    <li><strong>Professional Team</strong> - Experienced teachers and activity organizers with relevant qualifications</li>
+                    <li><strong>Bilingual Service</strong> - Providing Chinese-English bilingual services, helping Chinese families better integrate into the community</li>
+                    <li><strong>Child-Centered</strong> - Focusing on child welfare, creating safe, fun, and beneficial growth environments</li>
+                    <li><strong>Nutritious Meals</strong> - Daily provision of healthy and nutritious lunches and snacks</li>
+                    <li><strong>Completely Free</strong> - All activities and meals completely free, reducing family burden</li>
+                </ul>
+
+            </article>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<style>
+/* Single Page Article Layout - Enhanced Readability */
+
+.section--content {
+    padding: 4rem 0;
+    background: #f9fafb;
+}
+
+/* Two-column layout with sidebar */
+.page-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    position: relative;
+}
+
+.page-layout__sidebar {
+    flex: 0 0 250px;
+    position: sticky;
+    top: 100px;
+}
+
+.page-layout__main {
+    flex: 1;
+    min-width: 0;
+}
+
+/* Single column layout without sidebar */
+.page-layout--single {
+    max-width: 850px;
+    margin: 0 auto;
+}
+
+.article-content {
+    background: white;
+    padding: 3rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    line-height: 1.8;
+    color: #374151;
+}
+
+/* Heading Styles */
+.article-content h2 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 3px solid #d97706;
+}
+
+.article-content h2:first-child {
+    margin-top: 0;
+}
+
+.article-content h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #374151;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+/* Paragraph Styles */
+.article-content p {
+    font-size: 1.125rem;
+    line-height: 2;
+    margin-bottom: 1.5rem;
+    color: #4b5563;
+}
+
+/* List Styles */
+.article-content ul {
+    margin-bottom: 2rem;
+    padding-left: 0;
+    list-style: none;
+}
+
+.article-content ul li {
+    padding-left: 2rem;
+    margin-bottom: 1rem;
+    position: relative;
+    font-size: 1.0625rem;
+    line-height: 1.8;
+    color: #4b5563;
+}
+
+.article-content ul li::before {
+    content: "▸";
+    position: absolute;
+    left: 0.5rem;
+    color: #d97706;
+    font-weight: bold;
+    font-size: 1.125rem;
+}
+
+/* Strong Text */
+.article-content strong {
+    color: #d97706;
+    font-weight: 600;
+}
+
+/* Italic Text */
+.article-content em {
+    color: #6b7280;
+    font-style: italic;
+}
+
+/* Link Styles */
+.article-content a {
+    color: #d97706;
+    text-decoration: none;
+    border-bottom: 1px solid #fde68a;
+    transition: all 0.2s;
+}
+
+.article-content a:hover {
+    color: #b45309;
+    border-bottom-color: #d97706;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .page-layout {
+        flex-direction: column;
+    }
+
+    .page-layout__sidebar {
+        flex: 0 0 auto;
+        width: 100%;
+        position: static;
+        margin-bottom: 2rem;
+    }
+
+    .article-content {
+        padding: 2rem 1.5rem;
+    }
+
+    .article-content h2 {
+        font-size: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .article-content h3 {
+        font-size: 1.25rem;
+    }
+
+    .article-content p,
+    .article-content ul li {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .section--content {
+        padding: 2rem 0;
+    }
+
+    .article-content {
+        padding: 1.5rem;
+        border-radius: 0;
+    }
+
+    .article-content h2 {
+        font-size: 1.375rem;
+    }
+
+    .article-content ul li {
+        padding-left: 1.5rem;
+    }
+}
+</style>
+
+{% endblock %}

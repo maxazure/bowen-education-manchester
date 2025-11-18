@@ -73,6 +73,7 @@ class SiteColumn(BaseModel):
     hero_title = Column(Text, nullable=True, comment="Hero主标题（中文）")
     hero_title_en = Column(Text, nullable=True, comment="Hero英文副标题")
     hero_tagline = Column(Text, nullable=True, comment="Hero标语/口号")
+    hero_tagline_en = Column(Text, nullable=True, comment="Hero英文标语/口号")
     hero_cta_text = Column(Text, nullable=True, comment="CTA按钮文字")
     hero_cta_url = Column(Text, nullable=True, comment="CTA按钮链接")
 

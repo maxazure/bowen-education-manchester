@@ -151,6 +151,7 @@ def get_overview_sections(db: Session, parent_column_id: int) -> List[dict]:
         section = {
             "column": child,
             "column_name": child.name,
+            "column_name_en": child.name_en,
             "column_slug": child.slug,
             "column_type": child.column_type,
             "content_items": [],
