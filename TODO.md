@@ -5,6 +5,96 @@
 
 ## ✅ 已完成
 
+### [2025-11-18] 将侧边栏功能合并到main分支
+- [x] 将feature/static-generation分支合并到main - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 推送到远程仓库 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 更新TODO.md记录 - 完成时间: 2025-11-18 - 负责人: maxazure
+
+**问题描述**:
+- 用户需要将feature/static-generation分支的所有修改合并到main分支
+- 包括HAF和公园活动页面的侧边栏功能
+- 包括所有静态页面生成功能
+
+**解决方案**:
+1. **处理未提交修改**:
+   - 使用git stash暂存.claude/context-snapshot.md的修改
+   - 切换到main分支
+
+2. **合并分支**:
+   - 使用git merge feature/static-generation进行fast-forward合并
+   - 拉取远程更改并处理分歧
+   - 使用--no-rebase策略进行合并
+
+3. **推送到远程**:
+   - 成功推送到origin/main
+   - 合并提交ID: 16d545a
+
+**验证结果**:
+- ✅ 所有23个提交成功合并到main分支
+- ✅ 包含PR #1的合并（f7756cb）
+- ✅ 包含所有静态文件（215个文件，+286,326行）
+- ✅ main分支与远程同步
+- ✅ 工作目录干净，无待提交文件
+
+**相关文件**:
+- feature/static-generation分支（已合并）
+- main分支（已更新）
+
+**提交历史**:
+- 16d545a: Merge branch 'main' of github
+- 52c3e77: chore: 添加生成的静态页面和静态资源到版本控制
+- f7756cb: Merge pull request #1
+- e5ec283: feat: 为HAF和公园活动页面添加侧边栏支持
+
+### [2025-11-18] 为HAF和公园活动页面添加侧边栏支持
+- [x] 修改HAF页面模板添加侧边栏布局 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 修改静态生成器支持programmes-parks侧边栏 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 重新生成静态页面并验证 - 完成时间: 2025-11-18 - 负责人: maxazure
+
+**问题描述**:
+- 用户反馈"haf 和 公园活动 都应该有左侧边栏"
+- HAF项目页面（programmes-haf）缺少侧边栏导航
+- 公园活动页面（programmes-parks）缺少侧边栏导航
+- 需要显示父栏目"政府项目"及兄弟栏目导航
+
+**解决方案**:
+1. **修改HAF页面模板**（`templates/zh/programmes-haf.html` 和 `templates/en/programmes-haf.html`）:
+   - 添加条件布局：`{% if parent_column %}`
+   - 两栏布局（带侧边栏）：`.page-layout` + `.page-layout__sidebar` + `.page-layout__main`
+   - 单栏布局（无侧边栏）：`.page-layout--single`
+   - 包含侧边栏组件：`{% include 'components/sidebar_nav.html' %}`
+
+2. **CSS样式设计**:
+   - `.page-layout`: Flexbox布局，gap: 2rem
+   - `.page-layout__sidebar`: 固定宽度250px，sticky定位（top: 100px）
+   - `.page-layout__main`: flex: 1，自适应宽度
+   - `.page-layout--single`: 最大宽度850px，居中显示
+   - 响应式设计：768px以下切换为单栏布局
+
+3. **修改静态生成器** (`app/services/static_generator.py:562`):
+   - 在programmes-parks栏目使用post_list_with_sidebar.html模板
+   - 添加到特殊处理列表：`if column.slug in ["school-curriculum", "programmes-parks"]:`
+
+**验证结果**:
+- ✅ HAF项目页面（中英文）成功显示侧边栏
+- ✅ 公园活动页面（中英文）成功显示侧边栏
+- ✅ 侧边栏显示父栏目"政府项目/Government Programs"
+- ✅ 侧边栏显示兄弟栏目：HAF项目、公园活动
+- ✅ 静态页面生成成功（108页全部成功）
+- ✅ 响应式设计正常工作（桌面、平板、手机）
+- ✅ sticky侧边栏在桌面端正常工作
+
+**相关文件**:
+- `templates/zh/programmes-haf.html` - 中文HAF项目模板（修改+301行）
+- `templates/en/programmes-haf.html` - 英文HAF项目模板（修改+301行）
+- `app/services/static_generator.py:562` - 静态生成器（1行修改）
+
+**页面访问**:
+- 中文HAF页面：http://localhost:8000/zh/programmes-haf/
+- 英文HAF页面：http://localhost:8000/en/programmes-haf/
+- 中文公园活动：http://localhost:8000/zh/programmes-parks/
+- 英文公园活动：http://localhost:8000/en/programmes-parks/
+
 ### [2025-11-18] 重新设计政府项目栏目页面
 - [x] 查看programmes栏目结构和子栏目 - 完成时间: 2025-11-18 - 负责人: maxazure
 - [x] 修改中文programmes.html模板 - 完成时间: 2025-11-18 - 负责人: maxazure
