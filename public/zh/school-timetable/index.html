@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js">
+<html lang="zh" class="no-js">
 <head>
     <!-- Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="description" content="School - Comprehensive overview of our programmes and services">
-    <meta name="keywords" content="">
-    <title>School - Bowen Education Group | Bowen Education Group</title>
+    <meta name="description" content="兴趣班课程表 - 博文教育集团为您提供优质的中文教育服务">
+    <meta name="keywords" content="博文教育集团,中文教育,曼彻斯特中文学校">
+    <title>兴趣班课程表 | 博文教育集团 Bowen Education Group | Bowen Education Group</title>
 
     <!-- Favicon -->
     <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
     <link rel="apple-touch-icon" href="/static/images/apple-touch-icon.png">
 
     <!-- Open Graph Tags -->
-    <meta property="og:title" content="Bowen Education Group">
-    <meta property="og:description" content="">
-    <meta property="og:image" content="">
-    <meta property="og:url" content="http://localhost:8000/en/school">
+    <meta property="og:title" content="兴趣班课程表 | 博文教育集团 Bowen Education Group">
+    <meta property="og:description" content="兴趣班课程表 - 博文教育集团为您提供优质的中文教育服务">
+    <meta property="og:image" content="/static/images/hero-default.jpg">
+    <meta property="og:url" content="http://localhost:8000/school-timetable">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Bowen Education Group">
 
@@ -29,188 +29,336 @@
     <!-- Stylesheets -->
     <link rel="stylesheet" href="/static/css/main.css">
     
+<!-- Preload critical resources -->
+<link rel="preload" href="https://unpkg.com/aos@2.3.1/dist/aos.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+</noscript>
 <style>
-/* Overview Page Styles */
-.page-header {
-    background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
-    color: white;
-    padding: 4rem 0 3rem;
-    text-align: center;
+/* 页面布局系统 - 两栏布局 */
+.section--content {
+    padding: 3rem 0;
+    background: linear-gradient(to bottom, #ffffff 0%, #f7fafc 100%);
 }
 
-.page-header h1 {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-}
-
-.page-header p {
-    font-size: 1.125rem;
-    opacity: 0.9;
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-/* Overview Sections */
-.overview-section {
-    padding: 4rem 0;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-.overview-section:last-child {
-    border-bottom: none;
-}
-
-.overview-section:nth-child(even) {
-    background: #f9fafb;
-}
-
-.section-header {
-    text-align: center;
-    margin-bottom: 3rem;
-}
-
-.section-header h2 {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #1e3a8a;
-    margin-bottom: 0.5rem;
-}
-
-.section-header p {
-    font-size: 1.125rem;
-    color: #6b7280;
-}
-
-/* Content Grid for Posts/Products */
-.content-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-.content-card {
-    background: white;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.content-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-}
-
-.content-card-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-}
-
-.content-card-body {
-    padding: 1.5rem;
-}
-
-.content-card-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #1e3a8a;
-    margin-bottom: 0.5rem;
-}
-
-.content-card-summary {
-    color: #6b7280;
-    font-size: 0.95rem;
-    line-height: 1.6;
-    margin-bottom: 1rem;
-}
-
-.content-card-meta {
+/* 主布局容器 - 使用 Flexbox 实现两栏布局 */
+.page-layout {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.875rem;
-    color: #9ca3af;
+    gap: 2rem;
+    align-items: flex-start;
+    position: relative;
 }
 
-/* Single Page Content */
-.single-page-content {
+/* 左侧边栏 - 固定宽度 */
+.page-layout__sidebar {
+    flex: 0 0 280px;
+    min-width: 280px;
+    max-width: 280px;
+}
+
+/* 右侧主内容区 - 自适应宽度 */
+.page-layout__main {
+    flex: 1;
+    min-width: 0; /* 防止flex子元素溢出 */
+    max-width: 100%; /* 确保不超出容器 */
+}
+
+/* 单栏布局（无侧边栏） */
+.page-layout--single {
     max-width: 900px;
     margin: 0 auto;
+}
+
+/* 确保 container 有正确的最大宽度 */
+.section--content .container {
+    max-width: 1200px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* 单页内容排版优化 - 增强可读性 */
+.single-page-content {
+    line-height: 1.8;
+    color: #2d3748;
     background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 2.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.single-page-content h2 {
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a202c;
+    padding-bottom: 0.75rem;
+    border-bottom: 3px solid #0052cc;
+}
+
+.single-page-content h2:first-child {
+    margin-top: 0;
 }
 
 .single-page-content h3 {
+    margin-top: 2.5rem;
+    margin-bottom: 1.25rem;
     font-size: 1.5rem;
     font-weight: 600;
-    color: #1e3a8a;
-    margin-bottom: 1rem;
+    color: #2d3748;
 }
 
-/* View All Link */
-.view-all-link {
-    text-align: center;
-    margin-top: 2rem;
+.single-page-content p {
+    margin-bottom: 1.5rem;
+    font-size: 1.0625rem;
 }
 
-.btn-view-all {
+.single-page-content ul,
+.single-page-content ol {
+    margin-bottom: 2rem;
+    padding-left: 2rem;
+}
+
+.single-page-content li {
+    margin-bottom: 0.875rem;
+    line-height: 1.8;
+}
+
+.single-page-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+    margin: 2.5rem 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* 图片加载优化 */
+    opacity: 0;
+    transition: opacity 0.3s ease-in;
+}
+
+.single-page-content img.loaded,
+.single-page-content img[loading="lazy"] {
+    opacity: 1;
+}
+
+/* 性能优化：减少重绘 */
+.single-page-content * {
+    will-change: auto;
+}
+
+.cta-buttons .btn {
+    will-change: transform, box-shadow;
+}
+
+.single-page-content blockquote {
+    border-left: 4px solid #0052cc;
+    padding-left: 1.5rem;
+    margin: 2rem 0;
+    font-style: italic;
+    color: #4a5568;
+}
+
+/* CTA 区域视觉强化 */
+.section--cta {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, #0052cc 0%, #003380 100%);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.section--cta::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+}
+
+.section--cta::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -5%;
+    width: 400px;
+    height: 400px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 50%;
+}
+
+.section--cta .container {
+    position: relative;
+    z-index: 2;
+}
+
+.section--cta .section__title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+}
+
+.section--cta .section__title-chinese {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    color: #ffffff;
+    opacity: 1;
+    font-weight: 600;
+}
+
+.section--cta .section__subtitle {
+    font-size: 1.25rem;
+    color: #ffffff;
+    opacity: 1;
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.6;
+}
+
+/* CTA 按钮优化 - 增强交互效果 */
+.cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    justify-content: center;
+    margin-top: 2.5rem;
+}
+
+.cta-buttons .btn {
+    min-width: 200px;
+    padding: 1.125rem 2.5rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    background: #3b82f6;
-    color: white;
-    border-radius: 8px;
+    gap: 0.625rem;
     text-decoration: none;
-    font-weight: 500;
-    transition: background 0.3s;
 }
 
-.btn-view-all:hover {
-    background: #2563eb;
+.cta-buttons .btn-primary {
+    background: white;
+    color: #0052cc;
+    border: 2px solid white;
 }
 
-/* Empty State */
-.empty-state {
-    text-align: center;
-    padding: 3rem;
-    color: #9ca3af;
+.cta-buttons .btn-primary:hover {
+    background: #f7fafc;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
 }
 
-.empty-state svg {
-    width: 80px;
-    height: 80px;
-    margin-bottom: 1rem;
-    opacity: 0.5;
+.cta-buttons .btn-outline-primary {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+}
+
+.cta-buttons .btn-outline-primary:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+}
+
+/* 响应式优化 */
+@media (max-width: 992px) {
+    .page-layout {
+        gap: 1.5rem;
+    }
+
+    .page-layout__sidebar {
+        flex: 0 0 240px;
+        min-width: 240px;
+    }
+
+    .single-page-content {
+        padding: 2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    /* 移动端改为纵向堆叠布局 */
+    .page-layout {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .page-layout__sidebar {
+        flex: none;
+        width: 100%;
+        min-width: 100%;
+        order: -1; /* 确保侧边栏在上方 */
+    }
+
+    .page-layout__main {
+        width: 100%;
+    }
+
+    .single-page-content {
+        padding: 1.5rem;
+    }
+
+    .single-page-content h2 {
+        font-size: 1.625rem;
+        margin-top: 2rem;
+    }
+
+    .section--cta .section__title {
+        font-size: 1.875rem;
+    }
+
+    .section--cta .section__title-chinese {
+        font-size: 1.5rem;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cta-buttons .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .single-page-content {
+        padding: 1.25rem;
+    }
 }
 </style>
 
 
     <!-- SEO: Language Alternatives -->
-    <link rel="alternate" hreflang="en" href="https://boweneducation.co.uk/en/school" />
-    <link rel="alternate" hreflang="zh" href="https://boweneducation.co.uk/school" />
-    <link rel="alternate" hreflang="x-default" href="https://boweneducation.co.uk/school" />
+    <link rel="alternate" hreflang="en" href="https://boweneducation.co.uk/en/school-timetable" />
+    <link rel="alternate" hreflang="zh" href="https://boweneducation.co.uk/school-timetable" />
+    <link rel="alternate" hreflang="x-default" href="https://boweneducation.co.uk/school-timetable" />
 
-    <!-- Fonts (English only - removed Chinese fonts) -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 
     <!-- Analytics -->
     
 
     <!-- Structured Data -->
     
+
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "EducationalOrganization",
         "name": "Bowen Education Group",
+        "alternateName": "博文教育集团",
         "url": "&lt;app.services.static_generator.obj object at 0x10834f8c0&gt;",
         "logo": "/static/images/logo.png",
         "description": "",
@@ -237,6 +385,51 @@
     }
     </script>
     
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "兴趣班课程表",
+    "description": "兴趣班课程表",
+    "url": "http://localhost:8000/school-timetable",
+    "inLanguage": ["en-GB", "zh-CN"],
+    "isPartOf": {
+        "@type": "WebSite",
+        "name": "Bowen Education Group",
+        "alternateName": "博文教育集团",
+        "url": "&lt;app.services.static_generator.obj object at 0x10834f8c0&gt;"
+    },
+    "publisher": {
+        "@type": "EducationalOrganization",
+        "name": "Bowen Education Group",
+        "alternateName": "博文教育集团"
+    },
+    "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "首页",
+                "item": "&lt;app.services.static_generator.obj object at 0x10834f8c0&gt;"
+            },
+            {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "中文学校",
+                "item": "&lt;app.services.static_generator.obj object at 0x10834f8c0&gt;school"
+            },
+            {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "兴趣班课程表",
+                "item": "http://localhost:8000/school-timetable"
+            }
+        ]
+    }
+}
+</script>
+
 </head>
 
 <body class="">
@@ -265,13 +458,13 @@
                     
                 </div>
                 <div class="language-switcher">
-                    <a href="/zh/school" class="language-toggle" aria-label="Switch to Chinese">
+                    <a href="/school-timetable" class="language-toggle" aria-label="Switch to English">
                         <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="10"></circle>
                             <line x1="2" y1="12" x2="22" y2="12"></line>
                             <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
                         </svg>
-                        <span>Chinese</span>
+                        <span>English</span>
                     </a>
                 </div>
             </div>
@@ -284,18 +477,19 @@
             <div class="header-content">
                 <!-- Logo -->
                 <div class="header-logo">
-                    <a href="/en/" aria-label="Bowen Education Group Home">
+                    <a href="/" aria-label="Bowen Education Group Home">
                         <img src="/static/images/logo.png" alt="Bowen Education Group" height="60">
                         <span class="logo-text">
                             <strong>Bowen Education Group</strong>
+                            <small>博文教育集团</small>
                         </span>
                     </a>
                 </div>
 
                 <!--
   Navigation Component
-  Reusable navigation menu component with two-level dropdown support
-  Manages interaction state using Alpine.js
+  可复用的导航菜单组件，支持二级下拉菜单
+  使用Alpine.js管理交互状态
 -->
 
 <nav
@@ -316,11 +510,11 @@
                     
                 >
                     <a
-                        href="/en/"
+                        href="/zh/"
                         class="nav-link"
                         
                     >
-                        Home
+                        <span class="nav-link-chinese">首页</span>
                         
                     </a>
                     
@@ -350,13 +544,13 @@
                     
                 >
                     <a
-                        href="/en/about/"
+                        href="/zh/about/"
                         class="nav-link"
                         
                         :aria-expanded="open.toString()"
                         
                     >
-                        About
+                        <span class="nav-link-chinese">关于博文</span>
                         
                         <svg
                             class="dropdown-icon"
@@ -389,14 +583,14 @@
                     >
                         
                         <li>
-                            <a href="/en/about-company/" class="dropdown-item">
-                                Our Story
+                            <a href="/zh/about-company/" class="dropdown-item">
+                                博文集团
                             </a>
                         </li>
                         
                         <li>
-                            <a href="/en/news/" class="dropdown-item">
-                                News
+                            <a href="/zh/news/" class="dropdown-item">
+                                博文新闻
                             </a>
                         </li>
                         
@@ -432,13 +626,13 @@
                     
                 >
                     <a
-                        href="/en/school/"
-                        class="nav-link active"
+                        href="/zh/school/"
+                        class="nav-link"
                         
                         :aria-expanded="open.toString()"
                         
                     >
-                        School
+                        <span class="nav-link-chinese">中文学校</span>
                         
                         <svg
                             class="dropdown-icon"
@@ -471,20 +665,20 @@
                     >
                         
                         <li>
-                            <a href="/en/school-curriculum/" class="dropdown-item">
-                                Curriculum
+                            <a href="/zh/school-curriculum/" class="dropdown-item">
+                                中文学校课程设置
                             </a>
                         </li>
                         
                         <li>
-                            <a href="/en/school-term-dates/" class="dropdown-item">
-                                Term Dates
+                            <a href="/zh/school-term-dates/" class="dropdown-item">
+                                学期日期
                             </a>
                         </li>
                         
                         <li>
-                            <a href="/en/school-pta/" class="dropdown-item">
-                                PTA
+                            <a href="/zh/school-pta/" class="dropdown-item">
+                                PTA家长教师协会
                             </a>
                         </li>
                         
@@ -502,11 +696,11 @@
                     
                 >
                     <a
-                        href="/en/tuition/"
+                        href="/zh/tuition/"
                         class="nav-link"
                         
                     >
-                        Tutoring
+                        <span class="nav-link-chinese">补习中心</span>
                         
                     </a>
                     
@@ -524,13 +718,13 @@
                     
                 >
                     <a
-                        href="/en/chess/"
+                        href="/zh/chess/"
                         class="nav-link"
                         
                         :aria-expanded="open.toString()"
                         
                     >
-                        Chess
+                        <span class="nav-link-chinese">国际象棋俱乐部</span>
                         
                         <svg
                             class="dropdown-icon"
@@ -563,32 +757,32 @@
                     >
                         
                         <li>
-                            <a href="/en/chess-about/" class="dropdown-item">
-                                About
+                            <a href="/zh/chess-about/" class="dropdown-item">
+                                俱乐部简介
                             </a>
                         </li>
                         
                         <li>
-                            <a href="/en/chess-courses/" class="dropdown-item">
-                                Courses
+                            <a href="/zh/chess-courses/" class="dropdown-item">
+                                国际象棋课程设置
                             </a>
                         </li>
                         
                         <li>
-                            <a href="/en/chess-events/" class="dropdown-item">
-                                Competitions
+                            <a href="/zh/chess-events/" class="dropdown-item">
+                                活动与赛事
                             </a>
                         </li>
                         
                         <li>
-                            <a href="/en/chess-resources/" class="dropdown-item">
-                                Resources
+                            <a href="/zh/chess-resources/" class="dropdown-item">
+                                学习资源
                             </a>
                         </li>
                         
                         <li>
-                            <a href="/en/chess-news/" class="dropdown-item">
-                                Highlights
+                            <a href="/zh/chess-news/" class="dropdown-item">
+                                新闻与精彩回顾
                             </a>
                         </li>
                         
@@ -608,13 +802,13 @@
                     
                 >
                     <a
-                        href="/en/badminton/"
+                        href="/zh/badminton/"
                         class="nav-link"
                         
                         :aria-expanded="open.toString()"
                         
                     >
-                        Badminton
+                        <span class="nav-link-chinese">羽毛球俱乐部</span>
                         
                         <svg
                             class="dropdown-icon"
@@ -647,20 +841,20 @@
                     >
                         
                         <li>
-                            <a href="/en/badminton-events/" class="dropdown-item">
-                                Events
+                            <a href="/zh/badminton-events/" class="dropdown-item">
+                                赛事活动
                             </a>
                         </li>
                         
                         <li>
-                            <a href="/en/badminton-schedule/" class="dropdown-item">
-                                Schedule
+                            <a href="/zh/badminton-schedule/" class="dropdown-item">
+                                训练时间表
                             </a>
                         </li>
                         
                         <li>
-                            <a href="/en/badminton-gallery/" class="dropdown-item">
-                                Gallery
+                            <a href="/zh/badminton-gallery/" class="dropdown-item">
+                                精彩瞬间
                             </a>
                         </li>
                         
@@ -680,13 +874,13 @@
                     
                 >
                     <a
-                        href="/en/programmes/"
+                        href="/zh/programmes/"
                         class="nav-link"
                         
                         :aria-expanded="open.toString()"
                         
                     >
-                        Programs
+                        <span class="nav-link-chinese">政府项目</span>
                         
                         <svg
                             class="dropdown-icon"
@@ -719,14 +913,14 @@
                     >
                         
                         <li>
-                            <a href="/en/programmes-haf/" class="dropdown-item">
-                                HAF Program
+                            <a href="/zh/programmes-haf/" class="dropdown-item">
+                                HAF项目
                             </a>
                         </li>
                         
                         <li>
-                            <a href="/en/programmes-parks/" class="dropdown-item">
-                                Park Activities
+                            <a href="/zh/programmes-parks/" class="dropdown-item">
+                                公园活动
                             </a>
                         </li>
                         
@@ -746,13 +940,13 @@
                     
                 >
                     <a
-                        href="/en/events/"
+                        href="/zh/events/"
                         class="nav-link"
                         
                         :aria-expanded="open.toString()"
                         
                     >
-                        Events
+                        <span class="nav-link-chinese">博文活动</span>
                         
                         <svg
                             class="dropdown-icon"
@@ -785,8 +979,8 @@
                     >
                         
                         <li>
-                            <a href="/en/events-henan/" class="dropdown-item">
-                                Henan Partnership
+                            <a href="/zh/events-henan/" class="dropdown-item">
+                                河南大学合作
                             </a>
                         </li>
                         
@@ -802,11 +996,11 @@
                     
                 >
                     <a
-                        href="/en/contact/"
+                        href="/zh/contact/"
                         class="nav-link"
                         
                     >
-                        Contact
+                        <span class="nav-link-chinese">联系我们</span>
                         
                     </a>
                     
@@ -848,7 +1042,7 @@
         aria-hidden="true"
     >
         <div class="mobile-nav">
-            <button class="mobile-nav-toggle mobile-nav-close" type="button" @click="closeMobileMenu()" aria-label="Close">Close</button>
+            <button class="mobile-nav-toggle mobile-nav-close" type="button" @click="closeMobileMenu()" aria-label="关闭">关闭</button>
             <ul class="mobile-nav-menu">
                 
                     
@@ -860,8 +1054,8 @@
                             x-data="{ submenuOpen: false }"
                         >
                             
-                            <a href="/en/" class="mobile-nav-link">
-                                Home
+                            <a href="/zh/" class="mobile-nav-link">
+                                <span class="nav-chinese">首页</span>
                             </a>
                             
                         </li>
@@ -893,7 +1087,7 @@
                                 aria-expanded="false"
                                 x-bind:aria-expanded="submenuOpen.toString()"
                             >
-                                <span>About</span>
+                                <span><span class="nav-chinese">关于博文</span></span>
                                 <svg
                                     class="toggle-icon"
                                     width="16"
@@ -923,20 +1117,20 @@
                             >
                                 <!-- Link to parent overview page -->
                                 <li>
-                                    <a href="/en/about/" class="mobile-submenu-link parent-link">
-                                        <strong>View All About</strong>
+                                    <a href="/zh/about/" class="mobile-submenu-link parent-link">
+                                        <strong>查看所有 关于博文</strong>
                                     </a>
                                 </li>
                                 
                                 <li>
-                                    <a href="/en/about-company/" class="mobile-submenu-link">
-                                        Our Story
+                                    <a href="/zh/about-company/" class="mobile-submenu-link">
+                                        博文集团
                                     </a>
                                 </li>
                                 
                                 <li>
-                                    <a href="/en/news/" class="mobile-submenu-link">
-                                        News
+                                    <a href="/zh/news/" class="mobile-submenu-link">
+                                        博文新闻
                                     </a>
                                 </li>
                                 
@@ -975,7 +1169,7 @@
                                 aria-expanded="false"
                                 x-bind:aria-expanded="submenuOpen.toString()"
                             >
-                                <span>School</span>
+                                <span><span class="nav-chinese">中文学校</span></span>
                                 <svg
                                     class="toggle-icon"
                                     width="16"
@@ -1005,26 +1199,26 @@
                             >
                                 <!-- Link to parent overview page -->
                                 <li>
-                                    <a href="/en/school/" class="mobile-submenu-link parent-link">
-                                        <strong>View All School</strong>
+                                    <a href="/zh/school/" class="mobile-submenu-link parent-link">
+                                        <strong>查看所有 中文学校</strong>
                                     </a>
                                 </li>
                                 
                                 <li>
-                                    <a href="/en/school-curriculum/" class="mobile-submenu-link">
-                                        Curriculum
+                                    <a href="/zh/school-curriculum/" class="mobile-submenu-link">
+                                        中文学校课程设置
                                     </a>
                                 </li>
                                 
                                 <li>
-                                    <a href="/en/school-term-dates/" class="mobile-submenu-link">
-                                        Term Dates
+                                    <a href="/zh/school-term-dates/" class="mobile-submenu-link">
+                                        学期日期
                                     </a>
                                 </li>
                                 
                                 <li>
-                                    <a href="/en/school-pta/" class="mobile-submenu-link">
-                                        PTA
+                                    <a href="/zh/school-pta/" class="mobile-submenu-link">
+                                        PTA家长教师协会
                                     </a>
                                 </li>
                                 
@@ -1042,8 +1236,8 @@
                             x-data="{ submenuOpen: false }"
                         >
                             
-                            <a href="/en/tuition/" class="mobile-nav-link">
-                                Tutoring
+                            <a href="/zh/tuition/" class="mobile-nav-link">
+                                <span class="nav-chinese">补习中心</span>
                             </a>
                             
                         </li>
@@ -1063,7 +1257,7 @@
                                 aria-expanded="false"
                                 x-bind:aria-expanded="submenuOpen.toString()"
                             >
-                                <span>Chess</span>
+                                <span><span class="nav-chinese">国际象棋俱乐部</span></span>
                                 <svg
                                     class="toggle-icon"
                                     width="16"
@@ -1093,38 +1287,38 @@
                             >
                                 <!-- Link to parent overview page -->
                                 <li>
-                                    <a href="/en/chess/" class="mobile-submenu-link parent-link">
-                                        <strong>View All Chess</strong>
+                                    <a href="/zh/chess/" class="mobile-submenu-link parent-link">
+                                        <strong>查看所有 国际象棋俱乐部</strong>
                                     </a>
                                 </li>
                                 
                                 <li>
-                                    <a href="/en/chess-about/" class="mobile-submenu-link">
-                                        About
+                                    <a href="/zh/chess-about/" class="mobile-submenu-link">
+                                        俱乐部简介
                                     </a>
                                 </li>
                                 
                                 <li>
-                                    <a href="/en/chess-courses/" class="mobile-submenu-link">
-                                        Courses
+                                    <a href="/zh/chess-courses/" class="mobile-submenu-link">
+                                        国际象棋课程设置
                                     </a>
                                 </li>
                                 
                                 <li>
-                                    <a href="/en/chess-events/" class="mobile-submenu-link">
-                                        Competitions
+                                    <a href="/zh/chess-events/" class="mobile-submenu-link">
+                                        活动与赛事
                                     </a>
                                 </li>
                                 
                                 <li>
-                                    <a href="/en/chess-resources/" class="mobile-submenu-link">
-                                        Resources
+                                    <a href="/zh/chess-resources/" class="mobile-submenu-link">
+                                        学习资源
                                     </a>
                                 </li>
                                 
                                 <li>
-                                    <a href="/en/chess-news/" class="mobile-submenu-link">
-                                        Highlights
+                                    <a href="/zh/chess-news/" class="mobile-submenu-link">
+                                        新闻与精彩回顾
                                     </a>
                                 </li>
                                 
@@ -1147,7 +1341,7 @@
                                 aria-expanded="false"
                                 x-bind:aria-expanded="submenuOpen.toString()"
                             >
-                                <span>Badminton</span>
+                                <span><span class="nav-chinese">羽毛球俱乐部</span></span>
                                 <svg
                                     class="toggle-icon"
                                     width="16"
@@ -1177,26 +1371,26 @@
                             >
                                 <!-- Link to parent overview page -->
                                 <li>
-                                    <a href="/en/badminton/" class="mobile-submenu-link parent-link">
-                                        <strong>View All Badminton</strong>
+                                    <a href="/zh/badminton/" class="mobile-submenu-link parent-link">
+                                        <strong>查看所有 羽毛球俱乐部</strong>
                                     </a>
                                 </li>
                                 
                                 <li>
-                                    <a href="/en/badminton-events/" class="mobile-submenu-link">
-                                        Events
+                                    <a href="/zh/badminton-events/" class="mobile-submenu-link">
+                                        赛事活动
                                     </a>
                                 </li>
                                 
                                 <li>
-                                    <a href="/en/badminton-schedule/" class="mobile-submenu-link">
-                                        Schedule
+                                    <a href="/zh/badminton-schedule/" class="mobile-submenu-link">
+                                        训练时间表
                                     </a>
                                 </li>
                                 
                                 <li>
-                                    <a href="/en/badminton-gallery/" class="mobile-submenu-link">
-                                        Gallery
+                                    <a href="/zh/badminton-gallery/" class="mobile-submenu-link">
+                                        精彩瞬间
                                     </a>
                                 </li>
                                 
@@ -1219,7 +1413,7 @@
                                 aria-expanded="false"
                                 x-bind:aria-expanded="submenuOpen.toString()"
                             >
-                                <span>Programs</span>
+                                <span><span class="nav-chinese">政府项目</span></span>
                                 <svg
                                     class="toggle-icon"
                                     width="16"
@@ -1249,20 +1443,20 @@
                             >
                                 <!-- Link to parent overview page -->
                                 <li>
-                                    <a href="/en/programmes/" class="mobile-submenu-link parent-link">
-                                        <strong>View All Programs</strong>
+                                    <a href="/zh/programmes/" class="mobile-submenu-link parent-link">
+                                        <strong>查看所有 政府项目</strong>
                                     </a>
                                 </li>
                                 
                                 <li>
-                                    <a href="/en/programmes-haf/" class="mobile-submenu-link">
-                                        HAF Program
+                                    <a href="/zh/programmes-haf/" class="mobile-submenu-link">
+                                        HAF项目
                                     </a>
                                 </li>
                                 
                                 <li>
-                                    <a href="/en/programmes-parks/" class="mobile-submenu-link">
-                                        Park Activities
+                                    <a href="/zh/programmes-parks/" class="mobile-submenu-link">
+                                        公园活动
                                     </a>
                                 </li>
                                 
@@ -1285,7 +1479,7 @@
                                 aria-expanded="false"
                                 x-bind:aria-expanded="submenuOpen.toString()"
                             >
-                                <span>Events</span>
+                                <span><span class="nav-chinese">博文活动</span></span>
                                 <svg
                                     class="toggle-icon"
                                     width="16"
@@ -1315,14 +1509,14 @@
                             >
                                 <!-- Link to parent overview page -->
                                 <li>
-                                    <a href="/en/events/" class="mobile-submenu-link parent-link">
-                                        <strong>View All Events</strong>
+                                    <a href="/zh/events/" class="mobile-submenu-link parent-link">
+                                        <strong>查看所有 博文活动</strong>
                                     </a>
                                 </li>
                                 
                                 <li>
-                                    <a href="/en/events-henan/" class="mobile-submenu-link">
-                                        Henan Partnership
+                                    <a href="/zh/events-henan/" class="mobile-submenu-link">
+                                        河南大学合作
                                     </a>
                                 </li>
                                 
@@ -1338,8 +1532,8 @@
                             x-data="{ submenuOpen: false }"
                         >
                             
-                            <a href="/en/contact/" class="mobile-nav-link">
-                                Contact
+                            <a href="/zh/contact/" class="mobile-nav-link">
+                                <span class="nav-chinese">联系我们</span>
                             </a>
                             
                         </li>
@@ -1347,7 +1541,7 @@
                 
             </ul>
             <div class="mobile-nav-footer">
-                <a href="/en/contact/" class="btn btn-primary btn-block">Contact Us</a>
+                <a href="/contact/" class="btn btn-primary btn-block">联系我们</a>
             </div>
         </div>
     </div>
@@ -1358,20 +1552,20 @@
 <script>
 /**
  * Navigation Menu Alpine.js Component
- * Manages navigation menu state and interaction
+ * 管理导航菜单的状态和交互
  */
 function navigationMenu() {
     return {
-        // Mobile menu open/close state
+        // 移动菜单开关状态
         mobileMenuOpen: false,
         lastFocused: null,
 
         /**
-         * Toggle mobile menu
+         * 切换移动菜单
          */
         toggleMobileMenu() {
             this.mobileMenuOpen = !this.mobileMenuOpen;
-            // Toggle body class to disable scrolling
+            // 切换body类来禁用滚动
             document.body.classList.toggle('mobile-menu-open', this.mobileMenuOpen);
             if (this.mobileMenuOpen) {
                 this.lastFocused = document.activeElement;
@@ -1384,7 +1578,7 @@ function navigationMenu() {
         },
 
         /**
-         * Close mobile menu
+         * 关闭移动菜单
          */
         closeMobileMenu() {
             this.mobileMenuOpen = false;
@@ -1393,10 +1587,10 @@ function navigationMenu() {
         },
 
         /**
-         * Initialize
+         * 初始化
          */
         init() {
-            // Listen for ESC key to close mobile menu
+            // 监听ESC键关闭移动菜单
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape' && this.mobileMenuOpen) {
                     this.closeMobileMenu();
@@ -1413,7 +1607,7 @@ function navigationMenu() {
                 }
             });
 
-            // Listen for route changes to close mobile menu
+            // 监听路由变化关闭移动菜单
             window.addEventListener('popstate', () => {
                 this.closeMobileMenu();
             });
@@ -1423,10 +1617,10 @@ function navigationMenu() {
 </script>
 
 <style>
-/* Alpine.js cloak - Prevent content flash */
+/* Alpine.js cloak - 防止内容闪烁 */
 [x-cloak] { display: none !important; }
 
-/* Dropdown menu animation helper */
+/* 下拉菜单动画辅助类 */
 .dropdown-menu {
     transform-origin: top;
 }
@@ -1435,7 +1629,7 @@ function navigationMenu() {
     transform-origin: top;
 }
 
-/* Hamburger menu animation */
+/* 汉堡菜单动画 */
 .hamburger-line {
     transition: all 0.3s ease;
 }
@@ -1452,7 +1646,7 @@ function navigationMenu() {
     transform: rotate(-45deg) translate(7px, -7px);
 }
 
-/* Disable body scroll */
+/* 禁用body滚动 */
 body.mobile-menu-open {
     overflow: hidden;
 }
@@ -1472,7 +1666,7 @@ body.mobile-menu-open {
           
           <li class="mobile-only-item" x-data="{ openSub: false }">
             
-            <a href="/en/" class="mobile-only-link"><span>Home</span></a>
+            <a href="/home/" class="mobile-only-link"><span class="nav-chinese">首页</span></a>
             
           </li>
         
@@ -1494,14 +1688,14 @@ body.mobile-menu-open {
           <li class="mobile-only-item" x-data="{ openSub: false }">
             
             <button class="mobile-only-link" @click="openSub = !openSub" :aria-expanded="openSub.toString()">
-              <span>About</span>
+              <span class="nav-chinese">关于博文</span>
               <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" :class="{ 'rotate-180': openSub }"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </button>
             <ul class="mobile-only-sub" x-show="openSub" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-96" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 max-h-96" x-transition:leave-end="opacity-0 max-h-0" style="display: none; overflow: hidden;">
               
-              <li><a href="/en/about-company/" class="mobile-only-sub-link">Our Story</a></li>
+              <li><a href="/about-company/" class="mobile-only-sub-link">博文集团</a></li>
               
-              <li><a href="/en/news/" class="mobile-only-sub-link">News</a></li>
+              <li><a href="/news/" class="mobile-only-sub-link">博文新闻</a></li>
               
             </ul>
             
@@ -1529,16 +1723,16 @@ body.mobile-menu-open {
           <li class="mobile-only-item" x-data="{ openSub: false }">
             
             <button class="mobile-only-link" @click="openSub = !openSub" :aria-expanded="openSub.toString()">
-              <span>School</span>
+              <span class="nav-chinese">中文学校</span>
               <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" :class="{ 'rotate-180': openSub }"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </button>
             <ul class="mobile-only-sub" x-show="openSub" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-96" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 max-h-96" x-transition:leave-end="opacity-0 max-h-0" style="display: none; overflow: hidden;">
               
-              <li><a href="/en/school-curriculum/" class="mobile-only-sub-link">Curriculum</a></li>
+              <li><a href="/school-curriculum/" class="mobile-only-sub-link">中文学校课程设置</a></li>
               
-              <li><a href="/en/school-term-dates/" class="mobile-only-sub-link">Term Dates</a></li>
+              <li><a href="/school-term-dates/" class="mobile-only-sub-link">学期日期</a></li>
               
-              <li><a href="/en/school-pta/" class="mobile-only-sub-link">PTA</a></li>
+              <li><a href="/school-pta/" class="mobile-only-sub-link">PTA家长教师协会</a></li>
               
             </ul>
             
@@ -1551,7 +1745,7 @@ body.mobile-menu-open {
           
           <li class="mobile-only-item" x-data="{ openSub: false }">
             
-            <a href="/en/tuition/" class="mobile-only-link"><span>Tutoring</span></a>
+            <a href="/tuition/" class="mobile-only-link"><span class="nav-chinese">补习中心</span></a>
             
           </li>
         
@@ -1561,41 +1755,20 @@ body.mobile-menu-open {
           <li class="mobile-only-item" x-data="{ openSub: false }">
             
             <button class="mobile-only-link" @click="openSub = !openSub" :aria-expanded="openSub.toString()">
-              <span>Chess</span>
+              <span class="nav-chinese">国际象棋俱乐部</span>
               <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" :class="{ 'rotate-180': openSub }"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </button>
             <ul class="mobile-only-sub" x-show="openSub" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-96" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 max-h-96" x-transition:leave-end="opacity-0 max-h-0" style="display: none; overflow: hidden;">
               
-              <li><a href="/en/chess-about/" class="mobile-only-sub-link">About</a></li>
+              <li><a href="/chess-about/" class="mobile-only-sub-link">俱乐部简介</a></li>
               
-              <li><a href="/en/chess-courses/" class="mobile-only-sub-link">Courses</a></li>
+              <li><a href="/chess-courses/" class="mobile-only-sub-link">国际象棋课程设置</a></li>
               
-              <li><a href="/en/chess-events/" class="mobile-only-sub-link">Competitions</a></li>
+              <li><a href="/chess-events/" class="mobile-only-sub-link">活动与赛事</a></li>
               
-              <li><a href="/en/chess-resources/" class="mobile-only-sub-link">Resources</a></li>
+              <li><a href="/chess-resources/" class="mobile-only-sub-link">学习资源</a></li>
               
-              <li><a href="/en/chess-news/" class="mobile-only-sub-link">Highlights</a></li>
-              
-            </ul>
-            
-          </li>
-        
-      
-        
-          
-          <li class="mobile-only-item" x-data="{ openSub: false }">
-            
-            <button class="mobile-only-link" @click="openSub = !openSub" :aria-expanded="openSub.toString()">
-              <span>Badminton</span>
-              <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" :class="{ 'rotate-180': openSub }"><polyline points="6 9 12 15 18 9"></polyline></svg>
-            </button>
-            <ul class="mobile-only-sub" x-show="openSub" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-96" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 max-h-96" x-transition:leave-end="opacity-0 max-h-0" style="display: none; overflow: hidden;">
-              
-              <li><a href="/en/badminton-events/" class="mobile-only-sub-link">Events</a></li>
-              
-              <li><a href="/en/badminton-schedule/" class="mobile-only-sub-link">Schedule</a></li>
-              
-              <li><a href="/en/badminton-gallery/" class="mobile-only-sub-link">Gallery</a></li>
+              <li><a href="/chess-news/" class="mobile-only-sub-link">新闻与精彩回顾</a></li>
               
             </ul>
             
@@ -1607,14 +1780,16 @@ body.mobile-menu-open {
           <li class="mobile-only-item" x-data="{ openSub: false }">
             
             <button class="mobile-only-link" @click="openSub = !openSub" :aria-expanded="openSub.toString()">
-              <span>Programs</span>
+              <span class="nav-chinese">羽毛球俱乐部</span>
               <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" :class="{ 'rotate-180': openSub }"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </button>
             <ul class="mobile-only-sub" x-show="openSub" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-96" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 max-h-96" x-transition:leave-end="opacity-0 max-h-0" style="display: none; overflow: hidden;">
               
-              <li><a href="/en/programmes-haf/" class="mobile-only-sub-link">HAF Program</a></li>
+              <li><a href="/badminton-events/" class="mobile-only-sub-link">赛事活动</a></li>
               
-              <li><a href="/en/programmes-parks/" class="mobile-only-sub-link">Park Activities</a></li>
+              <li><a href="/badminton-schedule/" class="mobile-only-sub-link">训练时间表</a></li>
+              
+              <li><a href="/badminton-gallery/" class="mobile-only-sub-link">精彩瞬间</a></li>
               
             </ul>
             
@@ -1626,12 +1801,14 @@ body.mobile-menu-open {
           <li class="mobile-only-item" x-data="{ openSub: false }">
             
             <button class="mobile-only-link" @click="openSub = !openSub" :aria-expanded="openSub.toString()">
-              <span>Events</span>
+              <span class="nav-chinese">政府项目</span>
               <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" :class="{ 'rotate-180': openSub }"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </button>
             <ul class="mobile-only-sub" x-show="openSub" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-96" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 max-h-96" x-transition:leave-end="opacity-0 max-h-0" style="display: none; overflow: hidden;">
               
-              <li><a href="/en/events-henan/" class="mobile-only-sub-link">Henan Partnership</a></li>
+              <li><a href="/programmes-haf/" class="mobile-only-sub-link">HAF项目</a></li>
+              
+              <li><a href="/programmes-parks/" class="mobile-only-sub-link">公园活动</a></li>
               
             </ul>
             
@@ -1642,7 +1819,24 @@ body.mobile-menu-open {
           
           <li class="mobile-only-item" x-data="{ openSub: false }">
             
-            <a href="/en/contact/" class="mobile-only-link"><span>Contact</span></a>
+            <button class="mobile-only-link" @click="openSub = !openSub" :aria-expanded="openSub.toString()">
+              <span class="nav-chinese">博文活动</span>
+              <svg class="toggle-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" :class="{ 'rotate-180': openSub }"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <ul class="mobile-only-sub" x-show="openSub" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 max-h-0" x-transition:enter-end="opacity-100 max-h-96" x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 max-h-96" x-transition:leave-end="opacity-0 max-h-0" style="display: none; overflow: hidden;">
+              
+              <li><a href="/events-henan/" class="mobile-only-sub-link">河南大学合作</a></li>
+              
+            </ul>
+            
+          </li>
+        
+      
+        
+          
+          <li class="mobile-only-item" x-data="{ openSub: false }">
+            
+            <a href="/contact/" class="mobile-only-link"><span class="nav-chinese">联系我们</span></a>
             
           </li>
         
@@ -1663,9 +1857,9 @@ body.mobile-menu-open {
                     <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
             </button>
-            <form action="/en/search/" method="GET" class="search-form">
-                <input type="search" name="q" placeholder="Search courses, news, events..." aria-label="Search" autofocus>
-                <button type="submit" class="btn btn-primary">Search</button>
+            <form action="/search/" method="GET" class="search-form">
+                <input type="search" name="q" placeholder="搜索课程、新闻、活动..." aria-label="搜索" autofocus>
+                <button type="submit" class="btn btn-primary">搜索</button>
             </form>
         </div>
     </div>
@@ -1715,399 +1909,531 @@ body.mobile-menu-open {
     <!-- Main Content -->
     <main id="main-content" class="main-content" role="main">
         
-<!-- Page Header -->
-<section class="page-header">
+
+<!-- Hero Section -->
+
+
+<!--
+  Standard Hero Component
+  统一的Hero区域组件，支持从栏目或页面获取背景图片
+-->
+
+
+
+
+
+    
+        
+    
+
+
+<section class="hero hero--content" aria-labelledby="page-title">
+    <div class="hero__overlay" aria-hidden="true"></div>
+    <div class="hero__background"
+         role="img"
+         aria-label="兴趣班课程表"
+         style="background-image: url('/static/images/hero-school.jpg');"
+         loading="lazy"></div>
     <div class="container">
-        <h1>Bowen Chinese School</h1>
-        <p>传承中华文化 · 培养双语人才</p>
+        <div class="hero__content">
+            <h1 id="page-title" class="hero__title" data-aos="fade-up">
+                <span lang="zh-CN">兴趣班课程表</span>
+            </h1>
+            
+        </div>
     </div>
 </section>
 
-<!-- Overview Sections -->
+<style>
+/* Hero Banner 标准样式 */
+.hero--content {
+    position: relative;
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-bottom: 0;
+}
 
-<section class="overview-section">
+.hero__background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.hero__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0, 82, 204, 0.65) 0%, rgba(0, 51, 128, 0.55) 100%);
+}
+
+.hero__content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+    padding: 2.5rem 1rem;
+}
+
+.hero__title {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero__subtitle {
+    font-size: 1.125rem;
+    font-weight: 400;
+    max-width: 800px;
+    margin: 0 auto;
+    opacity: 0.95;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+    .hero--content {
+        min-height: 200px;
+    }
+
+    .hero__content {
+        padding: 2rem 1rem;
+    }
+
+    .hero__title {
+        font-size: 1.75rem;
+    }
+
+    .hero__subtitle {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero--content {
+        min-height: 180px;
+    }
+
+    .hero__content {
+        padding: 1.5rem 1rem;
+    }
+
+    .hero__title {
+        font-size: 1.5rem;
+    }
+
+    .hero__subtitle {
+        font-size: 0.9375rem;
+    }
+}
+</style>
+
+<!-- Content Section -->
+<section class="section section--content">
     <div class="container">
-        <div class="section-header">
-            <h2>Curriculum</h2>
-        </div>
-
         
-            <!-- Single Page Content -->
-            <div class="single-page-content">
-                
-                <div class="prose">
-                    <h2>Chinese Curriculum</h2>
-<h3>🏫 Chinese Course Introduction</h3>
-<p>Bowen Chinese School's curriculum system covers all stages of learning from <strong>Pinyin Foundation</strong> to <strong>Advanced Reading and Writing</strong>, with clear grade divisions and progressive content.</p>
-<p>The school adopts a systematic <em>Huawen</em> textbook series, combined with <strong>Topic-based Learning</strong>, allowing students to learn language and understand culture in authentic contexts. Classes not only focus on phonetics, vocabulary, and grammar training, but also integrate Chinese history, traditional festivals, cultural stories, and modern life elements, helping children comprehensively improve in "listening, speaking, reading, and writing."</p>
-<p>Each week, students will participate in:<br />
-- <strong>Two hours of <em>Huawen</em> course learning</strong><br />
-- <strong>One hour of language application class</strong><br />
-- <strong>Half an hour of one-on-one online tutoring</strong></p>
-<h3><em>Huawen</em> Textbook Learning</h3>
-<p>The <em>Huawen</em> main course focuses on developing language fundamentals and reading and writing abilities, helping students systematically master Chinese knowledge.</p>
-<p>The language application class uses interactive teaching and situational expression to enable students to "express in Chinese and think in Chinese" in real environments.</p>
-<p>This "main course + application course" teaching model ensures both the systematization of language learning and enhanced practical application abilities, allowing students to naturally use Chinese both inside and outside the classroom.</p>
-<p>Additionally, the school organizes students to participate in <strong>YCT (Youth Chinese Test)</strong> and <strong>HSK (Chinese Proficiency Test)</strong> every academic year, testing learning outcomes with international standards and allowing students to make steady progress along a clear learning path.</p>
-<h3>Bowen Chinese Language Application Class (Compulsory)</h3>
-<p>The core of language learning lies in application. Bowen's Chinese language application class aims to make Chinese "come alive and be used" for children through rich and diverse classroom formats, truly transforming language into a tool for expression and thinking.</p>
-<h4>Course Content Includes:</h4>
-<ul>
-<li><strong>Picture Book Reading Class</strong>: Cultivate language sense and reading comprehension through stories</li>
-<li><strong>Recitation Class</strong>: Train pronunciation, intonation, and language expressiveness</li>
-<li><strong>Speech and Debate Class</strong>: Develop confident expression and logical thinking</li>
-<li><strong>Cultural Extension Class</strong>: Learn about traditional Chinese festivals and folk culture</li>
-<li><strong>Pinyin Intensive Class</strong>: Build a solid foundation in phonetics and improve pronunciation accuracy</li>
-<li><strong>Radical Intensive Class</strong>: Help students understand Chinese character structure and increase character recognition</li>
-<li><strong>Real-life Experience Class</strong>: Simulate real-life situations and use Chinese in practice</li>
-</ul>
-<h4>Immersive Learning Experience</h4>
-<p>To achieve a truly immersive learning experience, the school arranges:<br />
-- Three hours of Chinese immersive classroom learning per week, with full Chinese communication in class<br />
-- Half an hour of free one-on-one online tutoring every Saturday, with teachers providing targeted improvement based on individual student needs</p>
-<p>Through the "classroom + application + personalized tutoring" learning system, Bowen Chinese School helps students maximize Chinese practice, making language learning part of their daily lives.</p>
-<h3>1-on-1 Chinese Online Class (Free for Bowen Students)</h3>
-<p>Bowen Chinese School has deep cooperation with <strong>Chinese as a Foreign Language research teams</strong> from domestic universities, providing long-term <strong>free 1-on-1 customized Chinese online tutoring</strong> for enrolled students.</p>
-<p>Course content covers pinyin, conversation, writing, and cultural extension, designed by professional teachers based on students' age, proficiency level, and learning goals. Students can flexibly learn online, consolidate classroom knowledge, strengthen language application, and achieve synchronized online and offline growth.</p>
-<p>This unique teaching support system ensures every Bowen student receives continuous attention and personalized guidance, truly achieving "learning with gain, learning with success."</p>
-<h3>Homework Class (Chinese Learning Support)</h3>
-<p>To help students consolidate classroom knowledge and improve learning efficiency, Bowen Chinese School offers a <strong>"Homework Support Class"</strong> every Sunday afternoon.</p>
-<p>This course is open to all enrolled students, with <strong>Bowen education interns and teaching assistant teams</strong> providing one-on-one or small group tutoring, focusing on helping students complete their weekly Chinese homework and reinforce classroom content.</p>
-<h4>Tutoring Content Includes:</h4>
-<ul>
-<li>Text review and vocabulary consolidation</li>
-<li>Grammar and sentence pattern explanation</li>
-<li>Listening and speaking practice and oral expression</li>
-<li>Reading and writing skill improvement guidance</li>
-<li>Homework checking and personalized feedback</li>
-</ul>
-<p>The homework class not only allows students to promptly digest knowledge and fill in gaps after class, but also greatly <strong>reduces parents' pressure in home Chinese tutoring</strong>.</p>
-<p>Through collaboration between teachers and intern assistants, students can consolidate knowledge in a relaxed learning atmosphere and develop good habits of independent learning and standard writing.</p>
-<p>Bowen Chinese School believes that continuous learning support is an important guarantee for language growth. The establishment of the homework class provides students with systematic, warm, and efficient learning companionship outside the classroom, making Chinese truly part of their lives.</p>
-                </div>
-                <div class="view-all-link">
-                    <a href="/en/school-curriculum/" class="btn-view-all">
-                        View Full Page
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
+        <!-- Two-column layout with sidebar -->
+        <div class="page-layout">
+            <!-- Left Sidebar Navigation -->
+            <aside class="page-layout__sidebar">
+                <!--
+  Sidebar Navigation Component
+  显示父栏目和子栏目的侧边导航
+-->
+
+
+<aside class="sidebar-nav">
+    <!-- Parent Column Link -->
+    <div class="sidebar-header">
+        <a href="/zh/school/" class="sidebar-parent-link">
+            <h3>中文学校</h3>
+
+        </a>
+    </div>
+
+    <!-- Child Columns Navigation -->
+    
+    <nav class="sidebar-menu">
+        <ul class="sidebar-menu-list">
+            
+            <li class="sidebar-menu-item">
+                <a
+                    href="/zh/school-curriculum/"
+                    class="sidebar-menu-link"
+                >
+                    <span class="sidebar-menu-icon">
+                        
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                            <polyline points="13 2 13 9 20 9"></polyline>
                         </svg>
-                    </a>
-                </div>
-            </div>
-
-        
-    </div>
-</section>
-
-<section class="overview-section">
-    <div class="container">
-        <div class="section-header">
-            <h2>Term Dates</h2>
-        </div>
-
-        
-            <!-- Single Page Content -->
-            <div class="single-page-content">
-                
-                <h3>2024-2025 Academic Year Schedule</h3>
-                
-                <div class="prose">
-                    <h2>2025–2026 Academic Calendar</h2>
-<p>Bowen Education Chinese School's class schedule for the 2025-2026 academic year is as follows. All classes are held on <strong>Sundays</strong>.</p>
-<h3>🍂 Autumn Term</h3>
-<p><strong>Duration</strong>: 12 sessions</p>
-<p><strong>Class Dates</strong> (2025):<br />
-- September 7 (Assembly)<br />
-- September 14<br />
-- September 21<br />
-- September 28<br />
-- October 5<br />
-- October 12<br />
-- October 19<br />
-- November 9<br />
-- November 16<br />
-- November 23<br />
-- November 30<br />
-- December 7 (Assembly &amp; Award)</p>
-<h3>🌸 Spring Term</h3>
-<p><strong>Duration</strong>: 11 sessions</p>
-<p><strong>Class Dates</strong> (2026):<br />
-- January 11 (Assembly)<br />
-- January 18<br />
-- January 25<br />
-- February 1<br />
-- February 8<br />
-- February 14-15 (Chinese New Year Activities + Field Teaching Class: City Centre Library)<br />
-- March 1<br />
-- March 8<br />
-- March 15<br />
-- March 22<br />
-- March 29 (Assembly and Award)</p>
-<h3>☀️ Summer Term</h3>
-<p><strong>Duration</strong>: 9 sessions</p>
-<p><strong>Class Dates</strong> (2026):<br />
-- April 26 (Assembly)<br />
-- May 3<br />
-- May 10<br />
-- May 17<br />
-- May 24 (Exam Week)<br />
-- June 7<br />
-- June 14 (Dragon Boat Festival + Field Teaching Class: Salford Quay)<br />
-- June 21<br />
-- June 28 (Assembly and Award)</p>
-<hr />
-<p><strong>Important Notes</strong>:<br />
-- Assembly: Opening or closing assembly activities for the term<br />
-- Award: End-of-term award ceremony<br />
-- Field Teaching Class: Practical learning activities combining festivals and real-life scenarios<br />
-- Specific activity arrangements may be adjusted based on actual circumstances; please follow school notifications</p>
-                </div>
-                <div class="view-all-link">
-                    <a href="/en/school-term-dates/" class="btn-view-all">
-                        View Full Page
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        
+                    </span>
+                    <span class="sidebar-menu-text">中文学校课程设置</span>
+                </a>
+            </li>
+            
+            <li class="sidebar-menu-item">
+                <a
+                    href="/zh/school-term-dates/"
+                    class="sidebar-menu-link"
+                >
+                    <span class="sidebar-menu-icon">
+                        
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                            <polyline points="13 2 13 9 20 9"></polyline>
                         </svg>
-                    </a>
-                </div>
-            </div>
-
-        
-    </div>
-</section>
-
-<section class="overview-section">
-    <div class="container">
-        <div class="section-header">
-            <h2>PTA</h2>
-        </div>
-
-        
-            <!-- Single Page Content -->
-            <div class="single-page-content">
-                
-                <h3>Building Bridges Between Home and School</h3>
-                
-                <div class="prose">
-                    <h2>Parent-Teacher Association (PTA)</h2>
-<h3>💡 Home and School Together, Nurturing the Future</h3>
-<p>Bowen Chinese School believes that education is never a one-way street from the school alone, but the result of joint efforts between families and schools.</p>
-<p>To strengthen home-school communication and promote students' comprehensive development, the school has established the <strong>Parent-Teacher Association (PTA)</strong>, building a bridge of openness, cooperation, and mutual benefit between parents and teachers.</p>
-<h3>🤝 PTA Mission</h3>
-<p>Bowen PTA is committed to:</p>
-<ul>
-<li>🌟 <strong>Promoting Home-School Communication</strong> —— Keeping parents informed about their children's learning and school development</li>
-<li>🎯 <strong>Jointly Advancing Educational Quality</strong> —— Making teaching more responsive to student needs through feedback and suggestions</li>
-<li>🎉 <strong>Organizing School Activities and Celebrations</strong> —— Assisting in planning cultural festival activities such as Chinese New Year, Mid-Autumn Festival, and Dragon Boat Festival</li>
-<li>💬 <strong>Building a Parent Exchange Platform</strong> —— Sharing educational insights and learning experiences, forming a warm and supportive parent community</li>
-<li>💡 <strong>Supporting School Public Welfare and Community Projects</strong> —— Participating in volunteer services, cultural promotion, and community cooperation</li>
-</ul>
-<h3>🧩 PTA Structure</h3>
-<p>The PTA consists of <strong>parent representatives, teacher representatives, and school administrative members</strong>.</p>
-<ul>
-<li><strong>Parent Representatives</strong>: Parents who voluntarily join to voice the concerns of classroom parent groups</li>
-<li><strong>Teacher Representatives</strong>: Recommended by the school to participate in discussions on teaching and student development</li>
-<li><strong>School Representatives</strong>: Principals and academic directors serve as advisors, responsible for coordinating and supporting PTA work</li>
-</ul>
-<h3>🎯 PTA Activities and Projects</h3>
-<p>Throughout the year, the PTA organizes and participates in various activities, including:</p>
-<ul>
-<li>🌕 <strong>Festival Celebrations and Cultural Activities</strong>: Assisting with venue setup, performance preparation, and student participation organization</li>
-<li>🧧 <strong>Charity and Community Service</strong>: Organizing charity sales, community lectures, and cultural exchange activities</li>
-<li>🏫 <strong>Parent Workshops</strong>: Inviting experts to explain parent-child communication, learning methods, and psychological development</li>
-<li>📚 <strong>Campus Volunteer Projects</strong>: Assisting with library management, event photography, and safety supervision</li>
-</ul>
-<p>These activities not only enrich school life but also allow parents to better understand their children's growth environment through participation, strengthening the cohesion of the school community.</p>
-<h3>💬 Joining PTA</h3>
-<p>We welcome more parents to join the PTA and work together to create a higher quality, warmer learning environment for our children.</p>
-<p>Parents can sign up as volunteer members through their class teachers or contact the PTA coordinator directly for more information.</p>
-<p><strong>Contact Information</strong>:<br />
-- 📧 Email: pta@boweneducation.org<br />
-- 📍 Meeting Frequency: One regular meeting per term + preparatory meetings before major events</p>
-<h3>❤️ Our Beliefs</h3>
-<p><strong>Parents' companionship is the strongest support on children's learning journey;</strong></p>
-<p><strong>Teachers' care is the warmest force in students' growth process;</strong></p>
-<p><strong>Only when home and school work hand in hand can each step of education be more solid and more brilliant.</strong></p>
-<p>Bowen PTA—Where Love and Education Walk Together.</p>
-                </div>
-                <div class="view-all-link">
-                    <a href="/en/school-pta/" class="btn-view-all">
-                        View Full Page
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        
+                    </span>
+                    <span class="sidebar-menu-text">学期日期</span>
+                </a>
+            </li>
+            
+            <li class="sidebar-menu-item">
+                <a
+                    href="/zh/school-pta/"
+                    class="sidebar-menu-link"
+                >
+                    <span class="sidebar-menu-icon">
+                        
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                            <polyline points="13 2 13 9 20 9"></polyline>
                         </svg>
-                    </a>
-                </div>
-            </div>
+                        
+                    </span>
+                    <span class="sidebar-menu-text">PTA家长教师协会</span>
+                </a>
+            </li>
+            
+            <li class="sidebar-menu-item">
+                <a
+                    href="/zh/school-timetable/"
+                    class="sidebar-menu-link active"
+                >
+                    <span class="sidebar-menu-icon">
+                        
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                            <polyline points="13 2 13 9 20 9"></polyline>
+                        </svg>
+                        
+                    </span>
+                    <span class="sidebar-menu-text">兴趣班课程表</span>
+                </a>
+            </li>
+            
+            <li class="sidebar-menu-item">
+                <a
+                    href="/zh/school-registration/"
+                    class="sidebar-menu-link"
+                >
+                    <span class="sidebar-menu-icon">
+                        
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                            <polyline points="13 2 13 9 20 9"></polyline>
+                        </svg>
+                        
+                    </span>
+                    <span class="sidebar-menu-text">报名与试听</span>
+                </a>
+            </li>
+            
+        </ul>
+    </nav>
+    
 
-        
-    </div>
-</section>
+    <!-- Registration Button (only show if explicitly passed show_register_button variable) -->
+    
+</aside>
 
-<section class="overview-section">
-    <div class="container">
-        <div class="section-header">
-            <h2>Class Timetable</h2>
-        </div>
 
-        
-            <!-- Single Page Content -->
-            <div class="single-page-content">
-                
-                <div class="prose">
-                    <h2>2025-2026 Academic Year Autumn-Winter Term Timetable</h2>
-<h3>📅 Course Schedule</h3>
-<p>Bowen Chinese School's extracurricular class schedule for the 2025-2026 academic year autumn-winter term. All classes are held on <strong>Sundays</strong> at Forest Park School.</p>
-<p><img alt="2025-2026 Autumn-Winter Term Timetable" src="/static/uploads/chinese-school/timetable/2025-2026-autumn-winter-timetable.png" /></p>
-<h3>🏫 Venue</h3>
-<p><strong>Bowen Education</strong><br />
+<style>
+/* Sidebar Navigation Styles */
+.sidebar-nav {
+    width: 100%; /* 改为100%适应父容器 */
+    background: var(--color-white, #ffffff);
+    border-radius: var(--radius-lg, 0.75rem);
+    box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1));
+    overflow: hidden;
+    position: sticky;
+    top: 100px;
+    max-height: calc(100vh - 120px);
+    display: flex;
+    flex-direction: column;
+    --color-primary: #3b82f6;
+}
+
+.sidebar-header {
+    padding: var(--spacing-lg, 1.5rem);
+    background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+    color: white;
+}
+
+.sidebar-parent-link {
+    text-decoration: none;
+    color: white;
+    display: block;
+}
+
+.sidebar-parent-link:hover h3 {
+    text-decoration: underline;
+}
+
+.sidebar-parent-link h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.4;
+    color: #ffffff;
+}
+
+.sidebar-subtitle {
+    display: block;
+    font-size: 0.875rem;
+    opacity: 0.9;
+    margin-top: 0.25rem;
+}
+
+.sidebar-menu {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-sm, 1rem);
+}
+
+.sidebar-menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-menu-item {
+    margin-bottom: 0.375rem;
+}
+
+.sidebar-menu-link {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm, 0.75rem);
+    padding: var(--spacing-sm, 0.75rem) var(--spacing-md, 1rem);
+    color: var(--color-gray-800, #374151);
+    text-decoration: none;
+    border-radius: var(--radius-md, 0.5rem);
+    transition: all var(--transition-fast, 0.2s ease);
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.sidebar-menu-link:hover {
+    background: #eef6ff;
+    color: var(--color-primary, #0052cc);
+}
+
+.sidebar-menu-link.active {
+    background: #eaf2ff;
+    color: var(--color-primary, #0052cc);
+    font-weight: 600;
+    box-shadow: inset 0 0 0 2px rgba(0, 82, 204, 0.2);
+}
+
+.sidebar-menu-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    opacity: 0.8;
+}
+
+.sidebar-menu-link.active .sidebar-menu-icon {
+    opacity: 1;
+}
+
+.sidebar-menu-text {
+    flex: 1;
+}
+
+/* Registration CTA Button */
+.sidebar-cta {
+    padding: var(--spacing-md, 1rem);
+    margin-top: auto;
+    border-top: 1px solid var(--color-gray-200, #e2e8f0);
+}
+
+.sidebar-register-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md, 1rem);
+    padding: var(--spacing-md, 1rem);
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--radius-md, 0.5rem);
+    transition: all var(--transition-fast, 0.2s ease);
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+}
+
+.sidebar-register-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+.sidebar-register-btn svg {
+    flex-shrink: 0;
+}
+
+.sidebar-register-text {
+    flex: 1;
+    line-height: 1.4;
+}
+
+.sidebar-register-text strong {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.125rem;
+}
+
+.sidebar-register-text small {
+    display: block;
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .sidebar-nav {
+        width: 100%;
+        position: static;
+        margin-bottom: var(--spacing-lg);
+        max-height: none;
+    }
+}
+</style>
+            </aside>
+
+            <!-- Right Main Content -->
+            <div class="page-layout__main">
+                <article class="single-page-content" data-aos="fade-up">
+                    <h2>2025-2026学年 秋冬学期课程表</h2>
+<h3>📅 课程时间表</h3>
+<p>博文中文学校2025-2026学年秋冬学期的兴趣班课程安排如下。所有课程均在<strong>周日</strong>进行，地点：Forest Park School。</p>
+<p><img alt="2025-2026学年秋冬学期课程表" src="/static/uploads/chinese-school/timetable/2025-2026-autumn-winter-timetable.png" /></p>
+<h3>🏫 上课地址</h3>
+<p><strong>博文教育</strong><br />
 Forest Park School<br />
 27 Oakfield, Sale, Greater Manchester M33 6NB</p>
-<h3>⏰ Class Times</h3>
-<h4>Morning Sessions</h4>
-<p><strong>Period 1</strong> 09:30-10:30<br />
-<strong>Period 2</strong> 10:30-11:30<br />
-<strong>Period 3</strong> 11:30-12:30<br />
-<strong>Lunch</strong> 12:30-13:00</p>
-<h4>Afternoon Sessions</h4>
-<p><strong>Period 5</strong> 13:00-14:00<br />
-<strong>Period 6</strong> 14:00-15:00<br />
-<strong>Period 7</strong> 15:00-16:00<br />
-<strong>Period 8</strong> 16:00-17:00</p>
-<h3>📚 Course Categories</h3>
-<p>We offer a rich variety of extracurricular classes, including:</p>
-<h4>Chinese Courses</h4>
+<h3>⏰ 课程时间安排</h3>
+<h4>上午时段（Morning）</h4>
+<p><strong>第一节</strong> 09:30-10:30<br />
+<strong>第二节</strong> 10:30-11:30<br />
+<strong>第三节</strong> 11:30-12:30<br />
+<strong>午餐时间</strong> 12:30-13:00</p>
+<h4>下午时段（Afternoon）</h4>
+<p><strong>第五节</strong> 13:00-14:00<br />
+<strong>第六节</strong> 14:00-15:00<br />
+<strong>第七节</strong> 15:00-16:00<br />
+<strong>第八节</strong> 16:00-17:00</p>
+<h3>📚 课程类别</h3>
+<p>我们提供丰富多样的兴趣班课程，包括：</p>
+<h4>中文课程</h4>
 <ul>
-<li>Foundation Classes (Huawen Class 1 &amp; 2)</li>
-<li>Beginner Classes (Beginner Class 1 &amp; 2)</li>
-<li>Intermediate Classes (Intermediate Class 1, 2 &amp; 3)</li>
-<li>Advanced Classes (Advanced Class 1 &amp; 2)</li>
-<li>GCSE Chinese Class</li>
-<li>GCSE Tutorial Class</li>
-<li>Chinese Culture Class</li>
+<li>启蒙班（华文一班、二班）</li>
+<li>初级班（初级一班、二班）</li>
+<li>中级班（中级一、二、三班）</li>
+<li>高级班（高级一、二班）</li>
+<li>GCSE中文班</li>
+<li>GCSE补习班</li>
+<li>中国文化班</li>
 </ul>
-<h4>Language Courses</h4>
+<h4>语言课程</h4>
 <ul>
-<li>Cantonese Class</li>
+<li>粤语班（Cantonese Class）</li>
 </ul>
-<h4>Arts &amp; Crafts</h4>
+<h4>艺术与手工</h4>
 <ul>
-<li>Chess Club Class</li>
-<li>Arts &amp; Craft Club</li>
+<li>国际象棋俱乐部（Chess Club Class）</li>
+<li>艺术与手工俱乐部（Arts &amp; Craft Club）</li>
 </ul>
-<h4>Music &amp; Dance</h4>
+<h4>音乐舞蹈</h4>
 <ul>
-<li>Piano Class</li>
-<li>Belly Dance</li>
-<li>Fencing</li>
+<li>钢琴课（Piano Class）</li>
+<li>肚皮舞（Belly Dance）</li>
+<li>击剑（击剑课程）</li>
 </ul>
-<h4>Academic Support</h4>
+<h4>学术辅导</h4>
 <ul>
-<li>1V1 Tutoring</li>
-<li>A-level Tutoring</li>
-<li>Homework Support Class</li>
-<li>International Family Investigation Class</li>
-<li>LAMDA Classes (Levels 1, 2 &amp; 3)</li>
+<li>1V1补习</li>
+<li>A-level补习</li>
+<li>家庭作业班</li>
+<li>国际家庭探究课</li>
+<li>LAMDA课程（1、2、3级）</li>
 </ul>
-<h4>Other Activities</h4>
+<h4>其他活动</h4>
 <ul>
-<li>Parents Social Club</li>
+<li>家长社交俱乐部（Parents social Club）</li>
 </ul>
-<h3>📋 Classroom Allocation</h3>
-<p>Classes are distributed across different rooms:<br />
-- <strong>Room1</strong> (Red area): Foundation Chinese, Picture Book Class<br />
-- <strong>Reception Room</strong> (Yellow area): Beginner Classes, Cantonese Class<br />
-- <strong>Room2-Room10</strong>: Various grade Chinese classes, GCSE courses<br />
-- <strong>Room11 (Hall)</strong>: Parents Social Club, Belly Dance, Fencing<br />
-- <strong>Room12 (Piano)</strong>: Piano Classes</p>
-<h3>📞 Contact Us</h3>
-<p><strong>Enquiries &amp; Registration</strong>:<br />
-- Phone: 07419898100 / 0161 667 2668<br />
-- Email: info@boweneducation.org<br />
-- Website: www.boweneducation.org</p>
-<p><strong>Notes</strong>:<br />
-- Specific course arrangements are subject to the current timetable<br />
-- Please contact us for course details or registration<br />
-- Free trial classes available</p>
-                </div>
-                <div class="view-all-link">
-                    <a href="/en/school-timetable/" class="btn-view-all">
-                        View Full Page
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                        </svg>
-                    </a>
-                </div>
+<h3>📋 课程教室分配</h3>
+<p>课程分布在不同教室：<br />
+- <strong>Room1</strong>（红色区域）：中文启蒙班、绘本班<br />
+- <strong>Reception Room</strong>（黄色区域）：初级班、粤语班<br />
+- <strong>Room2-Room10</strong>：各年级中文课、GCSE课程<br />
+- <strong>Room11 (Hall)</strong>：家长社交俱乐部、肚皮舞、击剑<br />
+- <strong>Room12 (Piano)</strong>：钢琴课程</p>
+<h3>📞 联系我们</h3>
+<p><strong>报名咨询</strong>：<br />
+- 电话：07419898100 / 0161 667 2668<br />
+- 邮箱：info@boweneducation.org<br />
+- 官网：www.boweneducation.org</p>
+<p><strong>注意事项</strong>：<br />
+- 具体课程安排以当前课程表为准<br />
+- 如需了解课程详情或报名，请联系我们<br />
+- 支持免费试听课程</p>
+                </article>
             </div>
-
-        
-    </div>
-</section>
-
-<section class="overview-section">
-    <div class="container">
-        <div class="section-header">
-            <h2>Registration &amp; Trial</h2>
         </div>
-
-        
-            <!-- Single Page Content -->
-            <div class="single-page-content">
-                
-                <div class="prose">
-                    <h2>Registration and Trial Classes</h2>
-<h3>🌟 Welcome to Bowen Chinese School!</h3>
-<p>Bowen Chinese School welcomes all students who are eager to learn Chinese and understand Chinese culture.</p>
-<p>We offer <strong>free trial classes</strong> for all new students, helping parents and children better understand our curriculum, teaching styles, and classroom atmosphere to find the most suitable learning path.</p>
-<h3>📋 Registration and Trial Process</h3>
-<h4>🔹 Step 1: Fill Out the Registration Form</h4>
-<p>Parents can fill out the <strong>online registration form</strong> through the school website or by scanning the WeChat QR code, and select a suitable <strong>trial class date and time slot</strong>.</p>
-<p>Information to provide includes student name, age, Chinese proficiency level, contact details, and interested course categories.</p>
-<h4>🔹 Step 2: Course Matching and Trial Arrangement</h4>
-<p>The school will arrange an appropriate trial class based on the student's age and language proficiency.</p>
-<p>Staff will confirm the trial class, time, and classroom information via email or text 1–2 days before the trial.</p>
-<h4>🔹 Step 3: On-site Trial Experience</h4>
-<p>Students attend class at the scheduled time. The trial class will be taught by official teachers.</p>
-<p>During class, teachers will observe the student's language foundation and learning interests to provide reference for subsequent class placement.</p>
-<h4>🔹 Step 4: Trial Feedback and Class Placement Recommendations</h4>
-<p>After the trial, teachers will communicate with parents to provide feedback on the student's classroom performance and suitable class level.</p>
-<p>Parents can choose to enroll in the appropriate course based on the feedback.</p>
-<h4>🔹 Step 5: Confirm Enrollment and Payment</h4>
-<p>After determining the class, parents complete payment and registration, and the student officially joins Bowen Chinese School.</p>
-<p>The Academic Affairs Office will send enrollment notifications and timetable information, and your child can officially begin their learning journey.</p>
-<h3>📊 Registration Methods</h3>
-<h4>1. Scan QR Code to Fill Out Registration Form</h4>
-<p>Please scan the QR code to complete the online registration form</p>
-<h4>2. Google Form Registration</h4>
-<p>Fill out registration information online through Google Forms</p>
-<h4>3. Phone or Email Registration</h4>
-<ul>
-<li><strong>Phone</strong>: 07419898100 / 0161 667 2668</li>
-<li><strong>Email</strong>: info@boweneducation.org</li>
-</ul>
-<h3>📍 Contact Us</h3>
-<p><strong>Address</strong>: Bowen Chinese School, Forest Park Prep School, 27 Oakfield, Sale, Greater Manchester M33 6NB</p>
-<p><strong>Website</strong>: www.boweneducation.org</p>
-<p><strong>Email</strong>: info@boweneducation.org</p>
-<p><strong>Phone</strong>:<br />
-- 07419898100<br />
-- 0161 667 2668</p>
-                </div>
-                <div class="view-all-link">
-                    <a href="/en/school-registration/" class="btn-view-all">
-                        View Full Page
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-
         
     </div>
 </section>
 
-
+<!-- CTA Section -->
+<section class="section section--cta" aria-labelledby="cta-title">
+    <div class="container text-center" data-aos="fade-up">
+        <h2 id="cta-title" class="section__title">
+            <span lang="en-GB">Ready to Join Our Community?</span>
+        </h2>
+        <h3 class="section__title-chinese">
+            <span lang="zh-CN">准备加入我们的大家庭？</span>
+        </h3>
+        <p class="section__subtitle">
+            <span lang="en-GB">Discover how we can help you achieve your language learning goals</span>
+        </p>
+        <div class="cta-buttons" role="group" aria-label="Contact actions">
+            <a href="/contact"
+               class="btn btn-primary btn-lg"
+               aria-label="Book a visit to Bowen Education Group">
+                <i class="fas fa-calendar-alt" aria-hidden="true"></i>
+                <span lang="en-GB">Book a Visit</span>
+            </a>
+            <a href="tel:01619693071"
+               class="btn btn-outline-primary btn-lg"
+               aria-label="Call Bowen Education Group at 0161 969 3071">
+                <i class="fas fa-phone" aria-hidden="true"></i>
+                <span>0161 969 3071</span>
+            </a>
+        </div>
+    </div>
+</section>
 
 
     </main>
@@ -2122,12 +2448,13 @@ Forest Park School<br />
                 <div class="col-lg-4 col-md-4 mb-4">
                     <div class="footer__section">
                         <h3 class="footer__heading">Quick Links</h3>
+                        <h4 class="footer__heading-chinese">快速链接</h4>
                         <ul class="footer__links">
-                            <li><a href="/en/">Home</a></li>
-                            <li><a href="/en/about">About Us</a></li>
-                            <li><a href="/en/programmes">Government Programmes</a></li>
-                            <li><a href="/en/events">Events</a></li>
-                            <li><a href="/en/contact">Contact Us</a></li>
+                            <li><a href="/home">首页</a></li>
+                            <li><a href="/about">关于我们</a></li>
+                            <li><a href="/programmes">政府项目</a></li>
+                            <li><a href="/events">博文活动</a></li>
+                            <li><a href="/contact">联系我们</a></li>
                         </ul>
                     </div>
                 </div>
@@ -2136,11 +2463,12 @@ Forest Park School<br />
                 <div class="col-lg-4 col-md-4 mb-4">
                     <div class="footer__section">
                         <h3 class="footer__heading">Legal</h3>
+                        <h4 class="footer__heading-chinese">法律条款</h4>
                         <ul class="footer__links">
-                            <li><a href="/en/privacy-policy">Privacy Policy</a></li>
-                            <li><a href="/en/terms-of-service">Terms of Service</a></li>
-                            <li><a href="/en/cookie-policy">Cookie Policy</a></li>
-                            <li><a href="/en/safeguarding">Safeguarding Policy</a></li>
+                            <li><a href="/privacy-policy">隐私政策</a></li>
+                            <li><a href="/terms-of-service">使用条款</a></li>
+                            <li><a href="/cookie-policy">Cookie政策</a></li>
+                            <li><a href="/safeguarding">儿童保护政策</a></li>
                         </ul>
                     </div>
                 </div>
@@ -2149,6 +2477,7 @@ Forest Park School<br />
                 <div class="col-lg-4 col-md-4 mb-4">
                     <div class="footer__section">
                         <h3 class="footer__heading">Contact Us</h3>
+                        <h4 class="footer__heading-chinese">联系我们</h4>
                         <ul class="footer__contact">
                             <li>
                                 <i class="fas fa-map-marker-alt"></i>
@@ -2180,6 +2509,8 @@ Forest Park School<br />
                 <div class="col-lg-6">
                     <p class="footer__copyright">
                         &copy; 2025 Bowen Education Group. All rights reserved.
+                        <br>
+                        <small class="text-chinese">© 2025 博文教育集团。保留所有权利。</small>
                     </p>
                 </div>
                 <div class="col-lg-6 text-right">
@@ -2349,6 +2680,63 @@ Forest Park School<br />
     <!-- Scripts -->
     <script src="/static/js/main.js"></script>
     
+<!-- 延迟加载非关键 JavaScript -->
+<script>
+    // 懒加载 AOS 动画库
+    (function() {
+        var script = document.createElement('script');
+        script.src = 'https://unpkg.com/aos@2.3.1/dist/aos.js';
+        script.defer = true;
+        script.onload = function() {
+            // 初始化动画
+            AOS.init({
+                duration: 800,
+                easing: 'ease-in-out',
+                once: true,
+                offset: 100,
+                disable: function() {
+                    // 在低端设备上禁用动画以提升性能
+                    return window.innerWidth < 768 && 'ontouchstart' in window;
+                }
+            });
+        };
+        document.body.appendChild(script);
+    })();
+
+    // 图片懒加载优化
+    if ('IntersectionObserver' in window) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    if (img.dataset.src) {
+                        img.src = img.dataset.src;
+                        img.classList.add('loaded');
+                        observer.unobserve(img);
+                    }
+                }
+            });
+        });
+
+        // 监听所有带有 data-src 属性的图片
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            imageObserver.observe(img);
+        });
+    }
+
+    // 优化滚动性能
+    let ticking = false;
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(function() {
+                // 在这里处理滚动相关的逻辑
+                ticking = false;
+            });
+            ticking = true;
+        }
+    }, { passive: true });
+</script>
+
 
     <script>
         // Cookie banner
