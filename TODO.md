@@ -5,6 +5,350 @@
 
 ## ✅ 已完成
 
+### [2025-11-18] programmes-parks栏目转换为图片预览模式并修复Gallery页面404问题
+- [x] 创建自定义programmes-parks中文模板(文字介绍+图片网格) - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 创建park-activities GALLERY类型栏目 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 修复Gallery页面404问题(更正URL路径) - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 创建自定义programmes-parks英文模板 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 测试中英文programmes-parks和park-activities页面 - 完成时间: 2025-11-18 - 负责人: maxazure
+
+**需求背景**:
+- 用户希望 http://localhost:8000/zh/programmes-parks/ 页面显示图片预览而非文章列表
+- 需要一段介绍文字说明什么是公园活动
+- 下方显示历年来的公园活动照片集合(12张缩略图)
+- 点击"查看全部照片"按钮跳转到完整相册页面
+
+**问题现象**:
+1. programmes-parks页面显示的是post_list.html模板(文章列表)
+2. 点击Gallery按钮跳转到/zh/gallery/park-activities/返回404
+
+**技术实现**:
+
+1. **创建自定义中文模板** (templates/zh/programmes-parks.html):
+   - Hero section: 使用栏目标题和描述
+   - Introduction section: 灰色背景，介绍什么是公园活动项目
+   - Gallery grid section: 白色背景，显示12张照片缩略图(4列网格布局)
+   - View more button: 紫色渐变按钮链接到Gallery详情页
+   - CTA section: 蓝色渐变背景的联系我们区块
+
+2. **修复Gallery路由问题**:
+   - **问题分析**: 路由pattern `/zh/{column_slug:path}` 将 `/zh/gallery/park-activities/` 整体作为slug `"gallery/park-activities"`
+   - **现有Gallery访问方式**: 直接通过栏目slug访问，如 `/zh/gallery-festivals/` 而非 `/zh/gallery/festivals/`
+   - **解决方案**: 创建GALLERY类型栏目，slug为 `"park-activities"`，gallery_id指向Gallery记录ID:7
+   - **数据库记录**:
+     ```sql
+     INSERT INTO site_column (id, name, name_en, slug, column_type, parent_id, gallery_id)
+     VALUES (40, '公园活动相册', 'Park Activities Gallery', 'park-activities', 'GALLERY', 9, 7);
+     ```
+   - **正确URL**:
+     - 中文: `/zh/park-activities/`
+     - 英文: `/en/park-activities/`
+
+3. **更新模板链接**:
+   - 修正programmes-parks模板中的Gallery按钮链接
+   - 从 `/zh/gallery/{{ column.gallery.slug }}/` 改为 `/zh/park-activities/`
+
+4. **创建英文模板** (templates/en/programmes-parks.html):
+   - 相同的HTML结构和CSS样式
+   - 英文文案: "About Parks Programme", "Join Our Parks Activities"
+   - 链接到 `/en/park-activities/` 和 `/en/contact`
+
+5. **图片网格样式特点**:
+   - 响应式网格: `grid-template-columns: repeat(auto-fill, minmax(280px, 1fr))`
+   - 4:3 宽高比: `padding-bottom: 75%`
+   - Hover效果: 图片放大1.1倍，卡片上移8px
+   - 遮罩层: 黑色渐变遮罩显示图片标题
+   - AOS动画: 淡入和缩放效果(zoom-in)
+
+**测试结果**:
+- ✅ http://localhost:8000/zh/programmes-parks/ - 200 (显示介绍文字+12张照片)
+- ✅ http://localhost:8000/en/programmes-parks/ - 200 (英文版本)
+- ✅ http://localhost:8000/zh/park-activities/ - 200 (Gallery详情页)
+- ✅ http://localhost:8000/en/park-activities/ - 200 (英文Gallery详情页)
+- ✅ 响应式布局适配移动端、平板和桌面设备
+- ✅ 图片hover效果和AOS动画正常工作
+
+**相关文件**:
+- templates/zh/programmes-parks.html (新建)
+- templates/en/programmes-parks.html (新建)
+- app/routes/frontend.py:315-322 (已有Gallery images加载逻辑)
+- Database: site_column表新增记录 ID=40
+
+### [2025-11-18] 实现栏目与Gallery关联功能 - programmes-parks栏目显示关联相册
+- [x] 添加SiteColumn.gallery_id字段和Gallery关系 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 创建数据库迁移并执行(add_gallery_id_to_site_column) - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 更新Admin后台支持Gallery关联选择 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 关联programmes-parks栏目到park-activities Gallery - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 更新中文post_list.html模板显示Gallery section - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 更新英文post_list.html模板显示Gallery section - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 测试中英文页面Gallery section显示和链接功能 - 完成时间: 2025-11-18 - 负责人: maxazure
+
+**需求背景**:
+- 用户访问 http://localhost:8000/zh/programmes-parks/ 页面时，希望能看到关联的"公园活动"Gallery相册入口
+- 需要建立栏目(SiteColumn)和相册(Gallery)之间的数据库关联关系
+
+**技术实现**:
+
+1. **数据库模型更新** (app/models/site.py):
+   - 添加`gallery_id`外键字段指向Gallery表
+   - 添加`gallery`关系属性用于lazy loading
+
+2. **数据库迁移**:
+   - 创建迁移文件: `38e876557ca4_add_gallery_id_to_site_column.py`
+   - 使用batch_alter_table处理SQLite外键约束
+   - 成功执行迁移: `alembic upgrade head`
+
+3. **Admin后台更新** (admin/app/routers/columns.py):
+   - 添加Gallery导入和查询
+   - create_column和update_column函数添加gallery_id参数处理
+   - 表单页面传递all_galleries数据
+
+4. **Admin表单UI更新** (admin/templates/columns/form.html):
+   - 添加Gallery选择下拉框
+   - 显示Gallery标题和图片数量
+   - 支持"无（不关联）"选项
+
+5. **前端模板更新**:
+   - **中文模板** (templates/zh/post_list.html):
+     - 添加Gallery section HTML结构(紫色渐变背景)
+     - 显示Gallery标题、描述、图片数量
+     - CTA按钮链接到Gallery详情页
+     - 添加响应式CSS样式
+
+   - **英文模板** (templates/en/post_list.html):
+     - 相同的Gallery section结构
+     - 英文文案("67 amazing photos", "View All Photos")
+     - 链接到英文Gallery页面(/en/gallery/...)
+
+6. **数据关联**:
+   - programmes-parks栏目(ID: 23)关联到park-activities Gallery(ID: 7)
+   - Gallery包含67张公园活动照片
+
+**视觉效果**:
+- 紫色渐变背景(#667eea → #764ba2)突出显示
+- 白色文字清晰易读
+- 红色圆角CTA按钮醒目
+- 与下方蓝色CTA section形成良好视觉对比
+
+**测试结果**:
+- ✅ 中文页面Gallery section正常显示
+- ✅ 英文页面Gallery section正常显示
+- ✅ 按钮链接正确(/zh/gallery/park-activities/, /en/gallery/park-activities/)
+- ✅ 响应式样式适配移动端
+- ℹ️ Gallery详情页返回404(需要单独处理Gallery路由或静态生成)
+
+### [2025-11-18] Gallery系统全面实施 - 导入445张图片并完成相册分类
+- [x] 修复课程表页面图片显示问题 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 添加图片响应式和点击放大功能 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 修复图片路径问题(迁移到正确的static目录) - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 规划Gallery系统整体架构 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 创建4个GALLERY类型栏目 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 创建7个Gallery相册记录 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 开发图片导入脚本(import_gallery_images.py) - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 执行图片导入(445张新图片) - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 生成静态页面(98页全部成功) - 完成时间: 2025-11-18 - 负责人: maxazure
+
+**需求背景**:
+1. 课程表页面图片不显示(CSS opacity: 0问题)
+2. upload目录中有449张图片未整理和展示
+3. 需要建立完整的Gallery系统来管理和展示活动照片
+4. 需要按活动性质分类并支持时间轴筛选
+
+**问题修复**:
+
+1. **课程表图片显示问题**:
+   - 问题: CSS设置`opacity: 0`但`loaded`类未自动添加
+   - 解决: 在DOMContentLoaded事件中自动为所有内容图片添加`loaded`类
+   - 修改文件: `templates/zh/single_page.html`, `templates/en/single_page.html`
+
+2. **图片响应式和点击放大**:
+   - 添加CSS: `max-width: 100%; height: auto; cursor: pointer;`
+   - 添加悬停效果: `box-shadow`, `transform: scale(1.02)`
+   - 创建模态框lightbox功能(点击放大、ESC关闭、背景点击关闭)
+   - Body滚动锁定当模态框打开
+
+3. **图片路径问题**:
+   - 问题: 图片在`public/static/`但应该在`templates/static/`
+   - FastAPI静态文件服务配置: `STATIC_DIR = TEMPLATE_DIR / "static"`
+   - 解决: 拷贝图片到正确位置`templates/static/uploads/chinese-school/timetable/`
+
+**Gallery系统规划**:
+
+使用Task agent(Explore模式)收集信息:
+- upload目录结构分析: 8个主目录,449张图片
+- 数据库schema检查: Gallery, GalleryImage, MediaFile表
+- 现有数据: 仅10张图片已导入,需导入剩余439张
+
+**用户选择**:
+- ✅ 组织方式: 活动性质分类 + 时间标签
+- ✅ HAF照片: 单个Gallery用年份标签区分
+- ✅ 导入范围: 全部449张图片
+- ✅ 缩略图: 自动生成多尺寸
+
+**实施方案**:
+
+1. **创建4个GALLERY类型栏目**(父栏目: gallery ID:9):
+   ```
+   - 节日庆典 (gallery-festivals, ID: 36)
+   - 政府资助项目 (gallery-government, ID: 37)
+   - 俱乐部活动 (gallery-clubs, ID: 38)
+   - 夏令营活动 (gallery-camps, ID: 39)
+   ```
+
+2. **创建7个Gallery相册记录**:
+   ```
+   ID  Slug                Title                  分类        标签
+   3   cny-2025           春节庆祝2025           节日庆典    2025,春节,Chinese New Year
+   4   christmas-concert  圣诞音乐会             节日庆典    2024,圣诞,Christmas
+   5   haf-camps          HAF营地项目            政府资助    2021-2025,HAF,政府项目
+   6   haf-highlights     HAF精彩瞬间            政府资助    精彩瞬间,HAF,highlights
+   7   park-activities    公园活动Parktastic     政府资助    2024,公园活动,Parktastic
+   8   chess-club-photos  国际象棋俱乐部照片集   俱乐部活动  2023-2024,国际象棋,Chess
+   9   middleton-camp     Middleton夏令营        夏令营活动  2023-2024,夏令营,Summer Camp
+   ```
+
+3. **开发图片导入脚本**(`scripts/import_gallery_images.py` - 407行):
+
+   **核心功能**:
+   - 目录扫描与映射规则匹配
+   - MD5去重检测(避免重复导入)
+   - 图片拷贝到`templates/static/uploads/gallery/{gallery_slug}/`
+   - 三级缩略图生成:
+     - thumbnail: 300x300 (crop裁剪)
+     - medium: 800x800 (fit适应)
+     - large: 1920x1920 (fit适应)
+   - MediaFile记录创建(路径、尺寸、MIME类型、标签)
+   - GalleryImage关联创建(sort_order自动编号)
+   - Gallery统计更新(image_count, cover_media_id)
+
+   **图片处理技术**:
+   ```python
+   # PIL图片处理
+   - RGBA/LA/P模式转RGB(白色背景)
+   - LANCZOS重采样算法(高质量)
+   - 居中裁剪(crop模式)
+   - 保持比例缩放(fit模式)
+   - JPEG质量90,optimize=True
+   ```
+
+   **目录映射规则**(GALLERY_MAPPING):
+   ```python
+   'chinese-new-year-2025' -> cny-2025 + ['2025', '春节', 'Chinese New Year']
+   'christmas-concert' -> christmas-concert + ['2024', '圣诞', 'Christmas']
+   'government-haf-camp' -> haf-camps + ['2024', 'HAF', '政府项目']
+   'website-photos/government-camp/2021-2025' -> haf-camps + 年份标签
+   'chess-club' -> chess-club-photos + ['2024', '国际象棋', 'Chess']
+   # ... 更多映射
+   ```
+
+4. **执行图片导入**:
+   ```bash
+   cd /Users/maxazure/projects/bowen-education-manchester
+   source venv/bin/activate
+   python scripts/import_gallery_images.py
+   ```
+
+   **导入统计**:
+   ```
+   总文件数: 449张
+   成功导入: 445张新图片
+   跳过文件: 4张(已存在)
+   失败文件: 0张
+   总媒体文件: 508个(原有63 + 新增445)
+   生成缩略图: 1,335张(445 × 3)
+   处理时间: ~10分钟
+   ```
+
+   **按Gallery分类统计**:
+   ```
+   - 春节庆祝2025:        32张
+   - 圣诞音乐会:          16张
+   - HAF营地项目:        251张 (2021:45, 2022:38, 2023:52, 2024:61, 2025:55)
+   - HAF精彩瞬间:         22张
+   - 公园活动Parktastic:  67张
+   - 国际象棋俱乐部:      45张
+   - Middleton夏令营:     12张
+   ```
+
+5. **文件组织结构**:
+   ```
+   templates/static/uploads/gallery/
+   ├── cny-2025/
+   │   ├── IMG_001.jpg (原图)
+   │   ├── IMG_002.png
+   │   └── thumbnails/
+   │       ├── IMG_001_thumb.jpg (300x300)
+   │       ├── IMG_001_medium.jpg (800px)
+   │       ├── IMG_002_thumb.jpg
+   │       └── IMG_002_medium.jpg
+   ├── christmas-concert/
+   ├── haf-camps/
+   ├── haf-highlights/
+   ├── park-activities/
+   ├── chess-club-photos/
+   └── middleton-camp/
+   ```
+
+6. **生成静态页面**:
+   ```bash
+   python scripts/generate_static.py
+   ```
+
+   **生成结果**:
+   ```
+   总页面数: 98页
+   中文页面: 49页
+   英文页面: 49页
+   成功率: 100% (0失败)
+   生成时间: ~8秒
+   ```
+
+**数据库变更**:
+- SiteColumn表: 新增4条记录(IDs: 36-39)
+- Gallery表: 新增7条记录(IDs: 3-9)
+- MediaFile表: 新增445条记录(总508条)
+- GalleryImage表: 新增445条关联记录
+
+**技术亮点**:
+- ✅ 自动化导入流程(零手工操作)
+- ✅ 智能去重机制(filename + MD5)
+- ✅ 三级缩略图优化用户体验
+- ✅ 完整的事务管理(失败自动回滚)
+- ✅ 详细的进度日志(每张图片状态)
+- ✅ 模态框lightbox功能(点击放大查看)
+- ✅ 响应式图片设计(自适应容器宽度)
+
+**验证结果**:
+- ✅ 课程表页面图片正常显示: http://localhost:8000/zh/school-timetable/
+- ✅ 图片点击放大功能正常工作
+- ✅ 图片hover效果流畅(scale + box-shadow)
+- ✅ 模态框ESC键和背景点击关闭正常
+- ✅ 所有445张图片成功导入数据库
+- ✅ 缩略图生成质量优秀(LANCZOS算法)
+- ✅ Gallery封面图自动设置(首张图片)
+- ✅ 静态页面生成全部成功(98/98)
+
+**相关文件**:
+- `scripts/import_gallery_images.py` - 图片导入脚本(407行,新建)
+- `templates/zh/single_page.html` - 中文单页模板(修改,添加图片功能)
+- `templates/en/single_page.html` - 英文单页模板(修改,添加图片功能)
+- `templates/static/uploads/gallery/` - Gallery图片目录(新建)
+- `templates/static/uploads/chinese-school/timetable/` - 课程表图片(新建)
+- `instance/database.db` - 数据库(新增656条记录)
+
+**页面访问**:
+- 课程表页面: http://localhost:8000/zh/school-timetable/
+- Gallery栏目: http://localhost:8000/zh/gallery/ (待完善)
+- 各相册页面: /zh/gallery/{gallery_slug}/ (待生成)
+
+**后续优化建议**:
+- [ ] 为Gallery栏目创建overview页面展示所有相册
+- [ ] 实现前端Gallery浏览器(瀑布流/网格布局)
+- [ ] 添加图片EXIF信息读取(拍摄日期、地点)
+- [ ] 实现标签筛选功能(按年份、活动类型)
+- [ ] 添加图片懒加载优化性能
+- [ ] 考虑使用CDN加速图片加载
+
 ### [2025-11-18] 为中文学校添加课程表页面与Hero图片
 - [x] 为school-registration页面添加hero图片 - 完成时间: 2025-11-18 - 负责人: maxazure
 - [x] 开发图片压缩脚本（compress_images.py） - 完成时间: 2025-11-18 - 负责人: maxazure
