@@ -5,6 +5,67 @@
 
 ## ✅ 已完成
 
+### [2025-11-18] 为中文学校添加课程表页面与Hero图片
+- [x] 为school-registration页面添加hero图片 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 开发图片压缩脚本（compress_images.py） - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 创建兴趣班课程表页面和栏目 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 将课程表图片拷贝到静态文件目录 - 完成时间: 2025-11-18 - 负责人: maxazure
+
+**问题描述**:
+- 用户要求为学校报名页面添加hero图片（使用中文学校的hero图）
+- 需要压缩"网站文案和照片"目录下的大量高清图片
+- 需要将2025-2026学年兴趣班课程表以合适的形式展示在网站上
+- 需要将课程表图片正确拷贝到静态文件目录供前端访问
+
+**解决方案**:
+1. **Hero图片设置**（school-registration）:
+   - 查询school栏目的hero_media_id（33）
+   - 更新school-registration栏目（ID: 34）的hero_media_id为33
+   - 重新生成96个静态页面
+
+2. **图片压缩脚本开发**（scripts/compress_images.py）:
+   - 支持HEIC转JPG（使用pillow-heif库）
+   - 最大尺寸限制：1920px（保持比例）
+   - JPEG质量：85（互联网标准）
+   - 中文文件夹映射到英文名称
+   - 智能跳过已处理文件
+   - 处理结果：448个文件，216.37 MB → 52.00 MB（76.0%压缩率）
+
+3. **课程表页面创建**:
+   - 创建新栏目"兴趣班课程表"（ID: 35, slug: school-timetable）
+   - 创建SinglePage（ID: 28）包含详细课程信息：
+     - 课程时间表（上午4节课，下午4节课）
+     - 课程分类（中文课、语言类、艺术类、音乐类、学术辅导）
+     - 教室分配（Room1-Room12）
+     - 联系方式
+   - 拷贝课程表图片到upload目录
+   - 生成98个静态页面
+
+4. **静态文件拷贝**:
+   - 创建目录：public/static/uploads/chinese-school/timetable/
+   - 拷贝图片：2025-2026-autumn-winter-timetable.png（291KB）
+   - HTML中图片引用已正确设置
+
+**验证结果**:
+- ✅ school-registration页面hero图片显示正常
+- ✅ 图片压缩脚本成功处理448个文件，压缩率76.0%
+- ✅ 课程表页面布局美观，内容完整
+- ✅ 课程表图片正确显示在/zh/school-timetable/页面
+- ✅ 静态文件目录结构正确
+- ✅ 所有静态页面重新生成成功
+
+**相关文件**:
+- `instance/database.db` - 数据库（更新Column 34, 新建Column 35和SinglePage 28）
+- `scripts/compress_images.py` - 图片压缩脚本（新建）
+- `scripts/README_compress_images.md` - 脚本文档（新建）
+- `upload/chinese-school/timetable/2025-2026-autumn-winter-timetable.png` - 课程表源图片
+- `public/static/uploads/chinese-school/timetable/2025-2026-autumn-winter-timetable.png` - 静态文件图片
+- `public/zh/school-timetable/index.html` - 课程表静态页面
+
+**页面访问**:
+- 学校报名页：http://localhost:8000/zh/school-registration/
+- 课程表页面：http://localhost:8000/zh/school-timetable/
+
 ### [2025-11-18] 完善中文学校网站内容
 - [x] 读取并整理中文学校相关文档 - 完成时间: 2025-11-18 - 负责人: maxazure
 - [x] 更新school-about（关于我们）页面内容 - 完成时间: 2025-11-18 - 负责人: maxazure
