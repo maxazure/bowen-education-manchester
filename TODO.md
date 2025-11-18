@@ -5,6 +5,57 @@
 
 ## ✅ 已完成
 
+### [2025-11-18] 修复远程服务器programmes-parks页面模板缺失问题
+- [x] 发现问题：远程显示文章列表而非相册网格 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 定位原因：模板文件未提交到Git仓库 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 提交缺失的模板和路由代码 - 完成时间: 2025-11-18 - 负责人: maxazure
+- [x] 部署到生产服务器并验证 - 完成时间: 2025-11-18 - 负责人: maxazure
+
+**问题现象**:
+- 本地 http://localhost:8000/zh/programmes-parks/ 显示正确的相册网格模板
+- 远程 https://bowen.docms.nz/zh/programmes-parks/ 显示旧的文章列表模板
+
+**根本原因**:
+- `templates/zh/programmes-parks.html` 和 `templates/en/programmes-parks.html` 从未被提交到Git
+- 服务器上缺少这些模板文件，系统回退使用默认的 post_list.html
+
+**解决方案**:
+1. **提交缺失文件** (Commit: 26abc54):
+   - 新增 templates/zh/programmes-parks.html (中文相册模板)
+   - 新增 templates/en/programmes-parks.html (英文相册模板，包含Parktastic名称)
+   - 更新 app/routes/frontend.py (programmes-parks相册图片加载逻辑)
+   - 更新 app/models/site.py (gallery_id字段支持)
+   - 更新 admin/app/routers/columns.py 和 admin/templates/columns/form.html (后台Gallery关联)
+   - 更新 templates/en/post_list.html 和 templates/zh/post_list.html
+
+2. **部署流程**:
+   ```bash
+   # 本地提交并推送
+   git add templates/zh/programmes-parks.html templates/en/programmes-parks.html ...
+   git commit -m "fix: 添加programmes-parks自定义模板和相关路由逻辑"
+   git push origin main
+
+   # 服务器拉取代码
+   ssh maxazure@192.168.31.205 "cd /home/maxazure/projects/bowen-education-manchester && git pull origin main"
+
+   # 重启服务
+   ssh maxazure@192.168.31.205 "sudo systemctl restart bowen-education.service"
+   ```
+
+3. **验证结果**:
+   - ✅ 中文版: https://bowen.docms.nz/zh/programmes-parks/ - 相册网格显示正常
+   - ✅ 英文版: https://bowen.docms.nz/en/programmes-parks/ - 相册网格显示正常
+   - ✅ 照片数量: 67 amazing photos 全部显示
+   - ✅ Parktastic名称: 英文版正确使用
+   - ✅ Footer链接: 精彩相册/Photo Gallery 正常工作
+
+**经验教训**:
+- 创建新模板时必须确保提交到Git仓库
+- 部署前应检查 `git status` 确认所有修改已提交
+- 重要功能部署后应立即验证线上环境
+
+---
+
 ### [2025-11-18] programmes-parks栏目转换为图片预览模式并修复Gallery页面404问题
 - [x] 创建自定义programmes-parks中文模板(文字介绍+图片网格) - 完成时间: 2025-11-18 - 负责人: maxazure
 - [x] 创建park-activities GALLERY类型栏目 - 完成时间: 2025-11-18 - 负责人: maxazure
