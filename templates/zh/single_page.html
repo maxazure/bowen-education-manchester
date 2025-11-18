@@ -567,6 +567,12 @@
 
     // 图片点击放大功能
     document.addEventListener('DOMContentLoaded', function() {
+        // 为所有内容区域的图片添加loaded类（确保图片可见）
+        const contentImages = document.querySelectorAll('.single-page-content img');
+        contentImages.forEach(img => {
+            img.classList.add('loaded');
+        });
+
         // 创建模态框元素
         const modal = document.createElement('div');
         modal.className = 'image-modal';
@@ -580,7 +586,6 @@
         const closeBtn = modal.querySelector('.image-modal__close');
 
         // 为所有内容区域的图片添加点击事件
-        const contentImages = document.querySelectorAll('.single-page-content img');
         contentImages.forEach(img => {
             img.addEventListener('click', function() {
                 modal.classList.add('active');

@@ -551,6 +551,12 @@
 
     // Image click to zoom functionality
     document.addEventListener('DOMContentLoaded', function() {
+        // Add 'loaded' class to all content images (ensure images are visible)
+        const contentImages = document.querySelectorAll('.single-page-content img');
+        contentImages.forEach(img => {
+            img.classList.add('loaded');
+        });
+
         // Create modal element
         const modal = document.createElement('div');
         modal.className = 'image-modal';
@@ -564,7 +570,6 @@
         const closeBtn = modal.querySelector('.image-modal__close');
 
         // Add click event to all content images
-        const contentImages = document.querySelectorAll('.single-page-content img');
         contentImages.forEach(img => {
             img.addEventListener('click', function() {
                 modal.classList.add('active');
