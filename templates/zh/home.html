@@ -571,85 +571,53 @@
 <section class="hero-carousel">
     <div class="swiper heroSwiper">
         <div class="swiper-wrapper">
-            <!-- Slide 1: Main Brand -->
-            <div class="swiper-slide">
-                <div class="hero-slide" style="background-image: url('/static/images/heroes/hero-main-brand.jpg');">
-                    <div class="container">
-                        <div class="hero-slide-content" data-aos="fade-up">
-                            <h1 class="hero-slide-title">
-                                Bowen Education Group<br>
-                                <span style="font-size: 2.5rem;">博文教育集团</span>
-                            </h1>
-                            <p class="hero-slide-subtitle">Bridging East and West Through Education</p>
-                            <p class="hero-slide-subtitle" style="font-size: 1.25rem;">中西融汇，博学致远</p>
-                            <div class="mt-4">
-                                <a href="/school/" class="btn btn-primary btn-lg me-3">探索课程 Explore Courses</a>
-                                <a href="/contact/" class="btn btn-outline-light btn-lg">预约试听 Book Trial</a>
+            {% if hero_slides %}
+                {% for hero in hero_slides %}
+                <div class="swiper-slide">
+                    <div class="hero-slide" style="background-image: url('{{ hero.background_image }}');">
+                        {% if hero.badge_text %}
+                        <div class="hero-badge">
+                            <span style="font-weight: 700;">{{ hero.badge_text }}</span>
+                        </div>
+                        {% endif %}
+                        <div class="container">
+                            <div class="hero-slide-content" data-aos="fade-up">
+                                <h1 class="hero-slide-title">{{ hero.title }}</h1>
+                                {% if hero.subtitle %}
+                                <p class="hero-slide-subtitle">{{ hero.subtitle }}</p>
+                                {% endif %}
+                                {% if hero.description %}
+                                <p class="hero-slide-desc">{{ hero.description }}</p>
+                                {% endif %}
+                                <div class="mt-4">
+                                    {% if hero.button_text and hero.button_url %}
+                                    <a href="{{ hero.button_url }}" class="btn {{ hero.button_style or 'btn-primary' }} btn-lg{% if hero.button2_text %} me-3{% endif %}">{{ hero.button_text }}</a>
+                                    {% endif %}
+                                    {% if hero.button2_text and hero.button2_url %}
+                                    <a href="{{ hero.button2_url }}" class="btn {{ hero.button2_style or 'btn-outline-light' }} btn-lg">{{ hero.button2_text }}</a>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Slide 2: HAF Programme -->
-            <div class="swiper-slide">
-                <div class="hero-slide" style="background-image: url('/static/images/heroes/hero-haf-programme.jpg');">
-                    <div class="hero-badge">
-                        <span style="font-weight: 700; color: #1e3a8a;">Trafford Council</span>
-                    </div>
-                    <div class="container">
-                        <div class="hero-slide-content" data-aos="fade-up">
-                            <h1 class="hero-slide-title">Official HAF Programme Provider</h1>
-                            <p class="hero-slide-subtitle">政府认证HAF项目提供商</p>
-                            <p class="hero-slide-desc">
-                                Funded by Trafford Council - Free Holiday Activities & Healthy Food for Eligible Children
-                            </p>
-                            <div class="mt-4">
-                                <a href="/programmes-haf/" class="btn btn-success btn-lg">了解HAF项目 Learn More</a>
+                {% endfor %}
+            {% else %}
+                <!-- 默认幻灯片（无数据库内容时显示） -->
+                <div class="swiper-slide">
+                    <div class="hero-slide" style="background-image: url('/static/images/heroes/hero-main-brand.jpg');">
+                        <div class="container">
+                            <div class="hero-slide-content" data-aos="fade-up">
+                                <h1 class="hero-slide-title">Bowen Education Group</h1>
+                                <p class="hero-slide-subtitle">博文教育集团</p>
+                                <div class="mt-4">
+                                    <a href="/school/" class="btn btn-primary btn-lg">探索课程</a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Slide 3: Henan University Partnership -->
-            <div class="swiper-slide">
-                <div class="hero-slide" style="background-image: url('/static/images/heroes/hero-henan-university.jpg');">
-                    <div class="hero-badge">
-                        <span style="font-weight: 700; color: #dc2626;">河南大学</span>
-                    </div>
-                    <div class="container">
-                        <div class="hero-slide-content" data-aos="fade-up">
-                            <h1 class="hero-slide-title">Strategic Partnership with Henan University</h1>
-                            <p class="hero-slide-subtitle">河南大学战略合作伙伴</p>
-                            <p class="hero-slide-desc">
-                                Cultural Exchange Programmes & Root-seeking Tours to China
-                            </p>
-                            <div class="mt-4">
-                                <a href="/events-henan/" class="btn btn-warning btn-lg">查看合作详情 View Partnership</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 4: GCSE Chinese -->
-            <div class="swiper-slide">
-                <div class="hero-slide" style="background-image: url('/static/images/heroes/hero-event-featured.jpg');">
-                    <div class="container">
-                        <div class="hero-slide-content" data-aos="fade-up">
-                            <h1 class="hero-slide-title">GCSE Chinese</h1>
-                            <p class="hero-slide-subtitle">GCSE中文考试班</p>
-                            <p class="hero-slide-desc">
-                                Professional GCSE Chinese exam preparation - Qualified teachers & Proven results
-                            </p>
-                            <div class="mt-4">
-                                <a href="/school/" class="btn btn-primary btn-lg">查看详情 View Courses</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% endif %}
         </div>
 
         <!-- Navigation -->
@@ -677,11 +645,11 @@
                 <div class="quick-entry-content">
                     <h3 class="quick-entry-title">中文学校</h3>
                     <p class="quick-entry-subtitle">Chinese School</p>
-                    <p class="quick-entry-desc">从基础到A-Level的全方位中文教育</p>
+                    <p class="quick-entry-desc">完整的中文课程体系，专业师资团队</p>
                     <div class="quick-entry-features">
-                        <span class="quick-entry-tag">GCSE中文</span>
-                        <span class="quick-entry-tag">A-Level中文</span>
-                        <span class="quick-entry-tag">HSK考试</span>
+                        <span class="quick-entry-tag">启蒙班</span>
+                        <span class="quick-entry-tag">GCSE班</span>
+                        <span class="quick-entry-tag">HSK班</span>
                     </div>
                 </div>
                 <div class="quick-entry-arrow">

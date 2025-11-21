@@ -5,6 +5,119 @@
 
 ## ✅ 已完成
 
+### [2025-11-21] 更新网站核心信息（班级设置、服务名称、联系方式）
+- [x] 搜索并定位中文学校班级设置相关内容 - 完成时间: 2025-11-21 - 负责人: maxazure
+- [x] 修改中文学校班级设置为新的六个班级 - 完成时间: 2025-11-21 - 负责人: maxazure
+- [x] 搜索并定位补习中心"一对一"相关内容 - 完成时间: 2025-11-21 - 负责人: maxazure
+- [x] 将"一对一"修改为"个性化学业辅导" - 完成时间: 2025-11-21 - 负责人: maxazure
+- [x] 搜索并定位所有联系信息 - 完成时间: 2025-11-21 - 负责人: maxazure
+- [x] 在模板中更新联系信息 - 完成时间: 2025-11-21 - 负责人: maxazure
+- [x] 在数据库中更新联系信息 - 完成时间: 2025-11-21 - 负责人: maxazure
+- [x] 验证所有修改是否生效 - 完成时间: 2025-11-21 - 负责人: maxazure
+
+**需求背景**:
+用户要求更新网站的三项核心信息：
+1. 中文学校班级设置
+2. 补习中心服务名称
+3. 全站联系信息
+
+**修改内容**:
+
+1. **中文学校班级设置** (修改为6个班级):
+   - 非母语班
+   - 启蒙班
+   - 华文班
+   - GCSE衔接班
+   - GCSE班
+   - HSK班
+
+2. **补习中心服务名称**:
+   - 从："一对一辅导"
+   - 改为："个性化学业辅导"
+
+3. **联系信息更新**:
+   - **地址**: 2 Curzon Road, Sale, M33 7DR, England
+   - **电话**: 0161 667 2668
+   - **WhatsApp**: 07419 818100 (新增)
+
+**技术实现**:
+
+1. **模板文件修改**:
+   - `templates/zh/school.html` (lines 126-136): 更新班级列表
+   - `templates/zh/home.html` (lines 648-653): 更新首页快速入口标签
+   - `templates/zh/tuition.html` (lines 134-139): 更新服务卡片标题
+   - `templates/zh/partials/footer.html`: 更新联系信息
+   - `templates/en/partials/footer.html`: 更新联系信息
+   - 使用 `sed` 批量替换所有模板文件中的旧电话号码和地址
+
+2. **数据库修改** (site_setting表):
+   ```sql
+   -- 更新电话号码
+   UPDATE site_setting SET value_text = '0161 667 2668'
+   WHERE setting_key IN ('company_phone', 'phone');
+
+   -- 更新地址
+   UPDATE site_setting SET value_text = '2 Curzon Road, Sale, M33 7DR, England'
+   WHERE setting_key = 'company_address';
+
+   -- 新增WhatsApp
+   INSERT INTO site_setting (setting_key, value_text, value_type, created_at, updated_at)
+   VALUES ('whatsapp', '07419 818100', 'string', datetime('now'), datetime('now'));
+   ```
+
+3. **Bug修复**:
+   - **问题**: 插入WhatsApp设置时使用了 `value_type='text'`，导致500错误
+   - **错误信息**: `LookupError: 'text' is not among the defined enum values`
+   - **原因**: SettingValueType枚举只包含: string, html, json, media
+   - **修复**: 将WhatsApp的value_type改为'string'
+   ```sql
+   UPDATE site_setting SET value_type = 'string' WHERE setting_key = 'whatsapp';
+   ```
+
+**验证结果** (中文版):
+- ✅ 中文学校班级: 6个新班级名称正确显示在/zh/school页面
+- ✅ 补习服务名称: "个性化学业辅导"正确显示在/zh/tuition页面
+- ✅ Footer联系信息:
+  - 地址: 2 Curzon Road, Sale, M33 7DR, England
+  - 电话: 0161 667 2668
+  - WhatsApp: 07419 818100 (包含WhatsApp图标和链接)
+- ✅ 所有页面加载正常，无500错误
+
+**英文版同步修改**:
+- [x] 修改英文学校页面班级设置 - 完成时间: 2025-11-21 - 负责人: maxazure
+- [x] 修改英文首页快速入口标签 - 完成时间: 2025-11-21 - 负责人: maxazure
+- [x] 修改英文补习页面服务名称 - 完成时间: 2025-11-21 - 负责人: maxazure
+- [x] 验证英文版所有修改 - 完成时间: 2025-11-21 - 负责人: maxazure
+
+**英文版修改详情**:
+
+1. **模板文件修改**:
+   - `templates/en/school.html` (lines 128-133): 更新班级列表为6个新班级
+     - Non-Native Speaker Class
+     - Beginner Class
+     - Chinese Language Class
+     - GCSE Preparation Class
+     - GCSE Class
+     - HSK Class
+   - `templates/en/home.html` (lines 648-652): 更新首页快速入口
+     - 描述改为: "Complete Chinese curriculum system with professional teaching staff"
+     - 标签改为: Beginner Class, GCSE Class, HSK Class
+   - `templates/en/tuition.html` (lines 134-139): 服务名称从"One-to-One Tutoring"改为"Personalized Academic Support"
+
+**验证结果** (英文版):
+- ✅ 英文学校班级: 6个新班级正确显示在/en/school页面
+- ✅ 英文首页: 快速入口标签正确更新
+- ✅ 英文补习服务: "Personalized Academic Support"正确显示在/en/tuition页面
+- ✅ 所有英文页面加载正常
+
+**经验教训**:
+- 数据库枚举字段插入数据前需确认有效值列表
+- 联系信息更新需同时修改模板和数据库两处
+- 使用sed批量替换可提高效率，但需谨慎处理特殊字符
+- 双语网站需要同时更新中英文版本，确保内容一致性
+
+---
+
 ### [2025-11-18] 修复远程服务器programmes-parks页面模板缺失问题
 - [x] 发现问题：远程显示文章列表而非相册网格 - 完成时间: 2025-11-18 - 负责人: maxazure
 - [x] 定位原因：模板文件未提交到Git仓库 - 完成时间: 2025-11-18 - 负责人: maxazure
