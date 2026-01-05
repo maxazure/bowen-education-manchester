@@ -13,7 +13,7 @@ from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 
 # 使用相对导入避免命名冲突
-from .routers import auth, media, columns, single_pages, posts, products, settings, galleries, contacts, home, column_builder, static_pages
+from .routers import auth, media, columns, single_pages, posts, products, settings, galleries, contacts, home, column_builder, static_pages, heroes, stats
 from .middleware import AdminAuthMiddleware
 
 # 获取admin目录的绝对路径
@@ -50,10 +50,12 @@ app.include_router(posts.router, prefix="", tags=["posts"])
 app.include_router(products.router, prefix="", tags=["products"])
 app.include_router(settings.router, prefix="", tags=["settings"])
 app.include_router(galleries.router, prefix="", tags=["galleries"])
+app.include_router(heroes.router, prefix="", tags=["heroes"])
 app.include_router(contacts.router, prefix="", tags=["contacts"])
 app.include_router(home.router, prefix="", tags=["home"])
 app.include_router(column_builder.router, prefix="", tags=["columns-builder"])
 app.include_router(static_pages.router, prefix="", tags=["static-pages"])
+app.include_router(stats.router, prefix="", tags=["stats"])
 
 # 挂载管理后台静态文件
 app.mount("/admin-static", StaticFiles(directory=str(ADMIN_DIR / "admin-static")), name="admin-static")

@@ -277,19 +277,15 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 async function loadDashboardStats() {
     try {
-        // 这里应该调用实际的API接口
-        // 目前使用模拟数据
-        const stats = {
-            posts: 45,
-            products: 28,
-            galleries: 12,
-            contacts: 5,
-            columns: 8,
-            pages: 6,
-            media: 156,
-            publishedPosts: 38,
-            draftPosts: 7
-        };
+        // 调用 API 获取真实数据
+        const response = await fetch('/api/stats');
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error('获取数据失败');
+        }
+
+        const stats = result.data;
 
         // 更新统计数字
         updateStatValue('postsCount', stats.posts);
