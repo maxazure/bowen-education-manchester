@@ -373,10 +373,15 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
 <script>
-    lightbox.option({
-        'resizeDuration': 200,
-        'wrapAround': true,
-        'albumLabel': '图片 %1 / %2'
+    // Initialize Lightbox with error handling
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof lightbox !== 'undefined') {
+            lightbox.option({
+                'resizeDuration': 200,
+                'wrapAround': true,
+                'albumLabel': '图片 %1 / %2'
+            });
+        }
     });
 </script>
 {% endblock %}
