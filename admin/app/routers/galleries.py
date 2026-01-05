@@ -12,7 +12,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field
 from slugify import slugify
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 
 from admin.app.database import get_db
 from app.models.gallery import Gallery, GalleryImage
@@ -36,8 +36,10 @@ async def list_galleries(
     """
     相册列表页面 HTML
     """
-    # 获取所有相册
-    galleries = db.query(Gallery).order_by(Gallery.sort_order.asc(), Gallery.created_at.desc()).all()
+    # 获取所有相册，同时 eager load cover_media 关系
+    galleries = db.query(Gallery).options(
+        joinedload(Gallery.cover_media)
+    ).order_by(Gallery.sort_order.asc(), Gallery.created_at.desc()).all()
 
     # 计算统计信息
     total_galleries = len(galleries)

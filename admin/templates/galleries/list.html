@@ -88,8 +88,8 @@
             <div class="card border-0 shadow-sm h-100">
                 <!-- 封面图 -->
                 <div class="position-relative" style="height: 200px; overflow: hidden;">
-                    {% if gallery.cover_media_id %}
-                    <img src="{{ gallery.cover.path_original if gallery.cover else 'https://placehold.co/400x300/e9ecef/868e96?text=No+Image' }}"
+                    {% if gallery.cover_media_id and gallery.cover_media %}
+                    <img src="{{ gallery.cover_media.path_original }}"
                          alt="{{ gallery.title }}"
                          class="w-100 h-100 object-fit-cover">
                     {% else %}
