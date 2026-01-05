@@ -1,0 +1,353 @@
+{% extends "base.html" %}
+
+{% block title %}{% if is_edit %}编辑{% else %}新建{% endif %}Hero幻灯片 - 博文教育管理后台{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- 页面标题 -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">
+            <i class="bi bi-{% if is_edit %}pencil{% else %}plus-lg{% endif %} me-2"></i>
+            {% if is_edit %}编辑{% else %}新建{% endif %}Hero幻灯片
+        </h1>
+        <a href="/admin/heroes" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i>
+            返回列表
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-10 col-xl-8">
+            <form method="post"
+                  action="{% if is_edit %}/admin/heroes/{{ hero.id }}{% else %}/admin/heroes{% endif %}"
+                  class="needs-validation"
+                  novalidate>
+
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-white">
+                        <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                            <li class="nav-item">
+                                <button class="nav-link active" id="zh-tab" data-bs-toggle="tab" data-bs-target="#zh-content" type="button" role="tab">
+                                    中文内容
+                                </button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link" id="en-tab" data-bs-toggle="tab" data-bs-target="#en-content" type="button" role="tab">
+                                    English Content
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <!-- 中文内容 -->
+                            <div class="tab-pane fade show active" id="zh-content" role="tabpanel">
+                                <div class="mb-3">
+                                    <label for="title" class="form-label">
+                                        标题 <span class="text-danger">*</span>
+                                    </label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="title"
+                                           name="title"
+                                           value="{{ hero.title if hero else '' }}"
+                                           required>
+                                    <div class="invalid-feedback">请输入标题</div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="subtitle" class="form-label">副标题</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="subtitle"
+                                           name="subtitle"
+                                           value="{{ hero.subtitle if hero else '' }}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">描述</label>
+                                    <textarea class="form-control"
+                                              id="description"
+                                              name="description"
+                                              rows="3">{{ hero.description if hero else '' }}</textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="badge_text" class="form-label">徽章文字</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="badge_text"
+                                           name="badge_text"
+                                           value="{{ hero.badge_text if hero else '' }}"
+                                           placeholder="例如：Trafford Council、河南大学">
+                                    <small class="form-text text-muted">显示在幻灯片右上角的徽章文字</small>
+                                </div>
+                            </div>
+
+                            <!-- 英文内容 -->
+                            <div class="tab-pane fade" id="en-content" role="tabpanel">
+                                <div class="mb-3">
+                                    <label for="title_en" class="form-label">Title (English)</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="title_en"
+                                           name="title_en"
+                                           value="{{ hero.title_en if hero else '' }}">
+                                    <small class="form-text text-muted">留空时前台会使用中文标题</small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="subtitle_en" class="form-label">Subtitle (English)</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="subtitle_en"
+                                           name="subtitle_en"
+                                           value="{{ hero.subtitle_en if hero else '' }}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="description_en" class="form-label">Description (English)</label>
+                                    <textarea class="form-control"
+                                              id="description_en"
+                                              name="description_en"
+                                              rows="3">{{ hero.description_en if hero else '' }}</textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="badge_text_en" class="form-label">Badge Text (English)</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="badge_text_en"
+                                           name="badge_text_en"
+                                           value="{{ hero.badge_text_en if hero else '' }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 背景图片 -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">背景图片</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="background_image" class="form-label">
+                                背景图片路径 <span class="text-danger">*</span>
+                            </label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="background_image"
+                                   name="background_image"
+                                   value="{{ hero.background_image if hero else '/static/images/heroes/' }}"
+                                   required
+                                   placeholder="/static/images/heroes/hero-main-brand.jpg">
+                            <div class="invalid-feedback">请输入背景图片路径</div>
+                            <small class="form-text text-muted">
+                                建议尺寸：1920x1080px，格式：JPG/PNG
+                                <br>
+                                常用路径：/static/images/heroes/hero-*.jpg
+                            </small>
+                        </div>
+
+                        <!-- 预览 -->
+                        {% if hero and hero.background_image %}
+                        <div class="mt-3">
+                            <label class="form-label">当前背景图预览</label>
+                            <div style="max-width: 400px; border-radius: 8px; overflow: hidden;">
+                                <img src="{{ hero.background_image }}"
+                                     alt="背景图预览"
+                                     class="img-fluid"
+                                     onerror="this.src='/static/images/placeholder.png'">
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- 按钮配置 -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">按钮配置</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="border-bottom pb-2 mb-3">按钮1（主按钮）</h6>
+
+                                <div class="mb-3">
+                                    <label for="button_text" class="form-label">按钮文字（中文）</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="button_text"
+                                           name="button_text"
+                                           value="{{ hero.button_text if hero else '' }}"
+                                           placeholder="例如：探索课程">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="button_text_en" class="form-label">按钮文字（英文）</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="button_text_en"
+                                           name="button_text_en"
+                                           value="{{ hero.button_text_en if hero else '' }}"
+                                           placeholder="Example: Explore Courses">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="button_url" class="form-label">按钮链接</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="button_url"
+                                           name="button_url"
+                                           value="{{ hero.button_url if hero else '' }}"
+                                           placeholder="/school/">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="button_style" class="form-label">按钮样式</label>
+                                    <select class="form-select" id="button_style" name="button_style">
+                                        <option value="btn-primary" {% if hero and hero.button_style == 'btn-primary' %}selected{% endif %}>Primary (蓝色)</option>
+                                        <option value="btn-success" {% if hero and hero.button_style == 'btn-success' %}selected{% endif %}>Success (绿色)</option>
+                                        <option value="btn-warning" {% if hero and hero.button_style == 'btn-warning' %}selected{% endif %}>Warning (黄色)</option>
+                                        <option value="btn-danger" {% if hero and hero.button_style == 'btn-danger' %}selected{% endif %}>Danger (红色)</option>
+                                        <option value="btn-info" {% if hero and hero.button_style == 'btn-info' %}selected{% endif %}>Info (青色)</option>
+                                        <option value="btn-light" {% if hero and hero.button_style == 'btn-light' %}selected{% endif %}>Light (浅色)</option>
+                                        <option value="btn-dark" {% if hero and hero.button_style == 'btn-dark' %}selected{% endif %}>Dark (深色)</option>
+                                        <option value="btn-outline-light" {% if hero and hero.button_style == 'btn-outline-light' %}selected{% endif %}>Outline Light (浅色边框)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <h6 class="border-bottom pb-2 mb-3">按钮2（次要按钮）</h6>
+
+                                <div class="mb-3">
+                                    <label for="button2_text" class="form-label">按钮文字（中文）</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="button2_text"
+                                           name="button2_text"
+                                           value="{{ hero.button2_text if hero else '' }}"
+                                           placeholder="例如：预约试听">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="button2_text_en" class="form-label">按钮文字（英文）</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="button2_text_en"
+                                           name="button2_text_en"
+                                           value="{{ hero.button2_text_en if hero else '' }}"
+                                           placeholder="Example: Book Trial">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="button2_url" class="form-label">按钮链接</label>
+                                    <input type="text"
+                                           class="form-control"
+                                           id="button2_url"
+                                           name="button2_url"
+                                           value="{{ hero.button2_url if hero else '' }}"
+                                           placeholder="/contact/">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="button2_style" class="form-label">按钮样式</label>
+                                    <select class="form-select" id="button2_style" name="button2_style">
+                                        <option value="btn-primary" {% if hero and hero.button2_style == 'btn-primary' %}selected{% endif %}>Primary (蓝色)</option>
+                                        <option value="btn-success" {% if hero and hero.button2_style == 'btn-success' %}selected{% endif %}>Success (绿色)</option>
+                                        <option value="btn-warning" {% if hero and hero.button2_style == 'btn-warning' %}selected{% endif %}>Warning (黄色)</option>
+                                        <option value="btn-danger" {% if hero and hero.button2_style == 'btn-danger' %}selected{% endif %}>Danger (红色)</option>
+                                        <option value="btn-info" {% if hero and hero.button2_style == 'btn-info' %}selected{% endif %}>Info (青色)</option>
+                                        <option value="btn-light" {% if hero and hero.button2_style == 'btn-light' %}selected{% endif %}>Light (浅色)</option>
+                                        <option value="btn-dark" {% if hero and hero.button2_style == 'btn-dark' %}selected{% endif %}>Dark (深色)</option>
+                                        <option value="btn-outline-light" {% if hero and hero.button2_style == 'btn-outline-light' %}selected{% endif %}>Outline Light (浅色边框)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 排序和状态 -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">排序和状态</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="sort_order" class="form-label">排序顺序</label>
+                                    <input type="number"
+                                           class="form-control"
+                                           id="sort_order"
+                                           name="sort_order"
+                                           value="{{ hero.sort_order if hero else 0 }}"
+                                           min="0">
+                                    <small class="form-text text-muted">数字越小越靠前，建议使用10、20、30...便于后续插入</small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">启用状态</label>
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input"
+                                               type="checkbox"
+                                               id="is_active"
+                                               name="is_active"
+                                               value="true"
+                                               {% if not hero or hero.is_active %}checked{% endif %}>
+                                        <label class="form-check-label" for="is_active">
+                                            在前台显示此幻灯片
+                                        </label>
+                                    </div>
+                                    <small class="form-text text-muted">只有启用的幻灯片才会在前台显示</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 提交按钮 -->
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-lg me-1"></i>
+                                {% if is_edit %}更新{% else %}创建{% endif %}Hero幻灯片
+                            </button>
+                            <a href="/admin/heroes" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-lg me-1"></i>
+                                取消
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+// 表单验证
+(function() {
+    'use strict';
+    var forms = document.querySelectorAll('.needs-validation');
+    Array.prototype.slice.call(forms).forEach(function(form) {
+        form.addEventListener('submit', function(event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+})();
+</script>
+{% endblock %}
