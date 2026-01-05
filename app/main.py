@@ -128,7 +128,7 @@ def register_middlewares(app: FastAPI):
 def register_routes(app: FastAPI):
     """注册所有路由"""
     # 先注册管理后台路由（在通配符路由之前）
-    from admin.app.routers import auth, media, columns, single_pages, posts, products, settings, galleries, contacts, dashboard, home, column_builder, static_pages
+    from admin.app.routers import auth, media, columns, single_pages, posts, products, settings, galleries, contacts, dashboard, home, column_builder, static_pages, heroes, stats
 
     # 注册管理后台路由
     app.include_router(auth.router, prefix="/admin", tags=["admin-auth"])
@@ -140,10 +140,12 @@ def register_routes(app: FastAPI):
     app.include_router(products.router, prefix="/admin", tags=["admin-products"])
     app.include_router(settings.router, prefix="/admin", tags=["admin-settings"])
     app.include_router(galleries.router, prefix="/admin", tags=["admin-galleries"])
+    app.include_router(heroes.router, prefix="/admin", tags=["admin-heroes"])
     app.include_router(contacts.router, prefix="/admin", tags=["admin-contacts"])
     app.include_router(home.router, prefix="/admin", tags=["admin-home"])
     app.include_router(column_builder.router, prefix="/admin", tags=["admin-columns-builder"])
     app.include_router(static_pages.router, prefix="/admin", tags=["admin-static-pages"])
+    app.include_router(stats.router, prefix="/admin", tags=["admin-stats"])
 
     # 注册前台路由
     app.include_router(health.router, tags=["health"])
