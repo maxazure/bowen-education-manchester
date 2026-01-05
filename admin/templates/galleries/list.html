@@ -89,7 +89,7 @@
                 <!-- 封面图 -->
                 <div class="position-relative" style="height: 200px; overflow: hidden;">
                     {% if gallery.cover_media_id %}
-                    <img src="{{ gallery.cover.path_original if gallery.cover else '/static/images/placeholder.png' }}"
+                    <img src="{{ gallery.cover.path_original if gallery.cover else 'https://placehold.co/400x300/e9ecef/868e96?text=No+Image' }}"
                          alt="{{ gallery.title }}"
                          class="w-100 h-100 object-fit-cover">
                     {% else %}
