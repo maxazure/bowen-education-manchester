@@ -36,9 +36,10 @@ async def list_galleries(
     """
     相册列表页面 HTML
     """
-    # 获取所有相册，同时 eager load cover_media 关系
+    # 获取所有相册，同时 eager load cover_media 和 images 关系
     galleries = db.query(Gallery).options(
-        joinedload(Gallery.cover_media)
+        joinedload(Gallery.cover_media),
+        joinedload(Gallery.images).joinedload(GalleryImage.media)
     ).order_by(Gallery.sort_order.asc(), Gallery.created_at.desc()).all()
 
     # 计算统计信息
