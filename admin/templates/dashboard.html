@@ -4,97 +4,101 @@
 
 {% block content %}
 <!-- 页面标题区 -->
-<div class="page-header fade-in">
-    <h1 class="page-title">
-        <i class="bi bi-speedometer2 text-primary me-2"></i>仪表板
-    </h1>
-    <p class="page-subtitle">欢迎回来，查看您的系统概览</p>
+<div class="page-header animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="page-title">
+                <i class="bi bi-speedometer2 text-primary me-2"></i>仪表板
+            </h1>
+            <p class="page-subtitle">欢迎回来，查看您的系统概览</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline" id="refreshStats">
+                <i class="bi bi-arrow-clockwise"></i>
+            </button>
+            <button class="btn btn-primary" onclick="location.href='/admin/posts/new'">
+                <i class="bi bi-plus-lg me-2"></i>新建内容
+            </button>
+        </div>
+    </div>
 </div>
 
-<!-- 统计卡片区 -->
-<div class="row g-4 mb-4">
+<!-- 统计卡片区 - Modern Bento Grid -->
+<div class="bento-grid mb-5" style="--stagger-delay: 0">
     <!-- 文章统计 -->
-    <div class="col-12 col-sm-6 col-lg-3">
-        <div class="card stat-card bg-primary-light hover-lift h-100">
-            <div class="card-body d-flex align-items-center">
-                <div class="stat-icon text-primary me-3">
-                    <i class="bi bi-newspaper"></i>
-                </div>
-                <div class="flex-grow-1">
-                    <div class="stat-label">文章总数</div>
-                    <div class="stat-value" id="postsCount">-</div>
-                    <div class="stat-change text-success">
-                        <i class="bi bi-arrow-up-short"></i>
-                        <small>本月新增 0 篇</small>
-                    </div>
-                </div>
+    <div class="bento-item-3">
+        <div class="stat-card primary animate-fade-in" style="animation-delay: 0ms">
+            <div class="stat-icon">
+                <i class="bi bi-newspaper"></i>
+            </div>
+            <div class="stat-label">文章总数</div>
+            <div class="stat-value" id="postsCount">
+                <div class="skeleton skeleton-stat"></div>
+            </div>
+            <div class="stat-change positive" id="postsChange">
+                <i class="bi bi-arrow-up-short"></i>
+                <span>-</span>
             </div>
         </div>
     </div>
 
     <!-- 产品统计 -->
-    <div class="col-12 col-sm-6 col-lg-3">
-        <div class="card stat-card bg-success-light hover-lift h-100">
-            <div class="card-body d-flex align-items-center">
-                <div class="stat-icon text-success me-3">
-                    <i class="bi bi-box-seam"></i>
-                </div>
-                <div class="flex-grow-1">
-                    <div class="stat-label">产品总数</div>
-                    <div class="stat-value" id="productsCount">-</div>
-                    <div class="stat-change text-success">
-                        <i class="bi bi-arrow-up-short"></i>
-                        <small>本月新增 0 个</small>
-                    </div>
-                </div>
+    <div class="bento-item-3">
+        <div class="stat-card success animate-fade-in" style="animation-delay: 50ms">
+            <div class="stat-icon">
+                <i class="bi bi-box-seam"></i>
+            </div>
+            <div class="stat-label">产品总数</div>
+            <div class="stat-value" id="productsCount">
+                <div class="skeleton skeleton-stat"></div>
+            </div>
+            <div class="stat-change positive" id="productsChange">
+                <i class="bi bi-arrow-up-short"></i>
+                <span>-</span>
             </div>
         </div>
     </div>
 
     <!-- 相册统计 -->
-    <div class="col-12 col-sm-6 col-lg-3">
-        <div class="card stat-card bg-info-light hover-lift h-100">
-            <div class="card-body d-flex align-items-center">
-                <div class="stat-icon text-info me-3">
-                    <i class="bi bi-collection"></i>
-                </div>
-                <div class="flex-grow-1">
-                    <div class="stat-label">相册总数</div>
-                    <div class="stat-value" id="galleriesCount">-</div>
-                    <div class="stat-change text-success">
-                        <i class="bi bi-arrow-up-short"></i>
-                        <small>本月新增 0 个</small>
-                    </div>
-                </div>
+    <div class="bento-item-3">
+        <div class="stat-card info animate-fade-in" style="animation-delay: 100ms">
+            <div class="stat-icon">
+                <i class="bi bi-collection"></i>
+            </div>
+            <div class="stat-label">相册总数</div>
+            <div class="stat-value" id="galleriesCount">
+                <div class="skeleton skeleton-stat"></div>
+            </div>
+            <div class="stat-change positive" id="galleriesChange">
+                <i class="bi bi-arrow-up-short"></i>
+                <span>-</span>
             </div>
         </div>
     </div>
 
     <!-- 留言统计 -->
-    <div class="col-12 col-sm-6 col-lg-3">
-        <div class="card stat-card bg-warning-light hover-lift h-100">
-            <div class="card-body d-flex align-items-center">
-                <div class="stat-icon text-warning me-3">
-                    <i class="bi bi-chat-dots"></i>
-                </div>
-                <div class="flex-grow-1">
-                    <div class="stat-label">待处理留言</div>
-                    <div class="stat-value" id="contactsCount">-</div>
-                    <div class="stat-change text-warning">
-                        <i class="bi bi-exclamation-circle"></i>
-                        <small>需要关注</small>
-                    </div>
-                </div>
+    <div class="bento-item-3">
+        <div class="stat-card warning animate-fade-in" style="animation-delay: 150ms">
+            <div class="stat-icon">
+                <i class="bi bi-chat-dots"></i>
+            </div>
+            <div class="stat-label">待处理留言</div>
+            <div class="stat-value" id="contactsCount">
+                <div class="skeleton skeleton-stat"></div>
+            </div>
+            <div class="stat-change neutral" id="contactsChange">
+                <i class="bi bi-exclamation-circle"></i>
+                <span>需要关注</span>
             </div>
         </div>
     </div>
 </div>
 
 <!-- 主要内容区 -->
-<div class="row g-4">
+<div class="bento-grid">
     <!-- 快速操作 -->
-    <div class="col-12 col-lg-4">
-        <div class="card h-100">
+    <div class="bento-item-4">
+        <div class="card card-glass h-100 animate-fade-in" style="animation-delay: 200ms">
             <div class="card-header">
                 <h5 class="card-title mb-0">
                     <i class="bi bi-lightning-charge text-primary me-2"></i>快速操作
@@ -102,25 +106,25 @@
             </div>
             <div class="card-body">
                 <div class="d-grid gap-3">
-                    <a href="/admin/posts/new" class="btn btn-outline-primary d-flex align-items-center justify-content-between">
+                    <a href="/admin/posts/new" class="btn btn-outline d-flex align-items-center justify-content-between">
                         <span>
                             <i class="bi bi-plus-circle me-2"></i>创建文章
                         </span>
                         <i class="bi bi-arrow-right"></i>
                     </a>
-                    <a href="/admin/products/new" class="btn btn-outline-success d-flex align-items-center justify-content-between">
+                    <a href="/admin/products/new" class="btn btn-outline d-flex align-items-center justify-content-between">
                         <span>
                             <i class="bi bi-plus-circle me-2"></i>添加产品
                         </span>
                         <i class="bi bi-arrow-right"></i>
                     </a>
-                    <a href="/admin/galleries/new" class="btn btn-outline-info d-flex align-items-center justify-content-between">
+                    <a href="/admin/galleries/new" class="btn btn-outline d-flex align-items-center justify-content-between">
                         <span>
                             <i class="bi bi-plus-circle me-2"></i>创建相册
                         </span>
                         <i class="bi bi-arrow-right"></i>
                     </a>
-                    <a href="/admin/media" class="btn btn-outline-secondary d-flex align-items-center justify-content-between">
+                    <a href="/admin/media" class="btn btn-outline d-flex align-items-center justify-content-between">
                         <span>
                             <i class="bi bi-cloud-upload me-2"></i>上传媒体
                         </span>
@@ -132,20 +136,20 @@
     </div>
 
     <!-- 最近活动 -->
-    <div class="col-12 col-lg-8">
-        <div class="card h-100">
+    <div class="bento-item-8">
+        <div class="card h-100 animate-fade-in" style="animation-delay: 250ms">
             <div class="card-header d-flex align-items-center justify-content-between">
                 <h5 class="card-title mb-0">
                     <i class="bi bi-clock-history text-primary me-2"></i>最近活动
                 </h5>
-                <a href="/admin/posts" class="btn btn-sm btn-outline-primary">
+                <a href="/admin/posts" class="btn btn-sm btn-outline">
                     查看全部 <i class="bi bi-arrow-right ms-1"></i>
                 </a>
             </div>
-            <div class="card-body">
+            <div class="card-body p-0">
                 <div class="list-group list-group-flush" id="recentActivities">
                     <!-- 加载状态 -->
-                    <div class="text-center py-4 text-muted">
+                    <div class="text-center py-5 text-muted">
                         <div class="spinner-border spinner-border-sm me-2" role="status">
                             <span class="visually-hidden">加载中...</span>
                         </div>
@@ -158,9 +162,10 @@
 </div>
 
 <!-- 系统状态 -->
-<div class="row g-4 mt-2">
-    <div class="col-12 col-lg-6">
-        <div class="card">
+<div class="bento-grid mt-4">
+    <!-- 内容分布 -->
+    <div class="bento-item-2">
+        <div class="card animate-fade-in" style="animation-delay: 300ms">
             <div class="card-header">
                 <h5 class="card-title mb-0">
                     <i class="bi bi-bar-chart text-primary me-2"></i>内容分布
@@ -170,27 +175,27 @@
                 <div class="mb-4">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <span class="text-muted">已发布文章</span>
-                        <span class="fw-bold" id="publishedPostsCount">0</span>
+                        <span class="fw-bold" id="publishedPostsCount">-</span>
                     </div>
-                    <div class="progress">
+                    <div class="progress" style="height: 8px;">
                         <div class="progress-bar bg-success" role="progressbar" style="width: 0%" id="publishedPostsBar"></div>
                     </div>
                 </div>
                 <div class="mb-4">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <span class="text-muted">草稿文章</span>
-                        <span class="fw-bold" id="draftPostsCount">0</span>
+                        <span class="fw-bold" id="draftPostsCount">-</span>
                     </div>
-                    <div class="progress">
+                    <div class="progress" style="height: 8px;">
                         <div class="progress-bar bg-warning" role="progressbar" style="width: 0%" id="draftPostsBar"></div>
                     </div>
                 </div>
                 <div>
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <span class="text-muted">媒体文件</span>
-                        <span class="fw-bold" id="mediaCount">0</span>
+                        <span class="fw-bold" id="mediaCount">-</span>
                     </div>
-                    <div class="progress">
+                    <div class="progress" style="height: 8px;">
                         <div class="progress-bar bg-info" role="progressbar" style="width: 0%" id="mediaBar"></div>
                     </div>
                 </div>
@@ -198,8 +203,9 @@
         </div>
     </div>
 
-    <div class="col-12 col-lg-6">
-        <div class="card">
+    <!-- 系统信息 -->
+    <div class="bento-item-2">
+        <div class="card animate-fade-in" style="animation-delay: 350ms">
             <div class="card-header">
                 <h5 class="card-title mb-0">
                     <i class="bi bi-info-circle text-primary me-2"></i>系统信息
@@ -208,48 +214,40 @@
             <div class="card-body">
                 <div class="row g-3">
                     <div class="col-6">
-                        <div class="d-flex align-items-center">
-                            <div class="stat-icon bg-primary-light text-primary me-3" style="width: 48px; height: 48px; font-size: 20px;">
-                                <i class="bi bi-folder"></i>
-                            </div>
-                            <div>
-                                <div class="text-muted small">栏目数量</div>
-                                <div class="fw-bold fs-5" id="columnsCount">-</div>
-                            </div>
+                        <div class="stat-icon bg-primary-light text-primary me-3" style="width: 48px; height: 48px; font-size: 20px;">
+                            <i class="bi bi-folder"></i>
+                        </div>
+                        <div class="mt-2">
+                            <div class="text-muted small">栏目数量</div>
+                            <div class="fw-bold fs-5" id="columnsCount">-</div>
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="d-flex align-items-center">
-                            <div class="stat-icon bg-success-light text-success me-3" style="width: 48px; height: 48px; font-size: 20px;">
-                                <i class="bi bi-file-text"></i>
-                            </div>
-                            <div>
-                                <div class="text-muted small">单页数量</div>
-                                <div class="fw-bold fs-5" id="pagesCount">-</div>
-                            </div>
+                        <div class="stat-icon bg-success-light text-success me-3" style="width: 48px; height: 48px; font-size: 20px;">
+                            <i class="bi bi-file-text"></i>
+                        </div>
+                        <div class="mt-2">
+                            <div class="text-muted small">单页数量</div>
+                            <div class="fw-bold fs-5" id="pagesCount">-</div>
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="d-flex align-items-center">
-                            <div class="stat-icon bg-info-light text-info me-3" style="width: 48px; height: 48px; font-size: 20px;">
-                                <i class="bi bi-images"></i>
-                            </div>
-                            <div>
-                                <div class="text-muted small">媒体库</div>
-                                <div class="fw-bold fs-5" id="mediaLibCount">-</div>
-                            </div>
+                        <div class="stat-icon bg-info-light text-info me-3" style="width: 48px; height: 48px; font-size: 20px;">
+                            <i class="bi bi-images"></i>
+                        </div>
+                        <div class="mt-2">
+                            <div class="text-muted small">媒体库</div>
+                            <div class="fw-bold fs-5" id="mediaLibCount">-</div>
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="d-flex align-items-center">
-                            <div class="stat-icon bg-warning-light text-warning me-3" style="width: 48px; height: 48px; font-size: 20px;">
-                                <i class="bi bi-gear"></i>
-                            </div>
-                            <div>
-                                <div class="text-muted small">系统状态</div>
-                                <div class="fw-bold fs-5">
-                                    <span class="badge bg-success-light text-success">正常</span>
-                                </div>
+                        <div class="stat-icon bg-warning-light text-warning me-3" style="width: 48px; height: 48px; font-size: 20px;">
+                            <i class="bi bi-gear"></i>
+                        </div>
+                        <div class="mt-2">
+                            <div class="text-muted small">系统状态</div>
+                            <div class="fw-bold fs-5">
+                                <span class="badge badge-success">正常</span>
                             </div>
                         </div>
                     </div>
@@ -268,9 +266,36 @@ document.addEventListener('DOMContentLoaded', function() {
     // 加载最近活动
     loadRecentActivities();
 
+    // 刷新按钮事件
+    const refreshBtn = document.getElementById('refreshStats');
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', function() {
+            // 显示加载状态
+            showSkeletonLoading();
+
+            // 重新加载数据
+            loadDashboardStats();
+            loadRecentActivities();
+        });
+    }
+
     // 每30秒刷新一次数据
     setInterval(loadDashboardStats, 30000);
 });
+
+/**
+ * 显示骨架屏加载状态
+ */
+function showSkeletonLoading() {
+    const statElements = ['postsCount', 'productsCount', 'galleriesCount', 'contactsCount'];
+
+    statElements.forEach(id => {
+        const element = document.getElementById(id);
+        if (element && !element.querySelector('.skeleton')) {
+            element.innerHTML = '<div class="skeleton skeleton-stat"></div>';
+        }
+    });
+}
 
 /**
  * 加载仪表板统计数据
@@ -278,7 +303,7 @@ document.addEventListener('DOMContentLoaded', function() {
 async function loadDashboardStats() {
     try {
         // 调用 API 获取真实数据
-        const response = await fetch('/api/stats');
+        const response = await fetch('/admin/api/stats');
         const result = await response.json();
 
         if (!result.success) {
@@ -287,7 +312,7 @@ async function loadDashboardStats() {
 
         const stats = result.data;
 
-        // 更新统计数字
+        // 更新统计数字（移除骨架屏，显示真实数据）
         updateStatValue('postsCount', stats.posts);
         updateStatValue('productsCount', stats.products);
         updateStatValue('galleriesCount', stats.galleries);
@@ -296,18 +321,29 @@ async function loadDashboardStats() {
         updateStatValue('pagesCount', stats.pages);
         updateStatValue('mediaLibCount', stats.media);
 
+        // 更新变化指示器
+        updateStatChange('postsChange', `本月新增 ${stats.monthlyPosts || 0} 篇`);
+        updateStatChange('productsChange', `本月新增 ${stats.monthlyProducts || 0} 个`);
+        updateStatChange('galleriesChange', `本月新增 ${stats.monthlyGalleries || 0} 个`);
+
         // 更新进度条
         updateStatValue('publishedPostsCount', stats.publishedPosts);
         updateStatValue('draftPostsCount', stats.draftPosts);
         updateStatValue('mediaCount', stats.media);
 
-        const total = stats.posts;
+        const total = stats.posts || 1;
         updateProgressBar('publishedPostsBar', (stats.publishedPosts / total) * 100);
         updateProgressBar('draftPostsBar', (stats.draftPosts / total) * 100);
         updateProgressBar('mediaBar', Math.min((stats.media / 200) * 100, 100));
 
     } catch (error) {
         console.error('加载统计数据失败:', error);
+
+        // 显示错误状态
+        showErrorMessage('postsCount', '加载失败');
+        showErrorMessage('productsCount', '加载失败');
+        showErrorMessage('galleriesCount', '加载失败');
+        showErrorMessage('contactsCount', '加载失败');
     }
 }
 
@@ -318,10 +354,16 @@ function updateStatValue(elementId, value) {
     const element = document.getElementById(elementId);
     if (!element) return;
 
+    // 移除骨架屏
+    const skeleton = element.querySelector('.skeleton');
+    if (skeleton) {
+        skeleton.remove();
+    }
+
     const currentValue = parseInt(element.textContent) || 0;
     const targetValue = value;
-    const duration = 1000; // 动画持续时间（毫秒）
-    const steps = 30; // 动画步数
+    const duration = 800;
+    const steps = 20;
     const increment = (targetValue - currentValue) / steps;
     const stepDuration = duration / steps;
 
@@ -336,6 +378,33 @@ function updateStatValue(elementId, value) {
             element.textContent = targetValue;
         }
     }, stepDuration);
+}
+
+/**
+ * 更新统计变化文字
+ */
+function updateStatChange(elementId, text) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        const span = element.querySelector('span');
+        if (span) {
+            span.textContent = text;
+        }
+    }
+}
+
+/**
+ * 显示错误信息
+ */
+function showErrorMessage(elementId, message) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        const skeleton = element.querySelector('.skeleton');
+        if (skeleton) {
+            skeleton.remove();
+        }
+        element.innerHTML = `<span class="text-danger small">${message}</span>`;
+    }
 }
 
 /**

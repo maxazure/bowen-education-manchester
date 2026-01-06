@@ -1,11 +1,16 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="博文教育集团管理后台">
     <meta name="author" content="博文教育集团">
     <title>{% block title %}博文教育管理后台{% endblock %}</title>
+
+    <!-- Google Fonts - Inter for modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -14,283 +19,10 @@
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css" rel="stylesheet">
 
-    <!-- 自定义样式 -->
-    <link rel="stylesheet" href="/admin-static/css/admin.css">
+    <!-- Modern CSS with Glassmorphism & Dark Mode -->
+    <link rel="stylesheet" href="/admin-static/css/admin-modern.css">
 
     {% block extra_css %}{% endblock %}
-
-    <style>
-        /* Bootstrap 5 管理后台自定义样式 */
-        :root {
-            --topbar-height: 60px;
-            --sidebar-width: 240px;
-            --sidebar-collapsed-width: 70px;
-            --primary-color: #c8102e;
-            --sidebar-bg: #1f2937;
-            --sidebar-text: #9ca3af;
-            --sidebar-active: #c8102e;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-            font-size: 14px;
-            line-height: 1.5;
-            background-color: #f9fafb;
-            padding-top: var(--topbar-height);
-        }
-
-        /* 顶部导航栏 */
-        .topbar {
-            height: var(--topbar-height);
-            background: #ffffff;
-            border-bottom: 1px solid #e5e7eb;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-        }
-
-        .topbar .navbar-brand {
-            font-weight: 600;
-            color: #1f2937;
-        }
-
-        .topbar .navbar-brand:hover {
-            color: var(--primary-color);
-        }
-
-        #sidebarToggle {
-            color: #4b5563;
-            font-size: 1.5rem;
-            text-decoration: none;
-        }
-
-        #sidebarToggle:hover {
-            color: var(--primary-color);
-        }
-
-        .user-dropdown .btn {
-            color: #4b5563;
-            text-decoration: none;
-            border: none;
-            background: transparent;
-        }
-
-        .user-dropdown .btn:hover,
-        .user-dropdown .btn:focus {
-            color: var(--primary-color);
-            background: transparent;
-        }
-
-        /* 侧边栏 */
-        .sidebar {
-            position: fixed;
-            top: var(--topbar-height);
-            left: 0;
-            width: var(--sidebar-width);
-            height: calc(100vh - var(--topbar-height));
-            background-color: var(--sidebar-bg);
-            overflow-y: auto;
-            overflow-x: hidden;
-            transition: width 0.3s ease, transform 0.3s ease;
-            z-index: 1000;
-        }
-
-        .sidebar::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .sidebar::-webkit-scrollbar-track {
-            background: #374151;
-        }
-
-        .sidebar::-webkit-scrollbar-thumb {
-            background: #4b5563;
-            border-radius: 3px;
-        }
-
-        .sidebar-content {
-            padding: 1rem 0;
-        }
-
-        .sidebar-link {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 1.5rem;
-            color: var(--sidebar-text);
-            text-decoration: none;
-            transition: all 0.2s ease;
-            position: relative;
-        }
-
-        .sidebar-link:hover {
-            background-color: rgba(255, 255, 255, 0.05);
-            color: #ffffff;
-        }
-
-        .sidebar-link.active {
-            background-color: rgba(200, 16, 46, 0.1);
-            color: #ffffff;
-            border-left: 3px solid var(--sidebar-active);
-        }
-
-        .sidebar-link i {
-            font-size: 1.25rem;
-            width: 24px;
-            margin-right: 0.75rem;
-        }
-
-        .sidebar-text {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .sidebar-header {
-            padding: 0.5rem 1.5rem;
-            color: #6b7280;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .sidebar-section {
-            margin-bottom: 0.5rem;
-        }
-
-        /* 侧边栏折叠状态 */
-        .sidebar.collapsed {
-            width: var(--sidebar-collapsed-width);
-        }
-
-        .sidebar.collapsed .sidebar-text,
-        .sidebar.collapsed .sidebar-header {
-            display: none;
-        }
-
-        .sidebar.collapsed .sidebar-link {
-            justify-content: center;
-            padding: 0.75rem;
-        }
-
-        .sidebar.collapsed .sidebar-link i {
-            margin-right: 0;
-        }
-
-        /* 主内容区 */
-        .main-content {
-            margin-left: var(--sidebar-width);
-            padding: 2rem;
-            min-height: calc(100vh - var(--topbar-height));
-            transition: margin-left 0.3s ease;
-        }
-
-        body.sidebar-collapsed .main-content {
-            margin-left: var(--sidebar-collapsed-width);
-        }
-
-        /* 移动端遮罩 */
-        .sidebar-overlay {
-            display: none;
-            position: fixed;
-            top: var(--topbar-height);
-            left: 0;
-            width: 100%;
-            height: calc(100vh - var(--topbar-height));
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .sidebar-overlay.show {
-            display: block;
-            opacity: 1;
-        }
-
-        /* 响应式设计 */
-        @media (max-width: 991.98px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .sidebar.show {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
-
-            body.sidebar-collapsed .main-content {
-                margin-left: 0;
-            }
-        }
-
-        /* 页面标题 */
-        .page-header {
-            margin-bottom: 1.5rem;
-        }
-
-        .page-title {
-            font-size: 1.75rem;
-            font-weight: 600;
-            color: #1f2937;
-            margin-bottom: 0.25rem;
-        }
-
-        .page-subtitle {
-            color: #6b7280;
-            font-size: 0.875rem;
-        }
-
-        /* 卡片样式 */
-        .card {
-            border: none;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            margin-bottom: 1.5rem;
-        }
-
-        .card-header {
-            background-color: #f9fafb;
-            border-bottom: 1px solid #e5e7eb;
-            padding: 1rem 1.25rem;
-        }
-
-        .card-title {
-            margin-bottom: 0;
-            font-weight: 600;
-            color: #1f2937;
-        }
-
-        /* 按钮颜色覆盖 */
-        .btn-primary {
-            background-color: var(--primary-color);
-            border-color: var(--primary-color);
-        }
-
-        .btn-primary:hover,
-        .btn-primary:focus {
-            background-color: #a00d25;
-            border-color: #a00d25;
-        }
-
-        /* 面包屑 */
-        .breadcrumb {
-            background-color: transparent;
-            padding: 0;
-            margin-bottom: 1rem;
-        }
-
-        /* Toast 容器 */
-        .toast-container {
-            z-index: 9999;
-        }
-    </style>
 </head>
 <body>
     <!-- 顶部导航栏 -->
@@ -307,8 +39,15 @@
                 </a>
             </div>
 
-            <!-- 右侧：用户菜单 -->
-            <div class="d-flex align-items-center">
+            <!-- 右侧：主题切换 + 用户菜单 -->
+            <div class="d-flex align-items-center gap-2">
+                <!-- 主题切换按钮 -->
+                <button class="theme-toggle" id="themeToggle" type="button" aria-label="切换主题">
+                    <i class="bi bi-sun-fill sun-icon"></i>
+                    <i class="bi bi-moon-fill moon-icon"></i>
+                </button>
+
+                <!-- 用户菜单 -->
                 <div class="dropdown user-dropdown">
                     <button class="btn dropdown-toggle d-flex align-items-center" type="button"
                             id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -360,6 +99,10 @@
                 <a href="/admin/products" class="sidebar-link {% if '/products' in request.path %}active{% endif %}">
                     <i class="bi bi-box-seam"></i>
                     <span class="sidebar-text">产品管理</span>
+                </a>
+                <a href="/admin/heroes" class="sidebar-link {% if '/heroes' in request.path %}active{% endif %}">
+                    <i class="bi bi-badge-vo"></i>
+                    <span class="sidebar-text">Hero幻灯片</span>
                 </a>
             </div>
 
@@ -416,6 +159,44 @@
     <script src="/admin-static/js/admin.js"></script>
 
     <script>
+        /**
+         * Dark Mode Toggle
+         */
+        (function() {
+            'use strict';
+
+            const themeToggle = document.getElementById('themeToggle');
+            const html = document.documentElement;
+
+            // Get saved theme or default to light
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            html.setAttribute('data-theme', savedTheme);
+
+            // Toggle theme
+            if (themeToggle) {
+                themeToggle.addEventListener('click', function() {
+                    const currentTheme = html.getAttribute('data-theme');
+                    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+                    html.setAttribute('data-theme', newTheme);
+                    localStorage.setItem('theme', newTheme);
+
+                    // Add transition animation
+                    html.style.transition = 'background-color 0.3s ease';
+                    setTimeout(() => {
+                        html.style.transition = '';
+                    }, 300);
+                });
+            }
+
+            // Listen for system theme changes
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+                if (!localStorage.getItem('theme')) {
+                    html.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+                }
+            });
+        })();
+
         /**
          * 侧边栏折叠功能
          */
