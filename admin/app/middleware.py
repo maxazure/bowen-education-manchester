@@ -25,7 +25,7 @@ class AdminAuthMiddleware(BaseHTTPMiddleware):
             return response
 
         # 公开路径（无需认证）- 前缀匹配
-        public_prefixes = ["/admin/login", "/admin/api/", "/api/"]
+        public_prefixes = ["/admin/login", "/admin/logout", "/admin/api/", "/admin/static/", "/api/"]
         static_paths = ["/static/", "/admin-static/", "/uploads/", "/health"]
 
         # 检查是否是静态资源或公开路径
@@ -42,8 +42,13 @@ class AdminAuthMiddleware(BaseHTTPMiddleware):
             else:
                 # 需要认证的管理后台路径
                 try:
-                    user_id = request.session.get("admin_user_id")
-                    logger.info(f"访问 {request.url.path}, session user_id: {user_id}, session内容: {dict(request.session)}")
+                    # 先检查 session 是否存在
+                    if hasattr(request, 'session'):
+                        user_id = request.session.get("admin_user_id")
+                        logger.info(f"访问 {request.url.path}, session user_id: {user_id}, session内容: {dict(request.session)}")
+                    else:
+                        logger.error("request.session 属性不存在")
+                        user_id = None
                 except (AttributeError, RuntimeError, AssertionError) as e:
                     logger.error(f"Session读取异常: {e}")
                     user_id = None
