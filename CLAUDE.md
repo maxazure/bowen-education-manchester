@@ -6,6 +6,8 @@
 - **项目路径**: /home/maxazure/projects/bowen-education-manchester
 - **服务名称**: bowen-education.service
 - **服务端口**: 10034
+- **网站地址**: https://bowen.docms.nz
+- **Admin地址**: https://bowen.docms.nz/admin
 
 ### 同步数据库标准流程
 
@@ -50,6 +52,82 @@ ssh maxazure@192.168.31.205 "tail -f /home/maxazure/projects/bowen-education-man
 # 查看数据库备份列表
 ssh maxazure@192.168.31.205 "ls -lh /home/maxazure/projects/bowen-education-manchester/instance/database.db*"
 ```
+
+## 部署步骤
+
+当需要部署代码更新到服务器时，请按以下步骤操作：
+
+```bash
+# 1. 提交代码到 git（如果尚未提交）
+git add .
+git commit -m "描述本次更新"
+git push
+
+# 2. SSH 到服务器，拉取最新代码
+ssh maxazure@192.168.31.205 "cd /home/maxazure/projects/bowen-education-manchester && git pull"
+
+# 3. 如果有新的模型文件或数据库变更，运行数据库迁移
+# 添加新列示例：
+ssh maxazure@192.168.31.205 "cd /home/maxazure/projects/bowen-education-manchester && . venv/bin/activate && python -c \"
+from sqlalchemy import text
+from app.database import engine
+
+# 添加缺失的列
+with engine.connect() as conn:
+    try:
+        conn.execute(text('ALTER TABLE 表名 ADD COLUMN 列名 列类型'))
+        print('列添加成功')
+    except Exception as e:
+        print(f'列已存在或错误: {e}')
+    conn.commit()
+\""
+
+# 4. 同步模型文件到服务器（如果添加了新模型）
+rsync -av --delete /Users/maxazure/projects/bowen-education-manchester/app/models/ maxazure@192.168.31.205:/home/maxazure/projects/bowen-education-manchester/app/models/
+
+# 5. 重启服务
+ssh maxazure@192.168.31.205 "sudo systemctl restart bowen-education.service"
+
+# 6. 验证服务状态
+ssh maxazure@192.168.31.205 "sudo systemctl status bowen-education.service --no-pager"
+```
+
+### 服务故障排查
+
+如果服务启动失败，检查错误日志：
+
+```bash
+ssh maxazure@192.168.31.205 "tail -50 /home/maxazure/projects/bowen-education-manchester/logs/error.log"
+```
+
+常见问题：
+- `ImportError: cannot import name 'XXX' from 'app.models'` - 需要同步模型文件
+- `sqlite3.OperationalError: no such column: xxx` - 需要添加数据库列
+- `OperationalError: password hash does not match` - 需要重置 admin 密码
+
+## 修改管理员密码
+
+如果需要修改 admin 用户密码，在服务器上执行：
+
+```bash
+ssh maxazure@192.168.31.205 "cd /home/maxazure/projects/bowen-education-manchester && . venv/bin/activate && python -c \"
+import bcrypt
+from app.database import engine
+from sqlalchemy import text
+
+# 设置新密码
+new_password = '你的新密码'
+salt = bcrypt.gensalt()
+new_hash = bcrypt.hashpw(new_password.encode('utf-8'), salt).decode('utf-8')
+
+with engine.connect() as conn:
+    conn.execute(text('UPDATE admin_users SET password_hash=:h WHERE username=:u'), {'h': new_hash, 'u': 'admin'})
+    conn.commit()
+    print('密码已更新')
+\""
+```
+
+当前管理员默认密码：`admin123`
 
 ## 其他注意事项
 
