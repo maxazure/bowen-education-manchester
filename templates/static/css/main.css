@@ -1277,6 +1277,9 @@ a:hover {
     color: var(--color-primary);
     font-weight: 600;
     text-decoration: none;
+    display: block;
+    word-break: break-all;
+    overflow-wrap: break-word;
 }
 
 .contact-info-card__link:hover {
