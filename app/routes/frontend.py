@@ -17,6 +17,7 @@ from app.config import settings
 from app.database import get_db
 from app.models import ColumnType, SiteColumn
 from app.models.contact import ContactMessage
+from app.models.hero import HeroSlide
 from app.schemas.requests import ContactFormRequest
 from app.services import post_service, product_service, site_service
 from app.services import layout_service as layout_render_service
@@ -102,6 +103,12 @@ async def homepage(request: Request, db: Session = Depends(get_db)):
         page = site_service.get_single_page(db, home_column.id)
         context["page"] = page
 
+    # Get hero slides for carousel (从数据库读取已启用的Hero幻灯片)
+    hero_slides = db.query(HeroSlide).filter(
+        HeroSlide.is_active == True
+    ).order_by(HeroSlide.sort_order.asc()).all()
+    context["hero_slides"] = hero_slides
+
     # Get featured event for hero carousel (最新推荐的活动文章)
     featured_event = post_service.get_posts(db, is_recommended=True, limit=1)
     context["featured_event"] = featured_event[0] if featured_event else None
@@ -139,6 +146,12 @@ async def homepage_en(request: Request, db: Session = Depends(get_db)):
     if home_column and home_column.column_type == ColumnType.SINGLE_PAGE:
         page = site_service.get_single_page(db, home_column.id)
         context["page"] = page
+
+    # Get hero slides for carousel (从数据库读取已启用的Hero幻灯片)
+    hero_slides = db.query(HeroSlide).filter(
+        HeroSlide.is_active == True
+    ).order_by(HeroSlide.sort_order.asc()).all()
+    context["hero_slides"] = hero_slides
 
     # Get featured event for hero carousel
     featured_event = post_service.get_posts(db, is_recommended=True, limit=1)
@@ -187,7 +200,7 @@ async def column_page_generic(
 ):
     """Generic column page handler with language support"""
     # Exclude admin paths - they should be handled by admin router
-    if column_slug.startswith("admin"):
+    if column_slug == "admin" or column_slug.startswith("admin/"):
         raise HTTPException(status_code=404, detail="Page not found")
 
     # Remove trailing slash from column_slug for database lookup

@@ -19,7 +19,7 @@ from app.models.hero import HeroSlide
 ADMIN_DIR = Path(__file__).parent.parent.parent
 templates = Jinja2Templates(directory=str(ADMIN_DIR / "templates"))
 
-router = APIRouter(prefix="/heroes", tags=["heroes"])
+router = APIRouter(tags=["heroes"])
 
 
 # ===== HTML 页面路由 =====

@@ -3,6 +3,7 @@
 
 提供单页相关的业务逻辑:
 - Markdown 转 HTML
+- HTML 转 Markdown（基础）
 - Slug 生成
 - 删除检查
 """
@@ -91,6 +92,92 @@ def markdown_to_html(content: str) -> str:
     )
 
     return clean_html
+
+
+def html_to_markdown(html_content: Optional[str]) -> str:
+    """
+    将 HTML 转换为 Markdown（基础转换）
+
+    这是一个基础转换器,用于旧数据没有存储 markdown 时的后备方案。
+    复杂的 HTML 结构可能无法完美转换。
+
+    Args:
+        html_content: HTML 文本
+
+    Returns:
+        Markdown 文本
+    """
+    if not html_content:
+        return ""
+
+    # 移除 HTML 注释
+    content = re.sub(r"<!--.*?-->", "", html_content, flags=re.DOTALL)
+
+    # 转换标题
+    content = re.sub(r"<h1[^>]*>(.*?)</h1>", r"# \1\n\n", content, flags=re.DOTALL)
+    content = re.sub(r"<h2[^>]*>(.*?)</h2>", r"## \1\n\n", content, flags=re.DOTALL)
+    content = re.sub(r"<h3[^>]*>(.*?)</h3>", r"### \1\n\n", content, flags=re.DOTALL)
+    content = re.sub(r"<h4[^>]*>(.*?)</h4>", r"#### \1\n\n", content, flags=re.DOTALL)
+    content = re.sub(r"<h5[^>]*>(.*?)</h5>", r"##### \1\n\n", content, flags=re.DOTALL)
+    content = re.sub(r"<h6[^>]*>(.*?)</h6>", r"###### \1\n\n", content, flags=re.DOTALL)
+
+    # 转换粗体和斜体
+    content = re.sub(r"<strong>(.*?)</strong>", r"**\1**", content, flags=re.DOTALL)
+    content = re.sub(r"<b>(.*?)</b>", r"**\1**", content, flags=re.DOTALL)
+    content = re.sub(r"<em>(.*?)</em>", r"*\1*", content, flags=re.DOTALL)
+    content = re.sub(r"<i>(.*?)</i>", r"*\1*", content, flags=re.DOTALL)
+
+    # 转换段落
+    content = re.sub(r"<p[^>]*>(.*?)</p>", r"\1\n\n", content, flags=re.DOTALL)
+
+    # 转换换行
+    content = re.sub(r"<br\s*/?>", "\n", content)
+
+    # 转换无序列表
+    content = re.sub(r"<ul[^>]*>", "", content)
+    content = re.sub(r"</ul>", "\n", content)
+    content = re.sub(r"<li[^>]*>(.*?)</li>", r"- \1\n", content, flags=re.DOTALL)
+
+    # 转换有序列表
+    content = re.sub(r"<ol[^>]*>", "", content)
+    content = re.sub(r"</ol>", "\n", content)
+
+    # 转换链接
+    content = re.sub(
+        r'<a[^>]*href=["\']([^"\']*)["\'][^>]*>(.*?)</a>', r"[\2](\1)", content, flags=re.DOTALL
+    )
+
+    # 转换图片
+    content = re.sub(
+        r'<img[^>]*src=["\']([^"\']*)["\'][^>]* alt=["\']([^"\']*)["\'][^>]*/?>',
+        r"![\2](\1)",
+        content,
+    )
+    content = re.sub(
+        r'<img[^>]*src=["\']([^"\']*)["\'][^>]*>', r"![](\1)", content
+    )
+
+    # 转换代码块
+    content = re.sub(r"<pre[^>]*><code[^>]*>", "```\n", content)
+    content = re.sub(r"</code></pre>", "\n```\n", content)
+    content = re.sub(r"<code[^>]*>(.*?)</code>", r"`\1`", content, flags=re.DOTALL)
+
+    # 转换引用
+    content = re.sub(r"<blockquote[^>]*>", "> ", content)
+    content = re.sub(r"</blockquote>", "\n", content)
+
+    # 转换水平线
+    content = re.sub(r"<hr\s*/?>", "\n---\n", content)
+
+    # 移除剩余的 HTML 标签
+    content = re.sub(r"<[^>]+>", "", content)
+
+    # 清理多余的空白字符
+    content = re.sub(r"[ \t]+", " ", content)
+    content = re.sub(r"\n{3,}", "\n\n", content)
+    content = content.strip()
+
+    return content
 
 
 def slugify(text: str) -> str:

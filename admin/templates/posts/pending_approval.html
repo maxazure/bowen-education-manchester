@@ -1,0 +1,370 @@
+{% extends "base.html" %}
+
+{% block title %}待审核文章 - 博文教育管理后台{% endblock %}
+
+{% block content %}
+<!-- 面包屑导航 -->
+<nav aria-label="breadcrumb" class="mb-3 animate-fade-in">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin"><i class="bi bi-house-door me-1"></i>首页</a></li>
+        <li class="breadcrumb-item"><a href="/admin/posts">文章管理</a></li>
+        <li class="breadcrumb-item active" aria-current="page">待审核</li>
+    </ol>
+</nav>
+
+<!-- 页面标题区 -->
+<div class="page-header animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="page-title">
+                <i class="bi bi-clock-check text-warning me-2"></i>待审核文章
+            </h1>
+            <p class="page-subtitle">共有 {{ total }} 篇文章等待审核</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="/admin/posts" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-1"></i>返回列表
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- 筛选栏 -->
+<div class="card mb-4 animate-fade-in">
+    <div class="card-body">
+        <div class="d-flex align-items-center gap-3">
+            <span class="text-muted">快速筛选：</span>
+            <a href="/admin/posts/pending-approval" class="btn btn-sm btn-warning">
+                <i class="bi bi-clock me-1"></i>待审核 ({{ total }})
+            </a>
+            <a href="/admin/posts/scheduled" class="btn btn-sm btn-info">
+                <i class="bi bi-clock me-1"></i>定时发布
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- 待审核文章列表 -->
+<div class="card animate-fade-in">
+    <div class="card-body p-0">
+        {% if posts %}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 50px;">
+                            <input type="checkbox" class="form-check-input" id="selectAll" onchange="toggleSelectAll()">
+                        </th>
+                        <th>文章</th>
+                        <th style="width: 100px;">栏目</th>
+                        <th style="width: 80px;">状态</th>
+                        <th style="width: 80px;">推荐</th>
+                        <th style="width: 150px;">创建时间</th>
+                        <th style="width: 180px;">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in posts %}
+                    <tr>
+                        <td>
+                            <input type="checkbox" class="form-check-input post-checkbox"
+                                   value="{{ post.id }}" onchange="updateSelection()">
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-start">
+                                {% if post.cover_media %}
+                                <img src="{{ post.cover_media.file_url }}" alt="" style="width: 60px; height: 45px; object-fit: cover; border-radius: 4px;" class="me-3">
+                                {% else %}
+                                <div style="width: 60px; height: 45px; background: #f0f0f0; border-radius: 4px;" class="me-3 d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-image text-muted"></i>
+                                </div>
+                                {% endif %}
+                                <div>
+                                    <a href="/admin/posts/{{ post.id }}/edit" class="text-decoration-none">
+                                        <strong>{{ post.title }}</strong>
+                                    </a>
+                                    {% if post.title_en %}
+                                    <br><small class="text-muted">{{ post.title_en }}</small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark">{{ post.column.name if post.column else '-' }}</span>
+                        </td>
+                        <td>
+                            {% if post.status == 'published' %}
+                            <span class="badge bg-success">已发布</span>
+                            {% elif post.status == 'draft' %}
+                            <span class="badge bg-secondary">草稿</span>
+                            {% else %}
+                            <span class="badge bg-warning">已下线</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if post.is_recommended %}
+                            <i class="bi bi-star-fill text-warning"></i>
+                            {% else %}
+                            <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <small class="text-muted">{{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a href="/admin/posts/{{ post.id }}/edit" class="btn btn-outline-primary" title="编辑">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <button class="btn btn-outline-success" onclick="approvePost({{ post.id }})" title="审核通过">
+                                    <i class="bi bi-check-circle"></i>
+                                </button>
+                                <button class="btn btn-outline-warning" onclick="rejectPost({{ post.id }})" title="驳回">
+                                    <i class="bi bi-x-circle"></i>
+                                </button>
+                                <a href="/admin/posts/{{ post.id }}/preview" class="btn btn-outline-secondary" title="预览">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 批量操作栏 -->
+        <div class="batch-actions-bar" id="batchActionsBar" style="display: none;">
+            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <div>
+                    <i class="bi bi-check-circle text-primary me-2"></i>
+                    已选择 <strong id="selectedCount">0</strong> 篇
+                </div>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-success" onclick="batchApprove()">
+                        <i class="bi bi-check-circle me-1"></i>批量通过
+                    </button>
+                    <button class="btn btn-sm btn-warning" onclick="batchReject()">
+                        <i class="bi bi-x-circle me-1"></i>批量驳回
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="clearSelection()">
+                        <i class="bi bi-x-circle me-1"></i>取消
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-check-circle fs-1 d-block mb-3 text-success"></i>
+            <p class="text-muted mb-2">暂无待审核文章</p>
+            <p class="text-muted small">所有文章都已审核完成</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- 驳回原因模态框 -->
+<div class="modal fade" id="rejectModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-x-circle text-warning me-2"></i>驳回文章
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="rejectPostId">
+                <div class="mb-3">
+                    <label class="form-label">驳回原因（可选）</label>
+                    <textarea class="form-control" id="rejectReason" rows="3"
+                              placeholder="请输入驳回原因，以便作者修改..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-warning" onclick="confirmReject()">
+                    <i class="bi bi-x-circle me-1"></i>确认驳回
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 批量驳回模态框 -->
+<div class="modal fade" id="batchRejectModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-x-circle text-warning me-2"></i>批量驳回
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">驳回原因（可选）</label>
+                    <textarea class="form-control" id="batchRejectReason" rows="3"
+                              placeholder="请输入驳回原因..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-warning" onclick="confirmBatchReject()">
+                    <i class="bi bi-x-circle me-1"></i>确认驳回
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// 选择功能
+function toggleSelectAll() {
+    const selectAll = document.getElementById('selectAll');
+    const checkboxes = document.querySelectorAll('.post-checkbox');
+    checkboxes.forEach(cb => cb.checked = selectAll.checked);
+    updateSelection();
+}
+
+function updateSelection() {
+    const selected = document.querySelectorAll('.post-checkbox:checked');
+    const count = selected.length;
+    const batchBar = document.getElementById('batchActionsBar');
+    const countEl = document.getElementById('selectedCount');
+
+    if (count > 0) {
+        batchBar.style.display = 'flex';
+        countEl.textContent = count;
+    } else {
+        batchBar.style.display = 'none';
+    }
+}
+
+function clearSelection() {
+    document.querySelectorAll('.post-checkbox').forEach(cb => cb.checked = false);
+    document.getElementById('selectAll').checked = false;
+    updateSelection();
+}
+
+function getSelectedIds() {
+    const selected = document.querySelectorAll('.post-checkbox:checked');
+    return Array.from(selected).map(cb => parseInt(cb.value));
+}
+
+// 审核操作
+async function approvePost(postId) {
+    if (!confirm('确定要审核通过这篇文章吗？')) return;
+
+    try {
+        const result = await fetch(`/admin/posts/${postId}/approve`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'}
+        });
+        const data = await result.json();
+        if (data.success) {
+            showToast('success', '审核通过', '文章已审核通过');
+            setTimeout(() => location.reload(), 1500);
+        } else {
+            showToast('error', '操作失败', data.message);
+        }
+    } catch (error) {
+        showToast('error', '操作失败', error.message);
+    }
+}
+
+function rejectPost(postId) {
+    document.getElementById('rejectPostId').value = postId;
+    document.getElementById('rejectReason').value = '';
+    new bootstrap.Modal(document.getElementById('rejectModal')).show();
+}
+
+async function confirmReject() {
+    const postId = document.getElementById('rejectPostId').value;
+    const reason = document.getElementById('rejectReason').value;
+
+    try {
+        const result = await fetch(`/admin/posts/${postId}/reject`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({reason})
+        });
+        const data = await result.json();
+        if (data.success) {
+            bootstrap.Modal.getInstance(document.getElementById('rejectModal')).hide();
+            showToast('warning', '已驳回', '文章已被驳回');
+            setTimeout(() => location.reload(), 1500);
+        } else {
+            showToast('error', '操作失败', data.message);
+        }
+    } catch (error) {
+        showToast('error', '操作失败', error.message);
+    }
+}
+
+// 批量操作
+async function batchApprove() {
+    const postIds = getSelectedIds();
+    if (postIds.length === 0) {
+        showToast('warning', '请选择文章', '');
+        return;
+    }
+
+    if (!confirm(`确定要审核通过选中的 ${postIds.length} 篇文章吗？`)) return;
+
+    try {
+        const result = await fetch('/admin/posts/batch/approve', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({post_ids: postIds})
+        });
+        const data = await result.json();
+        if (data.success) {
+            showToast('success', '批量通过', data.message);
+            setTimeout(() => location.reload(), 1500);
+        } else {
+            showToast('error', '操作失败', data.message);
+        }
+    } catch (error) {
+        showToast('error', '操作失败', error.message);
+    }
+}
+
+function batchReject() {
+    const postIds = getSelectedIds();
+    if (postIds.length === 0) {
+        showToast('warning', '请选择文章', '');
+        return;
+    }
+
+    document.getElementById('batchRejectReason').value = '';
+    new bootstrap.Modal(document.getElementById('batchRejectModal')).show();
+}
+
+async function confirmBatchReject() {
+    const postIds = getSelectedIds();
+    const reason = document.getElementById('batchRejectReason').value;
+
+    try {
+        const result = await fetch('/admin/posts/batch/reject', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({post_ids: postIds, reason})
+        });
+        const data = await result.json();
+        if (data.success) {
+            bootstrap.Modal.getInstance(document.getElementById('batchRejectModal')).hide();
+            showToast('warning', '批量驳回', data.message);
+            setTimeout(() => location.reload(), 1500);
+        } else {
+            showToast('error', '操作失败', data.message);
+        }
+    } catch (error) {
+        showToast('error', '操作失败', error.message);
+    }
+}
+</script>
+{% endblock %}

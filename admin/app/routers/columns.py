@@ -17,7 +17,7 @@ from app.models.gallery import Gallery
 from app.services import column_service
 from admin.app.routers.static_pages import generate_static_task
 
-router = APIRouter(prefix="/columns", tags=["columns"])
+router = APIRouter(tags=["columns"])
 templates = Jinja2Templates(directory="admin/templates")
 
 

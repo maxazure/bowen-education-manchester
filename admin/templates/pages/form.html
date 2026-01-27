@@ -213,7 +213,7 @@
         <a href="/admin/pages" class="btn btn-secondary">返回列表</a>
     </div>
 
-    <form method="POST" action="{% if mode == 'edit' %}/admin/pages/{{ page.id }}{% else %}/admin/pages{% endif %}" id="pageForm">
+    <form method="POST" action="{% if mode == 'edit' %}/admin/pages/{{ page.id }}{% else %}/admin/pages/create{% endif %}" id="pageForm">
         <div class="form-row">
             <div class="form-main">
                 <!-- 语言切换 Tab -->
@@ -418,9 +418,43 @@
         }
     });
 
-    // 表单提交处理
-    const form = document.getElementById('pageForm');
+    // Fix: CodeMirror can't render properly on hidden elements
+    // Need to refresh when tab becomes visible
+    const enTab = document.getElementById('en-tab');
+    const zhTab = document.getElementById('zh-tab');
 
+    if (enTab && zhTab) {
+        enTab.addEventListener('shown.bs.tab', function() {
+            // Refresh English editor when English tab is shown
+            setTimeout(function() {
+                easyMDE_en.codemirror.refresh();
+            }, 10);
+        });
+
+        zhTab.addEventListener('shown.bs.tab', function() {
+            // Refresh Chinese editor when Chinese tab is shown
+            setTimeout(function() {
+                easyMDE_zh.codemirror.refresh();
+            }, 10);
+        });
+    }
+
+    // Initial refresh for Chinese editor (since it's visible on page load)
+    setTimeout(function() {
+        easyMDE_zh.codemirror.refresh();
+    }, 100);
+
+    // Fix: 覆盖原生 submit 方法，确保内容同步
+    const originalSubmit = form.submit.bind(form);
+    form.submit = function() {
+        // 同步 EasyMDE 内容到隐藏字段
+        document.getElementById('content_markdown').value = easyMDE_zh.value();
+        document.getElementById('content_markdown_en').value = easyMDE_en.value();
+        // 调用原生提交
+        originalSubmit();
+    };
+
+    // 传统 submit 事件监听（处理点击按钮触发的提交）
     form.addEventListener('submit', function(event) {
         // 确保从 EasyMDE 编辑器获取最新内容
         document.getElementById('content_markdown').value = easyMDE_zh.value();

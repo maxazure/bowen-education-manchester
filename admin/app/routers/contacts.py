@@ -16,7 +16,7 @@ from sqlalchemy.orm import Session
 from admin.app.database import get_db
 from app.models.contact import ContactMessage
 
-router = APIRouter(prefix="/contacts", tags=["contacts"])
+router = APIRouter(tags=["contacts"])
 
 templates = Jinja2Templates(directory="admin/templates")
 

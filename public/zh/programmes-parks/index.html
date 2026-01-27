@@ -9,11 +9,11 @@
     <title>公园活动 - Bowen Education Group | Bowen Education Group</title>
 
     <!-- Favicon -->
-    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/static/images/favicon.png" type="image/png">
     <link rel="apple-touch-icon" href="/static/images/apple-touch-icon.png">
 
     <!-- Open Graph Tags -->
-    <meta property="og:title" content="Bowen Education Group">
+    <meta property="og:title" content="Bowen Education Group - Updated">
     <meta property="og:description" content="">
     <meta property="og:image" content="">
     <meta property="og:url" content="http://localhost:8000/programmes-parks">
@@ -22,7 +22,7 @@
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Bowen Education Group">
+    <meta name="twitter:title" content="Bowen Education Group - Updated">
     <meta name="twitter:description" content="">
     <meta name="twitter:image" content="">
 
@@ -30,496 +30,271 @@
     <link rel="stylesheet" href="/static/css/main.css">
     
 <link rel="preload" href="https://unpkg.com/aos@2.3.1/dist/aos.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript>
-    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-</noscript>
+<noscript><link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css"></noscript>
+
 <style>
-/* Content Section - 与 single_page.html 保持一致 */
-.section--content {
-    padding: 3rem 0;
-    background: linear-gradient(to bottom, #ffffff 0%, #f7fafc 100%);
+/* Introduction Section */
+.section--intro {
+    padding: 4rem 0;
+    background: #f8f9fa;
 }
 
-.section--content .container {
-    max-width: 1200px;
-    padding-left: 15px;
-    padding-right: 15px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* Page Layout - 与 single_page.html 保持一致 */
-.page-layout {
-    display: flex;
-    gap: 2rem;
-    align-items: flex-start;
-    position: relative;
-}
-
-.page-layout__sidebar {
-    flex: 0 0 280px;
-    min-width: 280px;
-    max-width: 280px;
-}
-
-.page-layout__main {
-    flex: 1;
-    min-width: 0;
-    max-width: 100%;
-}
-
-/* Course System Intro */
-.course-system-intro {
-    margin-bottom: 3rem;
-    padding: 2.5rem;
-    background: white;
-    border-radius: 0.75rem;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+.intro-content {
+    max-width: 900px;
+    margin: 0 auto;
 }
 
 .section-title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #1a202c;
-    margin-bottom: 1rem;
-    padding-bottom: 0.75rem;
-    border-bottom: 3px solid #0052cc;
-}
-
-.section-subtitle {
-    color: #4a5568;
-    font-size: 1.0625rem;
-    line-height: 1.8;
+    font-size: 2.5rem;
+    color: #1f2937;
     margin-bottom: 2rem;
-}
-
-/* Learning Stages Grid */
-.learning-stages {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin-top: 2rem;
-}
-
-.stage-card {
     text-align: center;
-    padding: 1.5rem;
-    background: #f7fafc;
-    border-radius: 0.75rem;
-    transition: transform 0.3s, box-shadow 0.3s;
+    font-weight: 700;
 }
 
-.stage-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 12px rgba(0, 82, 204, 0.15);
+.intro-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #4b5563;
 }
 
-.stage-icon {
-    font-size: 3rem;
+.intro-text p {
+    margin-bottom: 1.5rem;
+}
+
+/* Gallery Grid Section */
+.section--gallery-grid {
+    padding: 5rem 0;
+    background: #fff;
+}
+
+.gallery-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.gallery-header .section-title {
+    font-size: 2.5rem;
+    color: #1f2937;
     margin-bottom: 1rem;
 }
 
-.stage-title {
-    font-size: 1.125rem;
+.gallery-header .section-subtitle {
+    font-size: 1.2rem;
+    color: #6b7280;
+    margin-bottom: 1rem;
+}
+
+.gallery-count {
+    color: #667eea;
+    font-size: 1.1rem;
     font-weight: 600;
-    color: #1a202c;
-    margin-bottom: 0.5rem;
-}
-
-.stage-desc {
-    font-size: 0.875rem;
-    color: #4a5568;
-    margin: 0;
-}
-
-/* Courses Grid */
-.courses-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-/* Course Card */
-.course-card {
-    background: white;
-    border-radius: 0.75rem;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
-.course-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+.gallery-count i {
+    font-size: 1.3rem;
 }
 
-.course-card__image {
+/* Photos Grid */
+.photos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.photo-item {
+    position: relative;
+    overflow: hidden;
+}
+
+.photo-card {
     position: relative;
     width: 100%;
-    height: 200px;
+    padding-bottom: 75%; /* 4:3 aspect ratio */
     overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
 }
 
-.course-card__image img {
+.photo-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+}
+
+.photo-card img {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.3s;
 }
 
-.course-card:hover .course-card__image img {
+.photo-card:hover img {
     transform: scale(1.1);
 }
 
-.course-badge {
+.photo-overlay {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
-    padding: 0.5rem 1rem;
-    background: rgba(220, 38, 38, 0.9);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+    display: flex;
+    align-items: flex-end;
+    padding: 1rem;
+}
+
+.photo-card:hover .photo-overlay {
+    opacity: 1;
+}
+
+.photo-info {
     color: white;
-    font-size: 0.75rem;
-    font-weight: 600;
-    border-radius: 2rem;
-    backdrop-filter: blur(4px);
+    width: 100%;
 }
 
-.course-badge--recommended {
-    background: rgba(220, 38, 38, 0.9);
-}
-
-.course-card__content {
-    padding: 1.5rem;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.course-meta {
-    margin-bottom: 1rem;
-}
-
-.course-age-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.375rem 0.875rem;
-    background: #e3f2fd;
-    color: #1e3a8a;
-    border-radius: 1.5rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-}
-
-.course-card__title {
-    font-size: 1.25rem;
-    margin-bottom: 0.75rem;
-    line-height: 1.4;
-    min-height: 3rem;
-}
-
-.course-card__title a {
-    color: #1f2937;
-    text-decoration: none;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-.course-card__title a:hover {
-    color: #0052cc;
-}
-
-.course-card__summary {
-    color: #6c757d;
+.photo-title {
     font-size: 0.95rem;
-    line-height: 1.6;
-    margin-bottom: 1rem;
-    flex: 1;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    font-weight: 600;
+    margin: 0;
 }
 
-.course-features {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-.feature-tag {
-    padding: 0.25rem 0.75rem;
-    background: #f8f9fa;
-    color: #495057;
-    border-radius: 0.25rem;
-    font-size: 0.8125rem;
-}
-
-.course-actions {
-    display: flex;
-    gap: 0.75rem;
-    margin-top: auto;
-}
-
-.course-actions .btn {
-    flex: 1;
-    padding: 0.625rem 1rem;
-    font-size: 0.9375rem;
-}
-
-/* Trial CTA Box */
-.trial-cta-box {
-    margin-top: 3rem;
-    padding: 2.5rem;
-    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
-    border-radius: 0.75rem;
+/* Gallery CTA */
+.gallery-cta {
     text-align: center;
 }
 
-.trial-cta__title {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: #1a202c;
+.btn--primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn--primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    color: white;
+}
+
+.btn--primary i {
+    font-size: 1.2rem;
+}
+
+/* CTA Section */
+.section--cta {
+    padding: 4rem 0;
+    color: #fff;
+}
+
+.cta-box__title {
+    font-size: 2rem;
     margin-bottom: 1rem;
+    color: #fff;
 }
 
-.trial-cta__text {
-    color: #4a5568;
-    font-size: 1.0625rem;
-    line-height: 1.6;
+.cta-box__text {
+    font-size: 1.1rem;
     margin-bottom: 2rem;
+    color: rgba(255, 255, 255, 0.9);
 }
 
-.trial-cta__buttons {
+.cta-box__buttons {
     display: flex;
     gap: 1rem;
     justify-content: center;
     flex-wrap: wrap;
 }
 
-/* Empty State */
-.empty-state {
-    text-align: center;
-    padding: 4rem 2rem;
-    background: #f8f9fa;
-    border-radius: 0.75rem;
-}
-
-.empty-state__icon {
-    font-size: 4rem;
-    margin-bottom: 1rem;
-}
-
-.empty-state__title {
-    font-size: 1.5rem;
-    color: #1f2937;
-    margin-bottom: 0.5rem;
-}
-
-.empty-state__text {
-    color: #6c757d;
-    margin-bottom: 2rem;
-}
-
-/* CTA Section - 与 single_page.html 保持一致 */
-.section--cta {
-    padding: 5rem 0;
-    background: linear-gradient(135deg, #0052cc 0%, #003380 100%);
-    color: white;
-    position: relative;
-    overflow: hidden;
-}
-
-.section--cta::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -10%;
-    width: 500px;
-    height: 500px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 50%;
-}
-
-.section--cta::after {
-    content: '';
-    position: absolute;
-    bottom: -30%;
-    left: -5%;
-    width: 400px;
-    height: 400px;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 50%;
-}
-
-.section--cta .container {
-    position: relative;
-    z-index: 2;
-}
-
-.section--cta .section__title {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-    color: #ffffff;
-}
-
-.section--cta .section__title-chinese {
-    font-size: 1.75rem;
-    margin-bottom: 1.5rem;
-    color: #ffffff;
-    opacity: 1;
+.btn--white {
+    background: #fff;
+    color: #1e3a8a;
+    padding: 0.875rem 2rem;
+    border-radius: 50px;
     font-weight: 600;
-}
-
-.section--cta .section__subtitle {
-    font-size: 1.25rem;
-    color: #ffffff;
-    opacity: 1;
-    max-width: 600px;
-    margin: 0 auto 2.5rem;
-    line-height: 1.6;
-}
-
-/* CTA Buttons - 与 single_page.html 保持一致 */
-.cta-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.25rem;
-    justify-content: center;
-    margin-top: 2.5rem;
-}
-
-.cta-buttons .btn {
-    min-width: 200px;
-    padding: 1.125rem 2.5rem;
-    font-size: 1.125rem;
-    font-weight: 600;
-    border-radius: 0.5rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.625rem;
     text-decoration: none;
+    transition: all 0.3s;
 }
 
-.cta-buttons .btn-primary {
-    background: white;
-    color: #0052cc;
-    border: 2px solid white;
+.btn--white:hover {
+    background: #f8f9fa;
+    transform: translateY(-2px);
+    color: #1e3a8a;
 }
 
-.cta-buttons .btn-primary:hover {
-    background: #f7fafc;
-    transform: translateY(-3px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
-}
-
-.cta-buttons .btn-outline-primary {
+.btn--outline-white {
     background: transparent;
-    color: white;
-    border: 2px solid white;
+    color: #fff;
+    border: 2px solid #fff;
+    padding: 0.875rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
 }
 
-.cta-buttons .btn-outline-primary:hover {
-    background: rgba(255, 255, 255, 0.15);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+.btn--outline-white:hover {
+    background: #fff;
+    color: #1e3a8a;
+    transform: translateY(-2px);
 }
 
-/* Responsive Design */
-@media (max-width: 992px) {
-    .page-layout {
-        gap: 1.5rem;
-    }
-
-    .page-layout__sidebar {
-        flex: 0 0 240px;
-        min-width: 240px;
-    }
-
-    .course-system-intro {
-        padding: 2rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .page-layout {
-        flex-direction: column;
-        gap: 1.5rem;
-    }
-
-    .page-layout__sidebar {
-        flex: none;
-        width: 100%;
-        min-width: 100%;
-        order: -1;
-    }
-
-    .page-layout__main {
-        width: 100%;
-    }
-
-    .course-system-intro {
-        padding: 1.5rem;
-    }
-
+/* Responsive */
+@media (max-width: 767px) {
     .section-title {
-        font-size: 1.625rem;
+        font-size: 2rem;
     }
 
-    .learning-stages {
-        grid-template-columns: 1fr 1fr;
+    .intro-text {
+        font-size: 1rem;
+    }
+
+    .photos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         gap: 1rem;
     }
 
-    .courses-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-
-    .section--cta .section__title {
-        font-size: 1.875rem;
-    }
-
-    .section--cta .section__title-chinese {
+    .cta-box__title {
         font-size: 1.5rem;
     }
 
-    .cta-buttons {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .cta-buttons .btn {
-        width: 100%;
-        justify-content: center;
-    }
-
-    .trial-cta__buttons {
+    .cta-box__buttons {
         flex-direction: column;
     }
 
-    .trial-cta__buttons .btn {
+    .cta-box__buttons .btn {
         width: 100%;
     }
 }
 
-@media (max-width: 576px) {
-    .course-system-intro {
-        padding: 1.25rem;
+@media (min-width: 768px) and (max-width: 1023px) {
+    .photos-grid {
+        grid-template-columns: repeat(3, 1fr);
     }
+}
 
-    .learning-stages {
-        grid-template-columns: 1fr;
+@media (min-width: 1024px) {
+    .photos-grid {
+        grid-template-columns: repeat(4, 1fr);
     }
 }
 </style>
@@ -544,9 +319,9 @@
     {
         "@context": "https://schema.org",
         "@type": "EducationalOrganization",
-        "name": "Bowen Education Group",
+        "name": "Bowen Education Group - Updated",
         "alternateName": "博文教育集团",
-        "url": "&lt;app.services.static_generator.obj object at 0x10834f4d0&gt;",
+        "url": "&lt;app.services.static_generator.obj object at 0x108093770&gt;",
         "logo": "/static/images/logo.png",
         "description": "",
         "address": {
@@ -562,7 +337,7 @@
             "latitude": "",
             "longitude": ""
         },
-        "telephone": "0161 969 3071",
+        "telephone": "0161 667 2668",
         "email": "",
         "sameAs": [
             
@@ -589,7 +364,7 @@
                     <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                     </svg>
-                    <a href="tel:0161 969 3071">0161 969 3071</a>
+                    <a href="tel:0161 667 2668">0161 667 2668</a>
                 </span>
                 
                 
@@ -622,7 +397,7 @@
                     <a href="/" aria-label="Bowen Education Group Home">
                         <img src="/static/images/logo.png" alt="Bowen Education Group" height="60">
                         <span class="logo-text">
-                            <strong>Bowen Education Group</strong>
+                            <strong>Bowen Education Group - Updated</strong>
                             <small>博文教育集团</small>
                         </span>
                     </a>
@@ -2074,7 +1849,7 @@ body.mobile-menu-open {
     <div class="hero__background"
          role="img"
          aria-label="公园活动"
-         style="background-image: url('/static/images/hero-haf-programme.jpg');"
+         style="background-image: url('/static/uploads/gallery/haf-camps/haf-programme-002.jpg');"
          loading="lazy"></div>
     <div class="container">
         <div class="hero__content">
@@ -2183,339 +1958,247 @@ body.mobile-menu-open {
 }
 </style>
 
-<!-- Content Section with Sidebar -->
-<section class="section section--content">
+<!-- Introduction Section -->
+<section class="section section--intro">
     <div class="container">
-        <div class="page-layout">
-            <!-- Left Sidebar Navigation -->
-            <aside class="page-layout__sidebar">
-                <!--
-  Sidebar Navigation Component
-  显示父栏目和子栏目的侧边导航
--->
-
-
-<aside class="sidebar-nav">
-    <!-- Parent Column Link -->
-    <div class="sidebar-header">
-        <a href="/zh/programmes/" class="sidebar-parent-link">
-            <h3>政府项目</h3>
-
-        </a>
-    </div>
-
-    <!-- Child Columns Navigation -->
-    
-    <nav class="sidebar-menu">
-        <ul class="sidebar-menu-list">
-            
-            <li class="sidebar-menu-item">
-                <a
-                    href="/zh/programmes-haf/"
-                    class="sidebar-menu-link"
-                >
-                    <span class="sidebar-menu-icon">
-                        
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
-                            <polyline points="13 2 13 9 20 9"></polyline>
-                        </svg>
-                        
-                    </span>
-                    <span class="sidebar-menu-text">HAF项目</span>
-                </a>
-            </li>
-            
-            <li class="sidebar-menu-item">
-                <a
-                    href="/zh/programmes-parks/"
-                    class="sidebar-menu-link active"
-                >
-                    <span class="sidebar-menu-icon">
-                        
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                            <polyline points="10 9 9 9 8 9"></polyline>
-                        </svg>
-                        
-                    </span>
-                    <span class="sidebar-menu-text">公园活动</span>
-                </a>
-            </li>
-            
-        </ul>
-    </nav>
-    
-
-    <!-- Registration Button (only show if explicitly passed show_register_button variable) -->
-    
-</aside>
-
-
-<style>
-/* Sidebar Navigation Styles */
-.sidebar-nav {
-    width: 100%; /* 改为100%适应父容器 */
-    background: var(--color-white, #ffffff);
-    border-radius: var(--radius-lg, 0.75rem);
-    box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.1));
-    overflow: hidden;
-    position: sticky;
-    top: 100px;
-    max-height: calc(100vh - 120px);
-    display: flex;
-    flex-direction: column;
-    --color-primary: #3b82f6;
-}
-
-.sidebar-header {
-    padding: var(--spacing-lg, 1.5rem);
-    background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
-    color: white;
-}
-
-.sidebar-parent-link {
-    text-decoration: none;
-    color: white;
-    display: block;
-}
-
-.sidebar-parent-link:hover h3 {
-    text-decoration: underline;
-}
-
-.sidebar-parent-link h3 {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 700;
-    line-height: 1.4;
-    color: #ffffff;
-}
-
-.sidebar-subtitle {
-    display: block;
-    font-size: 0.875rem;
-    opacity: 0.9;
-    margin-top: 0.25rem;
-}
-
-.sidebar-menu {
-    flex: 1;
-    overflow-y: auto;
-    padding: var(--spacing-sm, 1rem);
-}
-
-.sidebar-menu-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar-menu-item {
-    margin-bottom: 0.375rem;
-}
-
-.sidebar-menu-link {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm, 0.75rem);
-    padding: var(--spacing-sm, 0.75rem) var(--spacing-md, 1rem);
-    color: var(--color-gray-800, #374151);
-    text-decoration: none;
-    border-radius: var(--radius-md, 0.5rem);
-    transition: all var(--transition-fast, 0.2s ease);
-    font-size: 1rem;
-    line-height: 1.5;
-}
-
-.sidebar-menu-link:hover {
-    background: #eef6ff;
-    color: var(--color-primary, #0052cc);
-}
-
-.sidebar-menu-link.active {
-    background: #eaf2ff;
-    color: var(--color-primary, #0052cc);
-    font-weight: 600;
-    box-shadow: inset 0 0 0 2px rgba(0, 82, 204, 0.2);
-}
-
-.sidebar-menu-icon {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    opacity: 0.8;
-}
-
-.sidebar-menu-link.active .sidebar-menu-icon {
-    opacity: 1;
-}
-
-.sidebar-menu-text {
-    flex: 1;
-}
-
-/* Registration CTA Button */
-.sidebar-cta {
-    padding: var(--spacing-md, 1rem);
-    margin-top: auto;
-    border-top: 1px solid var(--color-gray-200, #e2e8f0);
-}
-
-.sidebar-register-btn {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md, 1rem);
-    padding: var(--spacing-md, 1rem);
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: white;
-    text-decoration: none;
-    border-radius: var(--radius-md, 0.5rem);
-    transition: all var(--transition-fast, 0.2s ease);
-    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
-}
-
-.sidebar-register-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-    background: linear-gradient(135deg, #059669 0%, #047857 100%);
-}
-
-.sidebar-register-btn svg {
-    flex-shrink: 0;
-}
-
-.sidebar-register-text {
-    flex: 1;
-    line-height: 1.4;
-}
-
-.sidebar-register-text strong {
-    display: block;
-    font-size: 0.95rem;
-    font-weight: 600;
-    margin-bottom: 0.125rem;
-}
-
-.sidebar-register-text small {
-    display: block;
-    font-size: 0.8rem;
-    opacity: 0.9;
-}
-
-/* Mobile Responsive */
-@media (max-width: 768px) {
-    .sidebar-nav {
-        width: 100%;
-        position: static;
-        margin-bottom: var(--spacing-lg);
-        max-height: none;
-    }
-}
-</style>
-            </aside>
-
-            <!-- Right Main Content -->
-            <div class="page-layout__main">
-
-                <!-- Course System Overview (Only for School Curriculum) -->
-                
-
-                <!-- Posts Grid -->
-                <div class="courses-grid">
-                    
-                        
-                        <div class="course-card" data-aos="fade-up" data-aos-delay="0">
-                            <!-- Course Image -->
-                            <div class="course-card__image">
-                                
-                                <img src="/static/images/hero-haf-programme.jpg" alt="2025年博文假期营 - 戏剧运动活动" loading="lazy">
-                                
-                                
-                                <span class="course-badge course-badge--recommended">推荐课程</span>
-                                
-                            </div>
-
-                            <!-- Course Content -->
-                            <div class="course-card__content">
-                                <!-- Age Tag -->
-                                <div class="course-meta">
-                                    <span class="course-age-tag">
-                                        <i class="fas fa-users"></i>
-                                        全年龄
-                                    </span>
-                                </div>
-
-                                <!-- Title -->
-                                <h3 class="course-card__title">
-                                    <a href="/programmes-parks/holiday-camp-2025">2025年博文假期营 - 戏剧运动活动</a>
-                                </h3>
-
-                                <!-- Summary -->
-                                <p class="course-card__summary">
-                                    2025年8月4-29日，博文教育为5-11岁儿童举办的假期营活动，包括戏剧表演、运动游戏、艺术手工等丰富内容。
-                                </p>
-
-                                <!-- Features Tags -->
-                                <div class="course-features">
-                                    
-                                </div>
-
-                                <!-- Action Buttons -->
-                                <div class="course-actions">
-                                    <a href="/programmes-parks/holiday-camp-2025" class="btn btn-outline-primary btn-sm">查看详情</a>
-                                    <a href="/contact/?course=holiday-camp-2025" class="btn btn-primary btn-sm">立即报名</a>
-                                </div>
-                            </div>
-                        </div>
-                        
-                    
-                </div>
-
-                <!-- CTA Box -->
-                
-                <div class="trial-cta-box" data-aos="fade-up">
-                    <h3 class="trial-cta__title">预约试听课 Book a Trial Lesson</h3>
-                    <p class="trial-cta__text">想让孩子体验中文学习的乐趣？欢迎预约免费试听课，亲身感受我们的教学特色。</p>
-                    <div class="trial-cta__buttons">
-                        <a href="/contact" class="btn btn-primary">预约试听课</a>
-                        <a href="/school-term-dates" class="btn btn-outline-primary">查看学期安排</a>
-                    </div>
-                </div>
-                
+        <div class="intro-content" data-aos="fade-up">
+            <h2 class="section-title">关于公园活动项目 About Parks Programme</h2>
+            <div class="intro-text">
+                <p>
+                    博文教育集团的公园活动项目为5-11岁的儿童提供丰富多彩的户外学习体验。我们利用曼彻斯特地区的优质公园资源，
+                    通过游戏、运动、艺术和团队活动，让孩子们在大自然中快乐成长。
+                </p>
+                <p>
+                    每个假期，我们都会组织不同主题的公园活动，包括戏剧表演、体育运动、艺术创作、自然探索等。
+                    这些活动不仅让孩子们享受户外时光，更培养了他们的社交能力、创造力和团队合作精神。
+                </p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- CTA Section -->
-<section class="section section--cta" aria-labelledby="cta-title">
-    <div class="container text-center" data-aos="fade-up">
-        <h2 id="cta-title" class="section__title">
-            <span lang="en-GB">Ready to Join Our Community?</span>
-        </h2>
-        <h3 class="section__title-chinese">
-            <span lang="zh-CN">准备加入我们的大家庭？</span>
-        </h3>
-        <p class="section__subtitle">
-            <span lang="en-GB">Discover how we can help you achieve your language learning goals</span>
-        </p>
-        <div class="cta-buttons" role="group" aria-label="Contact actions">
-            <a href="/contact"
-               class="btn btn-primary btn-lg"
-               aria-label="Book a visit to Bowen Education Group">
-                <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                <span lang="en-GB">Book a Visit</span>
+<!-- Gallery Photos Section -->
+
+<section class="section section--gallery-grid">
+    <div class="container">
+        <div class="gallery-header" data-aos="fade-up">
+            <h2 class="section-title">公园活动Parktastic</h2>
+            
+            <p class="section-subtitle">公园户外活动精彩照片</p>
+            
+            <p class="gallery-count">
+                <i class="fas fa-images"></i> 共 67 张精彩照片
+            </p>
+        </div>
+
+        <!-- Photos Grid -->
+        <div class="photos-grid" data-aos="fade-up" data-aos-delay="100">
+            
+            <div class="photo-item" data-aos="zoom-in" data-aos-delay="0">
+                <div class="photo-card">
+                    <img src="/static/uploads/gallery/park-activities/parktastic-20250819-058.jpg"
+                         alt="parktastic-20250819-058"
+                         loading="lazy">
+                    <div class="photo-overlay">
+                        <div class="photo-info">
+                            
+                            <p class="photo-title">parktastic-20250819-058</p>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="photo-item" data-aos="zoom-in" data-aos-delay="50">
+                <div class="photo-card">
+                    <img src="/static/uploads/gallery/park-activities/parktastic-20250814-053.jpg"
+                         alt="parktastic-20250814-053"
+                         loading="lazy">
+                    <div class="photo-overlay">
+                        <div class="photo-info">
+                            
+                            <p class="photo-title">parktastic-20250814-053</p>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="photo-item" data-aos="zoom-in" data-aos-delay="100">
+                <div class="photo-card">
+                    <img src="/static/uploads/gallery/park-activities/parktastic-20250826-059.jpg"
+                         alt="parktastic-20250826-059"
+                         loading="lazy">
+                    <div class="photo-overlay">
+                        <div class="photo-info">
+                            
+                            <p class="photo-title">parktastic-20250826-059</p>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="photo-item" data-aos="zoom-in" data-aos-delay="150">
+                <div class="photo-card">
+                    <img src="/static/uploads/gallery/park-activities/parktastic-20250827-060.jpg"
+                         alt="parktastic-20250827-060"
+                         loading="lazy">
+                    <div class="photo-overlay">
+                        <div class="photo-info">
+                            
+                            <p class="photo-title">parktastic-20250827-060</p>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="photo-item" data-aos="zoom-in" data-aos-delay="200">
+                <div class="photo-card">
+                    <img src="/static/uploads/gallery/park-activities/parktastic-20250827-061.jpg"
+                         alt="parktastic-20250827-061"
+                         loading="lazy">
+                    <div class="photo-overlay">
+                        <div class="photo-info">
+                            
+                            <p class="photo-title">parktastic-20250827-061</p>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="photo-item" data-aos="zoom-in" data-aos-delay="250">
+                <div class="photo-card">
+                    <img src="/static/uploads/gallery/park-activities/parktastic-20250722-004.jpg"
+                         alt="parktastic-20250722-004"
+                         loading="lazy">
+                    <div class="photo-overlay">
+                        <div class="photo-info">
+                            
+                            <p class="photo-title">parktastic-20250722-004</p>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="photo-item" data-aos="zoom-in" data-aos-delay="300">
+                <div class="photo-card">
+                    <img src="/static/uploads/gallery/park-activities/parktastic-20250814-052.jpg"
+                         alt="parktastic-20250814-052"
+                         loading="lazy">
+                    <div class="photo-overlay">
+                        <div class="photo-info">
+                            
+                            <p class="photo-title">parktastic-20250814-052</p>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="photo-item" data-aos="zoom-in" data-aos-delay="350">
+                <div class="photo-card">
+                    <img src="/static/uploads/gallery/park-activities/parktastic-20250814-050.jpg"
+                         alt="parktastic-20250814-050"
+                         loading="lazy">
+                    <div class="photo-overlay">
+                        <div class="photo-info">
+                            
+                            <p class="photo-title">parktastic-20250814-050</p>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="photo-item" data-aos="zoom-in" data-aos-delay="400">
+                <div class="photo-card">
+                    <img src="/static/uploads/gallery/park-activities/parktastic-20250827-062.jpg"
+                         alt="parktastic-20250827-062"
+                         loading="lazy">
+                    <div class="photo-overlay">
+                        <div class="photo-info">
+                            
+                            <p class="photo-title">parktastic-20250827-062</p>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="photo-item" data-aos="zoom-in" data-aos-delay="450">
+                <div class="photo-card">
+                    <img src="/static/uploads/gallery/park-activities/parktastic-20250807-031.jpg"
+                         alt="parktastic-20250807-031"
+                         loading="lazy">
+                    <div class="photo-overlay">
+                        <div class="photo-info">
+                            
+                            <p class="photo-title">parktastic-20250807-031</p>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="photo-item" data-aos="zoom-in" data-aos-delay="500">
+                <div class="photo-card">
+                    <img src="/static/uploads/gallery/park-activities/parktastic-20250814-051.jpg"
+                         alt="parktastic-20250814-051"
+                         loading="lazy">
+                    <div class="photo-overlay">
+                        <div class="photo-info">
+                            
+                            <p class="photo-title">parktastic-20250814-051</p>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="photo-item" data-aos="zoom-in" data-aos-delay="550">
+                <div class="photo-card">
+                    <img src="/static/uploads/gallery/park-activities/parktastic-20250812-038.jpg"
+                         alt="parktastic-20250812-038"
+                         loading="lazy">
+                    <div class="photo-overlay">
+                        <div class="photo-info">
+                            
+                            <p class="photo-title">parktastic-20250812-038</p>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- View More Button -->
+        <div class="gallery-cta" data-aos="fade-up">
+            <a href="/zh/park-activities/" class="btn btn--primary btn--large">
+                <i class="fas fa-photo-video"></i>
+                查看全部 67 张照片
             </a>
-            <a href="tel:01619693071"
-               class="btn btn-outline-primary btn-lg"
-               aria-label="Call Bowen Education Group at 0161 969 3071">
-                <i class="fas fa-phone" aria-hidden="true"></i>
-                <span>0161 969 3071</span>
-            </a>
+        </div>
+    </div>
+</section>
+
+
+<!-- Call to Action Section -->
+<section class="section section--cta" style="background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);">
+    <div class="container">
+        <div class="cta-box text-center" data-aos="fade-up">
+            <h2 class="cta-box__title">加入我们的公园活动</h2>
+            <p class="cta-box__text">
+                想了解更多公园活动信息或报名参加？欢迎随时与我们联系。
+            </p>
+            <div class="cta-box__buttons">
+                <a href="/contact" class="btn btn--white">联系我们</a>
+                <a href="/programmes" class="btn btn--outline-white">查看所有项目</a>
+            </div>
         </div>
     </div>
 </section>
@@ -2539,6 +2222,7 @@ body.mobile-menu-open {
                             <li><a href="/about">关于我们</a></li>
                             <li><a href="/programmes">政府项目</a></li>
                             <li><a href="/events">博文活动</a></li>
+                            <li><a href="/zh/gallery-festivals">精彩相册</a></li>
                             <li><a href="/contact">联系我们</a></li>
                         </ul>
                     </div>
@@ -2567,12 +2251,16 @@ body.mobile-menu-open {
                             <li>
                                 <i class="fas fa-map-marker-alt"></i>
                                 <span>
-                                    1/F, 2A Curzon Road, Sale, Manchester M33 7DR
+                                    2 Curzon Road, Sale, M33 7DR, England
                                 </span>
                             </li>
                             <li>
                                 <i class="fas fa-phone"></i>
-                                <a href="tel:01619693071">0161 969 3071</a>
+                                <a href="tel:01616672668">0161 667 2668</a>
+                            </li>
+                            <li>
+                                <i class="fab fa-whatsapp"></i>
+                                <a href="https://wa.me/447419818100">07419 818100</a>
                             </li>
                             <li>
                                 <i class="fas fa-envelope"></i>
@@ -2765,45 +2453,14 @@ body.mobile-menu-open {
     <!-- Scripts -->
     <script src="/static/js/main.js"></script>
     
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
-    // 懒加载 AOS 动画库
-    (function() {
-        var script = document.createElement('script');
-        script.src = 'https://unpkg.com/aos@2.3.1/dist/aos.js';
-        script.defer = true;
-        script.onload = function() {
-            AOS.init({
-                duration: 800,
-                easing: 'ease-in-out',
-                once: true,
-                offset: 100,
-                disable: function() {
-                    return window.innerWidth < 768 && 'ontouchstart' in window;
-                }
-            });
-        };
-        document.body.appendChild(script);
-    })();
-
-    // 图片懒加载优化
-    if ('IntersectionObserver' in window) {
-        const imageObserver = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    if (img.dataset.src) {
-                        img.src = img.dataset.src;
-                        img.classList.add('loaded');
-                        observer.unobserve(img);
-                    }
-                }
-            });
-        });
-
-        document.querySelectorAll('img[data-src]').forEach(img => {
-            imageObserver.observe(img);
-        });
-    }
+    AOS.init({
+        duration: 800,
+        easing: 'ease-in-out',
+        once: true,
+        offset: 100
+    });
 </script>
 
 

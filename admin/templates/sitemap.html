@@ -1,0 +1,462 @@
+{% extends "base.html" %}
+
+{% block title %}网站地图管理 - 博文教育管理后台{% endblock %}
+
+{% block extra_css %}
+<style>
+    .sitemap-card {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .sitemap-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .sitemap-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: white;
+    }
+
+    .stat-value {
+        font-size: 28px;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .stat-label {
+        color: #666;
+        font-size: 14px;
+    }
+
+    .file-info {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 12px;
+        padding: 20px;
+        color: white;
+    }
+
+    .file-info .file-icon {
+        font-size: 48px;
+        opacity: 0.8;
+    }
+
+    .url-list {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .url-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .url-item:last-child {
+        border-bottom: none;
+    }
+
+    .url-priority {
+        width: 50px;
+        text-align: center;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+        margin-right: 15px;
+    }
+
+    .priority-high {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .priority-medium {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .priority-low {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .ping-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px;
+        background: white;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .ping-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        margin-right: 15px;
+    }
+
+    .ping-google { background: #4285f4; color: white; }
+    .ping-bing { background: #00a4ef; color: white; }
+    .ping-baidu { background: #2932e1; color: white; }
+
+    .modal-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .modal-header .btn-close {
+        filter: brightness(0) invert(1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- 页面标题 -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="mb-1">网站地图管理</h4>
+            <nav aria-label="breadcrumb" class="breadcrumb-nav">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/admin/">首页</a></li>
+                    <li class="breadcrumb-item active">网站地图</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary" onclick="pingSearchEngines()">
+                <i class="bi bi-bell me-2"></i>通知搜索引擎
+            </button>
+            <button class="btn btn-primary" onclick="generateSitemap()">
+                <i class="bi bi-gear me-2"></i>生成Sitemap
+            </button>
+        </div>
+    </div>
+
+    <!-- 统计卡片 -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="sitemap-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="card-body text-white">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-value">{{ stats.posts }}</div>
+                            <div class="stat-label text-white-50">文章页面</div>
+                        </div>
+                        <div class="sitemap-icon" style="background: rgba(255,255,255,0.2);">
+                            <i class="bi bi-file-text"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="sitemap-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                <div class="card-body text-white">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-value">{{ stats.products }}</div>
+                            <div class="stat-label text-white-50">产品页面</div>
+                        </div>
+                        <div class="sitemap-icon" style="background: rgba(255,255,255,0.2);">
+                            <i class="bi bi-box-seam"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="sitemap-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                <div class="card-body text-white">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-value">{{ stats.pages }}</div>
+                            <div class="stat-label text-white-50">单页数量</div>
+                        </div>
+                        <div class="sitemap-icon" style="background: rgba(255,255,255,0.2);">
+                            <i class="bi bi-file-earmark"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="sitemap-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                <div class="card-body text-white">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="stat-value">{{ stats.total }}</div>
+                            <div class="stat-label text-white-50">总URL数</div>
+                        </div>
+                        <div class="sitemap-icon" style="background: rgba(255,255,255,0.2);">
+                            <i class="bi bi-link-45deg"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Sitemap文件信息 -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-file-earmark-code me-2"></i>Sitemap 文件
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if sitemap.exists %}
+                    <div class="file-info mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="file-icon me-3">
+                                <i class="bi bi-file-earmark-code"></i>
+                            </div>
+                            <div>
+                                <div style="font-size: 24px; font-weight: 600;">sitemap.xml</div>
+                                <div class="mt-2">
+                                    <span class="me-3"><i class="bi bi-hdd me-1"></i>{{ sitemap.size }} KB</span>
+                                    <span class="me-3"><i class="bi bi-link-45deg me-1"></i>{{ sitemap.url_count }} 个URL</span>
+                                    <span><i class="bi bi-clock me-1"></i>{{ sitemap.modified }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="/sitemap.xml" target="_blank" class="btn btn-outline-primary">
+                            <i class="bi bi-eye me-1"></i>查看文件
+                        </a>
+                        <button class="btn btn-outline-secondary" onclick="copySitemapUrl()">
+                            <i class="bi bi-clipboard me-1"></i>复制URL
+                        </button>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5 text-muted">
+                        <i class="bi bi-file-earmark-x fs-1 d-block mb-3"></i>
+                        <p>Sitemap 文件尚未生成</p>
+                        <button class="btn btn-primary" onclick="generateSitemap()">
+                            <i class="bi bi-gear me-1"></i>立即生成
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- URL结构预览 -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-diagram-3 me-2"></i>URL 结构
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="url-list">
+                        <div class="url-item">
+                            <span class="url-priority priority-high">1.0</span>
+                            <div>
+                                <div class="fw-bold">首页</div>
+                                <div class="small text-muted">/</div>
+                            </div>
+                        </div>
+                        <div class="url-item">
+                            <span class="url-priority priority-high">0.9</span>
+                            <div>
+                                <div class="fw-bold">栏目页</div>
+                                <div class="small text-muted">/{slug}</div>
+                            </div>
+                        </div>
+                        <div class="url-item">
+                            <span class="url-priority priority-medium">0.7</span>
+                            <div>
+                                <div class="fw-bold">文章页</div>
+                                <div class="small text-muted">/{column}/{slug}</div>
+                            </div>
+                        </div>
+                        <div class="url-item">
+                            <span class="url-priority priority-medium">0.6</span>
+                            <div>
+                                <div class="fw-bold">产品页</div>
+                                <div class="small text-muted">/products/{slug}</div>
+                            </div>
+                        </div>
+                        <div class="url-item">
+                            <span class="url-priority priority-low">0.5</span>
+                            <div>
+                                <div class="fw-bold">相册页</div>
+                                <div class="small text-muted">/gallery/{slug}</div>
+                            </div>
+                        </div>
+                        <div class="url-item">
+                            <span class="url-priority priority-low">0.5</span>
+                            <div>
+                                <div class="fw-bold">单页面</div>
+                                <div class="small text-muted">/{slug}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 搜索引擎通知 -->
+    <div class="row g-4 mt-2">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-globe me-2"></i>搜索引擎通知
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-3">生成 sitemap.xml 后，建议通知以下搜索引擎进行索引更新：</p>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="ping-item">
+                                <div class="d-flex align-items-center">
+                                    <div class="ping-icon ping-google">
+                                        <i class="bi bi-google"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold">Google</div>
+                                        <div class="small text-muted">站长平台</div>
+                                    </div>
+                                </div>
+                                <span class="badge bg-success">已支持</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="ping-item">
+                                <div class="d-flex align-items-center">
+                                    <div class="ping-icon ping-bing">
+                                        <i class="bi bi-microsoft"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold">Bing</div>
+                                        <div class="small text-muted">站长工具</div>
+                                    </div>
+                                </div>
+                                <span class="badge bg-success">已支持</span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="ping-item">
+                                <div class="d-flex align-items-center">
+                                    <div class="ping-icon ping-baidu">
+                                        <i class="bi bi-search"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold">Baidu</div>
+                                        <div class="small text-muted">站长平台</div>
+                                    </div>
+                                </div>
+                                <span class="badge bg-secondary">需验证</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 生成进度模态框 -->
+<div class="modal fade" id="generateModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body text-center py-4">
+                <div class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">生成中...</span>
+                </div>
+                <h5>正在生成 Sitemap...</h5>
+                <p class="text-muted" id="generateStatus">请稍候</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 生成sitemap
+    async function generateSitemap() {
+        const modal = new bootstrap.Modal(document.getElementById('generateModal'));
+        modal.show();
+
+        document.getElementById('generateStatus').textContent = '正在收集内容数据...';
+
+        try {
+            const response = await fetch('/api/sitemap/generate', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    base_url: window.location.origin
+                })
+            });
+
+            document.getElementById('generateStatus').textContent = '正在写入文件...';
+
+            const result = await response.json();
+
+            modal.hide();
+
+            if (result.success) {
+                showToast('success', result.message, '成功');
+                setTimeout(() => location.reload(), 1500);
+            } else {
+                showToast('error', result.message, '错误');
+            }
+        } catch (error) {
+            modal.hide();
+            console.error('生成sitemap失败:', error);
+            showToast('error', '生成sitemap失败', '错误');
+        }
+    }
+
+    // 通知搜索引擎
+    async function pingSearchEngines() {
+        try {
+            const response = await fetch('/api/sitemap/ping');
+            const result = await response.json();
+
+            if (result.success) {
+                showToast('success', result.message, '成功');
+            } else {
+                showToast('error', result.message, '错误');
+            }
+        } catch (error) {
+            console.error('通知搜索引擎失败:', error);
+            showToast('error', '通知失败', '错误');
+        }
+    }
+
+    // 复制sitemap URL
+    function copySitemapUrl() {
+        const url = window.location.origin + '/sitemap.xml';
+        navigator.clipboard.writeText(url).then(() => {
+            showToast('success', 'URL已复制到剪贴板', '成功');
+        }).catch(() => {
+            showToast('error', '复制失败', '错误');
+        });
+    }
+</script>
+{% endblock %}

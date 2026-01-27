@@ -221,7 +221,7 @@
         <a href="/admin/products" class="btn btn-secondary">返回列表</a>
     </div>
 
-    <form method="POST" action="{{ action }}" id="productForm">
+    <form method="POST" action="{{ action }}" id="productForm" novalidate>
         <div class="form-row">
             <div class="form-main">
                 <!-- 语言切换 Tab -->
@@ -236,6 +236,26 @@
                             <i class="bi bi-globe"></i>English Content
                         </button>
                     </li>
+                    <li class="nav-item ms-auto">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" title="快速翻译/克隆">
+                                <i class="bi bi-translate"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><h6 class="dropdown-header">快速克隆</h6></li>
+                                <li><a class="dropdown-item" href="javascript:cloneProductToEnglish()">
+                                    <i class="bi bi-arrow-right text-primary me-2"></i>中文 → English
+                                </a></li>
+                                <li><a class="dropdown-item" href="javascript:cloneProductToChinese()">
+                                    <i class="bi bi-arrow-left text-success me-2"></i>English → 中文
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="javascript:swapProductContent()">
+                                    <i class="bi bi-arrow-left-right text-warning me-2"></i>交换内容
+                                </a></li>
+                            </ul>
+                        </div>
+                    </li>
                 </ul>
 
                 <!-- Tab 内容 -->
@@ -248,9 +268,21 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="slug">URL Slug <span style="color: red;">*</span></label>
-                            <input type="text" id="slug" name="slug" required value="{{ product.slug if product and product.slug else '' }}" placeholder="留空自动生成">
-                            <div class="help-text">留空将自动生成。只能包含字母、数字和连字符。</div>
+                            <label for="slug">URL Slug <span style="color: red;">*</span>
+                                <span class="text-muted small" style="font-weight: normal;">(自动验证)</span>
+                            </label>
+                            <div class="input-group">
+                                <input type="text" id="slug" name="slug" required
+                                       value="{{ product.slug if product and product.slug else '' }}"
+                                       placeholder="留空自动生成"
+                                       {% if product %}data-exclude-id="{{ product.id }}"{% endif %}>
+                                <button class="btn btn-outline-secondary" type="button" id="checkSlugBtn" title="检查 slug 是否可用">
+                                    <i class="bi bi-check-circle"></i>
+                                </button>
+                            </div>
+                            <div class="slug-status mt-1" id="slugStatus">
+                                <small class="text-muted">留空将自动生成。只能包含字母、数字和连字符。</small>
+                            </div>
                         </div>
 
                         <div class="form-group">
@@ -261,7 +293,7 @@
 
                         <div class="form-group markdown-editor">
                             <label for="description_markdown">产品详细说明 (Markdown) <span style="color: red;">*</span></label>
-                            <textarea id="description_markdown" name="description_markdown" required>{{ product.description_html if product and product.description_html else '' }}</textarea>
+                            <textarea id="description_markdown" name="description_markdown" required>{% if description_markdown %}{{ description_markdown }}{% endif %}</textarea>
                             <div class="help-text">支持 Markdown 格式编辑，实时预览内容效果</div>
                         </div>
 
@@ -299,7 +331,7 @@
 
                         <div class="form-group markdown-editor">
                             <label for="description_markdown_en">Product Details (Markdown)</label>
-                            <textarea id="description_markdown_en" name="description_markdown_en">{{ product.description_html_en if product and product.description_html_en else '' }}</textarea>
+                            <textarea id="description_markdown_en" name="description_markdown_en">{% if description_markdown_en %}{{ description_markdown_en }}{% endif %}</textarea>
                             <div class="help-text">Supports Markdown format with live preview</div>
                         </div>
 
@@ -330,15 +362,15 @@
                         <label>状态</label>
                         <div class="radio-group">
                             <label>
-                                <input type="radio" name="status" value="draft" {% if not product or product.status == 'draft' %}checked{% endif %}>
+                                <input type="radio" name="product_status" value="draft" {% if not product or product.status == 'draft' %}checked{% endif %}>
                                 草稿
                             </label>
                             <label>
-                                <input type="radio" name="status" value="online" {% if product and product.status == 'online' %}checked{% endif %}>
+                                <input type="radio" name="product_status" value="online" {% if product and product.status == 'online' %}checked{% endif %}>
                                 上线
                             </label>
                             <label>
-                                <input type="radio" name="status" value="offline" {% if product and product.status == 'offline' %}checked{% endif %}>
+                                <input type="radio" name="product_status" value="offline" {% if product and product.status == 'offline' %}checked{% endif %}>
                                 下线
                             </label>
                         </div>
@@ -423,9 +455,92 @@
                 <div class="sidebar-section">
                     <div class="sidebar-section-title">封面图片</div>
                     <div class="form-group">
-                        <label for="cover_media_id">封面图 ID</label>
-                        <input type="number" id="cover_media_id" name="cover_media_id" value="{{ product.cover_media_id if product and product.cover_media_id else '' }}" placeholder="输入媒体库图片的 ID">
-                        <div class="help-text">输入媒体库图片的 ID</div>
+                        <div class="input-group">
+                            <input type="number" id="cover_media_id" name="cover_media_id"
+                                   value="{{ product.cover_media_id if product and product.cover_media_id else '' }}"
+                                   placeholder="输入媒体库图片的 ID">
+                            <button class="btn btn-outline-secondary" type="button" onclick="openMediaSelector()" title="从媒体库选择">
+                                <i class="bi bi-collection"></i>
+                            </button>
+                        </div>
+                        <!-- 封面预览 -->
+                        <div id="coverPreview" class="mt-2" style="display: none;">
+                            <img src="" alt="封面预览" class="img-thumbnail" style="max-height: 100px;">
+                        </div>
+                        <div class="help-text">点击图标从媒体库选择图片</div>
+                    </div>
+                </div>
+
+                <!-- 自动保存状态 -->
+                <div class="sidebar-section">
+                    <div class="sidebar-section-title">
+                        <i class="bi bi-cloud-arrow-up"></i>
+                        <span>自动保存</span>
+                    </div>
+                    <div id="autosaveIndicator" class="d-flex align-items-center mb-2">
+                        <div class="autosave-status me-3">
+                            <span class="badge bg-secondary" id="autosaveText">
+                                <i class="bi bi-clock me-1"></i>等待编辑...
+                            </span>
+                        </div>
+                        <div class="autosave-time small text-muted">
+                            <i class="bi bi-clock-history me-1"></i>
+                            <span id="autosaveTime">尚未保存</span>
+                        </div>
+                    </div>
+                    <div class="help-text">系统每 5 秒自动保存草稿</div>
+                </div>
+
+                <!-- SEO 优化建议 -->
+                <div class="sidebar-section">
+                    <div class="sidebar-section-title">
+                        <i class="bi bi-search"></i>
+                        <span>SEO 优化建议</span>
+                    </div>
+                    <div id="seoAnalysis" class="seo-analysis">
+                        <!-- 标题长度分析 -->
+                        <div class="seo-item mb-3" id="seoTitleItem">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-card-text me-1"></i>标题</span>
+                                <span class="badge bg-secondary" id="seoTitleLength">0/60</span>
+                            </div>
+                            <div class="progress mt-1" style="height: 6px;">
+                                <div class="progress-bar" id="seoTitleProgress" role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <small class="text-muted" id="seoTitleTip">建议 30-60 字符</small>
+                        </div>
+
+                        <!-- 描述长度分析 -->
+                        <div class="seo-item mb-3" id="seoDescItem">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-text-paragraph me-1"></i>描述</span>
+                                <span class="badge bg-secondary" id="seoDescLength">0/160</span>
+                            </div>
+                            <div class="progress mt-1" style="height: 6px;">
+                                <div class="progress-bar" id="seoDescProgress" role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <small class="text-muted" id="seoDescTip">建议 120-160 字符</small>
+                        </div>
+
+                        <!-- 内容字数分析 -->
+                        <div class="seo-item mb-3" id="seoContentItem">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-file-text me-1"></i>内容</span>
+                                <span class="badge bg-secondary" id="seoContentLength">0 字</span>
+                            </div>
+                            <div class="progress mt-1" style="height: 6px;">
+                                <div class="progress-bar" id="seoContentProgress" role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <small class="text-muted" id="seoContentTip">建议至少 300 字</small>
+                        </div>
+
+                        <!-- SEO 评分 -->
+                        <div class="seo-score text-center mt-3 pt-3 border-top">
+                            <div class="score-circle mx-auto mb-2" id="seoScoreCircle" style="width: 60px; height: 60px; border-radius: 50%; background: #f8f9fa; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; font-weight: bold;">
+                                <span id="seoScore">0</span>
+                            </div>
+                            <small class="text-muted">SEO 评分</small>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -433,6 +548,14 @@
 
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">{% if product %}更新产品{% else %}创建产品{% endif %}</button>
+            <button type="button" class="btn btn-outline-info" onclick="previewProduct()">
+                <i class="bi bi-eye me-2"></i>预览
+            </button>
+            {% if product %}
+            <button type="button" class="btn btn-outline-primary" onclick="duplicateProduct({{ product.id }})">
+                <i class="bi bi-copy me-2"></i>保存并复制
+            </button>
+            {% endif %}
             <button type="button" class="btn btn-secondary" onclick="window.location.href='/admin/products'">取消</button>
         </div>
     </form>
@@ -441,17 +564,22 @@
 
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 <script>
 (function() {
     'use strict';
+
+    const productId = {% if product %}{{ product.id }}{% else %}0{% endif %};
+    const isNewProduct = productId === 0;
 
     // 初始化中文 Markdown 编辑器
     const easyMDE_zh = new EasyMDE({
         element: document.getElementById('description_markdown'),
         spellChecker: false,
+        // 新产品启用autosave，已有产品禁用（从服务器加载内容）
         autosave: {
-            enabled: true,
-            uniqueId: 'product-description-zh-' + ({% if product %}{{ product.id }}{% else %}0{% endif %}),
+            enabled: isNewProduct,
+            uniqueId: 'product-description-zh-' + productId,
             delay: 5000,
         },
         placeholder: '请输入产品详细说明，支持 Markdown 格式...',
@@ -464,7 +592,7 @@
             'preview', 'side-by-side', 'fullscreen', '|',
             'guide'
         ],
-        status: ['autosave', 'lines', 'words', 'cursor'],
+        status: isNewProduct ? ['autosave', 'lines', 'words', 'cursor'] : ['lines', 'words', 'cursor'],
         renderingConfig: {
             codeSyntaxHighlighting: true,
         }
@@ -474,9 +602,10 @@
     const easyMDE_en = new EasyMDE({
         element: document.getElementById('description_markdown_en'),
         spellChecker: false,
+        // 新产品启用autosave，已有产品禁用
         autosave: {
-            enabled: true,
-            uniqueId: 'product-description-en-' + ({% if product %}{{ product.id }}{% else %}0{% endif %}),
+            enabled: isNewProduct,
+            uniqueId: 'product-description-en-' + productId,
             delay: 5000,
         },
         placeholder: 'Enter English product details, supports Markdown format...',
@@ -489,7 +618,7 @@
             'preview', 'side-by-side', 'fullscreen', '|',
             'guide'
         ],
-        status: ['autosave', 'lines', 'words', 'cursor'],
+        status: isNewProduct ? ['autosave', 'lines', 'words', 'cursor'] : ['lines', 'words', 'cursor'],
         renderingConfig: {
             codeSyntaxHighlighting: true,
         }
@@ -569,6 +698,189 @@
         });
     }
 
+    // ========== 自动保存指示器 ==========
+    const autosaveText = document.getElementById('autosaveText');
+    const autosaveTime = document.getElementById('autosaveTime');
+
+    // 监听 EasyMDE 的自动保存事件
+    easyMDE_zh.codemirror.on('change', function() {
+        if (autosaveText) {
+            autosaveText.innerHTML = '<i class="bi bi-arrow-repeat me-1"></i>正在保存...';
+            autosaveText.className = 'badge bg-info';
+        }
+    });
+
+    easyMDE_en.codemirror.on('change', function() {
+        if (autosaveText) {
+            autosaveText.innerHTML = '<i class="bi bi-arrow-repeat me-1"></i>正在保存...';
+            autosaveText.className = 'badge bg-info';
+        }
+    });
+
+    // 检查 localStorage 中的自动保存状态
+    function checkAutosaveStatus() {
+        const uniqueId = 'product-description-zh-' + productId;
+        const autosaveKey = 'easymde-autosave-' + uniqueId;
+        const savedData = localStorage.getItem(autosaveKey);
+
+        if (savedData) {
+            try {
+                const data = JSON.parse(savedData);
+                if (data.value && data.value.length > 0) {
+                    if (autosaveText) {
+                        autosaveText.innerHTML = '<i class="bi bi-check-circle me-1"></i>已保存';
+                        autosaveText.className = 'badge bg-success';
+                    }
+                    if (autosaveTime) {
+                        const savedDate = new Date(data.time);
+                        const now = new Date();
+                        const diffMs = now - savedDate;
+                        const diffMins = Math.floor(diffMs / 60000);
+
+                        if (diffMins < 1) {
+                            autosaveTime.textContent = '刚刚保存';
+                        } else if (diffMins < 60) {
+                            autosaveTime.textContent = diffMins + ' 分钟前';
+                        } else {
+                            autosaveTime.textContent = savedDate.toLocaleString('zh-CN');
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error('解析自动保存数据失败:', e);
+            }
+        }
+    }
+
+    // 每 3 秒检查一次保存状态
+    setInterval(checkAutosaveStatus, 3000);
+    checkAutosaveStatus(); // 初始检查
+
+    // ========== SEO 分析功能 ==========
+    const seoTitleInput = document.getElementById('seo_title');
+    const seoDescInput = document.getElementById('seo_description');
+
+    function analyzeProductSEO() {
+        // 标题分析
+        const titleLength = (seoTitleInput ? seoTitleInput.value : '').length ||
+                           (document.getElementById('name') ? document.getElementById('name').value : '').length;
+        const titleLengthEl = document.getElementById('seoTitleLength');
+        const titleProgress = document.getElementById('seoTitleProgress');
+        const titleTip = document.getElementById('seoTitleTip');
+
+        if (titleLengthEl && titleProgress) {
+            titleLengthEl.textContent = titleLength + '/60';
+            const titlePercent = Math.min((titleLength / 60) * 100, 100);
+            titleProgress.style.width = titlePercent + '%';
+
+            if (titleLength === 0) {
+                titleProgress.className = 'progress-bar bg-secondary';
+                titleLengthEl.className = 'badge bg-secondary';
+                if (titleTip) titleTip.textContent = '建议 30-60 字符';
+            } else if (titleLength < 30) {
+                titleProgress.className = 'progress-bar bg-warning';
+                titleLengthEl.className = 'badge bg-warning';
+                if (titleTip) titleTip.textContent = '标题偏短，建议 30-60 字符';
+            } else if (titleLength > 60) {
+                titleProgress.className = 'progress-bar bg-danger';
+                titleLengthEl.className = 'badge bg-danger';
+                if (titleTip) titleTip.textContent = '标题过长，可能被截断';
+            } else {
+                titleProgress.className = 'progress-bar bg-success';
+                titleLengthEl.className = 'badge bg-success';
+                if (titleTip) titleTip.textContent = '标题长度合适';
+            }
+        }
+
+        // 描述分析
+        const descLength = (seoDescInput ? seoDescInput.value : '').length;
+        const descLengthEl = document.getElementById('seoDescLength');
+        const descProgress = document.getElementById('seoDescProgress');
+        const descTip = document.getElementById('seoDescTip');
+
+        if (descLengthEl && descProgress) {
+            descLengthEl.textContent = descLength + '/160';
+            const descPercent = Math.min((descLength / 160) * 100, 100);
+            descProgress.style.width = descPercent + '%';
+
+            if (descLength === 0) {
+                descProgress.className = 'progress-bar bg-secondary';
+                descLengthEl.className = 'badge bg-secondary';
+                if (descTip) descTip.textContent = '建议 120-160 字符';
+            } else if (descLength < 120) {
+                descProgress.className = 'progress-bar bg-warning';
+                descLengthEl.className = 'badge bg-warning';
+                if (descTip) descTip.textContent = '描述偏短，建议 120-160 字符';
+            } else if (descLength > 160) {
+                descProgress.className = 'progress-bar bg-danger';
+                descLengthEl.className = 'badge bg-danger';
+                if (descTip) descTip.textContent = '描述过长，可能被截断';
+            } else {
+                descProgress.className = 'progress-bar bg-success';
+                descLengthEl.className = 'badge bg-success';
+                if (descTip) descTip.textContent = '描述长度合适';
+            }
+        }
+
+        // 内容字数分析
+        const contentLength = easyMDE_zh.value().length;
+        const contentLengthEl = document.getElementById('seoContentLength');
+        const contentProgress = document.getElementById('seoContentProgress');
+        const contentTip = document.getElementById('seoContentTip');
+
+        if (contentLengthEl && contentProgress) {
+            contentLengthEl.textContent = contentLength + ' 字';
+            const contentPercent = Math.min((contentLength / 1000) * 100, 100);
+            contentProgress.style.width = contentPercent + '%';
+
+            if (contentLength < 300) {
+                contentProgress.className = 'progress-bar bg-danger';
+                if (contentTip) contentTip.textContent = '内容过短，建议至少 300 字';
+            } else if (contentLength < 600) {
+                contentProgress.className = 'progress-bar bg-warning';
+                if (contentTip) contentTip.textContent = '内容偏短，建议 600 字以上';
+            } else {
+                contentProgress.className = 'progress-bar bg-success';
+                if (contentTip) contentTip.textContent = '内容长度良好';
+            }
+        }
+
+        // 计算 SEO 评分
+        let score = 0;
+        if (titleLength >= 30 && titleLength <= 60) score += 30;
+        else if (titleLength > 0) score += 15;
+
+        if (descLength >= 120 && descLength <= 160) score += 30;
+        else if (descLength > 0) score += 15;
+
+        if (contentLength >= 600) score += 40;
+        else if (contentLength >= 300) score += 20;
+
+        const scoreEl = document.getElementById('seoScore');
+        const scoreCircle = document.getElementById('seoScoreCircle');
+        if (scoreEl && scoreCircle) {
+            scoreEl.textContent = score;
+            if (score >= 80) {
+                scoreCircle.style.background = '#d4edda';
+                scoreCircle.style.color = '#155724';
+            } else if (score >= 50) {
+                scoreCircle.style.background = '#fff3cd';
+                scoreCircle.style.color = '#856404';
+            } else {
+                scoreCircle.style.background = '#f8d7da';
+                scoreCircle.style.color = '#721c24';
+            }
+        }
+    }
+
+    // 监听输入变化
+    if (seoTitleInput) seoTitleInput.addEventListener('input', analyzeProductSEO);
+    if (seoDescInput) seoDescInput.addEventListener('input', analyzeProductSEO);
+    document.getElementById('name')?.addEventListener('input', analyzeProductSEO);
+
+    easyMDE_zh.codemirror.on('change', analyzeProductSEO);
+    analyzeProductSEO(); // 初始分析
+
     // 防止意外离开页面
     let formChanged = false;
 
@@ -597,6 +909,504 @@
         formChanged = false;
     });
 
+    // ========== 快速克隆双语功能 ==========
+    window.cloneProductToEnglish = function() {
+        const nameZh = document.getElementById('name').value;
+        const summaryZh = document.getElementById('summary').value;
+        const contentZh = easyMDE_zh.value();
+        const priceZh = document.getElementById('price_text').value;
+
+        if (!nameZh && !summaryZh && !contentZh) {
+            showToast('warning', '请先填写中文内容', '提示');
+            return;
+        }
+
+        confirmAction(
+            '确认克隆到英文',
+            '将中文内容复制到英文版本？已存在的英文内容将被覆盖。',
+            function() {
+                // 克隆名称
+                if (nameZh && !document.getElementById('name_en').value) {
+                    document.getElementById('name_en').value = nameZh;
+                }
+                // 克隆摘要
+                if (summaryZh && !document.getElementById('summary_en').value) {
+                    document.getElementById('summary_en').value = summaryZh;
+                }
+                // 克隆内容
+                if (contentZh && !easyMDE_en.value()) {
+                    easyMDE_en.value(contentZh);
+                }
+                // 克隆价格
+                if (priceZh && !document.getElementById('price_text_en').value) {
+                    document.getElementById('price_text_en').value = priceZh;
+                }
+
+                showToast('success', '已克隆到英文版本', '成功');
+
+                // 切换到英文标签
+                const enTab = document.getElementById('en-tab');
+                if (enTab) {
+                    enTab.click();
+                }
+            }
+        );
+    };
+
+    window.cloneProductToChinese = function() {
+        const nameEn = document.getElementById('name_en').value;
+        const summaryEn = document.getElementById('summary_en').value;
+        const contentEn = easyMDE_en.value();
+        const priceEn = document.getElementById('price_text_en').value;
+
+        if (!nameEn && !summaryEn && !contentEn) {
+            showToast('warning', '请先填写英文内容', '提示');
+            return;
+        }
+
+        confirmAction(
+            '确认克隆到中文',
+            '将英文内容复制到中文版本？已存在的中文内容将被覆盖。',
+            function() {
+                // 克隆名称
+                if (nameEn && !document.getElementById('name').value) {
+                    document.getElementById('name').value = nameEn;
+                }
+                // 克隆摘要
+                if (summaryEn && !document.getElementById('summary').value) {
+                    document.getElementById('summary').value = summaryEn;
+                }
+                // 克隆内容
+                if (contentEn && !easyMDE_zh.value()) {
+                    easyMDE_zh.value(contentEn);
+                }
+                // 克隆价格
+                if (priceEn && !document.getElementById('price_text').value) {
+                    document.getElementById('price_text').value = priceEn;
+                }
+
+                showToast('success', '已克隆到中文版本', '成功');
+
+                // 切换到中文标签
+                const zhTab = document.getElementById('zh-tab');
+                if (zhTab) {
+                    zhTab.click();
+                }
+            }
+        );
+    };
+
+    window.swapProductContent = function() {
+        const nameZh = document.getElementById('name').value;
+        const nameEn = document.getElementById('name_en').value;
+        const summaryZh = document.getElementById('summary').value;
+        const summaryEn = document.getElementById('summary_en').value;
+        const contentZh = easyMDE_zh.value();
+        const contentEn = easyMDE_en.value();
+        const priceZh = document.getElementById('price_text').value;
+        const priceEn = document.getElementById('price_text_en').value;
+
+        if (!nameEn && !contentEn) {
+            showToast('warning', '没有英文内容可交换', '提示');
+            return;
+        }
+
+        confirmAction(
+            '确认交换内容',
+            '交换中英文内容？',
+            function() {
+                // 交换名称
+                document.getElementById('name').value = nameEn;
+                document.getElementById('name_en').value = nameZh;
+                // 交换摘要
+                document.getElementById('summary').value = summaryEn;
+                document.getElementById('summary_en').value = summaryZh;
+                // 交换内容
+                easyMDE_zh.value(contentEn);
+                easyMDE_en.value(contentZh);
+                // 交换价格
+                document.getElementById('price_text').value = priceEn;
+                document.getElementById('price_text_en').value = priceZh;
+
+                showToast('success', '已交换中英文内容', '成功');
+            }
+        );
+    };
+
+    // ========== Slug 验证功能 ==========
+    const slugInput = document.getElementById('slug');
+    const slugStatus = document.getElementById('slugStatus');
+    const checkSlugBtn = document.getElementById('checkSlugBtn');
+    let slugChecking = false;
+
+    // 检查 slug 是否可用
+    async function checkSlugAvailability() {
+        const slug = slugInput.value.trim();
+        if (!slug) {
+            slugStatus.innerHTML = '<small class="text-muted">请输入 slug</small>';
+            checkSlugBtn.innerHTML = '<i class="bi bi-check-circle"></i>';
+            checkSlugBtn.classList.remove('btn-success', 'btn-danger');
+            checkSlugBtn.classList.add('btn-outline-secondary');
+            return;
+        }
+
+        if (slugChecking) return;
+        slugChecking = true;
+
+        checkSlugBtn.disabled = true;
+        checkSlugBtn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+
+        try {
+            const excludeId = slugInput.dataset.excludeId || '';
+            const response = await fetch(`/admin/products/check-slug?slug=${encodeURIComponent(slug)}${excludeId ? '&exclude_id=' + excludeId : ''}`);
+            const result = await response.json();
+
+            if (result.success) {
+                if (result.available) {
+                    slugStatus.innerHTML = '<small class="text-success"><i class="bi bi-check-circle"></i> Slug 可用</small>';
+                    checkSlugBtn.innerHTML = '<i class="bi bi-check-circle"></i>';
+                    checkSlugBtn.classList.remove('btn-outline-secondary', 'btn-danger');
+                    checkSlugBtn.classList.add('btn-success');
+                } else {
+                    slugStatus.innerHTML = '<small class="text-danger"><i class="bi bi-x-circle"></i> Slug 已被使用，请使用其他 slug</small>';
+                    checkSlugBtn.innerHTML = '<i class="bi bi-x-circle"></i>';
+                    checkSlugBtn.classList.remove('btn-outline-secondary', 'btn-success');
+                    checkSlugBtn.classList.add('btn-danger');
+                }
+            }
+        } catch (error) {
+            console.error('检查 slug 失败:', error);
+            slugStatus.innerHTML = '<small class="text-warning"><i class="bi bi-exclamation-triangle"></i> 检查失败，请重试</small>';
+        } finally {
+            slugChecking = false;
+            checkSlugBtn.disabled = false;
+        }
+    }
+
+    // 手动检查 slug
+    if (checkSlugBtn) {
+        checkSlugBtn.addEventListener('click', checkSlugAvailability);
+    }
+
+    // 失焦时自动检查
+    slugInput.addEventListener('blur', function() {
+        if (this.value.trim()) {
+            checkSlugAvailability();
+        }
+    });
+
+    // 输入时清除验证状态
+    slugInput.addEventListener('input', function() {
+        slugStatus.innerHTML = '<small class="text-muted"><i class="bi bi-info-circle"></i> 输入完成后将自动验证</small>';
+        checkSlugBtn.innerHTML = '<i class="bi bi-check-circle"></i>';
+        checkSlugBtn.classList.remove('btn-success', 'btn-danger');
+        checkSlugBtn.classList.add('btn-outline-secondary');
+    });
+
+    // ========== 保存并复制功能 ==========
+    window.duplicateProduct = function(productId) {
+        confirmAction(
+            '确认复制',
+            '确定要创建这个产品的副本吗？',
+            function() {
+                fetch(`/admin/products/duplicate/${productId}`, {
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast('success', data.message, '成功');
+                        setTimeout(() => {
+                            window.location.href = `/admin/products/${data.new_product_id}/edit`;
+                        }, 1500);
+                    } else {
+                        showToast('danger', data.message, '错误');
+                    }
+                })
+                .catch(error => {
+                    console.error('复制失败:', error);
+                    showToast('danger', '复制失败，请稍后重试', '错误');
+                });
+            }
+        );
+    };
+
+    // ========== 媒体选择器功能 ==========
+    window.openMediaSelector = function() {
+        const width = 1000;
+        const height = 700;
+        const left = (window.innerWidth - width) / 2;
+        const top = (window.innerHeight - height) / 2;
+
+        window.open(
+            '/admin/media?select=1',
+            'mediaSelector',
+            `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
+        );
+    };
+
+    // 媒体选择回调函数
+    window.selectMediaCallback = function(media) {
+        document.getElementById('cover_media_id').value = media.id;
+        const preview = document.getElementById('coverPreview');
+        const previewImg = preview.querySelector('img');
+        previewImg.src = media.url;
+        preview.style.display = 'block';
+        showToast('success', `已选择图片: ${media.name}`, '成功');
+    };
+
+    // 页面加载时如果有封面 ID，则加载预览
+    const initialCoverId = document.getElementById('cover_media_id').value;
+    if (initialCoverId) {
+        fetch(`/admin/media/${initialCoverId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const preview = document.getElementById('coverPreview');
+                    const previewImg = preview.querySelector('img');
+                    previewImg.src = data.file.url;
+                    preview.style.display = 'block';
+                }
+            })
+            .catch(() => {});
+    }
+
+    // ========== 键盘快捷键 ==========
+    document.addEventListener('keydown', function(e) {
+        // Ctrl+S 保存
+        if (e.ctrlKey && e.key === 's') {
+            e.preventDefault();
+            form.dispatchEvent(new Event('submit'));
+        }
+        // Ctrl+P 预览
+        if (e.ctrlKey && e.key === 'p') {
+            e.preventDefault();
+            const slug = document.getElementById('slug').value || '{{ product.slug if product else "" }}';
+            if (slug) {
+                window.open(`/product/${slug}`, '_blank');
+            } else {
+                showToast('warning', '请先保存产品以获取预览链接', '提示');
+            }
+        }
+        // Ctrl+D 设为草稿
+        if (e.ctrlKey && e.key === 'd') {
+            e.preventDefault();
+            document.querySelector('input[name="product_status"][value="draft"]').checked = true;
+            showToast('info', '已切换为草稿', '提示');
+        }
+        // Ctrl+Shift+P 上线发布
+        if (e.ctrlKey && e.shiftKey && e.key === 'P') {
+            e.preventDefault();
+            document.querySelector('input[name="product_status"][value="online"]').checked = true;
+            showToast('success', '已切换为上线', '提示');
+        }
+    });
+
+    // 显示快捷键提示（3秒后消失）
+    const shortcutToast = document.createElement('div');
+    shortcutToast.className = 'alert alert-info position-fixed top-0 start-50 translate-middle-x mt-3';
+    shortcutToast.style.zIndex = '9999';
+    shortcutToast.innerHTML = '<i class="bi bi-keyboard me-2"></i><strong>快捷键:</strong> Ctrl+S 保存 | Ctrl+P 预览 | Ctrl+D 草稿 | Ctrl+Shift+P 上线';
+    document.body.appendChild(shortcutToast);
+    setTimeout(() => shortcutToast.remove(), 4000);
+
+    // ========== 产品预览功能 ==========
+    window.previewProduct = function() {
+        // 获取表单数据
+        const nameZh = document.getElementById('name').value || '未填写产品名称';
+        const nameEn = document.getElementById('name_en').value || nameZh;
+        const summaryZh = document.getElementById('summary').value || '暂无卖点描述';
+        const summaryEn = document.getElementById('summary_en').value || summaryZh;
+        const contentZh = easyMDE_zh.value() || '<p>暂无详细说明</p>';
+        const contentEn = easyMDE_en.value() || contentZh;
+        const priceZh = document.getElementById('price_text').value || '暂无价格信息';
+        const priceEn = document.getElementById('price_text_en').value || priceZh;
+
+        // 更新模态框内容
+        document.getElementById('previewNameZh').textContent = nameZh;
+        document.getElementById('previewNameEn').textContent = nameEn;
+        document.getElementById('previewSummaryZh').textContent = summaryZh;
+        document.getElementById('previewSummaryEn').textContent = summaryEn;
+        document.getElementById('previewPriceZh').textContent = priceZh;
+        document.getElementById('previewPriceEn').textContent = priceEn;
+
+        // 更新双语对照内容
+        document.getElementById('previewNameZh_2').textContent = nameZh;
+        document.getElementById('previewNameEn_2').textContent = nameEn;
+        document.getElementById('previewSummaryZh_2').textContent = summaryZh;
+        document.getElementById('previewSummaryEn_2').textContent = summaryEn;
+        document.getElementById('previewPriceZh_2').textContent = priceZh;
+        document.getElementById('previewPriceEn_2').textContent = priceEn;
+
+        // 渲染 Markdown 为 HTML
+        document.getElementById('previewContentZh').innerHTML = marked.parse(contentZh);
+        document.getElementById('previewContentEn').innerHTML = marked.parse(contentEn);
+        document.getElementById('previewContentZh_2').innerHTML = marked.parse(contentZh);
+        document.getElementById('previewContentEn_2').innerHTML = marked.parse(contentEn);
+
+        // 显示模态框
+        const previewModal = new bootstrap.Modal(document.getElementById('productPreviewModal'));
+        previewModal.show();
+    };
+
 })();
 </script>
+
+<!-- 产品预览模态框 -->
+<div class="modal fade" id="productPreviewModal" tabindex="-1" aria-labelledby="productPreviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="productPreviewModalLabel">
+                    <i class="bi bi-eye me-2"></i>产品预览
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- 语言切换 Tab -->
+                <ul class="nav nav-tabs mb-3" id="productPreviewTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="preview-zh-tab" data-bs-toggle="tab" data-bs-target="#product-preview-zh" type="button" role="tab">
+                            <i class="bi bi-translate"></i>中文预览
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="preview-en-tab" data-bs-toggle="tab" data-bs-target="#product-preview-en" type="button" role="tab">
+                            <i class="bi bi-globe"></i>English Preview
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="preview-both-tab" data-bs-toggle="tab" data-bs-target="#product-preview-both" type="button" role="tab">
+                            <i class="bi bi-columns-gap"></i>双语对照
+                        </button>
+                    </li>
+                </ul>
+
+                <!-- Tab 内容 -->
+                <div class="tab-content" id="productPreviewTabContent">
+                    <!-- 中文预览 -->
+                    <div class="tab-pane fade show active" id="product-preview-zh" role="tabpanel">
+                        <div class="preview-product">
+                            <h2 class="preview-name" id="previewNameZh"></h2>
+                            <p class="preview-price" id="previewPriceZh"></p>
+                            <p class="preview-summary" id="previewSummaryZh"></p>
+                            <hr>
+                            <div class="preview-body" id="previewContentZh"></div>
+                        </div>
+                    </div>
+
+                    <!-- 英文预览 -->
+                    <div class="tab-pane fade" id="product-preview-en" role="tabpanel">
+                        <div class="preview-product">
+                            <h2 class="preview-name" id="previewNameEn"></h2>
+                            <p class="preview-price" id="previewPriceEn"></p>
+                            <p class="preview-summary" id="previewSummaryEn"></p>
+                            <hr>
+                            <div class="preview-body" id="previewContentEn"></div>
+                        </div>
+                    </div>
+
+                    <!-- 双语对照 -->
+                    <div class="tab-pane fade" id="product-preview-both" role="tabpanel">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="preview-product bg-light p-3 rounded">
+                                    <h5 class="text-primary"><i class="bi bi-translate"></i> 中文</h5>
+                                    <h4 class="preview-name" id="previewNameZh_2"></h4>
+                                    <p class="preview-price text-success" id="previewPriceZh_2"></p>
+                                    <p class="preview-summary text-muted" id="previewSummaryZh_2"></p>
+                                    <hr>
+                                    <div class="preview-body" id="previewContentZh_2"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="preview-product bg-light p-3 rounded">
+                                    <h5 class="text-success"><i class="bi bi-globe"></i> English</h5>
+                                    <h4 class="preview-name" id="previewNameEn_2"></h4>
+                                    <p class="preview-price text-success" id="previewPriceEn_2"></p>
+                                    <p class="preview-summary text-muted" id="previewSummaryEn_2"></p>
+                                    <hr>
+                                    <div class="preview-body" id="previewContentEn_2"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.preview-product {
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+}
+.preview-name {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+.preview-price {
+    font-size: 1.25rem;
+    color: #dc3545;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+.preview-summary {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+.preview-body {
+    line-height: 1.8;
+    color: #333;
+}
+.preview-body h1,
+.preview-body h2,
+.preview-body h3,
+.preview-body h4,
+.preview-body h5,
+.preview-body h6 {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+.preview-body p {
+    margin-bottom: 1rem;
+}
+.preview-body ul,
+.preview-body ol {
+    margin-bottom: 1rem;
+    padding-left: 2rem;
+}
+.preview-body pre {
+    background: #f5f5f5;
+    padding: 1rem;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+.preview-body code {
+    background: #f5f5f5;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.9em;
+}
+.preview-body blockquote {
+    border-left: 4px solid #0d6efd;
+    padding-left: 1rem;
+    margin: 1rem 0;
+    color: #666;
+}
+.preview-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+</style>
 {% endblock %}

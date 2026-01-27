@@ -22,7 +22,7 @@ from app.models.media import MediaFile
 ADMIN_DIR = Path(__file__).parent.parent.parent
 templates = Jinja2Templates(directory=str(ADMIN_DIR / "templates"))
 
-router = APIRouter(prefix="/galleries", tags=["galleries"])
+router = APIRouter(tags=["galleries"])
 
 
 # ===== HTML 页面路由 =====
@@ -74,6 +74,73 @@ async def new_gallery(request: Request):
             "is_edit": False,
         }
     )
+
+
+@router.post("", response_class=HTMLResponse)
+async def create_gallery_html(
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    """
+    创建新相册（HTML表单提交）
+    """
+    from slugify import slugify
+
+    # 获取表单数据
+    form_data = await request.form()
+    title = form_data.get("title", "")
+    description = form_data.get("description", "")
+    category = form_data.get("category", "")
+    tags = form_data.get("tags", "")
+    display_mode = form_data.get("display_mode", "grid")
+    is_featured = "is_featured" in form_data
+    is_public = "is_public" in form_data or True
+    allow_download = "allow_download" in form_data
+    watermark_enabled = "watermark_enabled" in form_data
+
+    if not title:
+        return templates.TemplateResponse(
+            "galleries/form.html",
+            {
+                "request": request,
+                "gallery": None,
+                "is_edit": False,
+                "error": "相册标题不能为空"
+            }
+        )
+
+    # 生成 slug
+    slug = slugify(title)
+
+    # 检查 slug 是否重复
+    existing = db.query(Gallery).filter_by(slug=slug).first()
+    if existing:
+        counter = 1
+        while db.query(Gallery).filter_by(slug=f"{slug}-{counter}").first():
+            counter += 1
+        slug = f"{slug}-{counter}"
+
+    # 创建相册
+    gallery = Gallery(
+        title=title,
+        slug=slug,
+        description=description,
+        category=category,
+        tags=tags,
+        display_mode=display_mode,
+        is_featured=is_featured,
+        is_public=is_public,
+        allow_download=allow_download,
+        watermark_enabled=watermark_enabled,
+    )
+
+    db.add(gallery)
+    db.commit()
+    db.refresh(gallery)
+
+    # 重定向到列表页
+    from fastapi.responses import RedirectResponse
+    return RedirectResponse(url="/admin/galleries", status_code=303)
 
 
 @router.get("/{gallery_id}/edit", response_class=HTMLResponse)
@@ -134,7 +201,9 @@ class GalleryCreate(BaseModel):
     """创建相册的请求模型"""
 
     title: str = Field(..., min_length=1, max_length=200, description="相册标题")
+    title_en: Optional[str] = Field(None, max_length=200, description="相册英文标题")
     description: Optional[str] = Field(None, description="相册描述")
+    description_en: Optional[str] = Field(None, description="相册英文描述")
     category: Optional[str] = Field(None, max_length=100, description="分类")
     tags: Optional[str] = Field(None, max_length=255, description="标签（逗号分隔）")
     cover_media_id: Optional[int] = Field(None, description="封面图ID")
@@ -149,7 +218,9 @@ class GalleryUpdate(BaseModel):
     """更新相册的请求模型"""
 
     title: Optional[str] = Field(None, min_length=1, max_length=200)
+    title_en: Optional[str] = Field(None, max_length=200)
     description: Optional[str] = None
+    description_en: Optional[str] = None
     category: Optional[str] = Field(None, max_length=100)
     tags: Optional[str] = Field(None, max_length=255)
     cover_media_id: Optional[int] = None
@@ -208,8 +279,10 @@ class GalleryResponse(BaseModel):
 
     id: int
     title: str
+    title_en: Optional[str]
     slug: str
     description: Optional[str]
+    description_en: Optional[str]
     category: Optional[str]
     tags: Optional[str]
     cover_media_id: Optional[int]
@@ -247,8 +320,8 @@ class GalleryImageResponse(BaseModel):
 # ===== Routes =====
 
 
-@router.post("", status_code=status.HTTP_200_OK)
-def create_gallery(
+@router.post("/create", status_code=status.HTTP_200_OK)
+async def create_gallery(
     gallery_data: GalleryCreate,
     db: Session = Depends(get_db),
 ) -> dict:
@@ -277,8 +350,10 @@ def create_gallery(
     # 创建相册
     gallery = Gallery(
         title=gallery_data.title,
+        title_en=gallery_data.title_en,
         slug=slug,
         description=gallery_data.description,
+        description_en=gallery_data.description_en,
         category=gallery_data.category,
         tags=gallery_data.tags,
         cover_media_id=gallery_data.cover_media_id,
@@ -297,8 +372,10 @@ def create_gallery(
     return {
         "id": gallery.id,
         "title": gallery.title,
+        "title_en": gallery.title_en,
         "slug": gallery.slug,
         "description": gallery.description,
+        "description_en": gallery.description_en,
         "category": gallery.category,
         "tags": gallery.tags,
         "cover_media_id": gallery.cover_media_id,
@@ -348,8 +425,10 @@ def update_gallery(
     return {
         "id": gallery.id,
         "title": gallery.title,
+        "title_en": gallery.title_en,
         "slug": gallery.slug,
         "description": gallery.description,
+        "description_en": gallery.description_en,
         "category": gallery.category,
         "tags": gallery.tags,
         "cover_media_id": gallery.cover_media_id,
@@ -555,8 +634,10 @@ def set_cover_image(
     return {
         "id": gallery.id,
         "title": gallery.title,
+        "title_en": gallery.title_en,
         "slug": gallery.slug,
         "description": gallery.description,
+        "description_en": gallery.description_en,
         "category": gallery.category,
         "tags": gallery.tags,
         "cover_media_id": gallery.cover_media_id,

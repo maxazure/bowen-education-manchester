@@ -1,0 +1,423 @@
+{% extends "base.html" %}
+
+{% block title %}回收站 - 博文教育管理后台{% endblock %}
+
+{% block content %}
+<!-- 批量操作栏 -->
+<div class="batch-actions-bar" id="batchActionsBar" style="display: none;">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <div>
+            <i class="bi bi-check-circle text-warning me-2"></i>
+            已选择 <strong id="selectedCount">0</strong> 篇文章
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+            <button class="btn btn-sm btn-success" onclick="batchRestore()">
+                <i class="bi bi-arrow-counterclockwise me-1"></i>批量恢复
+            </button>
+            <button class="btn btn-sm btn-danger" onclick="batchPermanentDelete()">
+                <i class="bi bi-x-lg me-1"></i>批量永久删除
+            </button>
+            <button class="btn btn-sm btn-outline-secondary" onclick="clearSelection()">
+                <i class="bi bi-x-circle me-1"></i>取消选择
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 页面头部 -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title">
+            <i class="bi bi-trash text-warning me-2"></i>回收站
+        </h1>
+        <p class="page-subtitle mb-0">已删除的文章将保留 30 天，可在此恢复或永久删除</p>
+    </div>
+    <div class="page-actions d-flex gap-2">
+        <a href="/admin/posts" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i>返回文章列表
+        </a>
+        {% if total > 0 %}
+        <button type="button" class="btn btn-outline-danger" onclick="emptyTrash()">
+            <i class="bi bi-trash-fill me-2"></i>清空回收站
+        </button>
+        {% endif %}
+    </div>
+</div>
+
+<!-- 统计信息卡片 -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card stat-card bg-warning-light">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon bg-warning text-white me-3">
+                    <i class="bi bi-trash"></i>
+                </div>
+                <div>
+                    <div class="stat-label">回收站文章</div>
+                    <div class="stat-value text-warning">{{ total }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-info-circle text-info fs-4 me-2"></i>
+                    <div>
+                        <strong>回收站提示</strong>
+                        <p class="text-muted mb-0 small">已删除的文章会在回收站中保留 30 天。超过 30 天后将自动永久删除。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if total == 0 %}
+<!-- 空状态 -->
+<div class="card">
+    <div class="card-body text-center py-5">
+        <i class="bi bi-trash text-muted" style="font-size: 4rem;"></i>
+        <h4 class="mt-3 text-muted">回收站为空</h4>
+        <p class="text-muted">没有已删除的文章</p>
+        <a href="/admin/posts" class="btn btn-primary mt-3">
+            <i class="bi bi-arrow-left me-2"></i>返回文章列表
+        </a>
+    </div>
+</div>
+{% else %}
+<!-- 文章列表卡片 -->
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div class="d-flex align-items-center gap-2">
+            <input type="checkbox" class="form-check-input" id="selectAll" onchange="toggleSelectAll()">
+            <span class="text-muted small">全选</span>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <!-- 搜索框 -->
+            <div class="input-group input-group-sm" style="width: 250px;">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input type="text" class="form-control" id="searchInput" placeholder="搜索标题..." oninput="filterTable()">
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0" id="trashTable">
+                <thead>
+                    <tr>
+                        <th style="width: 50px;" class="sticky-col start-0">
+                            <input type="checkbox" class="form-check-input" id="selectAll" onchange="toggleSelectAll()">
+                        </th>
+                        <th style="width: 60px;">ID</th>
+                        <th style="width: 80px;">封面</th>
+                        <th>文章标题</th>
+                        <th style="width: 120px;">栏目</th>
+                        <th style="width: 150px;">删除时间</th>
+                        <th style="width: 120px;">剩余保留</th>
+                        <th style="width: 120px;" class="text-center sticky-col end-0">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in posts %}
+                    {% set days_ago = ((now - post.updated_at).days if post.updated_at else 0) %}
+                    <tr data-id="{{ post.id }}" data-title="{{ post.title.lower() }}">
+                        <td class="sticky-col start-0">
+                            <input type="checkbox" class="form-check-input trash-checkbox"
+                                   value="{{ post.id }}" onchange="updateBatchActions()">
+                        </td>
+                        <td>
+                            <span class="text-muted">#{{ post.id }}</span>
+                        </td>
+                        <td>
+                            {% if post.cover_media %}
+                            <img src="{{ post.cover_media.file_url if post.cover_media.file_url else '/static/images/news/news-hero-background.jpg' }}"
+                                 alt="封面" class="rounded" style="width: 50px; height: 35px; object-fit: cover;">
+                            {% else %}
+                            <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 50px; height: 35px;">
+                                <i class="bi bi-image text-muted"></i>
+                            </div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="/admin/posts/{{ post.id }}/edit" class="text-decoration-none fw-medium">
+                                {{ post.title }}
+                            </a>
+                            {% if post.title_en %}
+                            <p class="text-muted small mb-0">{{ post.title_en[:50] }}{% if post.title_en|length > 50 %}...{% endif %}</p>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if post.column %}
+                            <span class="badge bg-light text-dark">{{ post.column.name }}</span>
+                            {% else %}
+                            <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="text-muted small">
+                                {{ post.updated_at.strftime('%Y-%m-%d %H:%M') if post.updated_at else '-' }}
+                            </span>
+                        </td>
+                        <td>
+                            {% set remaining = 30 - days_ago %}
+                            {% if remaining > 20 %}
+                            <span class="badge bg-success">{{ remaining }}天</span>
+                            {% elif remaining > 10 %}
+                            <span class="badge bg-warning text-dark">{{ remaining }}天</span>
+                            {% else %}
+                            <span class="badge bg-danger">{{ remaining }}天</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center sticky-col end-0">
+                            <button class="btn btn-sm btn-outline-success" onclick="restorePost({{ post.id }})" title="恢复">
+                                <i class="bi bi-arrow-counterclockwise"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="permanentDelete({{ post.id }})" title="永久删除">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 分页 -->
+{% if total_pages > 1 %}
+<nav aria-label="Page navigation" class="mt-4">
+    <ul class="pagination justify-content-center">
+        <li class="page-item {% if page == 1 %}disabled{% endif %}">
+            <a class="page-link" href="/admin/posts/trash?page={{ page - 1 }}">上一页</a>
+        </li>
+        {% for p in range(1, total_pages + 1) %}
+        {% if p == 1 or p == total_pages or (p >= page - 2 and p <= page + 2) %}
+        <li class="page-item {% if p == page %}active{% endif %}">
+            <a class="page-link" href="/admin/posts/trash?page={{ p }}">{{ p }}</a>
+        </li>
+        {% elif p == page - 3 or p == page + 3 %}
+        <li class="page-item disabled">
+            <span class="page-link">...</span>
+        </li>
+        {% endif %}
+        {% endfor %}
+        <li class="page-item {% if page == total_pages %}disabled{% endif %}">
+            <a class="page-link" href="/admin/posts/trash?page={{ page + 1 }}">下一页</a>
+        </li>
+    </ul>
+</nav>
+{% endif %}
+
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<style>
+/* 表格固定列样式 */
+.sticky-col {
+    position: sticky;
+    background: #fff;
+    z-index: 1;
+}
+.sticky-col.start-0 { left: 0; }
+.sticky-col.end-0 { right: 0; background: #f8f9fa; }
+thead.sticky-top { position: sticky; top: 0; z-index: 2; background: #f8f9fa; }
+.table-scroll-container { max-height: calc(100vh - 350px); overflow: auto; }
+</style>
+<script>
+// 选择管理
+let selectedIds = [];
+
+// 更新批量操作栏状态
+function updateBatchActions() {
+    const checkboxes = document.querySelectorAll('.trash-checkbox:checked');
+    selectedIds = Array.from(checkboxes).map(cb => parseInt(cb.value));
+
+    const count = selectedIds.length;
+    const batchBar = document.getElementById('batchActionsBar');
+    const countEl = document.getElementById('selectedCount');
+
+    countEl.textContent = count;
+    batchBar.style.display = count > 0 ? 'flex' : 'none';
+
+    // 更新全选状态
+    const allCheckboxes = document.querySelectorAll('.trash-checkbox');
+    const selectAll = document.getElementById('selectAll');
+    selectAll.checked = count === allCheckboxes.length && count > 0;
+    selectAll.indeterminate = count > 0 && count < allCheckboxes.length;
+}
+
+// 全选/取消全选
+function toggleSelectAll() {
+    const selectAll = document.getElementById('selectAll');
+    document.querySelectorAll('.trash-checkbox').forEach(cb => {
+        cb.checked = selectAll.checked;
+    });
+    updateBatchActions();
+}
+
+// 清除选择
+function clearSelection() {
+    document.querySelectorAll('.trash-checkbox').forEach(cb => {
+        cb.checked = false;
+    });
+    updateBatchActions();
+}
+
+// 搜索过滤
+function filterTable() {
+    const keyword = document.getElementById('searchInput').value.toLowerCase().trim();
+    document.querySelectorAll('#trashTable tbody tr').forEach(row => {
+        const title = row.dataset.title || '';
+        row.style.display = !keyword || title.includes(keyword) ? '' : 'none';
+    });
+}
+
+// 批量恢复
+function batchRestore() {
+    if (selectedIds.length === 0) {
+        showToast('warning', '请选择要恢复的文章', '提示');
+        return;
+    }
+
+    confirmAction(
+        '批量恢复确认',
+        `确定要恢复选中的 ${selectedIds.length} 篇文章吗？恢复后将回到草稿箱。`,
+        function() {
+            fetch('/admin/posts/batch/restore', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ post_ids: selectedIds })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('恢复失败:', error);
+                showToast('danger', '恢复失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+
+// 批量永久删除
+function batchPermanentDelete() {
+    if (selectedIds.length === 0) {
+        showToast('warning', '请选择要永久删除的文章', '提示');
+        return;
+    }
+
+    confirmAction(
+        '批量永久删除确认',
+        `确定要永久删除选中的 ${selectedIds.length} 篇文章吗？此操作<strong class="text-danger">不可恢复</strong>！`,
+        function() {
+            fetch('/admin/posts/batch/permanent-delete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ post_ids: selectedIds })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('删除失败:', error);
+                showToast('danger', '删除失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+
+// 恢复文章
+function restorePost(postId) {
+    confirmAction(
+        '确认恢复',
+        '确定要恢复这篇文章吗？恢复后将回到草稿箱。',
+        function() {
+            fetch(`/admin/posts/trash/${postId}/restore`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('恢复失败:', error);
+                showToast('danger', '恢复失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+
+// 永久删除
+function permanentDelete(postId) {
+    confirmAction(
+        '永久删除确认',
+        '确定要永久删除这篇文章吗？此操作<strong class="text-danger">不可恢复</strong>！',
+        function() {
+            fetch(`/admin/posts/trash/${postId}/permanent-delete`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('删除失败:', error);
+                showToast('danger', '删除失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+
+// 清空回收站
+function emptyTrash() {
+    confirmAction(
+        '清空回收站确认',
+        '确定要<strong class="text-danger">永久删除所有文章</strong>吗？此操作<strong class="text-danger">不可恢复</strong>！',
+        function() {
+            fetch('/admin/posts/trash/empty', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('清空失败:', error);
+                showToast('danger', '清空失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+</script>
+{% endblock %}

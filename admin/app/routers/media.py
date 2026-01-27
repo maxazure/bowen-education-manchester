@@ -544,3 +544,150 @@ async def delete_folder(folder_id: int, db: Session = Depends(get_db)):
     db.commit()
 
     return JSONResponse(content={"success": True, "message": "删除成功"})
+
+
+@router.get("/api/list")
+async def list_media_api(
+    folder_id: Optional[int] = None,
+    file_type: Optional[str] = None,
+    limit: int = 50,
+    offset: int = 0,
+    db: Session = Depends(get_db),
+):
+    """获取媒体文件列表 API（供其他页面调用）"""
+    import os
+    from datetime import datetime
+
+    # 查询数据库中的文件
+    query = db.query(MediaFile)
+
+    if folder_id:
+        query = query.filter(MediaFile.folder_id == folder_id)
+
+    if file_type:
+        query = query.filter(MediaFile.type == file_type)
+
+    total = query.count()
+    files = query.order_by(MediaFile.created_at.desc()).offset(offset).limit(limit).all()
+
+    # 获取文件夹信息
+    folders = db.query(MediaFolder).all()
+
+    # 构建响应数据
+    result_files = []
+    for f in files:
+        # 确定文件夹路径
+        folder_path = ""
+        if f.folder:
+            folder_path = f.folder.path
+
+        # 构建URL
+        static_dir = "templates/static/uploads"
+        file_path = os.path.join(static_dir, folder_path, f.filename) if folder_path else os.path.join(static_dir, f.filename)
+        url = f"/static/uploads/{folder_path}/{f.filename}" if folder_path else f"/static/uploads/{f.filename}"
+
+        # 如果文件不存在于static目录，尝试其他位置
+        if not os.path.exists(file_path):
+            # 尝试其他可能的路径
+            alt_paths = [
+                f"/static/uploads/{f.filename}",
+                f"/{f.filename}",
+            ]
+            for alt_url in alt_paths:
+                alt_path = alt_url.lstrip("/")
+                if os.path.exists(alt_path):
+                    url = alt_url
+                    break
+
+        result_files.append({
+            "id": f.id,
+            "filename": f.filename,
+            "original_name": f.original_name or f.filename,
+            "type": f.type,
+            "mime_type": f.mime_type,
+            "size": f.size,
+            "url": url,
+            "folder": folder_path,
+            "created_at": f.created_at.isoformat() if f.created_at else None,
+        })
+
+    return JSONResponse(content={
+        "success": True,
+        "files": result_files,
+        "total": total,
+        "limit": limit,
+        "offset": offset,
+        "folders": [{"id": fo.id, "name": fo.name, "path": fo.path} for fo in folders]
+    })
+
+
+# ============================================================
+# 统计 API
+# ============================================================
+
+
+@router.get("/api/stats")
+async def get_media_stats(db: Session = Depends(get_db)):
+    """获取媒体库统计信息 API"""
+    # 总文件数
+    total_files = db.query(MediaFile).count()
+
+    # 图片统计
+    total_images = db.query(MediaFile).filter(MediaFile.file_type == 'image').count()
+    image_size = db.query(func.sum(MediaFile.size)).filter(MediaFile.file_type == 'image').scalar() or 0
+
+    # 视频统计
+    total_videos = db.query(MediaFile).filter(MediaFile.file_type == 'video').count()
+    video_size = db.query(func.sum(MediaFile.size)).filter(MediaFile.file_type == 'video').scalar() or 0
+
+    # 文档统计
+    total_documents = db.query(MediaFile).filter(MediaFile.file_type == 'document').count()
+    doc_size = db.query(func.sum(MediaFile.size)).filter(MediaFile.file_type == 'document').scalar() or 0
+
+    # 总大小
+    total_size = db.query(func.sum(MediaFile.size)).scalar() or 0
+
+    return JSONResponse(content={
+        "success": True,
+        "stats": {
+            "total_files": total_files,
+            "total_images": total_images,
+            "total_videos": total_videos,
+            "total_documents": total_documents,
+            "total_size": total_size,
+            "image_size": image_size,
+            "video_size": video_size,
+            "document_size": doc_size,
+        }
+    })
+
+
+@router.get("/api/recent")
+async def get_recent_uploads(
+    limit: int = 5,
+    db: Session = Depends(get_db),
+):
+    """获取最近上传的文件 API"""
+    files = (
+        db.query(MediaFile)
+        .order_by(MediaFile.created_at.desc())
+        .limit(limit)
+        .all()
+    )
+
+    result_files = []
+    for f in files:
+        result_files.append({
+            "id": f.id,
+            "filename": f.filename_original or f.filename,
+            "filename_original": f.filename_original or f.filename,
+            "path_thumb": f.path_thumb,
+            "path_original": f.path_original,
+            "file_type": f.file_type,
+            "created_at": f.created_at.isoformat() if f.created_at else None,
+        })
+
+    return JSONResponse(content={
+        "success": True,
+        "files": result_files
+    })

@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block title %}标签管理 - 博文教育管理后台{% endblock %}
+
+{% block content %}
+<!-- 页面头部 -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title">标签管理</h1>
+        <p class="page-subtitle mb-0">管理网站内容的标签，用于灵活分类和检索</p>
+    </div>
+    <div class="page-actions">
+        <a href="/admin/tags/new" class="btn btn-primary">
+            <i class="bi bi-plus-lg me-1"></i>新建标签
+        </a>
+    </div>
+</div>
+
+<!-- 统计信息卡片 -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card stat-card bg-primary-light">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon bg-primary text-white me-3">
+                    <i class="bi bi-tags"></i>
+                </div>
+                <div>
+                    <div class="stat-label">总标签数</div>
+                    <div class="stat-value text-primary">{{ total_tags }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card stat-card bg-success-light">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon bg-success text-white me-3">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+                <div>
+                    <div class="stat-label">启用标签</div>
+                    <div class="stat-value text-success">{{ active_tags }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card stat-card bg-info-light">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon bg-info text-white me-3">
+                    <i class="bi bi-file-text"></i>
+                </div>
+                <div>
+                    <div class="stat-label">关联文章数</div>
+                    <div class="stat-value text-info">{{ total_posts }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 标签列表 -->
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th style="width: 50px;">ID</th>
+                        <th style="width: 100px;">颜色</th>
+                        <th>名称</th>
+                        <th>英文名称</th>
+                        <th>Slug</th>
+                        <th style="width: 100px;">文章数</th>
+                        <th style="width: 80px;">状态</th>
+                        <th style="width: 100px;">排序</th>
+                        <th style="width: 120px;">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if tags %}
+                    {% for tag in tags %}
+                    <tr>
+                        <td>{{ tag.id }}</td>
+                        <td>
+                            <span class="badge" style="background-color: {{ tag.color }}; width: 24px; height: 24px; display: inline-block; border-radius: 4px;"></span>
+                        </td>
+                        <td>
+                            <span class="fw-medium">{{ tag.name }}</span>
+                            {% if tag.icon %}
+                            <i class="bi bi-{{ tag.icon }} ms-1 text-muted"></i>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="text-muted">{{ tag.name_en or '-' }}</span>
+                        </td>
+                        <td>
+                            <code class="small">{{ tag.slug }}</code>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark">
+                                <i class="bi bi-file-text me-1"></i>
+                                {{ tag.posts|length }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if tag.is_active %}
+                            <span class="badge bg-success">启用</span>
+                            {% else %}
+                            <span class="badge bg-secondary">禁用</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="text-muted">{{ tag.sort_order }}</span>
+                        </td>
+                        <td>
+                            <div class="d-flex gap-1">
+                                <a href="/admin/tags/{{ tag.id }}/edit"
+                                   class="btn btn-sm btn-primary"
+                                   data-bs-toggle="tooltip"
+                                   title="编辑">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <button class="btn btn-sm {% if tag.is_active %}btn-outline-warning{% else %}btn-outline-success{% endif %}"
+                                        onclick="toggleTagStatus({{ tag.id }})"
+                                        data-bs-toggle="tooltip"
+                                        title="{% if tag.is_active %}禁用{% else %}启用{% endif %}">
+                                    <i class="bi {% if tag.is_active %}bi-pause{% else %}bi-play{% endif %}"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger"
+                                        onclick="deleteTag({{ tag.id }})"
+                                        data-bs-toggle="tooltip"
+                                        title="删除">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% else %}
+                    <tr>
+                        <td colspan="9">
+                            <div class="empty-state">
+                                <i class="bi bi-tags"></i>
+                                <h3>暂无标签</h3>
+                                <p>创建标签来更好地组织和分类您的内容</p>
+                                <a href="/admin/tags/new" class="btn btn-primary">
+                                    <i class="bi bi-plus-lg me-2"></i>创建第一个标签
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// 删除标签
+function deleteTag(tagId) {
+    confirmAction(
+        '确认删除',
+        '确定要删除这个标签吗？此操作不会删除关联的文章。',
+        function() {
+            fetch(`/admin/tags/${tagId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('danger', '删除失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+
+// 切换标签状态
+function toggleTagStatus(tagId) {
+    fetch(`/admin/tags/${tagId}/toggle`, {
+        method: 'POST'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('success', data.message, '成功');
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showToast('danger', data.message, '错误');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('danger', '操作失败，请稍后重试', '错误');
+    });
+}
+
+// 页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', function() {
+    // 初始化所有 tooltips
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+</script>
+{% endblock %}

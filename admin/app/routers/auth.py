@@ -77,7 +77,7 @@ async def login(
     logger.info("Session已设置")
 
     # 重定向到仪表板
-    return RedirectResponse(url="/admin/", status_code=302)
+    return RedirectResponse(url="/admin", status_code=302)
 
 
 @router.get("/logout")
@@ -99,7 +99,7 @@ async def logout(request: Request):
         pass
 
     # 重定向到登录页
-    return RedirectResponse(url="/admin/login", status_code=302)
+    return RedirectResponse(url="/login", status_code=302)
 
 
 @router.get("/profile/change-password", response_class=HTMLResponse)
@@ -147,7 +147,7 @@ async def change_password(
         admin_user_id = None
 
     if not admin_user_id:
-        return RedirectResponse(url="/admin/login", status_code=302)
+        return RedirectResponse(url="/login", status_code=302)
 
     admin = db.query(AdminUser).filter(AdminUser.id == admin_user_id).first()
 
@@ -169,4 +169,4 @@ async def change_password(
     db.commit()
 
     # 重定向到仪表板
-    return RedirectResponse(url="/admin/", status_code=302)
+    return RedirectResponse(url="/admin", status_code=302)

@@ -1,0 +1,499 @@
+{% extends "base.html" %}
+
+{% block title %}SEO分析 - 博文教育管理后台{% endblock %}
+
+{% block extra_css %}
+<style>
+    .score-circle {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+        font-weight: 700;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    .score-good {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        color: white;
+        box-shadow: 0 10px 30px rgba(67, 233, 123, 0.3);
+    }
+
+    .score-ok {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        color: white;
+        box-shadow: 0 10px 30px rgba(250, 112, 154, 0.3);
+    }
+
+    .score-poor {
+        background: linear-gradient(135deg, #ff6b6b 0%, #c23616 100%);
+        color: white;
+        box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+    }
+
+    .issue-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+        margin-right: 8px;
+    }
+
+    .issue-critical {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .issue-warning {
+        background: #fef3c7;
+        color: #d97706;
+    }
+
+    .issue-info {
+        background: #dbeafe;
+        color: #2563eb;
+    }
+
+    .problem-item {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        background: white;
+        border-radius: 8px;
+        margin-bottom: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+    }
+
+    .problem-item:hover {
+        transform: translateX(5px);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .problem-score {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        font-size: 14px;
+        margin-right: 15px;
+    }
+
+    .check-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .check-item:last-child {
+        border-bottom: none;
+    }
+
+    .check-icon {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        margin-right: 10px;
+    }
+
+    .check-pass {
+        background: #dcfce7;
+        color: #16a34a;
+    }
+
+    .check-fail {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+
+    .modal-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .modal-header .btn-close {
+        filter: brightness(0) invert(1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- 页面标题 -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="mb-1">SEO分析</h4>
+            <nav aria-label="breadcrumb" class="breadcrumb-nav">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/admin/">首页</a></li>
+                    <li class="breadcrumb-item active">SEO分析</li>
+                </ol>
+            </nav>
+        </div>
+        <button class="btn btn-outline-primary" onclick="refreshAnalysis()">
+            <i class="bi bi-arrow-clockwise me-2"></i>刷新分析
+        </button>
+    </div>
+
+    <!-- 整体评分 -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm text-center">
+                <div class="card-body py-5">
+                    <h6 class="text-muted mb-3">整体SEO评分</h6>
+                    <div class="score-circle {% if stats.avg_score >= 80 %}score-good{% elif stats.avg_score >= 60 %}score-ok{% else %}score-poor{% endif %}">
+                        {{ stats.avg_score }}
+                    </div>
+                    <div class="mt-3">
+                        {% if stats.avg_score >= 80 %}
+                        <span class="badge bg-success">良好</span>
+                        {% elif stats.avg_score >= 60 %}
+                        <span class="badge bg-warning">一般</span>
+                        {% else %}
+                        <span class="badge bg-danger">需优化</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="text-muted mb-2">总文章数</div>
+                            <div style="font-size: 28px; font-weight: 700;">{{ stats.total_posts }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="text-muted mb-2">严重问题</div>
+                            <div style="font-size: 28px; font-weight: 700; color: #dc2626;">{{ stats.issues.critical }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="text-muted mb-2">需优化内容</div>
+                            <div style="font-size: 28px; font-weight: 700; color: #d97706;">{{ stats.problematic_count }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-around text-center">
+                                <div>
+                                    <span class="issue-badge issue-critical">
+                                        <i class="bi bi-x-circle me-1"></i>{{ stats.issues.critical }} 严重
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="issue-badge issue-warning">
+                                        <i class="bi bi-exclamation-triangle me-1"></i>{{ stats.issues.warning }} 警告
+                                    </span>
+                                </div>
+                                <div>
+                                    <span class="issue-badge issue-info">
+                                        <i class="bi bi-info-circle me-1"></i>{{ stats.issues.info }} 建议
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- 问题内容列表 -->
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-exclamation-triangle me-2"></i>需要优化的内容
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if problematic_posts %}
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>文章标题</th>
+                                    <th>SEO评分</th>
+                                    <th>问题数</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for post in problematic_posts %}
+                                <tr>
+                                    <td>
+                                        <a href="/admin/posts/{{ post.id }}/edit" class="text-decoration-none">
+                                            {{ post.title }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <span class="problem-score {% if post.score >= 80 %}score-good{% elif post.score >= 60 %}score-ok{% else %}score-poor{% endif %}">
+                                            {{ post.score }}
+                                        </span>
+                                    </td>
+                                    <td>{{ post.issues }} 个问题</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary" onclick="analyzePost({{ post.id }})">
+                                            <i class="bi bi-search"></i> 分析
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5 text-muted">
+                        <i class="bi bi-check-circle fs-1 d-block mb-3"></i>
+                        <p>所有内容SEO状况良好！</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- SEO建议 -->
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-lightbulb me-2"></i>优化建议
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="check-item">
+                        <div class="d-flex align-items-center">
+                            <div class="check-icon check-pass"><i class="bi bi-check"></i></div>
+                            <span>标题长度 10-60 字符</span>
+                        </div>
+                    </div>
+                    <div class="check-item">
+                        <div class="d-flex align-items-center">
+                            <div class="check-icon check-pass"><i class="bi bi-check"></i></div>
+                            <span>SEO标题包含关键词</span>
+                        </div>
+                    </div>
+                    <div class="check-item">
+                        <div class="d-flex align-items-center">
+                            <div class="check-icon check-pass"><i class="bi bi-check"></i></div>
+                            <span>SEO描述 50-160 字符</span>
+                        </div>
+                    </div>
+                    <div class="check-item">
+                        <div class="d-flex align-items-center">
+                            <div class="check-icon check-pass"><i class="bi bi-check"></i></div>
+                            <span>内容不少于300字</span>
+                        </div>
+                    </div>
+                    <div class="check-item">
+                        <div class="d-flex align-items-center">
+                            <div class="check-icon check-pass"><i class="bi bi-check"></i></div>
+                            <span>图片添加alt属性</span>
+                        </div>
+                    </div>
+                    <div class="check-item">
+                        <div class="d-flex align-items-center">
+                            <div class="check-icon check-pass"><i class="bi bi-check"></i></div>
+                            <span>使用内部链接</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 分析详情模态框 -->
+<div class="modal fade" id="analysisModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">SEO分析详情</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="analysisContent">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">加载中...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 分析文章
+    async function analyzePost(postId) {
+        const modal = new bootstrap.Modal(document.getElementById('analysisModal'));
+        modal.show();
+
+        document.getElementById('analysisContent').innerHTML = `
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">加载中...</span>
+                </div>
+            </div>
+        `;
+
+        try {
+            const response = await fetch(`/api/seo/analyze/post/${postId}`);
+            const result = await response.json();
+
+            if (result.success) {
+                renderAnalysisResult(result.data);
+            } else {
+                document.getElementById('analysisContent').innerHTML = `
+                    <div class="text-center py-5 text-danger">
+                        <i class="bi bi-x-circle fs-1 d-block mb-3"></i>
+                        <p>${result.message}</p>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            console.error('分析失败:', error);
+            document.getElementById('analysisContent').innerHTML = `
+                <div class="text-center py-5 text-danger">
+                    <i class="bi bi-x-circle fs-1 d-block mb-3"></i>
+                    <p>分析失败，请稍后重试</p>
+                </div>
+            `;
+        }
+    }
+
+    // 渲染分析结果
+    function renderAnalysisResult(data) {
+        const scoreClass = data.status === 'good' ? 'score-good' : (data.status === 'ok' ? 'score-ok' : 'score-poor');
+
+        let html = `
+            <div class="text-center mb-4">
+                <div class="score-circle ${scoreClass}" style="width: 80px; height: 80px; font-size: 24px;">
+                    ${data.score}
+                </div>
+                <h5 class="mt-2">
+                    ${data.status === 'good' ? 'SEO状况良好' : (data.status === 'ok' ? 'SEO状况一般' : '需要优化')}
+                </h5>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header bg-light">
+                    <h6 class="mb-0">检查项目</h6>
+                </div>
+                <div class="card-body">
+                    <div class="check-item">
+                        <span>标题长度</span>
+                        <span class="${data.checks.title.valid ? 'text-success' : 'text-danger'}">
+                            ${data.checks.title.length} 字符
+                            <i class="bi ${data.checks.title.valid ? 'bi-check-circle' : 'bi-x-circle'}"></i>
+                        </span>
+                    </div>
+                    <div class="check-item">
+                        <span>SEO标题</span>
+                        <span class="${data.checks.seo_title.valid ? 'text-success' : 'text-danger'}">
+                            ${data.checks.seo_title.length} 字符
+                            <i class="bi ${data.checks.seo_title.valid ? 'bi-check-circle' : 'bi-x-circle'}"></i>
+                        </span>
+                    </div>
+                    <div class="check-item">
+                        <span>SEO描述</span>
+                        <span class="${data.checks.seo_description.valid ? 'text-success' : 'text-danger'}">
+                            ${data.checks.seo_description.length} 字符
+                            <i class="bi ${data.checks.seo_description.valid ? 'bi-check-circle' : 'bi-x-circle'}"></i>
+                        </span>
+                    </div>
+                    <div class="check-item">
+                        <span>内容字数</span>
+                        <span class="${data.checks.content_words.valid ? 'text-success' : 'text-danger'}">
+                            ${data.checks.content_words.count} 字
+                            <i class="bi ${data.checks.content_words.valid ? 'bi-check-circle' : 'bi-x-circle'}"></i>
+                        </span>
+                    </div>
+                    <div class="check-item">
+                        <span>图片ALT</span>
+                        <span class="${data.checks.images_alt.valid ? 'text-success' : 'text-danger'}">
+                            ${data.checks.images_alt.with_alt}/${data.checks.images_alt.total} 有ALT
+                            <i class="bi ${data.checks.images_alt.valid ? 'bi-check-circle' : 'bi-x-circle'}"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        if (data.issues.length > 0) {
+            html += `
+                <div class="card">
+                    <div class="card-header bg-light">
+                        <h6 class="mb-0">问题与建议</h6>
+                    </div>
+                    <div class="card-body">
+            `;
+
+            data.issues.forEach(issue => {
+                const levelClass = issue.level === 'critical' ? 'issue-critical' : (issue.level === 'warning' ? 'issue-warning' : 'issue-info');
+                html += `
+                    <div class="problem-item">
+                        <div>
+                            <span class="issue-badge ${levelClass}">
+                                <i class="bi ${issue.level === 'critical' ? 'bi-x-circle' : (issue.level === 'warning' ? 'bi-exclamation-triangle' : 'bi-info-circle')}"></i>
+                                ${issue.level === 'critical' ? '严重' : (issue.level === 'warning' ? '警告' : '建议')}
+                            </span>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <div class="fw-bold">${issue.message}</div>
+                            <div class="small text-muted mt-1">
+                                <i class="bi bi-lightbulb me-1"></i>${issue.suggestion}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</div></div>`;
+        } else {
+            html += `
+                <div class="text-center py-4 text-success">
+                    <i class="bi bi-check-circle fs-1 d-block mb-2"></i>
+                    <p>没有发现SEO问题！</p>
+                </div>
+            `;
+        }
+
+        document.getElementById('analysisContent').innerHTML = html;
+    }
+
+    // 刷新分析
+    function refreshAnalysis() {
+        location.reload();
+    }
+</script>
+{% endblock %}

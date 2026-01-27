@@ -1,0 +1,425 @@
+{% extends "base.html" %}
+
+{% block title %}多语言管理 - 博文教育管理后台{% endblock %}
+
+{% block content %}
+<!-- 面包屑导航 -->
+<nav aria-label="breadcrumb" class="mb-3 animate-fade-in">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin"><i class="bi bi-house-door me-1"></i>首页</a></li>
+        <li class="breadcrumb-item active" aria-current="page">多语言管理</li>
+    </ol>
+</nav>
+
+<!-- 页面标题区 -->
+<div class="page-header animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="page-title">
+                <i class="bi bi-translate text-primary me-2"></i>多语言管理
+            </h1>
+            <p class="page-subtitle">管理网站界面翻译和文案</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-secondary" onclick="exportAll()">
+                <i class="bi bi-download me-1"></i>导出全部
+            </button>
+            <button class="btn btn-outline-primary" onclick="showImportModal()">
+                <i class="bi bi-upload me-1"></i>导入翻译
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 语言统计卡片 -->
+<div class="row mb-4 animate-fade-in">
+    {% for lang in languages %}
+    <div class="col-md-6 col-lg-3">
+        <div class="card h-100 {% if coverage[lang.code].percentage == 100 %}border-success{% endif %}">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                        <h5 class="card-title mb-0">{{ lang.name }}</h5>
+                        <small class="text-muted">{{ lang.native_name }}</small>
+                    </div>
+                    <span class="badge {% if coverage[lang.code].percentage == 100 %}bg-success{% elif coverage[lang.code].percentage >= 50 %}bg-warning{% else %}bg-danger{% endif %}">
+                        {{ coverage[lang.code].percentage|int }}%
+                    </span>
+                </div>
+                <div class="progress mb-2" style="height: 8px;">
+                    <div class="progress-bar {% if coverage[lang.code].percentage == 100 %}bg-success{% elif coverage[lang.code].percentage >= 50 %}bg-warning{% else %}bg-danger{% endif %}"
+                         style="width: {{ coverage[lang.code].percentage }}%"></div>
+                </div>
+                <small class="text-muted">
+                    {{ coverage[lang.code].covered }} / {{ coverage[lang.code].total }} 条翻译
+                </small>
+                <div class="mt-2">
+                    <button class="btn btn-sm btn-outline-primary" onclick="editLanguage('{{ lang.code }}')">
+                        <i class="bi bi-pencil me-1"></i>编辑
+                    </button>
+                    <button class="btn btn-sm btn-outline-info" onclick="checkMissing('{{ lang.code }}')">
+                        <i class="bi bi-exclamation-triangle me-1"></i>缺失
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- 翻译编辑器 -->
+<div class="card animate-fade-in">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">
+            <i class="bi bi-translate text-primary me-2"></i>翻译列表
+        </h5>
+        <div class="d-flex gap-2">
+            <select class="form-select form-select-sm" id="editLang" onchange="loadTranslations()" style="width: auto;">
+                {% for lang in languages %}
+                <option value="{{ lang.code }}" {% if lang.code == 'en' %}selected{% endif %}>{{ lang.name }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" class="form-control form-control-sm" id="searchKey"
+                   placeholder="搜索 key..." style="width: 150px;" onkeyup="filterTranslations()">
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive" style="max-height: 600px; overflow-y: auto;">
+            <table class="table table-hover mb-0" id="translationTable">
+                <thead class="table-light sticky-top">
+                    <tr>
+                        <th style="width: 200px;">Key</th>
+                        <th style="width: 40%;">原文 (中文)</th>
+                        <th>译文 (<span id="targetLang">英文</span>)</th>
+                        <th style="width: 80px;">操作</th>
+                    </tr>
+                </thead>
+                <tbody id="translationBody">
+                    <!-- 动态生成 -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 缺失翻译面板 -->
+<div class="card mt-4 animate-fade-in" id="missingPanel" style="display: none;">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">
+            <i class="bi bi-exclamation-triangle text-warning me-2"></i>缺失翻译 - <span id="missingLang"></span>
+        </h5>
+        <button class="btn btn-sm btn-outline-secondary" onclick="hideMissingPanel()">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Key</th>
+                    <th>原文</th>
+                    <th>译文</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="missingBody">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- 导入模态框 -->
+<div class="modal fade" id="importModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-upload text-primary me-2"></i>导入翻译
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="importForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">目标语言</label>
+                        <select class="form-select" name="lang" required>
+                            {% for lang in languages %}
+                            <option value="{{ lang.code }}">{{ lang.name }} ({{ lang.native_name }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">翻译文件</label>
+                        <input type="file" class="form-control" name="file" accept=".json" required>
+                        <small class="text-muted">支持 JSON 格式的翻译文件</small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="importTranslations()">
+                    <i class="bi bi-upload me-1"></i>导入
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// 当前编辑的语言
+let currentLang = 'en';
+let allTranslations = {{ translations|tojson }};
+
+// 加载翻译列表
+function loadTranslations() {
+    currentLang = document.getElementById('editLang').value;
+    const langNames = {'zh': '中文', 'en': '英文'};
+    document.getElementById('targetLang').textContent = langNames[currentLang] || currentLang;
+
+    const tbody = document.getElementById('translationBody');
+    const zhTexts = allTranslations['zh'] || {};
+    const targetTexts = allTranslations[currentLang] || {};
+
+    let html = '';
+    for (const [key, zhValue] of Object.entries(zhTexts)) {
+        const targetValue = targetTexts[key] || '';
+        const isMissing = !targetValue || targetValue.trim() === '';
+        const isSame = targetValue === zhValue;
+
+        html += `
+            <tr data-key="${key}">
+                <td><code>${key}</code></td>
+                <td>${escapeHtml(zhValue)}</td>
+                <td>
+                    <input type="text" class="form-control form-control-sm"
+                           value="${escapeHtml(targetValue)}"
+                           data-original="${escapeHtml(targetValue)}"
+                           onchange="updateTranslation('${key}', this.value)"
+                           ${isMissing ? 'style="border-color: #ffc107;"' : ''}>
+                    ${isMissing ? '<small class="text-warning"><i class="bi bi-exclamation-triangle"></i> 缺失</small>' : ''}
+                    ${isSame && currentLang !== 'zh' ? '<small class="text-info ms-1"><i class="bi bi-info-circle"></i> 同原文</small>' : ''}
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="resetTranslation('${key}')" title="重置">
+                        <i class="bi bi-arrow-counterclockwise"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }
+
+    tbody.innerHTML = html || '<tr><td colspan="4" class="text-center py-4">暂无翻译数据</td></tr>';
+}
+
+// 更新翻译
+async function updateTranslation(key, value) {
+    try {
+        const response = await fetch(`/admin/api/i18n/${currentLang}`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                translations: {[key]: value}
+            })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            // 更新本地数据
+            if (!allTranslations[currentLang]) {
+                allTranslations[currentLang] = {};
+            }
+            allTranslations[currentLang][key] = value;
+
+            // 更新输入框状态
+            const input = document.querySelector(`input[value="${escapeHtml(value)}"]`);
+            if (input) {
+                input.style.borderColor = '';
+            }
+
+            showToast('success', '保存成功', '翻译已更新');
+        } else {
+            showToast('error', '保存失败', data.message);
+        }
+    } catch (error) {
+        showToast('error', '保存失败', error.message);
+    }
+}
+
+// 重置翻译
+function resetTranslation(key) {
+    const original = allTranslations[currentLang]?.[key] || '';
+    const input = document.querySelector(`tr[data-key="${key}"] input`);
+    if (input) {
+        input.value = original;
+        updateTranslation(key, original);
+    }
+}
+
+// 过滤翻译
+function filterTranslations() {
+    const search = document.getElementById('searchKey').value.toLowerCase();
+    const rows = document.querySelectorAll('#translationBody tr');
+
+    rows.forEach(row => {
+        const key = row.dataset.key.toLowerCase();
+        const zhValue = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+        const targetValue = row.querySelector('input').value.toLowerCase();
+
+        if (key.includes(search) || zhValue.includes(search) || targetValue.includes(search)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+// 编辑指定语言
+function editLanguage(lang) {
+    document.getElementById('editLang').value = lang;
+    loadTranslations();
+
+    // 滚动到翻译列表
+    document.getElementById('translationTable').scrollIntoView({behavior: 'smooth'});
+}
+
+// 检查缺失翻译
+async function checkMissing(lang) {
+    try {
+        const response = await fetch(`/admin/api/i18n/missing?target_lang=${lang}`);
+        const data = await response.json();
+
+        if (!data.success) {
+            showToast('error', '获取失败', data.message);
+            return;
+        }
+
+        const missing = data.data.missing;
+        const langNames = {'zh': '中文', 'en': '英文'};
+        document.getElementById('missingLang').textContent = langNames[lang] || lang;
+
+        const tbody = document.getElementById('missingBody');
+        let html = '';
+
+        for (const [key, item] of Object.entries(missing)) {
+            html += `
+                <tr data-key="${key}">
+                    <td><code>${key}</code></td>
+                    <td>${escapeHtml(item.source)}</td>
+                    <td>
+                        <input type="text" class="form-control form-control-sm" placeholder="请输入译文...">
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick="addMissingTranslation('${key}', this)">
+                            <i class="bi bi-plus"></i> 添加
+                        </button>
+                    </td>
+                </tr>
+            `;
+        }
+
+        tbody.innerHTML = html || '<tr><td colspan="4" class="text-center py-4">没有缺失的翻译</td></tr>';
+        document.getElementById('missingPanel').style.display = 'block';
+
+    } catch (error) {
+        showToast('error', '获取失败', error.message);
+    }
+}
+
+// 添加缺失翻译
+async function addMissingTranslation(key, button) {
+    const input = button.closest('tr').querySelector('input');
+    const value = input.value.trim();
+
+    if (!value) {
+        showToast('warning', '请输入译文', '');
+        return;
+    }
+
+    await updateTranslation(key, value);
+
+    // 移除该行
+    button.closest('tr').remove();
+
+    // 检查是否还有缺失
+    const remaining = document.querySelectorAll('#missingBody tr[data-key]');
+    if (remaining.length === 0) {
+        document.getElementById('missingBody').innerHTML = '<tr><td colspan="4" class="text-center py-4">没有缺失的翻译</td></tr>';
+    }
+}
+
+// 隐藏缺失面板
+function hideMissingPanel() {
+    document.getElementById('missingPanel').style.display = 'none';
+}
+
+// 显示导入模态框
+function showImportModal() {
+    new bootstrap.Modal(document.getElementById('importModal')).show();
+}
+
+// 导入翻译
+async function importTranslations() {
+    const form = document.getElementById('importForm');
+    const formData = new FormData(form);
+
+    try {
+        const response = await fetch('/admin/api/i18n/import', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            bootstrap.Modal.getInstance(document.getElementById('importModal')).hide();
+            showToast('success', '导入成功', data.message);
+            location.reload();
+        } else {
+            showToast('error', '导入失败', data.message);
+        }
+    } catch (error) {
+        showToast('error', '导入失败', error.message);
+    }
+}
+
+// 导出全部
+async function exportAll() {
+    for (const lang of ['zh', 'en']) {
+        try {
+            const response = await fetch(`/admin/api/i18n/export`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({lang: lang, format: 'json'})
+            });
+
+            if (response.ok) {
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `translations_${lang}.json`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+            }
+        } catch (error) {
+            console.error('导出失败:', error);
+        }
+    }
+
+    showToast('success', '正在导出', '翻译文件即将下载');
+}
+
+// HTML转义
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// 初始化
+document.addEventListener('DOMContentLoaded', function() {
+    loadTranslations();
+});
+</script>
+{% endblock %}

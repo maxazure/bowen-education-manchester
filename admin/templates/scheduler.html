@@ -1,0 +1,777 @@
+{% extends "base.html" %}
+
+{% block title %}定时任务管理 - 博文教育管理后台{% endblock %}
+
+{% block extra_css %}
+<style>
+    .task-card {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .task-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .task-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        color: white;
+    }
+
+    .cron-display {
+        font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+        background: #f8f9fa;
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 13px;
+        color: #495057;
+    }
+
+    .cron-field {
+        display: inline-block;
+        padding: 2px 8px;
+        background: #e9ecef;
+        border-radius: 4px;
+        margin: 0 2px;
+        font-weight: 500;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .status-active {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .status-paused {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .status-failed {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    .run-history {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+    .log-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid #f0f0f0;
+        font-size: 13px;
+    }
+
+    .log-item:last-child {
+        border-bottom: none;
+    }
+
+    .log-status {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 12px;
+    }
+
+    .log-success { background: #28a745; }
+    .log-failed { background: #dc3545; }
+
+    .template-card {
+        border: 2px dashed #dee2e6;
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .template-card:hover {
+        border-color: #667eea;
+        background: #f8f9ff;
+    }
+
+    .template-card.selected {
+        border-color: #667eea;
+        background: #f0f3ff;
+    }
+
+    .toggle-switch {
+        position: relative;
+        width: 50px;
+        height: 26px;
+    }
+
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .toggle-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.3s;
+        border-radius: 26px;
+    }
+
+    .toggle-slider:before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.3s;
+        border-radius: 50%;
+    }
+
+    .toggle-switch input:checked + .toggle-slider {
+        background-color: #667eea;
+    }
+
+    .toggle-switch input:checked + .toggle-slider:before {
+        transform: translateX(24px);
+    }
+
+    .next-run-info {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 12px;
+        padding: 15px;
+        color: white;
+    }
+
+    .stat-value {
+        font-size: 28px;
+        font-weight: 700;
+        color: #333;
+    }
+
+    .stat-label {
+        color: #666;
+        font-size: 14px;
+    }
+
+    .modal-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .modal-header .btn-close {
+        filter: brightness(0) invert(1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- 页面标题 -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="mb-1">定时任务管理</h4>
+            <nav aria-label="breadcrumb" class="breadcrumb-nav">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/admin/">首页</a></li>
+                    <li class="breadcrumb-item active">定时任务</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary" onclick="showTemplatesModal()">
+                <i class="bi bi-plus-circle me-2"></i>从模板创建
+            </button>
+            <button class="btn btn-primary" onclick="showCreateModal()">
+                <i class="bi bi-plus-lg me-2"></i>创建任务
+            </button>
+        </div>
+    </div>
+
+    <!-- 统计卡片 -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-2">
+            <div class="task-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="card-body text-white">
+                    <div class="stat-value">{{ stats.total }}</div>
+                    <div class="stat-label text-white-50">总任务数</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="task-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                <div class="card-body text-white">
+                    <div class="stat-value">{{ stats.active }}</div>
+                    <div class="stat-label text-white-50">运行中</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="task-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                <div class="card-body text-white">
+                    <div class="stat-value">{{ stats.paused }}</div>
+                    <div class="stat-label text-white-50">已暂停</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="task-card" style="background: linear-gradient(135deg, #ff6b6b 0%, #c23616 100%);">
+                <div class="card-body text-white">
+                    <div class="stat-value">{{ stats.failed }}</div>
+                    <div class="stat-label text-white-50">失败</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="next-run-info">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <div class="small opacity-75">下次执行</div>
+                        <div style="font-size: 20px; font-weight: 600;">{{ tasks[0].next_run if tasks else '无任务' }}</div>
+                    </div>
+                    <i class="bi bi-clock-history fs-1 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 任务列表 -->
+    <div class="row g-4">
+        {% for task in tasks %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm task-card h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="task-icon me-3" style="background: {{ task.color|default('#667eea') }};">
+                                <i class="bi {{ task.icon|default('bi-gear') }}"></i>
+                            </div>
+                            <div>
+                                <h5 class="mb-1">{{ task.name }}</h5>
+                                <span class="status-badge status-{{ task.status }}">
+                                    {{ '运行中' if task.status == 'active' else ('已暂停' if task.status == 'paused' else '失败') }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown">
+                                <i class="bi bi-three-dots"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><a class="dropdown-item" href="#" onclick="viewTask({{ task.id }}); return false;">
+                                    <i class="bi bi-eye me-2"></i>查看详情
+                                </a></li>
+                                <li><a class="dropdown-item" href="#" onclick="editTask({{ task.id }}); return false;">
+                                    <i class="bi bi-pencil me-2"></i>编辑任务
+                                </a></li>
+                                <li><a class="dropdown-item" href="#" onclick="executeTask({{ task.id }}); return false;">
+                                    <i class="bi bi-play me-2"></i>立即执行
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="#" onclick="deleteTask({{ task.id }}); return false;">
+                                    <i class="bi bi-trash me-2"></i>删除任务
+                                </a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <p class="text-muted small mb-3">{{ task.description }}</p>
+
+                    <div class="mb-3">
+                        <div class="small text-muted mb-1">执行周期 (Cron)</div>
+                        <div class="cron-display">
+                            <span class="cron-field">{{ task.cron_expression.split()[0] }}</span> 分
+                            <span class="cron-field">{{ task.cron_expression.split()[1] }}</span> 时
+                            <span class="cron-field">{{ task.cron_expression.split()[2] }}</span> 日
+                            <span class="cron-field">{{ task.cron_expression.split()[3] }}</span> 月
+                            <span class="cron-field">{{ task.cron_expression.split()[4] }}</span> 周
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="small text-muted">
+                            <i class="bi bi-clock me-1"></i>下次: {{ task.next_run }}
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" {% if task.status == 'active' %}checked{% endif %}
+                                   onchange="toggleTask({{ task.id }})">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="card-footer bg-white border-top">
+                    <div class="d-flex justify-content-between small text-muted">
+                        <span><i class="bi bi-play-circle me-1"></i>执行 {{ task.run_count }} 次</span>
+                        <span class="{% if task.last_result == 'success' %}text-success{% elif task.last_result == 'failed' %}text-danger{% endif %}">
+                            {% if task.last_result %}
+                                {{ '成功' if task.last_result == 'success' else '失败' }}
+                            {% else %}
+                                未执行
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if not tasks %}
+    <div class="text-center py-5">
+        <i class="bi bi-clock-history fs-1 d-block mb-3 text-muted"></i>
+        <h5 class="text-muted">暂无定时任务</h5>
+        <p class="text-muted mb-3">创建第一个定时任务来自动化日常操作</p>
+        <button class="btn btn-primary" onclick="showTemplatesModal()">
+            <i class="bi bi-plus-circle me-2"></i>从模板创建
+        </button>
+    </div>
+    {% endif %}
+</div>
+
+<!-- 创建任务模态框 -->
+<div class="modal fade" id="createModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">创建定时任务</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createTaskForm">
+                    <div class="mb-3">
+                        <label class="form-label">任务名称 <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="name" required
+                               placeholder="例如：每日数据库备份">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">任务类型 <span class="text-danger">*</span></label>
+                        <select class="form-select" name="task_type" required>
+                            <option value="">选择任务类型</option>
+                            <option value="sitemap">网站地图生成</option>
+                            <option value="backup">数据库备份</option>
+                            <option value="cleanup">清理任务</option>
+                            <option value="sync">数据同步</option>
+                            <option value="notification">通知提醒</option>
+                            <option value="custom">自定义任务</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Cron 表达式 <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="cron_expression" required
+                               placeholder="0 2 * * *" value="0 2 * * *">
+                        <div class="form-text">
+                            格式：分 时 日 月 周<br>
+                            <small class="text-muted">
+                                示例：<br>
+                                "0 2 * * *" = 每天凌晨2点<br>
+                                "0 3 * * 0" = 每周日凌晨3点<br>
+                                "0 4 1 * *" = 每月1号凌晨4点
+                            </small>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">任务描述</label>
+                        <textarea class="form-control" name="description" rows="2"
+                                  placeholder="描述此任务的用途..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">任务配置 (JSON)</label>
+                        <textarea class="form-control" name="config" rows="3"
+                                  placeholder='{"key": "value"}'></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="createTask()">创建</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 任务详情模态框 -->
+<div class="modal fade" id="detailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">任务详情</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="detailContent">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">加载中...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 任务模板模态框 -->
+<div class="modal fade" id="templatesModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">选择任务模板</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3">
+                    {% for key, template in templates.items() %}
+                    <div class="col-md-6">
+                        <div class="template-card" onclick="selectTemplate('{{ key }}')"
+                             id="template-{{ key }}">
+                            <div class="task-icon mb-3 mx-auto" style="background: {{ template.color }};">
+                                <i class="bi {{ template.icon }}"></i>
+                            </div>
+                            <h6 class="mb-2">{{ template.name }}</h6>
+                            <p class="text-muted small mb-2">{{ template.description }}</p>
+                            <code class="small">{{ template.cron_expression }}</code>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="createFromTemplate()" id="btnCreateFromTemplate" disabled>
+                    创建任务
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 执行进度模态框 -->
+<div class="modal fade" id="executeModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body text-center py-4">
+                <div class="spinner-border text-primary mb-3" role="status">
+                    <span class="visually-hidden">执行中...</span>
+                </div>
+                <h5>正在执行任务...</h5>
+                <p class="text-muted" id="executeStatus">请稍候</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let selectedTemplate = null;
+
+    // 显示创建模态框
+    function showCreateModal() {
+        const modal = new bootstrap.Modal(document.getElementById('createModal'));
+        modal.show();
+    }
+
+    // 显示模板选择模态框
+    function showTemplatesModal() {
+        selectedTemplate = null;
+        document.getElementById('btnCreateFromTemplate').disabled = true;
+        document.querySelectorAll('.template-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+        const modal = new bootstrap.Modal(document.getElementById('templatesModal'));
+        modal.show();
+    }
+
+    // 选择模板
+    function selectTemplate(key) {
+        selectedTemplate = key;
+        document.querySelectorAll('.template-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+        document.getElementById('template-' + key).classList.add('selected');
+        document.getElementById('btnCreateFromTemplate').disabled = false;
+    }
+
+    // 从模板创建
+    async function createFromTemplate() {
+        if (!selectedTemplate) return;
+
+        try {
+            const response = await fetch(`/api/scheduler/from-template?template_key=${selectedTemplate}`, {
+                method: 'POST'
+            });
+            const result = await response.json();
+
+            if (result.success) {
+                showToast('success', '任务创建成功', '成功');
+                bootstrap.Modal.getInstance(document.getElementById('templatesModal')).hide();
+                setTimeout(() => location.reload(), 1500);
+            } else {
+                showToast('error', result.message, '错误');
+            }
+        } catch (error) {
+            console.error('创建任务失败:', error);
+            showToast('error', '创建任务失败', '错误');
+        }
+    }
+
+    // 创建任务
+    async function createTask() {
+        const form = document.getElementById('createTaskForm');
+        const formData = new FormData(form);
+
+        const data = {
+            name: formData.get('name'),
+            task_type: formData.get('task_type'),
+            cron_expression: formData.get('cron_expression'),
+            description: formData.get('description'),
+            config: {}
+        };
+
+        // 解析JSON配置
+        const configText = formData.get('config');
+        if (configText) {
+            try {
+                data.config = JSON.parse(configText);
+            } catch (e) {
+                showToast('error', '任务配置必须是有效的JSON格式', '错误');
+                return;
+            }
+        }
+
+        try {
+            const response = await fetch('/api/scheduler/create', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+
+            if (result.success) {
+                showToast('success', '任务创建成功', '成功');
+                bootstrap.Modal.getInstance(document.getElementById('createModal')).hide();
+                setTimeout(() => location.reload(), 1500);
+            } else {
+                showToast('error', result.message, '错误');
+            }
+        } catch (error) {
+            console.error('创建任务失败:', error);
+            showToast('error', '创建任务失败', '错误');
+        }
+    }
+
+    // 查看任务详情
+    async function viewTask(taskId) {
+        const modal = new bootstrap.Modal(document.getElementById('detailModal'));
+        modal.show();
+
+        document.getElementById('detailContent').innerHTML = `
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">加载中...</span>
+                </div>
+            </div>
+        `;
+
+        try {
+            const response = await fetch(`/api/scheduler/${taskId}`);
+            const result = await response.json();
+
+            if (result.success) {
+                const task = result.data;
+                const statusClass = task.status === 'active' ? 'status-active' :
+                                   (task.status === 'paused' ? 'status-paused' : 'status-failed');
+
+                document.getElementById('detailContent').innerHTML = `
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5 class="mb-3">${task.name}</h5>
+                            <p class="text-muted">${task.description || '暂无描述'}</p>
+
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h6 class="card-title">执行配置</h6>
+                                    <div class="row mt-3">
+                                        <div class="col-sm-6">
+                                            <div class="mb-2">
+                                                <strong>任务类型:</strong>
+                                                <span class="ms-2 badge bg-primary">${task.task_type}</span>
+                                            </div>
+                                            <div class="mb-2">
+                                                <strong>执行周期:</strong>
+                                                <code class="ms-2">${task.cron_expression}</code>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="mb-2">
+                                                <strong>状态:</strong>
+                                                <span class="ms-2 status-badge ${statusClass}">
+                                                    ${task.status === 'active' ? '运行中' : (task.status === 'paused' ? '已暂停' : '失败')}
+                                                </span>
+                                            </div>
+                                            <div class="mb-2">
+                                                <strong>下次执行:</strong>
+                                                <span class="ms-2">${task.next_run}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-outline-primary" onclick="executeTask(${task.id})">
+                                    <i class="bi bi-play me-1"></i>立即执行
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="editTask(${task.id})">
+                                    <i class="bi bi-pencil me-1"></i>编辑
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-header bg-light">
+                                    <h6 class="mb-0">执行统计</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="text-center mb-3">
+                                        <div style="font-size: 36px; font-weight: 700; color: #667eea;">
+                                            ${task.run_count}
+                                        </div>
+                                        <div class="text-muted">总执行次数</div>
+                                    </div>
+                                    <hr>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="text-muted">最后执行:</span>
+                                        <span>${task.last_run ? new Date(task.last_run).toLocaleString() : '从未执行'}</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span class="text-muted">最后结果:</span>
+                                        <span class="${task.last_result === 'success' ? 'text-success' : (task.last_result === 'failed' ? 'text-danger' : 'text-muted')}">
+                                            ${task.last_result ? (task.last_result === 'success' ? '成功' : '失败') : '未知'}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                document.getElementById('detailContent').innerHTML = `
+                    <div class="text-center py-5 text-danger">
+                        <i class="bi bi-x-circle fs-1 d-block mb-3"></i>
+                        <p>${result.message}</p>
+                    </div>
+                `;
+            }
+        } catch (error) {
+            console.error('获取任务详情失败:', error);
+            document.getElementById('detailContent').innerHTML = `
+                <div class="text-center py-5 text-danger">
+                    <i class="bi bi-x-circle fs-1 d-block mb-3"></i>
+                    <p>加载失败</p>
+                </div>
+            `;
+        }
+    }
+
+    // 编辑任务
+    async function editTask(taskId) {
+        // 简化实现：使用详情模态框
+        viewTask(taskId);
+    }
+
+    // 切换任务状态
+    async function toggleTask(taskId) {
+        try {
+            const response = await fetch(`/api/scheduler/${taskId}/toggle`, {
+                method: 'POST'
+            });
+            const result = await response.json();
+
+            if (result.success) {
+                showToast('success', result.message, '成功');
+                setTimeout(() => location.reload(), 1000);
+            } else {
+                showToast('error', result.message, '错误');
+            }
+        } catch (error) {
+            console.error('切换状态失败:', error);
+            showToast('error', '操作失败', '错误');
+        }
+    }
+
+    // 执行任务
+    async function executeTask(taskId) {
+        const modal = new bootstrap.Modal(document.getElementById('executeModal'));
+        modal.show();
+
+        document.getElementById('executeStatus').textContent = '正在执行任务...';
+
+        try {
+            const response = await fetch(`/api/scheduler/${taskId}/execute`, {
+                method: 'POST'
+            });
+            const result = await response.json();
+
+            modal.hide();
+
+            if (result.success) {
+                showToast('success', result.message, '成功');
+                setTimeout(() => location.reload(), 1500);
+            } else {
+                showToast('error', result.message, '错误');
+            }
+        } catch (error) {
+            modal.hide();
+            console.error('执行任务失败:', error);
+            showToast('error', '执行失败', '错误');
+        }
+    }
+
+    // 删除任务
+    async function deleteTask(taskId) {
+        if (!confirm('确定要删除此任务吗？此操作不可恢复。')) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/scheduler/${taskId}`, {
+                method: 'DELETE'
+            });
+            const result = await response.json();
+
+            if (result.success) {
+                showToast('success', '任务删除成功', '成功');
+                setTimeout(() => location.reload(), 1500);
+            } else {
+                showToast('error', result.message, '错误');
+            }
+        } catch (error) {
+            console.error('删除任务失败:', error);
+            showToast('error', '删除失败', '错误');
+        }
+    }
+</script>
+{% endblock %}

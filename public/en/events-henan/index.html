@@ -9,7 +9,7 @@
     <title>Henan University Partnership | Bowen Education Group | Bowen Education Group</title>
 
     <!-- Favicon -->
-    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/static/images/favicon.png" type="image/png">
     <link rel="apple-touch-icon" href="/static/images/apple-touch-icon.png">
 
     <!-- Open Graph Tags -->
@@ -22,7 +22,7 @@
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Bowen Education Group">
+    <meta name="twitter:title" content="Bowen Education Group - Updated">
     <meta name="twitter:description" content="">
     <meta name="twitter:image" content="">
 
@@ -137,11 +137,77 @@
     /* Image loading optimization */
     opacity: 0;
     transition: opacity 0.3s ease-in;
+    /* Click to zoom hint */
+    cursor: pointer;
+}
+
+.single-page-content img:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    transform: scale(1.02);
+    transition: all 0.3s ease;
 }
 
 .single-page-content img.loaded,
 .single-page-content img[loading="lazy"] {
     opacity: 1;
+}
+
+/* Image Zoom Modal */
+.image-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    animation: fadeIn 0.3s ease;
+}
+
+.image-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-modal__content {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    animation: zoomIn 0.3s ease;
+}
+
+.image-modal__close {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    z-index: 10000;
+}
+
+.image-modal__close:hover {
+    color: #ccc;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 /* Performance optimization: reduce repaints */
@@ -346,8 +412,8 @@
     {
         "@context": "https://schema.org",
         "@type": "EducationalOrganization",
-        "name": "Bowen Education Group",
-        "url": "&lt;app.services.static_generator.obj object at 0x10834f4d0&gt;",
+        "name": "Bowen Education Group - Updated",
+        "url": "&lt;app.services.static_generator.obj object at 0x108093380&gt;",
         "logo": "/static/images/logo.png",
         "description": "",
         "address": {
@@ -363,7 +429,7 @@
             "latitude": "",
             "longitude": ""
         },
-        "telephone": "0161 969 3071",
+        "telephone": "0161 667 2668",
         "email": "",
         "sameAs": [
             
@@ -384,7 +450,7 @@
     "isPartOf": {
         "@type": "WebSite",
         "name": "Bowen Education Group",
-        "url": "&lt;app.services.static_generator.obj object at 0x10834f4d0&gt;"
+        "url": "&lt;app.services.static_generator.obj object at 0x108093380&gt;"
     },
     "publisher": {
         "@type": "EducationalOrganization",
@@ -397,13 +463,13 @@
                 "@type": "ListItem",
                 "position": 1,
                 "name": "Home",
-                "item": "&lt;app.services.static_generator.obj object at 0x10834f4d0&gt;en/"
+                "item": "&lt;app.services.static_generator.obj object at 0x108093380&gt;en/"
             },
             {
                 "@type": "ListItem",
                 "position": 2,
                 "name": "博文活动",
-                "item": "&lt;app.services.static_generator.obj object at 0x10834f4d0&gt;en/events"
+                "item": "&lt;app.services.static_generator.obj object at 0x108093380&gt;en/events"
             },
             {
                 "@type": "ListItem",
@@ -433,7 +499,7 @@
                     <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                     </svg>
-                    <a href="tel:0161 969 3071">0161 969 3071</a>
+                    <a href="tel:0161 667 2668">0161 667 2668</a>
                 </span>
                 
                 
@@ -466,7 +532,7 @@
                     <a href="/en/" aria-label="Bowen Education Group Home">
                         <img src="/static/images/logo.png" alt="Bowen Education Group" height="60">
                         <span class="logo-text">
-                            <strong>Bowen Education Group</strong>
+                            <strong>Bowen Education Group - Updated</strong>
                         </span>
                     </a>
                 </div>
@@ -2071,6 +2137,23 @@ body.mobile-menu-open {
                 </a>
             </li>
             
+            <li class="sidebar-menu-item">
+                <a
+                    href="/en/events-xungen/"
+                    class="sidebar-menu-link"
+                >
+                    <span class="sidebar-menu-icon">
+                        
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                            <polyline points="13 2 13 9 20 9"></polyline>
+                        </svg>
+                        
+                    </span>
+                    <span class="sidebar-menu-text">Root-Seeking Journey</span>
+                </a>
+            </li>
+            
         </ul>
     </nav>
     
@@ -2246,34 +2329,38 @@ body.mobile-menu-open {
             <!-- Right Main Content -->
             <div class="page-layout__main">
                 <article class="single-page-content" data-aos="fade-up">
-                    <h2>Henan University Partnership Programme</h2>
-<p>Bowen Education Group has established a long-term strategic partnership with Henan University in China, working together to promote educational and cultural exchange between the UK and China.</p>
-<h3>Partnership Initiatives</h3>
+                    <h2>Henan University Partnership</h2>
+<p>Bowen Education Group has established a long-term strategic partnership with Henan University in China to jointly promote Sino-British educational and cultural exchanges.</p>
+<h3>Cooperation Content</h3>
 <ul>
-<li><strong>Teacher Exchange</strong>: Henan University regularly sends experienced teachers to the UK for cultural exchange and teaching support</li>
-<li><strong>Student Exchange</strong>: Organized student exchange visits fostering friendship and understanding between young people from both countries</li>
-<li><strong>Cultural Activities</strong>: Joint cultural promotion events and academic seminars</li>
-<li><strong>Resource Sharing</strong>: Collaboration on educational resources and research outcomes</li>
+<li><strong>Faculty Exchange:</strong> Henan University regularly sends excellent teachers to the UK for cultural exchange and teaching support</li>
+<li><strong>Student Exchange:</strong> Organize student exchange activities to promote friendship and understanding between young people from both countries</li>
+<li><strong>Cultural Activities:</strong> Jointly hold various Chinese culture promotion activities and academic seminars</li>
+<li><strong>Resource Sharing:</strong> Share teaching resources and research results</li>
 </ul>
-<h3>Cultural Heritage Tours</h3>
-<p>As a key component of our partnership, we organize annual "Cultural Heritage Tours" for British-Chinese youth to explore their roots and deepen their understanding of Chinese culture:</p>
+<h3>2025 Root-Seeking Journey</h3>
+<p>In the summer of 2025, Bowen Education organized outstanding student representatives to visit Henan, China, participating in the "Affection for China · Root-Seeking Journey · Meet Henan · Root Camp" summer camp hosted by the China Overseas Chinese Federation.</p>
+<p>Through ten days of cultural experience and on-site learning, campers deeply experienced cultural themes such as "martial spirit, family memories, intangible cultural heritage revival, center of heaven and earth":</p>
 <ul>
-<li>Visit Henan University campus and experience university life in China</li>
-<li>Tour historic cultural cities to learn about Chinese history</li>
-<li>Build international friendships through exchanges with Chinese students</li>
-<li>Participate in cultural activities (tea ceremony, martial arts, traditional crafts, etc.)</li>
+<li>Visited iconic cultural landmarks such as the Longmen Grottoes, Millennium City Park, and Shaolin Temple</li>
+<li>Watched Shaolin Kung Fu performances and experienced Chinese martial arts</li>
+<li>Entered Yu Opera classes to learn traditional opera art</li>
+<li>Visited the Hakka Origin Memorial Hall in Luoyang to understand root culture</li>
+<li>Experienced "Only Henan · Drama Fantasy City" immersive performances</li>
+<li>Visited Henan Science and Technology Museum, Henan Museum, and Kaifeng Museum</li>
 </ul>
-<h3>Easter China Visit Programme</h3>
-<p>Each Easter holiday, we organize a two-week visit to China:</p>
+<p>This root-seeking journey not only enriched students' cultural experience but also inspired their reflection on language learning and identity recognition.</p>
+<h3>Easter China Visit Program</h3>
+<p>Every year during the Easter holiday, we organize a two-week visit to China:</p>
 <ul>
-<li><strong>When</strong>: Easter holiday period each year</li>
-<li><strong>For</strong>: Students aged 12-18</li>
-<li><strong>Itinerary</strong>: Henan (Kaifeng, Zhengzhou, Luoyang) + Beijing</li>
-<li><strong>Accommodation</strong>: University dormitories and selected hotels</li>
-<li><strong>Supervision</strong>: Professional tour leaders and Henan University volunteers</li>
+<li><strong>Date:</strong> Easter holiday each year</li>
+<li><strong>Target:</strong> Students aged 12-18</li>
+<li><strong>Itinerary:</strong> Henan (Kaifeng, Zhengzhou, Luoyang) + Beijing</li>
+<li><strong>Accommodation:</strong> University dormitories and selected hotels</li>
+<li><strong>Accompanied by:</strong> Professional tour leaders and Henan University volunteers</li>
 </ul>
-<p><strong>Enquiries and Registration:</strong></p>
-<p>For more information about our Henan University partnership or the China visit programme, please contact us:</p>
+<h3>Registration Inquiry</h3>
+<p>If you are interested in the Henan University partnership or China visit activities, please contact us for detailed information and registration methods.</p>
 <p>Email: <a href="mailto:info@boweneducation.org">info@boweneducation.org</a></p>
                 </article>
             </div>
@@ -2298,11 +2385,11 @@ body.mobile-menu-open {
                 <i class="fas fa-calendar-alt" aria-hidden="true"></i>
                 <span>Book a Visit</span>
             </a>
-            <a href="tel:01619693071"
+            <a href="tel:01616672668"
                class="btn btn-outline-primary btn-lg"
-               aria-label="Call Bowen Education Group at 0161 969 3071">
+               aria-label="Call Bowen Education Group at 0161 667 2668">
                 <i class="fas fa-phone" aria-hidden="true"></i>
-                <span>0161 969 3071</span>
+                <span>0161 667 2668</span>
             </a>
         </div>
     </div>
@@ -2326,6 +2413,7 @@ body.mobile-menu-open {
                             <li><a href="/en/about">About Us</a></li>
                             <li><a href="/en/programmes">Government Programmes</a></li>
                             <li><a href="/en/events">Events</a></li>
+                            <li><a href="/en/gallery-festivals">Photo Gallery</a></li>
                             <li><a href="/en/contact">Contact Us</a></li>
                         </ul>
                     </div>
@@ -2352,12 +2440,16 @@ body.mobile-menu-open {
                             <li>
                                 <i class="fas fa-map-marker-alt"></i>
                                 <span>
-                                    1/F, 2A Curzon Road, Sale, Manchester M33 7DR
+                                    2 Curzon Road, Sale, M33 7DR, England
                                 </span>
                             </li>
                             <li>
                                 <i class="fas fa-phone"></i>
-                                <a href="tel:01619693071">0161 969 3071</a>
+                                <a href="tel:01616672668">0161 667 2668</a>
+                            </li>
+                            <li>
+                                <i class="fab fa-whatsapp"></i>
+                                <a href="https://wa.me/447419818100">07419 818100</a>
                             </li>
                             <li>
                                 <i class="fas fa-envelope"></i>
@@ -2603,6 +2695,60 @@ body.mobile-menu-open {
             ticking = true;
         }
     }, { passive: true });
+
+    // Image click to zoom functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add 'loaded' class to all content images (ensure images are visible)
+        const contentImages = document.querySelectorAll('.single-page-content img');
+        contentImages.forEach(img => {
+            img.classList.add('loaded');
+        });
+
+        // Create modal element
+        const modal = document.createElement('div');
+        modal.className = 'image-modal';
+        modal.innerHTML = `
+            <span class="image-modal__close">&times;</span>
+            <img class="image-modal__content" alt="Zoomed image">
+        `;
+        document.body.appendChild(modal);
+
+        const modalImg = modal.querySelector('.image-modal__content');
+        const closeBtn = modal.querySelector('.image-modal__close');
+
+        // Add click event to all content images
+        contentImages.forEach(img => {
+            img.addEventListener('click', function() {
+                modal.classList.add('active');
+                modalImg.src = this.src;
+                modalImg.alt = this.alt || 'Zoomed image';
+                document.body.style.overflow = 'hidden'; // Prevent background scrolling
+            });
+        });
+
+        // Close modal function
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+
+        // Click close button
+        closeBtn.addEventListener('click', closeModal);
+
+        // Click modal background to close
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Press ESC to close
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+    });
 </script>
 
 

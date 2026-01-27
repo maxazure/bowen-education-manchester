@@ -19,6 +19,9 @@
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.min.css" rel="stylesheet">
 
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" integrity="sha384-/Fa0i/lhCJpMmRyK0 at4bIaHbW2m5m21k61q40lp1q5g9B/1y4lWYYXj7dD/2Vg==" crossorigin="anonymous"></script>
+
     <!-- Modern CSS with Glassmorphism & Dark Mode -->
     <link rel="stylesheet" href="/admin-static/css/admin-modern.css">
 
@@ -39,8 +42,91 @@
                 </a>
             </div>
 
-            <!-- 右侧：主题切换 + 用户菜单 -->
+            <!-- 右侧：搜索框 + 主题切换 + 快捷键 + 通知 + 用户菜单 -->
             <div class="d-flex align-items-center gap-2">
+                <!-- 搜索框 -->
+                <div class="search-box" style="position: relative;">
+                    <form action="/admin/search" method="GET" class="d-flex" id="globalSearchForm">
+                        <input type="text" name="q" class="form-control form-control-sm"
+                               placeholder="搜索..." id="globalSearchInput"
+                               autocomplete="off"
+                               onkeydown="if(event.key==='Enter'){this.form.submit()}"
+                               oninput="handleSearchInput(this)"
+                               onfocus="handleSearchFocus(this)"
+                               onblur="setTimeout(() => hideSearchDropdown(), 200)">
+                        <button type="submit" class="btn btn-link btn-sm text-muted px-1">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </form>
+                    <!-- 搜索下拉框 -->
+                    <div class="search-dropdown" id="searchDropdown" style="display: none; position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #dee2e6; border-radius: 0 0 8px 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 1000; max-height: 400px; overflow-y: auto;">
+                        <!-- 搜索历史 -->
+                        <div class="search-history" id="searchHistory" style="display: none;">
+                            <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom bg-light">
+                                <span class="small text-muted"><i class="bi bi-clock-history me-1"></i>搜索历史</span>
+                                <button class="btn btn-sm btn-link text-muted p-0" onclick="clearSearchHistory()">清除</button>
+                            </div>
+                            <div class="search-history-list" id="searchHistoryList"></div>
+                        </div>
+                        <!-- 搜索结果 -->
+                        <div class="search-results" id="searchResults"></div>
+                        <!-- 加载状态 -->
+                        <div class="search-loading text-center py-3" id="searchLoading" style="display: none;">
+                            <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+                            <span class="text-muted small">搜索中...</span>
+                        </div>
+                        <!-- 无结果 -->
+                        <div class="search-no-result text-center py-3" id="searchNoResult" style="display: none;">
+                            <span class="text-muted small">未找到结果</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 快捷键帮助按钮 -->
+                <button class="btn btn-link p-2 text-muted" type="button" onclick="showShortcutsModal()" title="键盘快捷键">
+                    <i class="bi bi-keyboard"></i>
+                </button>
+
+                <!-- 通知按钮 -->
+                <div class="dropdown">
+                    <button class="btn btn-link p-2 text-muted position-relative" type="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-bell"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notificationBadge" style="display: none;">
+                            0
+                        </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end notification-dropdown" aria-labelledby="notificationDropdown" style="width: 380px; max-height: 500px;">
+                        <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
+                            <h6 class="mb-0"><i class="bi bi-bell me-2"></i>通知</h6>
+                            <div class="d-flex gap-2">
+                                <a href="javascript:void(0)" class="text-muted small text-decoration-none" onclick="showNotificationSettings()">
+                                    <i class="bi bi-gear"></i> 设置
+                                </a>
+                                <a href="javascript:markAllNotificationsRead()" class="text-muted small text-decoration-none">全部已读</a>
+                            </div>
+                        </div>
+                        <!-- 通知筛选标签 -->
+                        <div class="px-3 py-2 border-bottom bg-light">
+                            <div class="btn-group btn-group-sm w-100">
+                                <button type="button" class="btn btn-outline-primary active" onclick="filterNotifications('all', this)">全部</button>
+                                <button type="button" class="btn btn-outline-primary" onclick="filterNotifications('unread', this)">未读</button>
+                                <button type="button" class="btn btn-outline-primary" onclick="filterNotifications('contacts', this)">留言</button>
+                            </div>
+                        </div>
+                        <div class="notification-list" id="notificationList" style="max-height: 320px; overflow-y: auto;">
+                            <div class="text-center py-4 text-muted">
+                                <i class="bi bi-hourglass-split fs-4 d-block mb-2"></i>
+                                加载中...
+                            </div>
+                        </div>
+                        <div class="border-top p-2 text-center">
+                            <a href="/admin/contacts" class="text-primary small text-decoration-none">
+                                查看所有留言 <i class="bi bi-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- 主题切换按钮 -->
                 <button class="theme-toggle" id="themeToggle" type="button" aria-label="切换主题">
                     <i class="bi bi-sun-fill sun-icon"></i>
@@ -104,6 +190,10 @@
                     <i class="bi bi-badge-vo"></i>
                     <span class="sidebar-text">Hero幻灯片</span>
                 </a>
+                <a href="/admin/tags" class="sidebar-link {% if '/tags' in request.path %}active{% endif %}">
+                    <i class="bi bi-tags"></i>
+                    <span class="sidebar-text">标签管理</span>
+                </a>
             </div>
 
             <!-- 媒体资源 -->
@@ -139,9 +229,72 @@
                     <i class="bi bi-lightning-charge"></i>
                     <span class="sidebar-text">静态页面</span>
                 </a>
+                <a href="/admin/backup" class="sidebar-link {% if '/backup' in request.path %}active{% endif %}">
+                    <i class="bi bi-cloud-arrow-up"></i>
+                    <span class="sidebar-text">数据备份</span>
+                </a>
+                <a href="/admin/import" class="sidebar-link {% if '/import' in request.path %}active{% endif %}">
+                    <i class="bi bi-cloud-arrow-down"></i>
+                    <span class="sidebar-text">数据导入</span>
+                </a>
+                <a href="/admin/export" class="sidebar-link {% if '/export' in request.path %}active{% endif %}">
+                    <i class="bi bi-file-earmark-spreadsheet"></i>
+                    <span class="sidebar-text">数据导出</span>
+                </a>
+                <a href="/admin/search" class="sidebar-link {% if '/search' in request.path and '/advanced-search' not in request.path %}active{% endif %}">
+                    <i class="bi bi-search"></i>
+                    <span class="sidebar-text">全站搜索</span>
+                </a>
+                <a href="/admin/advanced-search" class="sidebar-link {% if '/advanced-search' in request.path %}active{% endif %}">
+                    <i class="bi bi-funnel"></i>
+                    <span class="sidebar-text">高级搜索</span>
+                </a>
+                <a href="/admin/trash" class="sidebar-link {% if '/trash' in request.path %}active{% endif %}">
+                    <i class="bi bi-trash3"></i>
+                    <span class="sidebar-text">回收站</span>
+                </a>
+                <a href="/admin/operation-logs" class="sidebar-link {% if '/operation-logs' in request.path %}active{% endif %}">
+                    <i class="bi bi-clock-history"></i>
+                    <span class="sidebar-text">操作日志</span>
+                </a>
+                <a href="/admin/reports" class="sidebar-link {% if '/reports' in request.path %}active{% endif %}">
+                    <i class="bi bi-bar-chart-line"></i>
+                    <span class="sidebar-text">数据报表</span>
+                </a>
+                <a href="/admin/users" class="sidebar-link {% if '/users' in request.path or '/roles' in request.path %}active{% endif %}">
+                    <i class="bi bi-people"></i>
+                    <span class="sidebar-text">用户管理</span>
+                </a>
+                <a href="/admin/i18n" class="sidebar-link {% if '/i18n' in request.path %}active{% endif %}">
+                    <i class="bi bi-translate"></i>
+                    <span class="sidebar-text">多语言</span>
+                </a>
+                <a href="/admin/health" class="sidebar-link {% if '/health' in request.path %}active{% endif %}">
+                    <i class="bi bi-heart-pulse"></i>
+                    <span class="sidebar-text">系统监控</span>
+                </a>
+                <a href="/admin/versions" class="sidebar-link {% if '/versions' in request.path %}active{% endif %}">
+                    <i class="bi bi-clock-history"></i>
+                    <span class="sidebar-text">版本历史</span>
+                </a>
+                <a href="/admin/sitemap" class="sidebar-link {% if '/sitemap' in request.path %}active{% endif %}">
+                    <i class="bi bi-diagram-3"></i>
+                    <span class="sidebar-text">网站地图</span>
+                </a>
+                <a href="/admin/seo" class="sidebar-link {% if '/seo' in request.path %}active{% endif %}">
+                    <i class="bi bi-search"></i>
+                    <span class="sidebar-text">SEO分析</span>
+                </a>
+                <a href="/admin/scheduler" class="sidebar-link {% if '/scheduler' in request.path %}active{% endif %}">
+                    <i class="bi bi-clock"></i>
+                    <span class="sidebar-text">定时任务</span>
+                </a>
             </div>
         </div>
     </aside>
+
+    <!-- 侧边栏遮罩层（移动端） -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 
     <!-- 主内容区 -->
     <main class="main-content" id="mainContent">
@@ -260,6 +413,21 @@
                     document.body.classList.add('sidebar-collapsed');
                 }
             }
+
+            // 全局侧边栏切换函数
+            window.toggleSidebar = function() {
+                if (window.innerWidth < 992) {
+                    sidebar.classList.toggle('show');
+                    if (sidebarOverlay) {
+                        sidebarOverlay.classList.toggle('show');
+                    }
+                } else {
+                    sidebar.classList.toggle('collapsed');
+                    document.body.classList.toggle('sidebar-collapsed');
+                    const isCollapsed = sidebar.classList.contains('collapsed');
+                    localStorage.setItem('sidebarCollapsed', isCollapsed);
+                }
+            };
         })();
 
         /**
@@ -326,8 +494,9 @@
         }
 
         window.confirmAction = function(title, message, onConfirm) {
+            const modalId = 'confirmModal_' + Date.now();
             const modalHTML = `
-                <div class="modal fade" id="confirmModal" tabindex="-1">
+                <div class="modal fade" id="${modalId}" tabindex="-1">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -335,36 +504,1586 @@
                                     <i class="bi bi-exclamation-triangle text-warning me-2"></i>
                                     ${title}
                                 </h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 ${message}
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
-                                <button type="button" class="btn btn-danger" id="confirmBtn">确认</button>
+                                <button type="button" class="btn btn-danger confirm-btn">确认</button>
                             </div>
                         </div>
                     </div>
                 </div>
             `;
 
-            const oldModal = document.getElementById('confirmModal');
-            if (oldModal) oldModal.remove();
+            // Remove any existing modals
+            document.querySelectorAll('[id^="confirmModal_"]').forEach(el => el.remove());
 
             document.body.insertAdjacentHTML('beforeend', modalHTML);
 
-            const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
-            modal.show();
+            const modalElement = document.getElementById(modalId);
+            const modal = new bootstrap.Modal(modalElement);
 
-            document.getElementById('confirmBtn').addEventListener('click', function() {
+            // Handle confirm button click
+            modalElement.querySelector('.confirm-btn').addEventListener('click', function() {
+                modalElement.addEventListener('hidden.bs.modal', function handler() {
+                    modalElement.removeEventListener('hidden.bs.modal', handler);
+                    if (typeof onConfirm === 'function') {
+                        onConfirm();
+                    }
+                });
                 modal.hide();
-                if (typeof onConfirm === 'function') {
-                    onConfirm();
+            });
+
+            // Handle modal disposal after hidden
+            modalElement.addEventListener('hidden.bs.modal', function() {
+                setTimeout(() => modalElement.remove(), 200);
+            });
+
+            modal.show();
+        };
+
+        // 快捷键模态框
+        window.showShortcutsModal = function() {
+            const modalHTML = `
+                <div class="modal fade" id="shortcutsModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">
+                                    <i class="bi bi-keyboard me-2"></i>键盘快捷键
+                                </h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6 class="text-primary mb-3"><i class="bi bi-pencil-square me-2"></i>编辑操作</h6>
+                                        <table class="table table-sm table-hover">
+                                            <tr><td><kbd>Ctrl</kbd> + <kbd>S</kbd></td><td>保存内容</td></tr>
+                                            <tr><td><kbd>Ctrl</kbd> + <kbd>P</kbd></td><td>预览内容</td></tr>
+                                            <tr><td><kbd>Ctrl</kbd> + <kbd>D</kbd></td><td>存为草稿</td></tr>
+                                            <tr><td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd></td><td>直接发布</td></tr>
+                                            <tr><td><kbd>Ctrl</kbd> + <kbd>B</kbd></td><td>加粗文字</td></tr>
+                                            <tr><td><kbd>Ctrl</kbd> + <kbd>I</kbd></td><td>斜体文字</td></tr>
+                                            <tr><td><kbd>Ctrl</kbd> + <kbd>K</kbd></td><td>插入链接</td></tr>
+                                            <tr><td><kbd>Ctrl</kbd> + <kbd>V</kbd></td><td>粘贴上传图片</td></tr>
+                                            <tr><td><kbd>Ctrl</kbd> + <kbd>Z</kbd></td><td>撤销</td></tr>
+                                            <tr><td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd></td><td>重做</td></tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="text-success mb-3"><i class="bi bi-gear me-2"></i>系统操作</h6>
+                                        <table class="table table-sm table-hover">
+                                            <tr><td><kbd>?</kbd></td><td>显示此帮助</td></tr>
+                                            <tr><td><kbd>Esc</kbd></td><td>关闭模态框</td></tr>
+                                            <tr><td><kbd>Ctrl</kbd> + <kbd>N</kbd></td><td>新建内容</td></tr>
+                                            <tr><td><kbd>Ctrl</kbd> + <kbd>F</kbd></td><td>聚焦搜索框</td></tr>
+                                            <tr><td><kbd>g</kbd> → <kbd>p</kbd></td><td>跳转至文章</td></tr>
+                                            <tr><td><kbd>g</kbd> → <kbd>m</kbd></td><td>跳转至媒体</td></tr>
+                                            <tr><td><kbd>g</kbd> → <kbd>c</kbd></td><td>跳转至栏目</td></tr>
+                                            <tr><td><kbd>g</kbd> → <kbd>s</kbd></td><td>跳转至设置</td></tr>
+                                            <tr><td><kbd>Alt</kbd> + <kbd>Q</kbd></td><td>全选/取消全选</td></tr>
+                                            <tr><td><kbd>Ctrl</kbd> + <kbd>←</kbd></td><td>上一页</td></tr>
+                                            <tr><td><kbd>Ctrl</kbd> + <kbd>→</kbd></td><td>下一页</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <h6 class="text-warning mb-3"><i class="bi bi-trash me-2"></i>列表操作</h6>
+                                        <table class="table table-sm table-hover">
+                                            <tr><td><kbd>Ctrl</kbd> + <kbd>A</kbd></td><td>全选内容</td></tr>
+                                            <tr><td><kbd>Ctrl</kbd> + <kbd>D</kbd></td><td>批量复制</td></tr>
+                                            <tr><td><kbd>Delete</kbd></td><td>删除选中</td></tr>
+                                            <tr><td><kbd>Enter</kbd></td><td>编辑选中第一项</td></tr>
+                                            <tr><td><kbd>E</kbd></td><td>批量编辑</td></tr>
+                                            <tr><td><kbd>N</kbd></td><td>新建文章</td></tr>
+                                            <tr><td><kbd>Space</kbd></td><td>切换选中</td></tr>
+                                            <tr><td><kbd>Home</kbd> / <kbd>End</kbd></td><td>首页/末页</td></tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="text-info mb-3"><i class="bi bi-eye me-2"></i>快速导航</h6>
+                                        <table class="table table-sm table-hover">
+                                            <tr><td><kbd>/</kbd></td><td>快速搜索</td></tr>
+                                            <tr><td><kbd>G</kbd> → <kbd>H</kbd></td><td>仪表板</td></tr>
+                                            <tr><td><kbd>G</kbd> → <kbd>A</kbd></td><td>分析统计</td></tr>
+                                            <tr><td><kbd>G</kbd> → <kbd>S</kbd></td><td>SEO分析</td></tr>
+                                            <tr><td><kbd>G</kbd> → <kbd>B</kbd></td><td>数据备份</td></tr>
+                                            <tr><td><kbd>G</kbd> → <kbd>L</kbd></td><td>操作日志</td></tr>
+                                            <tr><td><kbd>G</kbd> → <kbd>U</kbd></td><td>用户管理</td></tr>
+                                            <tr><td><kbd>G</kbd> → <kbd>R</kbd></td><td>回收站</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <h6 class="text-secondary mb-3"><i class="bi bi-cursor me-2"></i>鼠标操作</h6>
+                                        <table class="table table-sm table-hover">
+                                            <tr><td>单击行</td><td>选中/取消选中</td></tr>
+                                            <tr><td>双击行</td><td>快速预览/编辑</td></tr>
+                                            <tr><td>点击列头</td><td>排序</td></tr>
+                                            <tr><td>拖拽列头</td><td>调整顺序</td></tr>
+                                            <tr><td>右键菜单</td><td>更多操作</td></tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6 class="text-danger mb-3"><i class="bi bi-lightning me-2"></i>特殊操作</h6>
+                                        <table class="table table-sm table-hover">
+                                            <tr><td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>L</kbd></td><td>切换暗黑模式</td></tr>
+                                            <tr><td><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>S</kbd></td><td>截图保存</td></tr>
+                                            <tr><td><kbd>Alt</kbd> + <kbd>1-9</kbd></td><td>快速导航</td></tr>
+                                            <tr><td><kbd>Shift</kbd> + <kbd>滚轮</kbd></td><td>水平滚动</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="alert alert-info mt-3 mb-0">
+                                    <i class="bi bi-info-circle me-2"></i>
+                                    <strong>提示：</strong>Mac 用户请使用 <kbd>⌘</kbd> (Command) 键代替 <kbd>Ctrl</kbd> 键
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // 移除已存在的模态框
+            const existingModal = document.getElementById('shortcutsModal');
+            if (existingModal) existingModal.remove();
+
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+            const modalElement = document.getElementById('shortcutsModal');
+            const modal = new bootstrap.Modal(modalElement);
+
+            modalElement.addEventListener('hidden.bs.modal', function() {
+                setTimeout(() => modalElement.remove(), 200);
+            });
+
+            modal.show();
+        };
+
+        // 全局快捷键监听
+        document.addEventListener('keydown', function(e) {
+            // 防止在输入框中触发
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.contentEditable === 'true') {
+                // 在编辑器中允许 Ctrl+S 等基本快捷键
+                if (e.ctrlKey && e.key === 's') {
+                    e.preventDefault();
+                    if (typeof window.onManualSave === 'function') {
+                        window.onManualSave();
+                    }
+                }
+                return;
+            }
+
+            // ? 键显示快捷键帮助
+            if (e.key === '?' && !e.ctrlKey && !e.metaKey) {
+                e.preventDefault();
+                showShortcutsModal();
+            }
+
+            // Escape 关闭模态框
+            if (e.key === 'Escape') {
+                const modals = document.querySelectorAll('.modal.show');
+                modals.forEach(modal => {
+                    const bsModal = bootstrap.Modal.getInstance(modal);
+                    if (bsModal) bsModal.hide();
+                });
+            }
+
+            // Ctrl/Cmd + / 聚焦搜索框
+            if ((e.ctrlKey || e.metaKey) && e.key === '/') {
+                e.preventDefault();
+                const searchInput = document.getElementById('globalSearchInput');
+                if (searchInput) {
+                    searchInput.focus();
+                    searchInput.select();
+                }
+            }
+
+            // Ctrl/Cmd + N 新建内容
+            if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+                e.preventDefault();
+                // 根据当前页面跳转到对应的创建页面
+                const path = window.location.pathname;
+                if (path.includes('/posts')) {
+                    window.location.href = '/admin/posts/new';
+                } else if (path.includes('/products')) {
+                    window.location.href = '/admin/products/new';
+                } else if (path.includes('/galleries')) {
+                    window.location.href = '/admin/galleries/new';
+                } else if (path.includes('/media')) {
+                    // 媒体库不支持新建，跳转到上传
+                    window.location.href = '/admin/media';
+                } else {
+                    window.location.href = '/admin/posts/new';
+                }
+            }
+
+            // G + H 跳转到仪表板
+            if (e.key.toLowerCase() === 'h' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+                // 使用一个标记来检测是否是 G 前缀模式
+                // 这里我们用更简单的方式：提示用户
+            }
+
+            // G键快捷跳转（需要先按G，再按目标键）
+            window._gKeyMode = window._gKeyMode || false;
+            window._gKeyTimer = window._gKeyTimer || null;
+
+            if (e.key.toLowerCase() === 'g' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+                if (!window._gKeyMode) {
+                    window._gKeyMode = true;
+                    // 2秒内没有按下一个键则退出G模式
+                    if (window._gKeyTimer) clearTimeout(window._gKeyTimer);
+                    window._gKeyTimer = setTimeout(() => {
+                        window._gKeyMode = false;
+                    }, 2000);
+                    // 显示提示
+                    showToast('info', 'G: H(仪表板) A(分析) S(SEO) B(备份) L(日志) U(用户) R(回收站)', '快捷导航');
+                }
+            } else if (window._gKeyMode) {
+                const shortcuts = {
+                    'h': '/admin/',
+                    'a': '/admin/analytics',
+                    's': '/admin/seo',
+                    'b': '/admin/backups',
+                    'l': '/admin/operation-logs',
+                    'u': '/admin/users',
+                    'r': '/admin/trash',
+                    'p': '/admin/posts',
+                    'm': '/admin/media',
+                    'c': '/admin/columns'
+                };
+                if (shortcuts[e.key.toLowerCase()]) {
+                    window.location.href = shortcuts[e.key.toLowerCase()];
+                }
+                window._gKeyMode = false;
+                if (window._gKeyTimer) clearTimeout(window._gKeyTimer);
+            }
+
+            // S + 数字 快速保存/发布 (在编辑器页面)
+            if (e.key.toLowerCase() === 's' && e.altKey) {
+                e.preventDefault();
+                const num = parseInt(e.code.replace('Digit', ''));
+                if (num >= 1 && num <= 5) {
+                    const btns = document.querySelectorAll('[data-quick-action]');
+                    if (btns[num - 1]) {
+                        btns[num - 1].click();
+                    }
+                }
+            }
+
+            // Alt + Q 快速选中全部
+            if (e.altKey && e.key.toLowerCase() === 'q') {
+                e.preventDefault();
+                const selectAllBtn = document.getElementById('selectAll');
+                if (selectAllBtn) {
+                    selectAllBtn.click();
+                }
+            }
+
+            // Alt + 数字键 快速导航（顶部导航）
+            if (e.altKey && /^[1-9]$/.test(e.key)) {
+                const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
+                const index = parseInt(e.key) - 1;
+                if (navLinks[index]) {
+                    navLinks[index].click();
+                }
+            }
+        });
+
+        // ========== 通知功能 ==========
+        // 加载通知
+        function loadNotifications() {
+            fetch('/admin/notifications?limit=10')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        renderNotifications(data.data);
+                    }
+                })
+                .catch(error => console.error('加载通知失败:', error));
+        }
+
+        // 渲染通知列表
+        function renderNotifications(data) {
+            const list = document.getElementById('notificationList');
+            const badge = document.getElementById('notificationBadge');
+
+            if (!list) return;
+
+            const unreadCount = data.unread_count + data.recent_contacts;
+
+            // 更新徽章
+            if (unreadCount > 0) {
+                badge.textContent = unreadCount > 99 ? '99+' : unreadCount;
+                badge.style.display = 'block';
+            } else {
+                badge.style.display = 'none';
+            }
+
+            // 渲染通知列表
+            let html = '';
+
+            // 优先显示新留言
+            if (data.recent_contacts > 0) {
+                html += `
+                    <a href="/admin/contacts" class="dropdown-item notification-item unread">
+                        <div class="d-flex">
+                            <div class="notification-icon bg-primary">
+                                <i class="bi bi-envelope"></i>
+                            </div>
+                            <div class="notification-content">
+                                <div class="notification-title">新留言提醒</div>
+                                <div class="notification-text">您有 ${data.recent_contacts} 条未处理留言</div>
+                                <div class="notification-time text-muted small">刚刚</div>
+                            </div>
+                        </div>
+                    </a>
+                `;
+            }
+
+            // 显示系统通知
+            if (data.notifications && data.notifications.length > 0) {
+                data.notifications.forEach(n => {
+                    const levelColors = {
+                        'info': 'bg-primary',
+                        'success': 'bg-success',
+                        'warning': 'bg-warning',
+                        'danger': 'bg-danger'
+                    };
+                    const levelIcons = {
+                        'info': 'bi-info-circle',
+                        'success': 'bi-check-circle',
+                        'warning': 'bi-exclamation-triangle',
+                        'danger': 'bi-x-circle'
+                    };
+
+                    const time = new Date(n.created_at);
+                    const timeStr = getTimeAgo(time);
+
+                    html += `
+                        <div class="dropdown-item notification-item ${n.is_read ? '' : 'unread'}" onclick="markNotificationRead(${n.id})" style="cursor: pointer;">
+                            <div class="d-flex">
+                                <div class="notification-icon ${levelColors[n.level] || 'bg-secondary'}">
+                                    <i class="bi ${levelIcons[n.level] || 'bi-bell'}"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-title">${n.title}</div>
+                                    ${n.content ? `<div class="notification-text">${n.content}</div>` : ''}
+                                    <div class="notification-time text-muted small">${timeStr}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            if (!html) {
+                html = `
+                    <div class="text-center py-4 text-muted">
+                        <i class="bi bi-bell-slash fs-4 d-block mb-2"></i>
+                        <p class="mb-0">暂无新通知</p>
+                    </div>
+                `;
+            }
+
+            list.innerHTML = html;
+        }
+
+        // 标记单条通知已读
+        window.markNotificationRead = function(id) {
+            fetch(`/admin/notifications/mark-read/${id}`, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        loadNotifications();
+                    }
+                });
+        };
+
+        // 标记所有通知已读
+        window.markAllNotificationsRead = function() {
+            fetch('/admin/notifications/mark-all-read', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        loadNotifications();
+                        showToast('success', '已全部标记为已读', '成功');
+                    }
+                });
+        };
+
+        // 获取相对时间
+        function getTimeAgo(date) {
+            const now = new Date();
+            const diff = now - date;
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+
+            if (minutes < 1) return '刚刚';
+            if (minutes < 60) return `${minutes} 分钟前`;
+            if (hours < 24) return `${hours} 小时前`;
+            if (days < 7) return `${days} 天前`;
+            return date.toLocaleDateString('zh-CN');
+        }
+
+        // 初始化通知（页面加载时）
+        if (document.getElementById('notificationDropdown')) {
+            loadNotifications();
+            // 每30秒刷新一次通知
+            setInterval(loadNotifications, 30000);
+        }
+
+        // ========== 增强通知系统 ==========
+        // 通知设置存储键
+        const NOTIFICATION_SETTINGS_KEY = 'admin_notification_settings';
+
+        // 默认通知设置
+        const defaultNotificationSettings = {
+            sound: true,
+            browserNotification: true,
+            autoRefresh: true,
+            refreshInterval: 30, // 秒
+            showContactNotifications: true,
+            showSystemNotifications: true
+        };
+
+        // 获取通知设置
+        function getNotificationSettings() {
+            try {
+                return { ...defaultNotificationSettings, ...JSON.parse(localStorage.getItem(NOTIFICATION_SETTINGS_KEY)) };
+            } catch (e) {
+                return defaultNotificationSettings;
+            }
+        }
+
+        // 保存通知设置
+        function saveNotificationSettings(settings) {
+            localStorage.setItem(NOTIFICATION_SETTINGS_KEY, JSON.stringify(settings));
+        }
+
+        // 播放通知声音
+        function playNotificationSound() {
+            const settings = getNotificationSettings();
+            if (!settings.sound) return;
+
+            // 创建音频上下文
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.3);
+            } catch (e) {
+                console.warn('播放通知声音失败:', e);
+            }
+        }
+
+        // 请求浏览器通知权限并发送通知
+        function sendBrowserNotification(title, body, icon = '/favicon.ico') {
+            const settings = getNotificationSettings();
+
+            if (!settings.browserNotification) return;
+
+            // 检查权限
+            if (Notification.permission === 'granted') {
+                new Notification(title, {
+                    body: body,
+                    icon: icon,
+                    tag: 'bowen-admin-notification',
+                    requireInteraction: false
+                });
+            } else if (Notification.permission !== 'denied') {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        new Notification(title, {
+                            body: body,
+                            icon: icon
+                        });
+                    }
+                });
+            }
+        }
+
+        // 通知设置弹窗
+        window.showNotificationSettings = function() {
+            const settings = getNotificationSettings();
+            const modalHTML = `
+                <div class="modal fade" id="notificationSettingsModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title"><i class="bi bi-bell-gear me-2"></i>通知设置</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="settingSound" ${settings.sound ? 'checked' : ''}>
+                                        <label class="form-check-label" for="settingSound">
+                                            <i class="bi bi-volume-up me-1"></i>通知声音
+                                        </label>
+                                    </div>
+                                    <small class="text-muted ms-4">收到新通知时播放提示音</small>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="settingBrowser" ${settings.browserNotification ? 'checked' : ''}>
+                                        <label class="form-check-label" for="settingBrowser">
+                                            <i class="bi bi-browser-chrome me-1"></i>浏览器通知
+                                        </label>
+                                    </div>
+                                    <small class="text-muted ms-4">在浏览器中显示桌面通知</small>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="settingAutoRefresh" ${settings.autoRefresh ? 'checked' : ''}>
+                                        <label class="form-check-label" for="settingAutoRefresh">
+                                            <i class="bi bi-arrow-clockwise me-1"></i>自动刷新
+                                        </label>
+                                    </div>
+                                    <small class="text-muted ms-4">自动检查新通知</small>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label"><i class="bi bi-clock me-1"></i>刷新间隔</label>
+                                    <select class="form-select" id="settingRefreshInterval">
+                                        <option value="15" ${settings.refreshInterval === 15 ? 'selected' : ''}>15 秒</option>
+                                        <option value="30" ${settings.refreshInterval === 30 ? 'selected' : ''}>30 秒</option>
+                                        <option value="60" ${settings.refreshInterval === 60 ? 'selected' : ''}>1 分钟</option>
+                                        <option value="120" ${settings.refreshInterval === 120 ? 'selected' : ''}>2 分钟</option>
+                                    </select>
+                                </div>
+                                <hr>
+                                <div class="mb-3">
+                                    <label class="form-label fw-bold">通知类型</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="settingContacts" ${settings.showContactNotifications ? 'checked' : ''}>
+                                        <label class="form-check-label" for="settingContacts">
+                                            <i class="bi bi-chat-dots me-1"></i>新留言通知
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="settingSystem" ${settings.showSystemNotifications ? 'checked' : ''}>
+                                        <label class="form-check-label" for="settingSystem">
+                                            <i class="bi bi-gear me-1"></i>系统通知
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                                <button type="button" class="btn btn-primary" onclick="saveNotificationSettingsHandler()">保存</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // 移除已存在的模态框
+            const existingModal = document.getElementById('notificationSettingsModal');
+            if (existingModal) existingModal.remove();
+
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+            const modalElement = document.getElementById('notificationSettingsModal');
+            const modal = new bootstrap.Modal(modalElement);
+
+            modalElement.addEventListener('hidden.bs.modal', function() {
+                setTimeout(() => modalElement.remove(), 200);
+            });
+
+            modal.show();
+        };
+
+        // 保存通知设置处理函数
+        window.saveNotificationSettingsHandler = function() {
+            const settings = {
+                sound: document.getElementById('settingSound').checked,
+                browserNotification: document.getElementById('settingBrowser').checked,
+                autoRefresh: document.getElementById('settingAutoRefresh').checked,
+                refreshInterval: parseInt(document.getElementById('settingRefreshInterval').value),
+                showContactNotifications: document.getElementById('settingContacts').checked,
+                showSystemNotifications: document.getElementById('settingSystem').checked
+            };
+
+            saveNotificationSettings(settings);
+
+            // 如果开启了浏览器通知，请求权限
+            if (settings.browserNotification && Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+                Notification.requestPermission();
+            }
+
+            // 更新自动刷新间隔
+            updateNotificationRefreshInterval(settings);
+
+            // 关闭模态框
+            const modal = bootstrap.Modal.getInstance(document.getElementById('notificationSettingsModal'));
+            if (modal) modal.hide();
+
+            showToast('success', '通知设置已保存', '成功');
+        };
+
+        // 更新通知刷新间隔
+        let notificationRefreshTimer = null;
+        function updateNotificationRefreshInterval(settings) {
+            if (notificationRefreshTimer) {
+                clearInterval(notificationRefreshTimer);
+            }
+
+            if (settings.autoRefresh) {
+                notificationRefreshTimer = setInterval(loadNotifications, settings.refreshInterval * 1000);
+            }
+        }
+
+        // 当前通知筛选状态
+        let currentNotificationFilter = 'all';
+
+        // 筛选通知
+        window.filterNotifications = function(type, btn) {
+            currentNotificationFilter = type;
+
+            // 更新按钮状态
+            const buttons = btn.parentElement.querySelectorAll('.btn');
+            buttons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // 重新加载通知
+            loadNotifications();
+        };
+
+        // 重写 loadNotifications 以支持筛选和新通知检测
+        const originalLoadNotifications = loadNotifications;
+        loadNotifications = function() {
+            fetch('/admin/notifications?limit=20')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const settings = getNotificationSettings();
+                        const prevCount = parseInt(document.getElementById('notificationBadge').textContent) || 0;
+                        const newCount = data.data.unread_count + data.data.recent_contacts;
+
+                        // 检测新通知
+                        if (newCount > prevCount && prevCount > 0) {
+                            playNotificationSound();
+
+                            // 找出新通知
+                            if (data.data.notifications && data.data.notifications.length > 0) {
+                                const latest = data.data.notifications[0];
+                                if (settings.showContactNotifications && data.data.recent_contacts > 0) {
+                                    sendBrowserNotification('新留言提醒', `您有 ${data.data.recent_contacts} 条未处理留言`);
+                                } else if (settings.showSystemNotifications && latest) {
+                                    sendBrowserNotification(latest.title, latest.content || '');
+                                }
+                            }
+                        }
+
+                        renderFilteredNotifications(data.data);
+                    }
+                })
+                .catch(error => console.error('加载通知失败:', error));
+        };
+
+        // 渲染筛选后的通知
+        function renderFilteredNotifications(data) {
+            const list = document.getElementById('notificationList');
+            const badge = document.getElementById('notificationBadge');
+
+            if (!list) return;
+
+            const settings = getNotificationSettings();
+            const unreadCount = data.unread_count + data.recent_contacts;
+
+            // 更新徽章
+            if (unreadCount > 0) {
+                badge.textContent = unreadCount > 99 ? '99+' : unreadCount;
+                badge.style.display = 'block';
+            } else {
+                badge.style.display = 'none';
+            }
+
+            let html = '';
+
+            // 根据筛选类型显示通知
+            if (currentNotificationFilter === 'all' || currentNotificationFilter === 'contacts') {
+                // 显示新留言
+                if (settings.showContactNotifications && data.recent_contacts > 0) {
+                    html += `
+                        <div class="notification-group">
+                            <div class="notification-group-header px-3 py-1 bg-light small text-muted">
+                                <i class="bi bi-envelope me-1"></i>新留言
+                            </div>
+                            <a href="/admin/contacts" class="dropdown-item notification-item unread">
+                                <div class="d-flex">
+                                    <div class="notification-icon bg-primary">
+                                        <i class="bi bi-envelope"></i>
+                                    </div>
+                                    <div class="notification-content">
+                                        <div class="notification-title">新留言提醒</div>
+                                        <div class="notification-text">您有 ${data.recent_contacts} 条未处理留言</div>
+                                        <div class="notification-time text-muted small">刚刚</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    `;
+                }
+            }
+
+            if (currentNotificationFilter === 'all' || currentNotificationFilter === 'unread' || currentNotificationFilter === 'system') {
+                // 显示系统通知
+                if (data.notifications && data.notifications.length > 0) {
+                    const levelColors = {
+                        'info': 'bg-primary',
+                        'success': 'bg-success',
+                        'warning': 'bg-warning text-dark',
+                        'danger': 'bg-danger'
+                    };
+                    const levelIcons = {
+                        'info': 'bi-info-circle',
+                        'success': 'bi-check-circle',
+                        'warning': 'bi-exclamation-triangle',
+                        'danger': 'bi-x-circle'
+                    };
+
+                    const filteredNotifications = data.notifications.filter(n => {
+                        if (currentNotificationFilter === 'unread') return !n.is_read;
+                        if (currentNotificationFilter === 'system') return true;
+                        return true; // all
+                    });
+
+                    if (filteredNotifications.length > 0) {
+                        if (currentNotificationFilter === 'all') {
+                            html += `
+                                <div class="notification-group">
+                                    <div class="notification-group-header px-3 py-1 bg-light small text-muted">
+                                        <i class="bi bi-gear me-1"></i>系统通知
+                                    </div>
+                            `;
+                        }
+
+                        filteredNotifications.forEach(n => {
+                            const time = new Date(n.created_at);
+                            const timeStr = getTimeAgo(time);
+
+                            html += `
+                                <div class="dropdown-item notification-item ${n.is_read ? '' : 'unread'}" onclick="markNotificationRead(${n.id})" style="cursor: pointer;">
+                                    <div class="d-flex">
+                                        <div class="notification-icon ${levelColors[n.level] || 'bg-secondary'}">
+                                            <i class="bi ${levelIcons[n.level] || 'bi-bell'}"></i>
+                                        </div>
+                                        <div class="notification-content">
+                                            <div class="d-flex justify-content-between">
+                                                <div class="notification-title">${n.title}</div>
+                                                ${!n.is_read ? '<span class="badge bg-danger" style="font-size: 0.6rem;">新</span>' : ''}
+                                            </div>
+                                            ${n.content ? `<div class="notification-text">${n.content}</div>` : ''}
+                                            <div class="notification-time text-muted small">${timeStr}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+
+                        if (currentNotificationFilter === 'all') {
+                            html += `</div>`;
+                        }
+                    }
+                }
+            }
+
+            if (!html) {
+                html = `
+                    <div class="text-center py-4 text-muted">
+                        <i class="bi bi-bell-slash fs-4 d-block mb-2"></i>
+                        <p class="mb-0">暂无通知</p>
+                    </div>
+                `;
+            }
+
+            list.innerHTML = html;
+        }
+
+        // ========== 前端性能优化 ==========
+
+        /**
+         * 防抖函数
+         */
+        window.debounce = function(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func.apply(this, args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        };
+
+        /**
+         * 节流函数
+         */
+        window.throttle = function(func, limit) {
+            let inThrottle;
+            return function executedFunction(...args) {
+                if (!inThrottle) {
+                    func.apply(this, args);
+                    inThrottle = true;
+                    setTimeout(() => inThrottle = false, limit);
+                }
+            };
+        };
+
+        /**
+         * 图片懒加载
+         */
+        window.initLazyImages = function() {
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            if (img.dataset.src) {
+                                img.src = img.dataset.src;
+                                img.removeAttribute('data-src');
+                            }
+                            if (img.dataset.srcset) {
+                                img.srcset = img.dataset.srcset;
+                                img.removeAttribute('data-srcset');
+                            }
+                            img.classList.add('loaded');
+                            observer.unobserve(img);
+                        }
+                    });
+                }, {
+                    rootMargin: '50px 0px',
+                    threshold: 0.01
+                });
+
+                document.querySelectorAll('img[data-src]').forEach(img => {
+                    imageObserver.observe(img);
+                });
+            } else {
+                // 回退方案：立即加载所有图片
+                document.querySelectorAll('img[data-src]').forEach(img => {
+                    img.src = img.dataset.src;
+                });
+            }
+        };
+
+        /**
+         * 延迟执行函数（用于非关键渲染）
+         */
+        window.defer = function(fn, priority) {
+            const priorities = {
+                'high': 0,
+                'medium': 100,
+                'low': 500
+            };
+            const delay = priorities[priority] || 100;
+            setTimeout(fn, delay);
+        };
+
+        /**
+         * 批量 DOM 操作优化
+         */
+        window.batchDOMOperations = function(operations) {
+            requestAnimationFrame(() => {
+                const fragment = document.createDocumentFragment();
+                operations.forEach(op => {
+                    if (op.type === 'append') {
+                        const el = document.createElement(op.tag);
+                        Object.keys(op.attrs || {}).forEach(key => {
+                            el.setAttribute(key, op.attrs[key]);
+                        });
+                        if (op.html) el.innerHTML = op.html;
+                        fragment.appendChild(el);
+                    }
+                });
+                if (operations[0]?.parent) {
+                    operations[0].parent.appendChild(fragment);
                 }
             });
         };
+
+        /**
+         * 缓存优化：存储大型数据到 sessionStorage
+         */
+        window.cacheData = function(key, data, ttl = 300000) {  // 默认5分钟
+            const item = {
+                data: data,
+                timestamp: Date.now(),
+                ttl: ttl
+            };
+            try {
+                sessionStorage.setItem(key, JSON.stringify(item));
+            } catch (e) {
+                console.warn('Cache storage failed:', e);
+            }
+        };
+
+        window.getCachedData = function(key) {
+            try {
+                const item = sessionStorage.getItem(key);
+                if (!item) return null;
+                const parsed = JSON.parse(item);
+                if (Date.now() - parsed.timestamp > parsed.ttl) {
+                    sessionStorage.removeItem(key);
+                    return null;
+                }
+                return parsed.data;
+            } catch (e) {
+                return null;
+            }
+        };
+
+        /**
+         * AJAX 请求优化：带缓存的 fetch
+         */
+        window.cachedFetch = async function(url, options = {}, cacheKey = null, cacheTTL = 60000) {
+            const key = cacheKey || url;
+
+            // 尝试从缓存获取
+            if (options.cache !== false) {
+                const cached = getCachedData(key);
+                if (cached) return cached;
+            }
+
+            const response = await fetch(url, options);
+            const data = await response.json();
+
+            // 缓存响应
+            if (options.cache !== false && data) {
+                cacheData(key, data, cacheTTL);
+            }
+
+            return data;
+        };
+
+        /**
+         * 初始化性能监控
+         */
+        window.initPerformanceMonitor = function() {
+            if ('PerformanceObserver' in window) {
+                // 监控长任务
+                const longTaskObserver = new PerformanceObserver((list) => {
+                    list.getEntries().forEach(entry => {
+                        if (entry.duration > 50) {
+                            console.warn(`Long task detected: ${entry.duration}ms`);
+                        }
+                    });
+                });
+                longTaskObserver.observe({ entryTypes: ['longtask'] });
+
+                // 监控 Largest Contentful Paint
+                const lcpObserver = new PerformanceObserver((list) => {
+                    const entries = list.getEntries();
+                    const lastEntry = entries[entries.length - 1];
+                    console.log(`LCP: ${lastEntry.startTime.toFixed(2)}ms`);
+                });
+                lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+            }
+        };
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            // 延迟初始化图片懒加载
+            defer(() => initLazyImages(), 'low');
+            // 初始化性能监控
+            defer(() => initPerformanceMonitor(), 'low');
+
+            // 初始化粘贴上传
+            initPasteUpload();
+        });
+
+        // ========== 粘贴上传功能 ==========
+        function initPasteUpload() {
+            document.addEventListener('paste', function(e) {
+                // 检查是否在编辑页面或媒体库页面
+                const path = window.location.pathname;
+                const isEditorPage = path.includes('/posts/') && (path.includes('/new') || path.includes('/edit'));
+                const isMediaPage = path.includes('/media');
+
+                if (!isEditorPage && !isMediaPage) return;
+
+                const items = e.clipboardData.items;
+                for (let i = 0; i < items.length; i++) {
+                    if (items[i].type.indexOf('image') !== -1) {
+                        e.preventDefault();
+                        const blob = items[i].getAsFile();
+                        uploadImage(blob);
+                        break;
+                    }
+                }
+            });
+        }
+
+        // 上传图片
+        function uploadImage(blob) {
+            const formData = new FormData();
+            formData.append('file', blob, `paste_${Date.now()}.png`);
+            formData.append('folder', 'uploads');
+
+            // 显示上传中提示
+            const toastId = 'uploadToast_' + Date.now();
+            const toastHTML = `
+                <div id="${toastId}" class="toast" role="alert">
+                    <div class="toast-header bg-info text-white">
+                        <i class="bi bi-cloud-upload me-2"></i>
+                        <strong class="me-auto">上传中...</strong>
+                    </div>
+                    <div class="toast-body">
+                        <div class="progress" style="height: 4px;">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 100%"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            let container = document.querySelector('.toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'toast-container position-fixed top-0 end-0 p-3';
+                document.body.appendChild(container);
+            }
+
+            const toastElement = document.createElement('div');
+            toastElement.innerHTML = toastHTML;
+            container.appendChild(toastElement.firstElementChild);
+            const toast = new bootstrap.Toast(toastElement.firstElementChild, { autohide: false });
+            toast.show();
+
+            fetch('/admin/media/api/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // 更新 toast
+                    toastElement.innerHTML = `
+                        <div class="toast" role="alert">
+                            <div class="toast-header bg-success text-white">
+                                <i class="bi bi-check-circle me-2"></i>
+                                <strong class="me-auto">上传成功</strong>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                            </div>
+                            <div class="toast-body">
+                                图片已上传: ${data.filename}
+                                ${data.url ? `<div class="mt-2"><img src="${data.url}" class="img-fluid rounded" style="max-height: 100px;"></div>` : ''}
+                            </div>
+                        </div>
+                    `;
+
+                    // 如果在编辑器中，尝试插入图片
+                    if (window.insertImageToEditor && data.url) {
+                        insertImageToEditor(data.url, data.filename);
+                    }
+
+                    // 如果在媒体库，刷新列表
+                    if (window.loadMediaList) {
+                        setTimeout(() => loadMediaList(), 1000);
+                    }
+                } else {
+                    toastElement.innerHTML = `
+                        <div class="toast" role="alert">
+                            <div class="toast-header bg-danger text-white">
+                                <i class="bi bi-x-circle me-2"></i>
+                                <strong class="me-auto">上传失败</strong>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                            </div>
+                            <div class="toast-body">${data.message || '未知错误'}</div>
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('Upload error:', error);
+                toastElement.innerHTML = `
+                    <div class="toast" role="alert">
+                        <div class="toast-header bg-danger text-white">
+                            <i class="bi bi-x-circle me-2"></i>
+                            <strong class="me-auto">上传失败</strong>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+                        </div>
+                        <div class="toast-body">网络错误，请稍后重试</div>
+                    </div>
+                `;
+            })
+            .finally(() => {
+                setTimeout(() => {
+                    toastElement.remove();
+                }, 5000);
+            });
+        }
     </script>
+
+    <script>
+        /**
+         * 全局搜索功能
+         */
+        const SEARCH_HISTORY_KEY = 'admin_search_history';
+        const MAX_HISTORY_ITEMS = 10;
+        let searchTimeout = null;
+
+        // 热门搜索词
+        const HOT_SEARCHES = ['文章', '产品', '栏目', '留言', 'SEO', '备份', '媒体'];
+
+        // 处理搜索输入
+        window.handleSearchInput = function(input) {
+            const keyword = input.value.trim();
+
+            // 清除之前的搜索超时
+            if (searchTimeout) {
+                clearTimeout(searchTimeout);
+            }
+
+            // 如果输入为空，显示搜索历史和热门搜索
+            if (keyword.length === 0) {
+                showSearchHistory();
+                showHotSearches();
+                return;
+            }
+
+            // 如果输入太短，显示热门搜索
+            if (keyword.length < 2) {
+                showHotSearches();
+                return;
+            }
+
+            // 防抖搜索 - 300ms 后执行
+            searchTimeout = setTimeout(() => {
+                performSearch(keyword);
+            }, 300);
+        };
+
+        // 显示热门搜索
+        function showHotSearches() {
+            const dropdown = document.getElementById('searchDropdown');
+            const history = document.getElementById('searchHistory');
+            const results = document.getElementById('searchResults');
+            const loading = document.getElementById('searchLoading');
+            const noResult = document.getElementById('searchNoResult');
+
+            dropdown.style.display = 'block';
+            history.style.display = 'block';
+            loading.style.display = 'none';
+            noResult.style.display = 'none';
+            results.innerHTML = '';
+
+            // 搜索历史标题
+            let html = `
+                <div class="px-3 py-2 border-bottom bg-light d-flex justify-content-between align-items-center">
+                    <span class="small text-muted"><i class="bi bi-fire me-1"></i>热门搜索</span>
+                    <span class="small text-muted">按 Enter 搜索</span>
+                </div>
+                <div class="p-2">
+                    <div class="d-flex flex-wrap gap-2">
+            `;
+
+            HOT_SEARCHES.forEach(term => {
+                html += `<button class="btn btn-sm btn-outline-secondary hot-search-tag" onclick="searchHotTerm('${term}')">${term}</button>`;
+            });
+
+            html += `
+                    </div>
+                </div>
+                <div class="search-history-header px-3 py-2 border-bottom bg-light d-flex justify-content-between align-items-center">
+                    <span class="small text-muted"><i class="bi bi-clock-history me-1"></i>搜索历史</span>
+                    <button class="btn btn-sm btn-link text-danger p-0" onclick="clearSearchHistory()">清空</button>
+                </div>
+            `;
+
+            history.innerHTML = html;
+            showSearchHistoryList();
+        }
+
+        // 搜索热门词
+        window.searchHotTerm = function(term) {
+            document.getElementById('globalSearchInput').value = term;
+            performSearch(term);
+        };
+
+        // 处理搜索框获得焦点
+        window.handleSearchFocus = function(input) {
+            const keyword = input.value.trim();
+            if (keyword.length === 0) {
+                showSearchHistory();
+            }
+        };
+
+        // 执行搜索
+        async function performSearch(keyword) {
+            const dropdown = document.getElementById('searchDropdown');
+            const loading = document.getElementById('searchLoading');
+            const noResult = document.getElementById('searchNoResult');
+            const history = document.getElementById('searchHistory');
+            const results = document.getElementById('searchResults');
+
+            dropdown.style.display = 'block';
+            history.style.display = 'none';
+            noResult.style.display = 'none';
+            loading.style.display = 'block';
+            results.innerHTML = '';
+
+            try {
+                const response = await fetch(`/admin/api/search?q=${encodeURIComponent(keyword)}&limit=8`);
+                const data = await response.json();
+
+                loading.style.display = 'none';
+
+                if (data.success && data.results && data.results.length > 0) {
+                    renderSearchResults(data.results, keyword);
+                    // 保存到搜索历史
+                    addToSearchHistory(keyword);
+                } else {
+                    noResult.style.display = 'block';
+                }
+            } catch (error) {
+                console.error('搜索失败:', error);
+                loading.style.display = 'none';
+                noResult.style.display = 'block';
+            }
+        }
+
+        // 渲染搜索结果
+        function renderSearchResults(results, keyword) {
+            const resultsContainer = document.getElementById('searchResults');
+            let html = '';
+
+            // 按类型分组
+            const grouped = {};
+            results.forEach(item => {
+                if (!grouped[item.type]) {
+                    grouped[item.type] = [];
+                }
+                grouped[item.type].push(item);
+            });
+
+            const typeLabels = {
+                'post': '文章',
+                'product': '产品',
+                'gallery': '相册',
+                'page': '单页',
+                'contact': '留言'
+            };
+
+            const typeIcons = {
+                'post': 'bi-newspaper',
+                'product': 'bi-box-seam',
+                'gallery': 'bi-images',
+                'page': 'bi-file-text',
+                'contact': 'bi-chat-dots'
+            };
+
+            for (const [type, items] of Object.entries(grouped)) {
+                html += `<div class="search-group">
+                    <div class="search-group-header px-3 py-2 bg-light border-bottom">
+                        <i class="bi ${typeIcons[type] || 'bi-file'} me-2"></i>
+                        ${typeLabels[type] || type}
+                        <span class="badge bg-secondary ms-2">${items.length}</span>
+                    </div>`;
+
+                items.slice(0, 4).forEach(item => {
+                    // 高亮关键词
+                    const highlightedTitle = highlightKeyword(item.title, keyword);
+                    html += `
+                        <a href="${item.url}" class="search-result-item d-flex align-items-center px-3 py-2 text-decoration-none">
+                            <div class="search-result-icon bg-primary-light text-primary me-3">
+                                <i class="bi ${typeIcons[item.type] || 'bi-file'}"></i>
+                            </div>
+                            <div class="flex-grow-1 min-width-0">
+                                <div class="text-truncate">${highlightedTitle}</div>
+                                ${item.summary ? `<div class="text-muted small text-truncate">${highlightKeyword(item.summary, keyword)}</div>` : ''}
+                            </div>
+                            <i class="bi bi-chevron-right text-muted ms-2"></i>
+                        </a>
+                    `;
+                });
+
+                // 如果有更多结果，添加查看更多链接
+                if (items.length > 4) {
+                    html += `<a href="/admin/search?q=${encodeURIComponent(keyword)}&type=${type}" class="search-more d-block px-3 py-2 text-center text-primary small border-top">
+                        查看更多 ${typeLabels[type]} <i class="bi bi-arrow-right ms-1"></i>
+                    </a>`;
+                }
+
+                html += '</div>';
+            }
+
+            // 添加全站搜索链接
+            html += `<div class="search-all border-top p-2 text-center">
+                <a href="/admin/search?q=${encodeURIComponent(keyword)}" class="btn btn-primary btn-sm w-100">
+                    <i class="bi bi-search me-1"></i>全站搜索 "{{ keyword }}"
+                </a>
+            </div>`;
+
+            resultsContainer.innerHTML = html;
+        }
+
+        // 高亮关键词
+        function highlightKeyword(text, keyword) {
+            if (!text || !keyword) return text || '';
+            const regex = new RegExp(`(${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+            return text.replace(regex, '<mark class="bg-warning">$1</mark>');
+        }
+
+        // 显示搜索历史
+        function showSearchHistory() {
+            const history = getSearchHistory();
+            const historyContainer = document.getElementById('searchHistory');
+            const historyList = document.getElementById('searchHistoryList');
+            const dropdown = document.getElementById('searchDropdown');
+
+            if (history.length === 0) {
+                dropdown.style.display = 'none';
+                return;
+            }
+
+            dropdown.style.display = 'block';
+            historyContainer.style.display = 'block';
+
+            let html = '';
+            history.forEach(item => {
+                html += `
+                    <a href="/admin/search?q=${encodeURIComponent(item)}" class="search-history-item d-flex align-items-center px-3 py-2 text-decoration-none">
+                        <i class="bi bi-clock-history text-muted me-3"></i>
+                        <span class="flex-grow-1">${item}</span>
+                        <i class="bi bi-x text-muted" onclick="removeFromHistory(event, '${item.replace(/'/g, "\\'")}')"></i>
+                    </a>
+                `;
+            });
+            historyList.innerHTML = html;
+        }
+
+        // 隐藏搜索下拉框
+        window.hideSearchDropdown = function() {
+            const dropdown = document.getElementById('searchDropdown');
+            dropdown.style.display = 'none';
+        };
+
+        // 添加到搜索历史
+        function addToSearchHistory(keyword) {
+            if (!keyword || keyword.length < 2) return;
+
+            let history = getSearchHistory();
+            // 移除已存在的相同关键词
+            history = history.filter(item => item.toLowerCase() !== keyword.toLowerCase());
+            // 添加到开头
+            history.unshift(keyword);
+            // 限制数量
+            history = history.slice(0, MAX_HISTORY_ITEMS);
+
+            localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(history));
+        }
+
+        // 获取搜索历史
+        function getSearchHistory() {
+            try {
+                return JSON.parse(localStorage.getItem(SEARCH_HISTORY_KEY)) || [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        // 从搜索历史移除
+        window.removeFromHistory = function(event, keyword) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            let history = getSearchHistory();
+            history = history.filter(item => item !== keyword);
+            localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(history));
+
+            showSearchHistory();
+        };
+
+        // 清除搜索历史
+        window.clearSearchHistory = function() {
+            localStorage.removeItem(SEARCH_HISTORY_KEY);
+            const dropdown = document.getElementById('searchDropdown');
+            dropdown.style.display = 'none';
+            showToast('success', '搜索历史已清除', '提示');
+        };
+    </script>
+
+    <style>
+/* 搜索框样式 */
+.search-box {
+    width: 240px;
+}
+.search-box .form-control-sm {
+    border-radius: 20px 0 0 20px;
+    padding-right: 0;
+}
+.search-box .btn {
+    border-radius: 0 20px 20px 0;
+    border-left: none;
+}
+.search-box form {
+    background: #f8f9fa;
+    border-radius: 20px;
+    padding: 2px 2px 2px 12px;
+}
+.search-box:focus-within {
+    background: #fff;
+}
+.search-box:focus-within .form-control-sm,
+.search-box:focus-within .btn {
+    background: #fff;
+    border-color: #86b7fe;
+}
+
+/* 搜索下拉框样式 */
+.search-dropdown {
+    border-top: none !important;
+    border-radius: 0 0 12px 12px !important;
+}
+.search-group-header {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #666;
+}
+.search-result-item {
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.15s ease;
+}
+.search-result-item:last-child {
+    border-bottom: none;
+}
+.search-result-item:hover {
+    background-color: #f0f7ff;
+}
+.search-result-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.search-history-item {
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.15s ease;
+}
+.search-history-item:hover {
+    background-color: #f8f9fa;
+}
+.search-history-item:hover i.bi-x {
+    color: #dc3545 !important;
+}
+.search-more {
+    font-size: 0.75rem;
+    padding: 8px;
+}
+.search-more:hover {
+    background-color: #f8f9fa;
+}
+.search-all {
+    padding: 8px;
+    background: #f8f9fa;
+    border-radius: 0 0 12px 12px;
+}
+.search-dropdown mark {
+    background-color: #fff3cd;
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+/* 通知下拉菜单样式 */
+.notification-item {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+.notification-item:last-child {
+    border-bottom: none;
+}
+.notification-item.unread {
+    background-color: #f8f9fa;
+}
+.notification-item:hover {
+    background-color: #f0f7ff;
+}
+.notification-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    flex-shrink: 0;
+    color: white;
+}
+.notification-icon i {
+    font-size: 1rem;
+}
+.notification-content {
+    flex: 1;
+    min-width: 0;
+}
+.notification-title {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 2px;
+}
+.notification-text {
+    font-size: 0.875rem;
+    color: #666;
+    margin-bottom: 2px;
+}
+.notification-time {
+    font-size: 0.75rem;
+}
+.notification-dropdown .dropdown-item {
+    white-space: normal;
+}
+
+/* 搜索框样式 */
+.search-box {
+    width: 200px;
+}
+.search-box .form-control-sm {
+    border-radius: 20px 0 0 20px;
+    padding-right: 0;
+}
+.search-box .btn {
+    border-radius: 0 20px 20px 0;
+    border-left: none;
+}
+.search-box form {
+    background: #f8f9fa;
+    border-radius: 20px;
+    padding: 2px 2px 2px 12px;
+}
+.search-box:focus-within {
+    background: #fff;
+}
+.search-box:focus-within .form-control-sm,
+.search-box:focus-within .btn {
+    background: #fff;
+    border-color: #86b7fe;
+}
+</style>
 
     {% block extra_js %}{% endblock %}
 </body>

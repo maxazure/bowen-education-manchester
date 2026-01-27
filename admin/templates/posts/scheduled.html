@@ -1,0 +1,416 @@
+{% extends "base.html" %}
+
+{% block title %}定时发布 - 博文教育管理后台{% endblock %}
+
+{% block content %}
+<!-- 面包屑导航 -->
+<nav aria-label="breadcrumb" class="mb-3 animate-fade-in">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin"><i class="bi bi-house-door me-1"></i>首页</a></li>
+        <li class="breadcrumb-item"><a href="/admin/posts">文章管理</a></li>
+        <li class="breadcrumb-item active" aria-current="page">定时发布</li>
+    </ol>
+</nav>
+
+<!-- 页面标题区 -->
+<div class="page-header animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="page-title">
+                <i class="bi bi-clock-history text-primary me-2"></i>定时发布
+            </h1>
+            <p class="page-subtitle">管理已设置定时发布的文章</p>
+        </div>
+        <div class="d-flex gap-2">
+            <!-- 实时时钟 -->
+            <div class="d-flex align-items-center me-3 bg-light rounded px-3 py-2">
+                <i class="bi bi-clock text-primary me-2"></i>
+                <span id="currentTime">{{ now.strftime('%H:%M:%S') }}</span>
+            </div>
+            <a href="/admin/posts" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>返回列表
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- 待发布文章 -->
+<div class="row mb-4">
+    <div class="col-lg-8">
+        <div class="card animate-fade-in">
+            <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-clock text-primary me-2"></i>待发布文章
+                    <span class="badge bg-primary ms-2">{{ posts|length }}</span>
+                </h5>
+                <div class="d-flex align-items-center gap-2">
+                    {% if posts|length > 0 %}
+                    <input type="checkbox" class="form-check-input" id="selectAll" onchange="toggleSelectAll()">
+                    <span class="text-muted small">全选</span>
+                    <div class="btn-group btn-group-sm" id="batchActions" style="display: none;">
+                        <button class="btn btn-outline-success" onclick="batchPublish()">
+                            <i class="bi bi-send me-1"></i>批量发布
+                        </button>
+                        <button class="btn btn-outline-danger" onclick="batchCancel()">
+                            <i class="bi bi-x-circle me-1"></i>批量取消
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="card-body p-0">
+                {% if posts %}
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0" id="scheduledTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 50px;"></th>
+                                <th>文章标题</th>
+                                <th>栏目</th>
+                                <th>定时发布时间</th>
+                                <th>距发布</th>
+                                <th style="width: 140px;">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for post in posts %}
+                            <tr data-id="{{ post.id }}" data-scheduled="{{ post.scheduled_at.isoformat() if post.scheduled_at else '' }}">
+                                <td>
+                                    <input type="checkbox" class="form-check-input scheduled-checkbox"
+                                           value="{{ post.id }}" onchange="updateBatchActions()">
+                                </td>
+                                <td>
+                                    <a href="/admin/posts/{{ post.id }}/edit" class="text-decoration-none">
+                                        {{ post.title }}
+                                    </a>
+                                </td>
+                                <td>
+                                    {% if post.column %}
+                                    <span class="badge bg-light text-dark">{{ post.column.name }}</span>
+                                    {% else %}
+                                    <span class="text-muted">-</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="scheduled-time">{{ post.scheduled_at.strftime('%Y-%m-%d %H:%M') }}</span>
+                                </td>
+                                <td>
+                                    <span class="countdown badge" data-scheduled="{{ post.scheduled_at.isoformat() }}">
+                                        计算中...
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-outline-success" onclick="publishNow({{ post.id }})" title="立即发布">
+                                            <i class="bi bi-send"></i>
+                                        </button>
+                                        <button class="btn btn-outline-warning" onclick="reschedule({{ post.id }})" title="重新设置">
+                                            <i class="bi bi-clock"></i>
+                                        </button>
+                                        <button class="btn btn-outline-danger" onclick="cancelSchedule({{ post.id }})" title="取消">
+                                            <i class="bi bi-x-circle"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5 text-muted">
+                    <i class="bi bi-clock fs-1 d-block mb-2"></i>
+                    <p class="mb-0">暂无待发布的定时文章</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- 统计信息 -->
+    <div class="col-lg-4">
+        <div class="card animate-fade-in" style="animation-delay: 100ms">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-info-circle text-info me-2"></i>使用说明
+                </h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        设置定时发布后，文章会在指定时间自动发布
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        系统会每小时检查一次定时任务
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        您可以随时取消或重新设置定时发布
+                    </li>
+                    <li class="mb-2">
+                        <i class="bi bi-check-circle text-success me-2"></i>
+                        点击"立即发布"可立即发布文章
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        {% if overdue_posts %}
+        <div class="card border-danger animate-fade-in mt-3" style="animation-delay: 150ms">
+            <div class="card-header bg-danger text-white">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-exclamation-triangle me-2"></i>待处理 ({{ overdue_posts|length }})
+                </h5>
+            </div>
+            <div class="card-body">
+                <p class="text-danger small">以下文章已错过定时发布时间，请检查：</p>
+                {% for post in overdue_posts %}
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <a href="/admin/posts/{{ post.id }}/edit" class="text-decoration-none small">
+                        {{ post.title }}
+                    </a>
+                    <button class="btn btn-sm btn-outline-danger" onclick="publishNow({{ post.id }})">
+                        发布
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- 重新设置时间模态框 -->
+<div class="modal fade" id="rescheduleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">重新设置发布时间</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="reschedulePostId">
+                <div class="mb-3">
+                    <label class="form-label">定时发布时间</label>
+                    <input type="datetime-local" id="rescheduleTime" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="saveSchedule()">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let selectedScheduleIds = [];
+const serverNow = new Date({{ now|tojson }});
+
+// 实时时钟更新
+function updateClock() {
+    const now = new Date();
+    const timeStr = now.toTimeString().split(' ')[0];
+    const timeEl = document.getElementById('currentTime');
+    if (timeEl) timeEl.textContent = timeStr;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// 倒计时更新
+function updateCountdowns() {
+    document.querySelectorAll('.countdown').forEach(el => {
+        const scheduledStr = el.dataset.scheduled;
+        if (!scheduledStr) return;
+
+        const scheduled = new Date(scheduledStr);
+        const now = new Date();
+        const diff = scheduled - now;
+
+        if (diff <= 0) {
+            el.textContent = '即将发布';
+            el.className = 'countdown badge bg-danger';
+            return;
+        }
+
+        let text = '';
+        let className = 'badge';
+
+        if (diff < 60000) { // 少于1分钟
+            text = Math.ceil(diff / 1000) + '秒';
+            className += ' bg-danger';
+        } else if (diff < 3600000) { // 少于1小时
+            text = Math.ceil(diff / 60000) + '分钟';
+            className += ' bg-warning text-dark';
+        } else if (diff < 86400000) { // 少于1天
+            text = Math.ceil(diff / 3600000) + '小时';
+            className += ' bg-info';
+        } else {
+            text = Math.ceil(diff / 86400000) + '天';
+            className += ' bg-success';
+        }
+
+        el.textContent = text;
+        el.className = className;
+    });
+}
+setInterval(updateCountdowns, 1000);
+updateCountdowns();
+
+// 批量操作
+function updateBatchActions() {
+    const checkboxes = document.querySelectorAll('.scheduled-checkbox:checked');
+    selectedScheduleIds = Array.from(checkboxes).map(cb => parseInt(cb.value));
+
+    const count = selectedScheduleIds.length;
+    const batchActions = document.getElementById('batchActions');
+    const selectAll = document.getElementById('selectAll');
+
+    batchActions.style.display = count > 0 ? 'flex' : 'none';
+    selectAll.checked = count === document.querySelectorAll('.scheduled-checkbox').length && count > 0;
+    selectAll.indeterminate = count > 0 && count < document.querySelectorAll('.scheduled-checkbox').length;
+}
+
+function toggleSelectAll() {
+    const selectAll = document.getElementById('selectAll');
+    document.querySelectorAll('.scheduled-checkbox').forEach(cb => {
+        cb.checked = selectAll.checked;
+    });
+    updateBatchActions();
+}
+
+function batchPublish() {
+    if (selectedScheduleIds.length === 0) {
+        showToast('warning', '请选择要发布的文章', '提示');
+        return;
+    }
+
+    confirmAction(
+        '批量发布确认',
+        `确定要立即发布选中的 ${selectedScheduleIds.length} 篇文章吗？`,
+        function() {
+            fetch('/admin/posts/batch/publish', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ post_ids: selectedScheduleIds })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            });
+        }
+    );
+}
+
+function batchCancel() {
+    if (selectedScheduleIds.length === 0) {
+        showToast('warning', '请选择要取消的文章', '提示');
+        return;
+    }
+
+    confirmAction(
+        '批量取消确认',
+        `确定要取消选中的 ${selectedScheduleIds.length} 篇定时发布吗？`,
+        function() {
+            fetch('/admin/posts/batch/cancel-schedule', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ post_ids: selectedScheduleIds })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            });
+        }
+    );
+}
+
+function publishNow(postId) {
+    confirmAction(
+        '确认立即发布',
+        '确定要立即发布这篇文章吗？',
+        function() {
+            fetch(`/admin/posts/${postId}/publish`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'action=publish'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', '已发布文章', '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            });
+        }
+    );
+}
+
+function reschedule(postId) {
+    document.getElementById('reschedulePostId').value = postId;
+    document.getElementById('rescheduleTime').value = '';
+    const modal = new bootstrap.Modal(document.getElementById('rescheduleModal'));
+    modal.show();
+}
+
+function saveSchedule() {
+    const postId = document.getElementById('reschedulePostId').value;
+    const time = document.getElementById('rescheduleTime').value;
+
+    if (!time) {
+        showToast('warning', '请选择时间', '提示');
+        return;
+    }
+
+    fetch(`/admin/posts/${postId}/schedule`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scheduled_at: time })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('success', data.message, '成功');
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showToast('danger', data.message, '错误');
+        }
+    });
+}
+
+function cancelSchedule(postId) {
+    confirmAction(
+        '确认取消定时发布',
+        '确定要取消这篇文章的定时发布吗？',
+        function() {
+            fetch(`/admin/posts/${postId}/cancel-schedule`, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', '已取消定时发布', '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            });
+        }
+    );
+}
+</script>
+{% endblock %}

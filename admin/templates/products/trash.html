@@ -1,0 +1,251 @@
+{% extends "base.html" %}
+
+{% block title %}产品回收站 - 博文教育管理后台{% endblock %}
+
+{% block content %}
+<!-- 页面头部 -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title">
+            <i class="bi bi-trash text-warning me-2"></i>产品回收站
+        </h1>
+        <p class="page-subtitle mb-0">已删除的产品将保留 30 天，可在此恢复或永久删除</p>
+    </div>
+    <div class="page-actions d-flex gap-2">
+        <a href="/admin/products" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-2"></i>返回产品列表
+        </a>
+        {% if total > 0 %}
+        <button type="button" class="btn btn-outline-danger" onclick="emptyTrash()">
+            <i class="bi bi-trash-fill me-2"></i>清空回收站
+        </button>
+        {% endif %}
+    </div>
+</div>
+
+<!-- 统计信息卡片 -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card stat-card bg-warning-light">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon bg-warning text-white me-3">
+                    <i class="bi bi-trash"></i>
+                </div>
+                <div>
+                    <div class="stat-label">回收站产品</div>
+                    <div class="stat-value text-warning">{{ total }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-info-circle text-info fs-4 me-2"></i>
+                    <div>
+                        <strong>回收站提示</strong>
+                        <p class="text-muted small mb-0">已删除的产品会在回收站中保留 30 天。超过 30 天后将自动永久删除。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if total == 0 %}
+<!-- 空状态 -->
+<div class="card">
+    <div class="card-body text-center py-5">
+        <i class="bi bi-trash text-muted" style="font-size: 4rem;"></i>
+        <h4 class="mt-3 text-muted">回收站为空</h4>
+        <p class="text-muted">没有已删除的产品</p>
+        <a href="/admin/products" class="btn btn-primary mt-3">
+            <i class="bi bi-arrow-left me-2"></i>返回产品列表
+        </a>
+    </div>
+</div>
+{% else %}
+<!-- 产品列表卡片 -->
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">ID</th>
+                        <th style="width: 80px;">封面</th>
+                        <th>产品名称</th>
+                        <th style="width: 120px;">栏目</th>
+                        <th style="width: 120px;">价格</th>
+                        <th style="width: 100px;">状态</th>
+                        <th style="width: 150px;">删除时间</th>
+                        <th style="width: 180px;" class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>
+                            <span class="text-muted">#{{ product.id }}</span>
+                        </td>
+                        <td>
+                            {% if product.cover_media_id %}
+                            <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 50px; height: 35px;">
+                                <i class="bi bi-image text-muted"></i>
+                            </div>
+                            {% else %}
+                            <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 50px; height: 35px;">
+                                <i class="bi bi-image text-muted"></i>
+                            </div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="fw-medium">{{ product.name }}</span>
+                            {% if product.name_en %}
+                            <p class="text-muted small mb-0">{{ product.name_en[:50] }}{% if product.name_en|length > 50 %}...{% endif %}</p>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if product.column %}
+                            <span class="badge bg-light text-dark">{{ product.column.name }}</span>
+                            {% else %}
+                            <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="text-muted">{{ product.price_text or '-' }}</span>
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary">已删除</span>
+                        </td>
+                        <td>
+                            <span class="text-muted small">
+                                {{ product.updated_at.strftime('%Y-%m-%d %H:%M') if product.updated_at else '-' }}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-outline-success me-1" onclick="restoreProduct({{ product.id }})" title="恢复">
+                                <i class="bi bi-arrow-counterclockwise"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="permanentDelete({{ product.id }})" title="永久删除">
+                                <i class="bi bi-x-lg"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 分页 -->
+{% if total_pages > 1 %}
+<nav aria-label="Page navigation" class="mt-4">
+    <ul class="pagination justify-content-center">
+        <li class="page-item {% if page == 1 %}disabled{% endif %}">
+            <a class="page-link" href="/admin/products/trash?page={{ page - 1 }}">上一页</a>
+        </li>
+        {% for p in range(1, total_pages + 1) %}
+        {% if p == 1 or p == total_pages or (p >= page - 2 and p <= page + 2) %}
+        <li class="page-item {% if p == page %}active{% endif %}">
+            <a class="page-link" href="/admin/products/trash?page={{ p }}">{{ p }}</a>
+        </li>
+        {% elif p == page - 3 or p == page + 3 %}
+        <li class="page-item disabled">
+            <span class="page-link">...</span>
+        </li>
+        {% endif %}
+        {% endfor %}
+        <li class="page-item {% if page == total_pages %}disabled{% endif %}">
+            <a class="page-link" href="/admin/products/trash?page={{ page + 1 }}">下一页</a>
+        </li>
+    </ul>
+</nav>
+{% endif %}
+
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// 恢复产品
+function restoreProduct(productId) {
+    confirmAction(
+        '确认恢复',
+        '确定要恢复这个产品吗？恢复后将回到草稿箱。',
+        function() {
+            fetch(`/admin/products/trash/${productId}/restore`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('恢复失败:', error);
+                showToast('danger', '恢复失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+
+// 永久删除
+function permanentDelete(productId) {
+    confirmAction(
+        '永久删除确认',
+        '确定要永久删除这个产品吗？此操作<strong class="text-danger">不可恢复</strong>！',
+        function() {
+            fetch(`/admin/products/trash/${productId}/permanent-delete`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('删除失败:', error);
+                showToast('danger', '删除失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+
+// 清空回收站
+function emptyTrash() {
+    confirmAction(
+        '清空回收站确认',
+        '确定要<strong class="text-danger">永久删除所有产品</strong>吗？此操作<strong class="text-danger">不可恢复</strong>！',
+        function() {
+            fetch('/admin/products/trash/empty', {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('清空失败:', error);
+                showToast('danger', '清空失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+</script>
+{% endblock %}

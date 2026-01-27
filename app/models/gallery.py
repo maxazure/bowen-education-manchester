@@ -24,8 +24,10 @@ class Gallery(BaseModel):
     __tablename__ = "gallery"
 
     title = Column(String(200), nullable=False, comment="相册标题")
+    title_en = Column(String(200), nullable=True, comment="相册英文标题")
     slug = Column(String(200), nullable=False, unique=True, comment="URL Slug")
     description = Column(Text, nullable=True, comment="相册描述")
+    description_en = Column(Text, nullable=True, comment="相册英文描述")
     category = Column(String(100), nullable=True, comment="分类")
     tags = Column(String(255), nullable=True, comment="标签（逗号分隔）")
     cover_media_id = Column(

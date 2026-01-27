@@ -1,7 +1,57 @@
 # TODO 任务列表
 
 ## 🔄 进行中
-暂无进行中的任务
+
+### [2026-01-07] Admin Panel 功能测试
+- [x] 使用 Chrome DevTools 漫游 admin panel 每一个功能中的 CRUD
+- [x] 修复发现的 bug
+- [x] Columns CRUD 测试完成
+- [x] Single Pages CRUD 测试完成
+- [x] Articles CRUD 测试完成
+- [x] Products CRUD 测试完成
+- [x] Heroes CRUD 测试完成
+- [x] Media Library 测试完成
+- [x] Settings 测试完成
+- [x] Static Pages 测试完成
+
+**发现的 Bug 修复**:
+1. **EasyMDE Markdown Editor 内容不同步**
+   - 文件: `admin/templates/pages/form.html`, `admin/templates/posts/form.html`
+   - 原因: JavaScript `form.submit()` bypasses submit event listeners
+   - 修复: 覆盖 `form.submit` 方法确保 EasyMDE 内容同步
+
+2. **Gallery CREATE 返回 405 Method Not Allowed**
+   - 文件: `admin/templates/galleries/form.html`, `admin/app/routers/galleries.py`
+   - 原因: 表单无 action 属性，路由缺少 HTML 表单处理器
+   - 修复:
+     - 添加 form action: `action="{% if is_edit %}/admin/galleries/{{ gallery.id }}{% else %}/admin/galleries{% endif %}"`
+     - 新增 HTML 表单 POST 处理器
+     - 将原 API POST 路由改为 `/api` 前缀
+
+### [2026-01-08] 网站内容增强修复
+- [x] **前后台数据一致性修复**
+  - [x] 修复 page.keywords → page.seo_keywords
+  - [x] SiteColumn 添加 content_html 和 content_html_en 字段
+  - [x] Gallery 添加 title_en 和 description_en 字段
+  - [x] 后台相册表单添加英文版本编辑
+
+- [x] **网站内容检查与修复**
+  - [x] 验证英文首页 /en/ 正常访问 (HTTP 200)
+  - [x] 删除6个空测试相册 (政府资助项目照片、俱乐部活动照片、Test Gallery、Test x2、完整字段测试相册)
+  - [x] 统一联系邮箱为 info@boweneducation.co.uk
+  - [x] 验证 SEO Meta Description 配置正确
+
+- [x] **更新 CLAUDE.md**
+  - [x] 添加 Chrome DevTools 浏览器自动化使用说明
+
+**测试数据**:
+- Column: "功能测试栏目2026" (ID:42)
+- Single Page: "功能测试单页2026final" (ID:30)
+- Articles: IDs 27-31
+- Product: "功能测试产品2026" (ID:8)
+- Hero Slide: "功能测试幻灯片2026" (ID:5)
+
+**注意**: Gallery CREATE 修复需要服务器重启才能生效
 
 ## ✅ 已完成
 
@@ -1469,3 +1519,260 @@ if column.parent_id:
 
 **最后更新**: 2025-11-17
 **当前状态**: 双语系统基本完成，待进行英文模板清理工作
+
+## 2026-01-06 - Admin Panel Bug Fix and Testing
+
+### Completed Tasks
+- [x] Comprehensive admin panel exploration and documentation
+- [x] Functional testing of all admin features
+- [x] Fixed duplicate route definitions in /admin/app/main.py
+- [x] Fixed incomplete dependency implementations in /admin/app/dependencies.py
+- [x] Fixed session key inconsistency between middleware and auth
+- [x] Added environment variable support for security settings
+- [x] Created .env.example for production configuration
+- [x] Fixed dashboard statistics loading
+- [x] Fixed products page 500 error
+- [x] Re-tested all functionality after fixes
+
+### Issues Fixed
+1. **Duplicate Routes** - Removed duplicate "/" route in main.py
+2. **Incomplete Dependencies** - Implemented proper auth checking in dependencies.py
+3. **Session Inconsistency** - Fixed session key mismatch (user_id vs admin_user_id)
+4. **Security Config** - Added environment variable support for production
+
+### Test Results
+✅ All admin panel functions now working correctly
+✅ Dashboard statistics load properly (26 posts, 7 products, 13 galleries)
+✅ Products management fully functional
+✅ All CRUD operations working
+✅ Security configuration improved
+
+### Files Modified
+- /admin/app/main.py
+- /admin/app/dependencies.py
+- /admin/app/.env.example (new)
+
+### Documentation
+- BUG_FIX_REPORT_2026.md - Comprehensive bug fix report
+
+### 2026-01-08 - Admin Panel Enhancement
+
+#### Completed Tasks
+- [x] 数据导入功能 (CSV Import) - 完成时间: 2026-01-08 - 负责人: maxazure
+  - 创建 import_.py 路由支持文章和产品CSV导入
+  - 创建 import_page.py 页面路由
+  - 创建 import.html 模板支持模板下载和文件上传
+  - 支持栏目/分类映射
+
+- [x] 全站搜索功能 (Global Search) - 完成时间: 2026-01-08 - 负责人: maxazure
+  - 创建 search.py 路由支持多类型搜索
+  - 创建 search.html 搜索页面模板
+  - 导航栏添加全局搜索框
+  - 支持文章、产品、相册搜索
+
+- [x] 修复CSS错误 - 完成时间: 2026-01-08 - 负责人: maxazure
+  - 修复 base.html 中的 `white-wrap` 为 `white-space`
+
+- [x] 数据备份恢复功能 (Backup/Restore) - 完成时间: 2026-01-08 - 负责人: maxazure
+  - 创建 backup.py 路由支持数据库备份和恢复
+  - 创建 backup.html 备份管理页面
+  - 支持JSON格式备份下载
+  - 支持从备份文件恢复数据
+
+- [x] 系统设置面板增强 - 完成时间: 2026-01-08 - 负责人: maxazure
+  - 在设置页面添加快速操作卡片
+  - 链接到数据备份、导入、导出、全站搜索
+
+- [x] 文件管理优化 (Media Library) - 完成时间: 2026-01-08 - 负责人: maxazure
+  - 添加搜索框功能
+  - 添加快速筛选按钮（全部/图片/视频/文档）
+  - 添加视图模式切换（网格/列表视图）
+  - 视图模式保存在本地存储
+
+#### Files Created
+- admin/app/routers/import_.py (new)
+- admin/app/routers/import_page.py (new)
+- admin/app/routers/search.py (new)
+- admin/app/routers/backup.py (new)
+- admin/templates/import.html (new)
+- admin/templates/search.html (new)
+- admin/templates/backup.html (new)
+
+#### Files Modified
+- admin/app/main.py - 注册新路由
+- admin/templates/base.html - 导航栏搜索框、侧边栏链接、CSS修复
+- admin/templates/settings/index.html - 添加快速操作卡片
+- admin/templates/media/list.html - 搜索、筛选、视图切换
+
+### 2026-01-08 - Admin Panel Enhancement (Phase 2)
+
+#### Completed Tasks
+- [x] 回收站功能 (Recycle Bin) - 完成时间: 2026-01-08 - 负责人: maxazure
+  - 创建 TrashItem 软删除模型
+  - 创建数据库迁移
+  - 创建 trash.py 路由支持移动到回收站、恢复、彻底删除
+  - 创建 trash.html 回收站管理页面
+  - 支持按类型筛选
+
+- [x] 操作日志功能 (Operation Logs) - 完成时间: 2026-01-08 - 负责人: maxazure
+  - 创建 OperationLog 操作日志模型
+  - 创建数据库迁移
+  - 创建 operation_logs.py 路由
+  - 创建 operation_logs.html 日志查看页面
+  - 支持按操作类型、模块、管理员筛选
+
+- [x] 快捷键提示增强 - 完成时间: 2026-01-08 - 负责人: maxazure
+  - 在 dashboard.html 添加快捷键模态框
+  - 完善快捷键说明文档
+  - 支持导航快捷键 (g+h, g+p 等)
+  - 支持操作快捷键 (n, c, e 等)
+
+#### Files Created
+- app/models/trash.py (new)
+- app/models/operation_log.py (new)
+- migrations/versions/e1f2g3h4i5j6_add_trash_item_table.py (new)
+- migrations/versions/f2g3h4i5j6k7_add_operation_log_table.py (new)
+- admin/app/routers/trash.py (new)
+- admin/app/routers/operation_logs.py (new)
+- admin/templates/trash.html (new)
+- admin/templates/operation_logs.html (new)
+
+#### Files Modified
+- admin/app/main.py - 注册 trash 和 operation_logs 路由
+- admin/templates/base.html - 添加回收站和操作日志侧边栏链接
+- admin/templates/dashboard.html - 添加快捷键模态框
+
+### 2026-01-08 - Admin Panel Enhancement (Phase 3)
+
+#### Completed Tasks
+- [x] 内容审核功能 (Content Approval) - 完成时间: 2026-01-08 - 负责人: maxazure
+  - 添加待审核文章列表页面 (`/admin/posts/pending-approval`)
+  - 添加单篇审核通过/驳回功能
+  - 添加批量审核功能
+  - 添加待审核数量API
+
+- [x] 定时发布功能 (Scheduled Publishing) - 完成时间: 2026-01-08 - 负责人: maxazure
+  - 添加定时发布设置API (`POST /posts/{id}/schedule`)
+  - 添加取消定时发布API
+  - 添加定时发布列表页面
+  - 添加立即发布功能
+
+#### Files Created
+- admin/templates/posts/pending_approval.html (new)
+
+#### Files Modified
+- admin/app/routers/posts.py - 添加审核和定时发布路由
+- admin/templates/posts/list.html - 添加待审核和定时发布快捷链接
+
+### 2026-01-08 - Admin Panel Enhancement (Phase 4)
+
+#### Completed Tasks
+- [x] 数据可视化报表 (Data Reports) - 完成时间: 2026-01-08 - 负责人: maxazure
+  - 创建报表页面 `/admin/reports`
+  - 添加核心指标卡片（内容总量、发布量、新增内容、待审核）
+  - 添加内容增长趋势图表（Chart.js）
+  - 添加内容类型分布图表
+  - 添加内容状态分布图表
+  - 添加栏目内容统计表格
+  - 支持日期范围筛选（7/14/30/90/365天）
+  - 支持CSV导出
+
+- [x] 多语言管理 (i18n Management) - 完成时间: 2026-01-08 - 负责人: maxazure
+  - 创建多语言管理页面 `/admin/i18n`
+  - 支持中英文界面翻译
+  - 显示翻译覆盖率统计
+  - 翻译编辑器支持实时保存
+  - 缺失翻译检测功能
+  - 翻译导入/导出功能
+
+#### Files Created
+- admin/app/routers/reports.py (new)
+- admin/app/routers/i18n.py (new)
+- admin/templates/reports.html (new)
+- admin/templates/i18n.html (new)
+
+#### Files Modified
+- admin/app/main.py - 注册 reports 和 i18n 路由
+- admin/templates/base.html - 添加数据报表和多语言侧边栏链接
+
+### 2026-01-08 - Admin Panel Enhancement (Phase 5)
+
+#### Completed Tasks
+- [x] 数据导出功能 (Data Export) - 完成时间: 2026-01-08 - 负责人: maxazure
+  - 创建 export_data.py 路由支持多类型数据导出
+  - 支持文章、产品、留言、媒体统计、访问统计导出
+  - 支持 CSV 和 JSON 格式下载
+  - 添加导出模态框到仪表板
+
+- [x] 智能搜索建议 (Intelligent Search Suggestions) - 完成时间: 2026-01-08 - 负责人: maxazure
+  - 在全局搜索框添加热门搜索建议
+  - 搜索历史记录功能
+  - 搜索热词快捷点击
+
+- [x] 快捷操作工具栏 (Quick Operations Toolbar) - 完成时间: 2026-01-08 - 负责人: maxazure
+  - 添加悬浮快捷操作工具栏
+  - 支持新建文章、上传媒体、快速备份、查看统计
+  - 工具栏位置保存到本地存储
+
+- [x] 数据可视化增强 (Data Visualization Enhancement) - 完成时间: 2026-01-08 - 负责人: maxazure
+  - 添加趋势图折线/柱状切换功能
+  - 添加 24 小时访问分布热力图
+  - 添加操作系统分布图表（水平柱状图）
+  - 添加本周/上周对比统计卡片
+  - 新增 API 端点：/api/analytics/hourly、/api/analytics/os-distribution、/api/analytics/compare
+  - 导出按钮和实时数据指示器
+
+#### Files Created
+- admin/app/routers/export_data.py (new)
+
+#### Files Modified
+- admin/app/routers/analytics.py - 添加小时分布、操作系统分布、对比统计 API
+- admin/templates/analytics.html - 增强可视化（热力图、柱状图切换、对比卡片）
+- admin/templates/base.html - 添加热门搜索建议
+- admin/templates/dashboard.html - 添加快捷操作工具栏
+
+### 2026-01-08 - Admin Panel Enhancement (Phase 6)
+
+#### Completed Tasks
+- [x] 拖拽排序优化 (Drag & Drop Sorting Enhancement) - 完成时间: 2026-01-08 - 负责人: maxazure
+  - 增强栏目管理拖拽排序视觉效果
+  - 添加拖拽预览镜像效果
+  - 添加排序位置指示器动画
+  - 添加排序保存状态提示
+  - 实时保存排序到服务器
+
+- [x] 高级批量操作 (Advanced Batch Operations) - 完成时间: 2026-01-08 - 负责人: maxazure
+  - 添加智能选择模态框（按状态、特性、日期筛选）
+  - 添加选择模式（添加/替换/交集）
+  - 添加操作模板功能（保存/加载常用选择）
+  - 添加全选当前页快捷按钮
+  - 模板数据保存到本地存储
+
+#### Files Modified
+- admin/templates/columns/list.html - 增强拖拽排序样式和功能
+- admin/templates/posts/list.html - 添加智能选择和操作模板
+
+### 2026-01-08 - Admin Panel Enhancement Summary
+
+本轮共完成以下 Admin Panel 改进：
+
+1. **数据导出功能** - 支持 CSV/JSON 格式多类型数据导出
+2. **智能搜索建议** - 全局搜索框热门搜索 + 历史记录
+3. **快捷操作工具栏** - 悬浮工具条支持常用操作快捷访问
+4. **数据可视化增强** - 趋势图切换、24小时热力图、操作系统分布
+5. **拖拽排序优化** - 视觉反馈增强、预览镜像、实时保存
+6. **高级批量操作** - 智能选择、条件筛选、操作模板
+
+所有改进均已记录到 TODO.md
+
+#### Files Created
+- admin/app/routers/export_data.py
+
+#### Files Modified
+- admin/app/routers/analytics.py
+- admin/templates/analytics.html
+- admin/templates/base.html
+- admin/templates/dashboard.html
+- admin/templates/columns/list.html
+- admin/templates/posts/list.html
+

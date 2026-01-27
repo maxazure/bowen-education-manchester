@@ -1,0 +1,546 @@
+{% extends "base.html" %}
+
+{% block title %}SEO 分析 - 博文教育管理后台{% endblock %}
+
+{% block content %}
+<!-- 面包屑导航 -->
+<nav aria-label="breadcrumb" class="mb-3 animate-fade-in">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin"><i class="bi bi-house-door me-1"></i>首页</a></li>
+        <li class="breadcrumb-item"><a href="/admin/posts">文章管理</a></li>
+        <li class="breadcrumb-item active" aria-current="page">SEO 分析</li>
+    </ol>
+</nav>
+
+<!-- 页面标题区 -->
+<div class="page-header animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="page-title">
+                <i class="bi bi-search text-primary me-2"></i>SEO 分析工具
+            </h1>
+            <p class="page-subtitle">分析文章 SEO 优化状态，提升搜索引擎排名</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary" onclick="refreshAnalysis()">
+                <i class="bi bi-arrow-clockwise me-2"></i>重新分析
+            </button>
+            <button class="btn btn-outline-success" onclick="exportReport()">
+                <i class="bi bi-download me-2"></i>导出报告
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 统计概览 -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card bg-primary-light">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon bg-primary text-white me-3">
+                    <i class="bi bi-file-earmark-text"></i>
+                </div>
+                <div>
+                    <div class="stat-label">已分析文章</div>
+                    <div class="stat-value text-primary" id="totalAnalyzed">-</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card bg-success-light">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon bg-success text-white me-3">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+                <div>
+                    <div class="stat-label">优秀</div>
+                    <div class="stat-value text-success" id="excellentCount">-</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card bg-warning-light">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon bg-warning text-white me-3">
+                    <i class="bi bi-exclamation-triangle"></i>
+                </div>
+                <div>
+                    <div class="stat-label">需改进</div>
+                    <div class="stat-value text-warning" id="warningCount">-</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card bg-danger-light">
+            <div class="card-body d-flex align-items-center">
+                <div class="stat-icon bg-danger text-white me-3">
+                    <i class="bi bi-x-circle"></i>
+                </div>
+                <div>
+                    <div class="stat-label">问题严重</div>
+                    <div class="stat-value text-danger" id="criticalCount">-</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SEO 评分分布 -->
+<div class="row g-3 mb-4">
+    <div class="col-lg-4">
+        <div class="card animate-fade-in">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-pie-chart text-primary me-2"></i>SEO 评分分布
+                </h5>
+            </div>
+            <div class="card-body">
+                <div style="height: 200px;">
+                    <canvas id="seoScoreChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="card animate-fade-in">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-list-check text-primary me-2"></i>常见问题 TOP 5
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush" id="commonIssues">
+                    <div class="text-center py-4 text-muted">
+                        <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                        正在加载...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 文章列表 -->
+<div class="card animate-fade-in">
+    <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <h5 class="card-title mb-0">
+            <i class="bi bi-table text-primary me-2"></i>文章 SEO 分析结果
+        </h5>
+        <div class="d-flex align-items-center gap-2">
+            <!-- 筛选 -->
+            <select class="form-select form-select-sm" id="filterScore" onchange="filterByScore()" style="width: auto;">
+                <option value="all">全部评分</option>
+                <option value="excellent">优秀 (80-100)</option>
+                <option value="good">良好 (60-79)</option>
+                <option value="poor">需改进 (40-59)</option>
+                <option value="critical">严重 (<40)</option>
+            </select>
+            <!-- 搜索 -->
+            <div class="input-group input-group-sm" style="width: 200px;">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input type="text" class="form-control" id="searchTitle" placeholder="搜索标题..." oninput="searchPosts()">
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0" id="seoTable">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">ID</th>
+                        <th>文章标题</th>
+                        <th style="width: 100px;">SEO 评分</th>
+                        <th style="width: 120px;">标题长度</th>
+                        <th style="120px;">描述长度</th>
+                        <th style="width: 120px;">关键词</th>
+                        <th style="width: 150px;">主要问题</th>
+                        <th style="width: 100px;">操作</th>
+                    </tr>
+                </thead>
+                <tbody id="seoTableBody">
+                    <tr>
+                        <td colspan="8" class="text-center py-5">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">加载中...</span>
+                            </div>
+                            <p class="mt-2 text-muted">正在分析文章...</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- 文章详情模态框 -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-search me-2"></i>SEO 详细分析
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="detailModalBody">
+                <!-- 内容将由 JS 填充 -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                <a href="#" id="editPostLink" class="btn btn-primary">
+                    <i class="bi bi-pencil me-1"></i>编辑文章
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+let seoData = [];
+let seoScoreChart = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+    initSeoChart();
+    loadSeoData();
+});
+
+// 初始化评分分布图表
+function initSeoChart() {
+    const ctx = document.getElementById('seoScoreChart');
+    if (!ctx) return;
+
+    seoScoreChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['优秀 (80-100)', '良好 (60-79)', '需改进 (40-59)', '严重 (<40)'],
+            datasets: [{
+                data: [0, 0, 0, 0],
+                backgroundColor: ['#22c55e', '#3b82f6', '#f59e0b', '#ef4444'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        padding: 15,
+                        usePointStyle: true
+                    }
+                }
+            }
+        }
+    });
+}
+
+// 加载 SEO 数据
+async function loadSeoData() {
+    try {
+        const response = await fetch('/admin/api/seo-analysis');
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error(result.message);
+        }
+
+        seoData = result.data.posts;
+        updateStats(result.data.stats);
+        updateChart(result.data.stats);
+        renderCommonIssues(result.data.commonIssues);
+        renderTable(seoData);
+
+    } catch (error) {
+        console.error('加载 SEO 数据失败:', error);
+        document.getElementById('seoTableBody').innerHTML = `
+            <tr>
+                <td colspan="8" class="text-center py-5 text-danger">
+                    <i class="bi bi-exclamation-circle fs-3 d-block mb-2"></i>
+                    加载失败，请重试
+                    <button class="btn btn-link mt-2" onclick="loadSeoData()">重新加载</button>
+                </td>
+            </tr>
+        `;
+    }
+}
+
+function updateStats(stats) {
+    document.getElementById('totalAnalyzed').textContent = stats.total;
+    document.getElementById('excellentCount').textContent = stats.excellent;
+    document.getElementById('warningCount').textContent = stats.warning;
+    document.getElementById('criticalCount').textContent = stats.critical;
+}
+
+function updateChart(stats) {
+    if (seoScoreChart) {
+        seoScoreChart.data.datasets[0].data = [
+            stats.excellent,
+            stats.good,
+            stats.warning,
+            stats.critical
+        ];
+        seoScoreChart.update();
+    }
+}
+
+function renderCommonIssues(issues) {
+    const container = document.getElementById('commonIssues');
+
+    if (!issues || issues.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-4 text-success">
+                <i class="bi bi-check-circle fs-3 d-block mb-2"></i>
+                暂无常见问题
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = issues.map((issue, index) => `
+        <div class="list-group-item d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <span class="badge bg-danger me-2">${index + 1}</span>
+                <span>${issue.description}</span>
+            </div>
+            <span class="badge bg-light text-dark">${issue.count} 篇</span>
+        </div>
+    `).join('');
+}
+
+function renderTable(posts) {
+    const tbody = document.getElementById('seoTableBody');
+
+    if (posts.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="8" class="text-center py-5 text-muted">
+                    <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                    没有符合条件的文章
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    tbody.innerHTML = posts.map(post => {
+        let scoreClass = 'bg-success';
+        if (post.score < 60) scoreClass = 'bg-warning';
+        if (post.score < 40) scoreClass = 'bg-danger';
+
+        let titleLengthClass = 'text-success';
+        if (post.titleLength < 30 || post.titleLength > 60) titleLengthClass = 'text-warning';
+        if (post.titleLength < 10 || post.titleLength > 80) titleLengthClass = 'text-danger';
+
+        let descLengthClass = 'text-success';
+        if (post.descLength < 120 || post.descLength > 160) descLengthClass = 'text-warning';
+        if (post.descLength < 50 || post.descLength > 200) descLengthClass = 'text-danger';
+
+        return `
+            <tr data-id="${post.id}">
+                <td><span class="text-muted">#${post.id}</span></td>
+                <td>
+                    <a href="/admin/posts/${post.id}/edit" class="text-decoration-none">
+                        ${post.title.substring(0, 40)}${post.title.length > 40 ? '...' : ''}
+                    </a>
+                </td>
+                <td>
+                    <div class="d-flex align-items-center">
+                        <span class="badge ${scoreClass} me-2">${post.score}</span>
+                        ${getScoreLabel(post.score)}
+                    </div>
+                </td>
+                <td class="${titleLengthClass}">${post.titleLength}</td>
+                <td class="${descLengthClass}">${post.descLength}</td>
+                <td>
+                    ${post.hasKeywords
+                        ? '<i class="bi bi-check-circle text-success"></i>'
+                        : '<i class="bi bi-x-circle text-danger"></i>'}
+                </td>
+                <td>
+                    <span class="text-danger small">${post.mainIssue || '-'}</span>
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-outline-primary" onclick="showDetail(${post.id})">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function getScoreLabel(score) {
+    if (score >= 80) return '<span class="badge bg-success-light text-success">优秀</span>';
+    if (score >= 60) return '<span class="badge bg-primary-light text-primary">良好</span>';
+    if (score >= 40) return '<span class="badge bg-warning-light text-warning">一般</span>';
+    return '<span class="badge bg-danger-light text-danger">较差</span>';
+}
+
+function filterByScore() {
+    const filter = document.getElementById('filterScore').value;
+    let filtered = seoData;
+
+    if (filter === 'excellent') {
+        filtered = seoData.filter(p => p.score >= 80);
+    } else if (filter === 'good') {
+        filtered = seoData.filter(p => p.score >= 60 && p.score < 80);
+    } else if (filter === 'poor') {
+        filtered = seoData.filter(p => p.score >= 40 && p.score < 60);
+    } else if (filter === 'critical') {
+        filtered = seoData.filter(p => p.score < 40);
+    }
+
+    renderTable(filtered);
+}
+
+function searchPosts() {
+    const keyword = document.getElementById('searchTitle').value.toLowerCase().trim();
+
+    if (!keyword) {
+        filterByScore();
+        return;
+    }
+
+    let filtered = seoData.filter(p =>
+        p.title.toLowerCase().includes(keyword)
+    );
+
+    renderTable(filtered);
+}
+
+function showDetail(postId) {
+    const post = seoData.find(p => p.id === postId);
+    if (!post) return;
+
+    const modal = new bootstrap.Modal(document.getElementById('detailModal'));
+    const body = document.getElementById('detailModalBody');
+    const editLink = document.getElementById('editPostLink');
+
+    editLink.href = `/admin/posts/${postId}/edit`;
+
+    const issues = post.issues || [];
+    const suggestions = post.suggestions || [];
+
+    body.innerHTML = `
+        <div class="row">
+            <div class="col-md-8">
+                <h5 class="mb-3">${post.title}</h5>
+
+                <div class="mb-4">
+                    <h6 class="text-muted mb-2">SEO 评分</h6>
+                    <div class="d-flex align-items-center">
+                        <div class="progress flex-grow-1" style="height: 20px; max-width: 300px;">
+                            <div class="progress-bar ${post.score >= 80 ? 'bg-success' : post.score >= 60 ? 'bg-primary' : post.score >= 40 ? 'bg-warning' : 'bg-danger'}"
+                                 style="width: ${post.score}%">
+                                ${post.score} 分
+                            </div>
+                        </div>
+                        <span class="ms-3">${getScoreLabel(post.score)}</span>
+                    </div>
+                </div>
+
+                ${issues.length > 0 ? `
+                <div class="alert alert-danger">
+                    <h6 class="alert-heading"><i class="bi bi-exclamation-triangle me-2"></i>发现的问题</h6>
+                    <ul class="mb-0">
+                        ${issues.map(i => `<li>${i}</li>`).join('')}
+                    </ul>
+                </div>
+                ` : ''}
+
+                ${suggestions.length > 0 ? `
+                <div class="alert alert-success">
+                    <h6 class="alert-heading"><i class="bi bi-lightbulb me-2"></i>优化建议</h6>
+                    <ul class="mb-0">
+                        ${suggestions.map(s => `<li>${s}</li>`).join('')}
+                    </ul>
+                </div>
+                ` : ''}
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">详细信息</h6>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-sm mb-0">
+                            <tr>
+                                <td>标题长度</td>
+                                <td class="${post.titleLength < 30 || post.titleLength > 60 ? 'text-danger' : 'text-success'}">
+                                    ${post.titleLength} 字符
+                                    ${post.titleLength < 30 ? '(太短)' : post.titleLength > 60 ? '(太长)' : ''}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>描述长度</td>
+                                <td class="${post.descLength < 120 || post.descLength > 160 ? 'text-danger' : 'text-success'}">
+                                    ${post.descLength} 字符
+                                    ${post.descLength < 120 ? '(太短)' : post.descLength > 160 ? '(太长)' : ''}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>关键词</td>
+                                <td>
+                                    ${post.hasKeywords
+                                        ? '<span class="text-success"><i class="bi bi-check-circle"></i> 已设置</span>'
+                                        : '<span class="text-danger"><i class="bi bi-x-circle"></i> 未设置</span>'}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>图片 Alt</td>
+                                <td>
+                                    ${post.hasAlt
+                                        ? '<span class="text-success"><i class="bi bi-check-circle"></i> 完整</span>'
+                                        : '<span class="text-warning"><i class="bi bi-exclamation-circle"></i> 缺失</span>'}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>内链数量</td>
+                                <td>${post.internalLinks} 个</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    modal.show();
+}
+
+function refreshAnalysis() {
+    loadSeoData();
+    showToast('info', '正在重新分析...', '提示');
+}
+
+function exportReport() {
+    const data = seoData.map(post => ({
+        ID: post.id,
+        标题: post.title,
+        SEO评分: post.score,
+        标题长度: post.titleLength,
+        描述长度: post.descLength,
+        关键词: post.hasKeywords ? '是' : '否',
+        主要问题: post.mainIssue || ''
+    }));
+
+    const headers = Object.keys(data[0] || {}).join(',');
+    const rows = data.map(row => Object.values(row).join(',')).join('\n');
+    const csv = `${headers}\n${rows}`;
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `seo_report_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+
+    showToast('success', '报告已导出', '成功');
+}
+</script>
+{% endblock %}

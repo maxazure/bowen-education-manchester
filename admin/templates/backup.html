@@ -1,0 +1,275 @@
+{% extends "base.html" %}
+
+{% block title %}数据备份 - 博文教育管理后台{% endblock %}
+
+{% block content %}
+<!-- 面包屑导航 -->
+<nav aria-label="breadcrumb" class="mb-3 animate-fade-in">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin"><i class="bi bi-house-door me-1"></i>首页</a></li>
+        <li class="breadcrumb-item active" aria-current="page">数据备份</li>
+    </ol>
+</nav>
+
+<!-- 页面标题区 -->
+<div class="page-header animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="page-title">
+                <i class="bi bi-cloud-arrow-up text-primary me-2"></i>数据备份与恢复
+            </h1>
+            <p class="page-subtitle">管理数据库备份，确保数据安全</p>
+        </div>
+    </div>
+</div>
+
+<!-- 统计卡片 -->
+<div class="row mb-4 animate-fade-in">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="card-text small mb-0">数据库大小</p>
+                        <h4 class="mb-0">{{ (database_size / 1024 / 1024)|round(2) }} MB</h4>
+                    </div>
+                    <i class="bi bi-database fs-1 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="card-text small mb-0">备份数量</p>
+                        <h4 class="mb-0">{{ backups|length }}</h4>
+                    </div>
+                    <i class="bi bi-folder2-open fs-1 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="card-text small mb-0">最近备份</p>
+                        {% if backups %}
+                        <h6 class="mb-0">{{ backups[0].created_at }}</h6>
+                        {% else %}
+                        <h6 class="mb-0">暂无备份</h6>
+                        {% endif %}
+                    </div>
+                    <i class="bi bi-clock-history fs-1 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-dark">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="card-text small mb-0">备份总大小</p>
+                        <h6 class="mb-0">
+                            {% set total = 0 %}
+                            {% for b in backups %}{% set total = total + b.size %}{% endfor %}
+                            {{ (total / 1024)|round(1) }} KB
+                        </h6>
+                    </div>
+                    <i class="bi bi-hdd-stack fs-1 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 备份操作区 -->
+<div class="row animate-fade-in">
+    <!-- 创建备份 -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-plus-circle text-success me-2"></i>创建备份
+                </h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">点击下方按钮立即创建数据库备份。备份将保存为 JSON 格式，可用于数据恢复或迁移。</p>
+                <button type="button" class="btn btn-success" onclick="createBackup()">
+                    <i class="bi bi-cloud-arrow-up me-1"></i>立即备份
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 恢复备份 -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-arrow-down-circle text-warning me-2"></i>恢复备份
+                </h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">上传备份文件 (JSON 格式) 以恢复数据。<span class="text-danger">注意：恢复将覆盖现有数据！</span></p>
+                <form id="restoreForm" enctype="multipart/form-data">
+                    <div class="input-group">
+                        <input type="file" class="form-control" id="backupFile" name="file" accept=".json" required>
+                        <button type="submit" class="btn btn-warning">
+                            <i class="bi bi-arrow-down-up me-1"></i>恢复
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 备份列表 -->
+<div class="card animate-fade-in">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">
+            <i class="bi bi-list-check text-primary me-2"></i>备份列表
+        </h5>
+        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="loadBackups()">
+            <i class="bi bi-arrow-clockwise me-1"></i>刷新
+        </button>
+    </div>
+    <div class="card-body p-0">
+        {% if backups %}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>文件名</th>
+                        <th>大小</th>
+                        <th>创建时间</th>
+                        <th class="text-end">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for backup in backups %}
+                    <tr>
+                        <td>
+                            <i class="bi bi-file-earmark-json text-success me-2"></i>
+                            {{ backup.filename }}
+                        </td>
+                        <td>{{ backup.size_formatted }}</td>
+                        <td>{{ backup.created_at }}</td>
+                        <td class="text-end">
+                            <a href="{{ backup.url }}" class="btn btn-sm btn-outline-primary" download>
+                                <i class="bi bi-download me-1"></i>下载
+                            </a>
+                            <button type="button" class="btn btn-sm btn-outline-danger" onclick="deleteBackup('{{ backup.filename }}')">
+                                <i class="bi bi-trash me-1"></i>删除
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-folder-x fs-1 d-block mb-3 text-muted"></i>
+            <p class="text-muted mb-0">暂无备份记录</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- 注意事项 -->
+<div class="card mt-4 animate-fade-in">
+    <div class="card-header">
+        <h5 class="card-title mb-0">
+            <i class="bi bi-exclamation-triangle text-warning me-2"></i>注意事项
+        </h5>
+    </div>
+    <div class="card-body">
+        <ul class="mb-0">
+            <li>建议定期创建备份，建议频率：<strong>每周一次</strong>或重要操作前</li>
+            <li>备份文件保存在 <code>instance/backups/</code> 目录</li>
+            <li>恢复备份前，系统会自动备份当前数据</li>
+            <li>如需迁移到其他服务器，只需复制 <code>instance/</code> 目录即可</li>
+            <li>如果文件上传功能异常，请检查 <code>public/static/uploads/</code> 目录权限</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+async function createBackup() {
+    try {
+        const result = await fetch('/admin/api/backup/create', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'}
+        });
+        const data = await result.json();
+        if (data.success) {
+            showToast('success', '备份成功', `文件: ${data.filename}`);
+            setTimeout(() => location.reload(), 1500);
+        } else {
+            showToast('error', '备份失败', data.detail || '未知错误');
+        }
+    } catch (error) {
+        showToast('error', '备份失败', error.message);
+    }
+}
+
+async function deleteBackup(filename) {
+    if (!confirm(`确定要删除备份 "${filename}" 吗？`)) return;
+
+    try {
+        const result = await fetch(`/admin/api/backup/${filename}`, {method: 'DELETE'});
+        const data = await result.json();
+        if (data.success) {
+            showToast('success', '删除成功', '备份已删除');
+            setTimeout(() => location.reload(), 1500);
+        } else {
+            showToast('error', '删除失败', data.detail || '未知错误');
+        }
+    } catch (error) {
+        showToast('error', '删除失败', error.message);
+    }
+}
+
+document.getElementById('restoreForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const fileInput = document.getElementById('backupFile');
+    if (!fileInput.files[0]) {
+        showToast('warning', '请选择文件', '');
+        return;
+    }
+
+    if (!confirm('恢复备份将覆盖现有数据，确定继续吗？')) return;
+
+    const formData = new FormData();
+    formData.append('file', fileInput.files[0]);
+
+    try {
+        const result = await fetch('/admin/api/backup/restore', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await result.json();
+        if (data.success) {
+            showToast('success', '恢复成功', data.message);
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            showToast('error', '恢复失败', data.detail || '未知错误');
+        }
+    } catch (error) {
+        showToast('error', '恢复失败', error.message);
+    }
+});
+
+async function loadBackups() {
+    location.reload();
+}
+</script>
+{% endblock %}

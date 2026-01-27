@@ -1,0 +1,495 @@
+{% extends "base.html" %}
+
+{% block title %}版本历史 - 博文教育管理后台{% endblock %}
+
+{% block extra_css %}
+<style>
+    .version-timeline {
+        position: relative;
+        padding-left: 30px;
+    }
+
+    .version-timeline::before {
+        content: '';
+        position: absolute;
+        left: 10px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: #e0e0e0;
+    }
+
+    .version-item {
+        position: relative;
+        padding: 15px;
+        background: white;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+    }
+
+    .version-item:hover {
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transform: translateX(5px);
+    }
+
+    .version-item::before {
+        content: '';
+        position: absolute;
+        left: -24px;
+        top: 20px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #667eea;
+        border: 2px solid white;
+        box-shadow: 0 0 0 2px #667eea;
+    }
+
+    .version-item.latest::before {
+        background: #43e97b;
+        box-shadow: 0 0 0 2px #43e97b;
+    }
+
+    .version-badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .version-badge.create {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        color: white;
+    }
+
+    .version-badge.update {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        color: white;
+    }
+
+    .version-badge.delete {
+        background: linear-gradient(135deg, #ff6b6b 0%, #c23616 100%);
+        color: white;
+    }
+
+    .version-badge.restore {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        color: white;
+    }
+
+    .snapshot-preview {
+        background: #f8f9fa;
+        padding: 10px;
+        border-radius: 6px;
+        font-size: 13px;
+        max-height: 100px;
+        overflow: hidden;
+        margin-top: 10px;
+        white-space: pre-wrap;
+        word-break: break-all;
+    }
+
+    .content-selector {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 12px;
+        padding: 20px;
+        color: white;
+    }
+
+    .version-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .modal-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+    }
+
+    .modal-header .btn-close {
+        filter: brightness(0) invert(1);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- 页面标题 -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="mb-1">版本历史</h4>
+            <nav aria-label="breadcrumb" class="breadcrumb-nav">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/admin/">首页</a></li>
+                    <li class="breadcrumb-item active">版本历史</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- 内容类型选择 -->
+    <div class="content-selector mb-4">
+        <div class="row g-3 align-items-center">
+            <div class="col-md-3">
+                <label class="form-label text-white">内容类型</label>
+                <select class="form-select" id="contentType" onchange="loadContentList()">
+                    <option value="post" {% if content_type == 'post' %}selected{% endif %}>文章</option>
+                    <option value="product" {% if content_type == 'product' %}selected{% endif %}>产品</option>
+                    <option value="gallery" {% if content_type == 'gallery' %}selected{% endif %}>相册</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label text-white">选择内容</label>
+                <select class="form-select" id="contentSelect" onchange="loadVersions()">
+                    <option value="">-- 请选择 --</option>
+                    {% for item in items %}
+                    <option value="{{ item.id }}" {% if content_id == item.id %}selected{% endif %}>
+                        {{ item.title if hasattr(item, 'title') else item.name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <button class="btn btn-light w-100" onclick="loadVersions()">
+                    <i class="bi bi-search me-2"></i>查询版本
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 版本历史列表 -->
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-clock-history me-2"></i>版本历史
+                        <span class="badge bg-primary ms-2" id="versionCount">0</span>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div id="versionList" class="version-timeline">
+                        <div class="text-center py-5 text-muted">
+                            <i class="bi bi-inbox fs-1 d-block mb-3"></i>
+                            请选择要查看的内容
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 侧边栏 -->
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-info-circle me-2"></i>使用说明
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            查看内容的修改历史
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            预览历史版本内容
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            一键回滚到指定版本
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle text-success me-2"></i>
+                            清理旧版本节省空间
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-gear me-2"></i>版本管理
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">保留版本数</label>
+                        <select class="form-select" id="keepCount">
+                            <option value="5">保留最近 5 个版本</option>
+                            <option value="10" selected>保留最近 10 个版本</option>
+                            <option value="20">保留最近 20 个版本</option>
+                            <option value="50">保留最近 50 个版本</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-outline-danger w-100" onclick="cleanupVersions()">
+                        <i class="bi bi-trash me-2"></i>清理旧版本
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 版本详情模态框 -->
+<div class="modal fade" id="versionDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">版本详情</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="versionDetailContent">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="restoreBtn" onclick="restoreVersion()">
+                    <i class="bi bi-arrow-counterclockwise me-2"></i>回滚到此版本
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentVersionId = null;
+    let currentContentType = 'post';
+    let currentContentId = null;
+
+    // 页面加载时
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('content_id')) {
+            currentContentId = parseInt(urlParams.get('content_id'));
+            loadVersions();
+        }
+    });
+
+    // 加载内容列表
+    async function loadContentList() {
+        currentContentType = document.getElementById('contentType').value;
+
+        try {
+            const response = await fetch(`/api/content/versions?content_type=${currentContentType}&limit=50`);
+            const result = await response.json();
+
+            if (result.success) {
+                const select = document.getElementById('contentSelect');
+                select.innerHTML = '<option value="">-- 请选择 --</option>';
+                result.data.forEach(item => {
+                    select.innerHTML += `<option value="${item.content_id}">${item.title}</option>`;
+                });
+            }
+        } catch (error) {
+            console.error('加载内容列表失败:', error);
+        }
+    }
+
+    // 加载版本历史
+    async function loadVersions() {
+        currentContentType = document.getElementById('contentType').value;
+        currentContentId = document.getElementById('contentSelect').value;
+
+        if (!currentContentId) {
+            document.getElementById('versionList').innerHTML = `
+                <div class="text-center py-5 text-muted">
+                    <i class="bi bi-inbox fs-1 d-block mb-3"></i>
+                    请选择要查看的内容
+                </div>
+            `;
+            document.getElementById('versionCount').textContent = '0';
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/versions/${currentContentType}/${currentContentId}`);
+            const result = await response.json();
+
+            if (result.success) {
+                renderVersions(result.data.items);
+                document.getElementById('versionCount').textContent = result.data.total;
+            }
+        } catch (error) {
+            console.error('加载版本历史失败:', error);
+            showToast('error', '加载版本历史失败', '错误');
+        }
+    }
+
+    // 渲染版本列表
+    function renderVersions(versions) {
+        const container = document.getElementById('versionList');
+
+        if (versions.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-5 text-muted">
+                    <i class="bi bi-clock-history fs-1 d-block mb-3"></i>
+                    暂无版本记录
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = versions.map((v, index) => {
+            const isLatest = index === 0;
+            const actionClass = {
+                'create': 'create',
+                'update': 'update',
+                'delete': 'delete',
+                'restore': 'restore',
+                'backup_before_restore': 'restore',
+            }[v.action] || 'update';
+
+            const actionText = {
+                'create': '创建',
+                'update': '更新',
+                'delete': '删除',
+                'restore': '回滚',
+                'backup_before_restore': '备份',
+            }[v.action] || '操作';
+
+            return `
+                <div class="version-item ${isLatest ? 'latest' : ''}">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <span class="version-badge ${actionClass}">v${v.version_number} - ${actionText}</span>
+                            <h6 class="mt-2 mb-1">${v.title || '无标题'}</h6>
+                            <div class="text-muted small">
+                                <i class="bi bi-person me-1"></i>${v.admin_name || '系统'}
+                                <i class="bi bi-clock ms-3 me-1"></i>${formatDate(v.created_at)}
+                                ${v.remark ? `<div class="mt-1"><i class="bi bi-chat me-1"></i>${v.remark}</div>` : ''}
+                            </div>
+                        </div>
+                        <div class="version-actions">
+                            <button class="btn btn-sm btn-outline-primary" onclick="viewVersionDetail(${v.id})">
+                                <i class="bi bi-eye"></i>
+                            </button>
+                            ${!isLatest ? `
+                            <button class="btn btn-sm btn-outline-warning" onclick="confirmRestore(${v.id}, ${v.version_number})">
+                                <i class="bi bi-arrow-counterclockwise"></i>
+                            </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // 查看版本详情
+    async function viewVersionDetail(versionId) {
+        currentVersionId = versionId;
+
+        try {
+            const response = await fetch(`/api/versions/${versionId}`);
+            const result = await response.json();
+
+            if (result.success) {
+                const v = result.data;
+                document.getElementById('versionDetailContent').innerHTML = `
+                    <div class="mb-3">
+                        <strong>版本号：</strong>v${v.version_number}
+                    </div>
+                    <div class="mb-3">
+                        <strong>操作：</strong>${v.action}
+                    </div>
+                    <div class="mb-3">
+                        <strong>操作人：</strong>${v.admin_name || '系统'}
+                    </div>
+                    <div class="mb-3">
+                        <strong>时间：</strong>${formatDate(v.created_at)}
+                    </div>
+                    ${v.remark ? `<div class="mb-3"><strong>备注：</strong>${v.remark}</div>` : ''}
+                    <div class="mb-3">
+                        <strong>内容快照：</strong>
+                        <div class="snapshot-preview">${v.content_snapshot || '无内容'}</div>
+                    </div>
+                `;
+                new bootstrap.Modal(document.getElementById('versionDetailModal')).show();
+            }
+        } catch (error) {
+            console.error('获取版本详情失败:', error);
+            showToast('error', '获取版本详情失败', '错误');
+        }
+    }
+
+    // 确认回滚
+    function confirmRestore(versionId, versionNumber) {
+        if (!confirm(`确定要回滚到版本 ${versionNumber} 吗？当前内容会自动备份。`)) return;
+        restoreVersion(versionId);
+    }
+
+    // 回滚版本
+    async function restoreVersion(versionId) {
+        const id = versionId || currentVersionId;
+        if (!id) return;
+
+        try {
+            const response = await fetch(`/api/versions/${id}/restore`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({})
+            });
+            const result = await response.json();
+
+            if (result.success) {
+                showToast('success', result.message, '成功');
+                bootstrap.Modal.getInstance(document.getElementById('versionDetailModal')).hide();
+                loadVersions();
+            } else {
+                showToast('error', result.message, '错误');
+            }
+        } catch (error) {
+            console.error('回滚失败:', error);
+            showToast('error', '回滚失败', '错误');
+        }
+    }
+
+    // 清理旧版本
+    async function cleanupVersions() {
+        const contentId = document.getElementById('contentSelect').value;
+        if (!contentId) {
+            showToast('warning', '请先选择内容', '提示');
+            return;
+        }
+
+        const keepCount = document.getElementById('keepCount').value;
+        if (!confirm(`确定要清理旧版本，保留最近 ${keepCount} 个版本吗？`)) return;
+
+        try {
+            const response = await fetch('/api/versions/cleanup', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    content_type: currentContentType,
+                    content_id: parseInt(contentId),
+                    keep_count: parseInt(keepCount)
+                })
+            });
+            const result = await response.json();
+
+            if (result.success) {
+                showToast('success', result.message, '成功');
+                loadVersions();
+            } else {
+                showToast('error', result.message, '错误');
+            }
+        } catch (error) {
+            console.error('清理失败:', error);
+            showToast('error', '清理失败', '错误');
+        }
+    }
+
+    // 格式化日期
+    function formatDate(dateStr) {
+        if (!dateStr) return '';
+        const date = new Date(dateStr);
+        return date.toLocaleString('zh-CN');
+    }
+</script>
+{% endblock %}

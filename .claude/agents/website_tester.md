@@ -28,14 +28,18 @@ source venv/bin/activate
 
 # Basic screenshot
 export DISPLAY=:99
-python tools/screenshot_website.py http://192.168.31.205:8002
+python tools/screenshot_website.py http://192.168.31.205:8000
 
 # Custom output file
-python tools/screenshot_website.py http://192.168.31.205:8002 homepage.png
+python tools/screenshot_website.py http://192.168.31.205:8000 homepage.png
 
 # Different page
-python tools/screenshot_website.py http://192.168.31.205:8002/about about_page.png
+python tools/screenshot_website.py http://192.168.31.205:8000/about about_page.png
 ```
+
+请注意：
+1. 不要试图截取full webpage
+2. 输出文件需要是 jpg
 
 **Features:**
 - Headless Chrome screenshots
@@ -67,7 +71,7 @@ python tools/screenshot_website.py http://192.168.31.205:8002/about about_page.p
 # Take screenshot
 source venv/bin/activate
 export DISPLAY=:99
-python tools/screenshot_website.py http://192.168.31.205:8002 initial.png
+python tools/screenshot_website.py http://192.168.31.205:8000 initial.png
 
 # Check for errors in browser console
 # Check network requests
@@ -132,11 +136,11 @@ source venv/bin/activate
 export DISPLAY=:99
 
 # 3. Test homepage
-python tools/screenshot_website.py http://192.168.31.205:8002 homepage.png
+python tools/screenshot_website.py http://192.168.31.205:8000 homepage.png
 
 # 4. Test other pages
-python tools/screenshot_website.py http://192.168.31.205:8002/about about.png
-python tools/screenshot_website.py http://192.168.31.205:8002/contact contact.png
+python tools/screenshot_website.py http://192.168.31.205:8000/about about.png
+python tools/screenshot_website.py http://192.168.31.205:8000/contact contact.png
 
 # 5. Review screenshots with Read tool
 # Use Read tool to view the PNG files and analyze them

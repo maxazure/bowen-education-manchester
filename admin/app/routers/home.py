@@ -9,7 +9,7 @@ from admin.app.services import layout_service
 from app.models.layout import LayoutScope
 
 
-router = APIRouter(prefix="/home", tags=["home"])
+router = APIRouter(tags=["home"])
 templates = Jinja2Templates(directory="admin/templates")
 
 

@@ -9,7 +9,7 @@
     <title>兴趣班课程表 | 博文教育集团 Bowen Education Group | Bowen Education Group</title>
 
     <!-- Favicon -->
-    <link rel="icon" href="/static/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/static/images/favicon.png" type="image/png">
     <link rel="apple-touch-icon" href="/static/images/apple-touch-icon.png">
 
     <!-- Open Graph Tags -->
@@ -22,7 +22,7 @@
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Bowen Education Group">
+    <meta name="twitter:title" content="Bowen Education Group - Updated">
     <meta name="twitter:description" content="">
     <meta name="twitter:image" content="">
 
@@ -137,11 +137,77 @@
     /* 图片加载优化 */
     opacity: 0;
     transition: opacity 0.3s ease-in;
+    /* 点击放大提示 */
+    cursor: pointer;
+}
+
+.single-page-content img:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    transform: scale(1.02);
+    transition: all 0.3s ease;
 }
 
 .single-page-content img.loaded,
 .single-page-content img[loading="lazy"] {
     opacity: 1;
+}
+
+/* 图片放大模态框 */
+.image-modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    animation: fadeIn 0.3s ease;
+}
+
+.image-modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-modal__content {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+    animation: zoomIn 0.3s ease;
+}
+
+.image-modal__close {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    z-index: 10000;
+}
+
+.image-modal__close:hover {
+    color: #ccc;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes zoomIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 /* 性能优化：减少重绘 */
@@ -357,9 +423,9 @@
     {
         "@context": "https://schema.org",
         "@type": "EducationalOrganization",
-        "name": "Bowen Education Group",
+        "name": "Bowen Education Group - Updated",
         "alternateName": "博文教育集团",
-        "url": "&lt;app.services.static_generator.obj object at 0x10834f8c0&gt;",
+        "url": "&lt;app.services.static_generator.obj object at 0x108093770&gt;",
         "logo": "/static/images/logo.png",
         "description": "",
         "address": {
@@ -375,7 +441,7 @@
             "latitude": "",
             "longitude": ""
         },
-        "telephone": "0161 969 3071",
+        "telephone": "0161 667 2668",
         "email": "",
         "sameAs": [
             
@@ -397,7 +463,7 @@
         "@type": "WebSite",
         "name": "Bowen Education Group",
         "alternateName": "博文教育集团",
-        "url": "&lt;app.services.static_generator.obj object at 0x10834f8c0&gt;"
+        "url": "&lt;app.services.static_generator.obj object at 0x108093770&gt;"
     },
     "publisher": {
         "@type": "EducationalOrganization",
@@ -411,13 +477,13 @@
                 "@type": "ListItem",
                 "position": 1,
                 "name": "首页",
-                "item": "&lt;app.services.static_generator.obj object at 0x10834f8c0&gt;"
+                "item": "&lt;app.services.static_generator.obj object at 0x108093770&gt;"
             },
             {
                 "@type": "ListItem",
                 "position": 2,
                 "name": "中文学校",
-                "item": "&lt;app.services.static_generator.obj object at 0x10834f8c0&gt;school"
+                "item": "&lt;app.services.static_generator.obj object at 0x108093770&gt;school"
             },
             {
                 "@type": "ListItem",
@@ -447,7 +513,7 @@
                     <svg class="icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                     </svg>
-                    <a href="tel:0161 969 3071">0161 969 3071</a>
+                    <a href="tel:0161 667 2668">0161 667 2668</a>
                 </span>
                 
                 
@@ -480,7 +546,7 @@
                     <a href="/" aria-label="Bowen Education Group Home">
                         <img src="/static/images/logo.png" alt="Bowen Education Group" height="60">
                         <span class="logo-text">
-                            <strong>Bowen Education Group</strong>
+                            <strong>Bowen Education Group - Updated</strong>
                             <small>博文教育集团</small>
                         </span>
                     </a>
@@ -2425,11 +2491,11 @@ Forest Park School<br />
                 <i class="fas fa-calendar-alt" aria-hidden="true"></i>
                 <span lang="en-GB">Book a Visit</span>
             </a>
-            <a href="tel:01619693071"
+            <a href="tel:01616672668"
                class="btn btn-outline-primary btn-lg"
-               aria-label="Call Bowen Education Group at 0161 969 3071">
+               aria-label="Call Bowen Education Group at 0161 667 2668">
                 <i class="fas fa-phone" aria-hidden="true"></i>
-                <span>0161 969 3071</span>
+                <span>0161 667 2668</span>
             </a>
         </div>
     </div>
@@ -2454,6 +2520,7 @@ Forest Park School<br />
                             <li><a href="/about">关于我们</a></li>
                             <li><a href="/programmes">政府项目</a></li>
                             <li><a href="/events">博文活动</a></li>
+                            <li><a href="/zh/gallery-festivals">精彩相册</a></li>
                             <li><a href="/contact">联系我们</a></li>
                         </ul>
                     </div>
@@ -2482,12 +2549,16 @@ Forest Park School<br />
                             <li>
                                 <i class="fas fa-map-marker-alt"></i>
                                 <span>
-                                    1/F, 2A Curzon Road, Sale, Manchester M33 7DR
+                                    2 Curzon Road, Sale, M33 7DR, England
                                 </span>
                             </li>
                             <li>
                                 <i class="fas fa-phone"></i>
-                                <a href="tel:01619693071">0161 969 3071</a>
+                                <a href="tel:01616672668">0161 667 2668</a>
+                            </li>
+                            <li>
+                                <i class="fab fa-whatsapp"></i>
+                                <a href="https://wa.me/447419818100">07419 818100</a>
                             </li>
                             <li>
                                 <i class="fas fa-envelope"></i>
@@ -2735,6 +2806,60 @@ Forest Park School<br />
             ticking = true;
         }
     }, { passive: true });
+
+    // 图片点击放大功能
+    document.addEventListener('DOMContentLoaded', function() {
+        // 为所有内容区域的图片添加loaded类（确保图片可见）
+        const contentImages = document.querySelectorAll('.single-page-content img');
+        contentImages.forEach(img => {
+            img.classList.add('loaded');
+        });
+
+        // 创建模态框元素
+        const modal = document.createElement('div');
+        modal.className = 'image-modal';
+        modal.innerHTML = `
+            <span class="image-modal__close">&times;</span>
+            <img class="image-modal__content" alt="放大图片">
+        `;
+        document.body.appendChild(modal);
+
+        const modalImg = modal.querySelector('.image-modal__content');
+        const closeBtn = modal.querySelector('.image-modal__close');
+
+        // 为所有内容区域的图片添加点击事件
+        contentImages.forEach(img => {
+            img.addEventListener('click', function() {
+                modal.classList.add('active');
+                modalImg.src = this.src;
+                modalImg.alt = this.alt || '放大图片';
+                document.body.style.overflow = 'hidden'; // 防止背景滚动
+            });
+        });
+
+        // 关闭模态框的方法
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = ''; // 恢复滚动
+        }
+
+        // 点击关闭按钮
+        closeBtn.addEventListener('click', closeModal);
+
+        // 点击模态框背景关闭
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // 按ESC键关闭
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+    });
 </script>
 
 

@@ -1,0 +1,348 @@
+{% extends "base.html" %}
+
+{% block title %}{% if tag %}编辑标签{% else %}新建标签{% endif %} - 博文教育管理后台{% endblock %}
+
+{% block content %}
+<!-- 页面头部 -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="page-title">{% if tag %}编辑标签{% else %}新建标签{% endif %}</h1>
+        <p class="page-subtitle mb-0">{% if tag %}修改标签信息{% else %}创建一个新的内容标签{% endif %}</p>
+    </div>
+    <div class="page-actions">
+        <a href="/admin/tags" class="btn btn-secondary me-2">
+            <i class="bi bi-arrow-left me-1"></i>返回列表
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-{% if tag %}pencil{% else %}plus{% endif %}-circle me-2"></i>
+                    {% if tag %}编辑标签{% else %}创建标签{% endif %}
+                </h5>
+            </div>
+            <div class="card-body">
+                <form id="tagForm" method="POST" action="{{ action }}">
+                    <!-- 基本信息 -->
+                    <div class="row g-3">
+                        <!-- 标签名称 -->
+                        <div class="col-md-6">
+                            <label class="form-label">
+                                标签名称 <span class="text-danger">*</span>
+                            </label>
+                            <input type="text"
+                                   class="form-control"
+                                   name="name"
+                                   id="tagName"
+                                   value="{{ tag.name if tag else '' }}"
+                                   placeholder="输入标签名称"
+                                   required
+                                   maxlength="50">
+                            <div class="form-text">标签的中文名称，用于显示</div>
+                        </div>
+
+                        <!-- 英文名称 -->
+                        <div class="col-md-6">
+                            <label class="form-label">英文名称</label>
+                            <input type="text"
+                                   class="form-control"
+                                   name="name_en"
+                                   id="tagNameEn"
+                                   value="{{ tag.name_en if tag else '' }}"
+                                   placeholder="Tag name in English"
+                                   maxlength="100">
+                            <div class="form-text">可选，英文界面显示</div>
+                        </div>
+
+                        <!-- Slug -->
+                        <div class="col-md-6">
+                            <label class="form-label">Slug</label>
+                            <div class="input-group">
+                                <input type="text"
+                                       class="form-control"
+                                       name="slug"
+                                       id="tagSlug"
+                                       value="{{ tag.slug if tag else '' }}"
+                                       placeholder="tag-slug"
+                                       readonly
+                                       style="background-color: #f8f9fa;">
+                                <button class="btn btn-outline-secondary" type="button" id="editSlugBtn" style="display: none;">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                            </div>
+                            <div class="form-text">URL友好的标识符，自动生成</div>
+                        </div>
+
+                        <!-- 排序 -->
+                        <div class="col-md-6">
+                            <label class="form-label">排序序号</label>
+                            <input type="number"
+                                   class="form-control"
+                                   name="sort_order"
+                                   id="sortOrder"
+                                   value="{{ tag.sort_order if tag else 0 }}"
+                                   placeholder="0"
+                                   min="0"
+                                   max="9999">
+                            <div class="form-text">数字越小越靠前</div>
+                        </div>
+
+                        <!-- 颜色选择 -->
+                        <div class="col-md-6">
+                            <label class="form-label">标签颜色</label>
+                            <div class="input-group">
+                                <input type="color"
+                                       class="form-control form-control-color"
+                                       name="color"
+                                       id="tagColor"
+                                       value="{{ tag.color if tag else '#667eea' }}"
+                                       style="width: 60px; cursor: pointer;">
+                                <input type="text"
+                                       class="form-control"
+                                       id="tagColorHex"
+                                       value="{{ tag.color if tag else '#667eea' }}"
+                                       pattern="^#[0-9A-Fa-f]{6}$"
+                                       style="max-width: 100px;">
+                            </div>
+                            <div class="form-text">选择标签的背景颜色</div>
+                        </div>
+
+                        <!-- 图标选择 -->
+                        <div class="col-md-6">
+                            <label class="form-label">图标</label>
+                            <input type="text"
+                                   class="form-control"
+                                   name="icon"
+                                   id="tagIcon"
+                                   value="{{ tag.icon if tag else '' }}"
+                                   placeholder="bi-tag (Bootstrap Icons)"
+                                   maxlength="50">
+                            <div class="form-text">Bootstrap Icons 图标类名，如 <code>bi-tag</code></div>
+                        </div>
+
+                        <!-- 描述 -->
+                        <div class="col-12">
+                            <label class="form-label">描述</label>
+                            <textarea class="form-control"
+                                      name="description"
+                                      id="tagDescription"
+                                      rows="3"
+                                      placeholder="输入标签描述（中文）"
+                                      maxlength="500">{{ tag.description if tag else '' }}</textarea>
+                        </div>
+
+                        <!-- 英文描述 -->
+                        <div class="col-12">
+                            <label class="form-label">英文描述</label>
+                            <textarea class="form-control"
+                                      name="description_en"
+                                      id="tagDescriptionEn"
+                                      rows="3"
+                                      placeholder="Tag description in English"
+                                      maxlength="500">{{ tag.description_en if tag else '' }}</textarea>
+                        </div>
+
+                        <!-- 状态 -->
+                        {% if tag %}
+                        <div class="col-12">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input"
+                                       type="checkbox"
+                                       name="is_active"
+                                       id="tagActive"
+                                       {% if tag.is_active %}checked{% endif %}>
+                                <label class="form-check-label" for="tagActive">
+                                    启用标签
+                                    <span class="text-muted d-block small">关闭后标签将不会在前台显示</span>
+                                </label>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- 预览 -->
+                    <div class="mt-4">
+                        <label class="form-label">预览效果</label>
+                        <div class="p-3 bg-light rounded">
+                            <span id="tagPreview"
+                                  class="badge"
+                                  style="background-color: {{ tag.color if tag else '#667eea' }};
+                                         font-size: 14px;
+                                         padding: 6px 12px;">
+                                <i class="bi bi-{{ tag.icon if tag.icon else 'tag' }} me-1"></i>
+                                {{ tag.name if tag else '标签名称' }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- 提交按钮 -->
+                    <div class="mt-4 d-flex gap-3">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg me-1"></i>
+                            {% if tag %}保存修改{% else %}创建标签{% endif %}
+                        </button>
+                        <a href="/admin/tags" class="btn btn-secondary">
+                            <i class="bi bi-x-lg me-1"></i>取消
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 右侧信息面板 -->
+    <div class="col-lg-4">
+        <!-- 使用说明 -->
+        <div class="card mb-3">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="bi bi-info-circle me-2"></i>使用说明
+                </h6>
+            </div>
+            <div class="card-body">
+                <ul class="mb-0 ps-3">
+                    <li class="mb-2">标签是灵活的内容分类方式</li>
+                    <li class="mb-2">一篇文章可以有多个标签</li>
+                    <li class="mb-2">标签不受栏目层级限制</li>
+                    <li class="mb-2">支持中英文双语显示</li>
+                    <li>可以为标签设置不同颜色</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 已有标签 -->
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">
+                    <i class="bi bi-tags me-2"></i>已有标签
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap gap-2" id="existingTags">
+                    <!-- 由页面加载时填充 -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 确认模态框 -->
+<div class="modal fade" id="confirmModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">确认操作</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="confirmMessage"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="confirmBtn">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// 颜色和预览联动
+const tagColor = document.getElementById('tagColor');
+const tagColorHex = document.getElementById('tagColorHex');
+const tagPreview = document.getElementById('tagPreview');
+const tagIcon = document.getElementById('tagIcon');
+const tagName = document.getElementById('tagName');
+
+function updatePreview() {
+    const color = tagColor.value;
+    const icon = tagIcon.value || 'tag';
+    const name = tagName.value || '标签名称';
+
+    tagColorHex.value = color;
+    tagPreview.style.backgroundColor = color;
+    tagPreview.innerHTML = `<i class="bi bi-${icon} me-1"></i>${name}`;
+}
+
+tagColor.addEventListener('input', updatePreview);
+tagColorHex.addEventListener('input', function() {
+    if (/^#[0-9A-Fa-f]{6}$/.test(this.value)) {
+        tagColor.value = this.value;
+        updatePreview();
+    }
+});
+tagIcon.addEventListener('input', updatePreview);
+tagName.addEventListener('input', updatePreview);
+
+// 初始化
+document.addEventListener('DOMContentLoaded', function() {
+    updatePreview();
+
+    // 加载已有标签
+    fetch('/admin/api/tags?active_only=false')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.data) {
+                const container = document.getElementById('existingTags');
+                data.data.slice(0, 20).forEach(tag => {
+                    const span = document.createElement('span');
+                    span.className = 'badge';
+                    span.style.backgroundColor = tag.color;
+                    span.style.cursor = 'pointer';
+                    span.onclick = function() {
+                        document.getElementById('tagName').value = tag.name;
+                        document.getElementById('tagColor').value = tag.color;
+                        updatePreview();
+                    };
+                    span.innerHTML = `<i class="bi bi-${tag.icon || 'tag'} me-1"></i>${tag.name}`;
+                    container.appendChild(span);
+                });
+            }
+        });
+
+    // 表单提交
+    document.getElementById('tagForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+
+        // 处理复选框
+        data.is_active = this.querySelector('#tagActive')?.checked ?? true;
+
+        // 处理空字符串
+        ['name_en', 'description', 'description_en', 'icon'].forEach(key => {
+            if (data[key] === '') {
+                data[key] = null;
+            }
+        });
+
+        fetch(this.action, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast('success', data.message, '成功');
+                setTimeout(() => {
+                    window.location.href = '/admin/tags';
+                }, 1000);
+            } else {
+                showToast('danger', data.message, '错误');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('danger', '操作失败，请稍后重试', '错误');
+        });
+    });
+});
+</script>
+{% endblock %}

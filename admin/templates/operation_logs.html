@@ -1,0 +1,242 @@
+{% extends "base.html" %}
+
+{% block title %}操作日志 - 博文教育管理后台{% endblock %}
+
+{% block content %}
+<!-- 面包屑导航 -->
+<nav aria-label="breadcrumb" class="mb-3 animate-fade-in">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin"><i class="bi bi-house-door me-1"></i>首页</a></li>
+        <li class="breadcrumb-item active" aria-current="page">操作日志</li>
+    </ol>
+</nav>
+
+<!-- 页面标题区 -->
+<div class="page-header animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="page-title">
+                <i class="bi bi-clock-history text-primary me-2"></i>操作日志
+            </h1>
+            <p class="page-subtitle">记录管理员的所有操作行为</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-secondary" onclick="loadLogs()">
+                <i class="bi bi-arrow-clockwise me-1"></i>刷新
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 统计卡片 -->
+<div class="row mb-4 animate-fade-in">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white h-100">
+            <div class="card-body text-center">
+                <h3 class="mb-0">{{ stats.total }}</h3>
+                <small>总记录数</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white h-100">
+            <div class="card-body text-center">
+                <h3 class="mb-0">{{ stats.today }}</h3>
+                <small>今日操作</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white h-100">
+            <div class="card-body text-center">
+                <h3 class="mb-0">{{ stats.this_week }}</h3>
+                <small>本周操作</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-dark h-100">
+            <div class="card-body text-center">
+                <h3 class="mb-0">{{ stats.this_month }}</h3>
+                <small>本月操作</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 筛选栏 -->
+<div class="card mb-4 animate-fade-in">
+    <div class="card-body">
+        <form action="/admin/operation-logs" method="GET" class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">操作类型</label>
+                <select name="action" class="form-select">
+                    <option value="">全部</option>
+                    {% for action in action_options %}
+                    <option value="{{ action }}" {% if current_action == action %}selected{% endif %}>{{ action }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">操作模块</label>
+                <select name="module" class="form-select">
+                    <option value="">全部</option>
+                    {% for module in module_options %}
+                    <option value="{{ module }}" {% if current_module == module %}selected{% endif %}>{{ module }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">&nbsp;</label>
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search me-1"></i>筛选
+                </button>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">&nbsp;</label>
+                <a href="/admin/operation-logs" class="btn btn-outline-secondary w-100">
+                    <i class="bi bi-x-lg me-1"></i>清除
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 日志列表 -->
+<div class="card animate-fade-in">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">
+            <i class="bi bi-list-check text-primary me-2"></i>日志列表
+            {% if total > 0 %}<span class="badge bg-secondary">{{ total }}</span>{% endif %}
+        </h5>
+    </div>
+    <div class="card-body p-0">
+        {% if logs %}
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 150px;">时间</th>
+                        <th style="width: 80px;">操作</th>
+                        <th style="width: 80px;">模块</th>
+                        <th>目标</th>
+                        <th>描述</th>
+                        <th style="width: 80px;">状态</th>
+                        <th style="width: 100px;">IP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in logs %}
+                    <tr>
+                        <td>
+                            <small>{{ log.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                        </td>
+                        <td>
+                            {% if log.action == 'create' %}
+                            <span class="badge bg-success">新增</span>
+                            {% elif log.action == 'update' %}
+                            <span class="badge bg-primary">修改</span>
+                            {% elif log.action == 'delete' %}
+                            <span class="badge bg-danger">删除</span>
+                            {% elif log.action == 'login' %}
+                            <span class="badge bg-info">登录</span>
+                            {% elif log.action == 'logout' %}
+                            <span class="badge bg-secondary">登出</span>
+                            {% else %}
+                            <span class="badge bg-light text-dark">{{ log.action }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ log.module }}</td>
+                        <td>
+                            {% if log.target_name %}
+                            <strong>{{ log.target_name }}</strong>
+                            {% endif %}
+                            {% if log.target_id %}
+                            <br><small class="text-muted">ID: {{ log.target_id }}</small>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <small>{{ log.description or '-' }}</small>
+                        </td>
+                        <td>
+                            {% if log.status == 'success' %}
+                            <span class="text-success"><i class="bi bi-check-circle"></i></span>
+                            {% else %}
+                            <span class="text-danger"><i class="bi bi-x-circle"></i></span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <small class="text-muted">{{ log.ip_address or '-' }}</small>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 分页 -->
+        {% if total > per_page %}
+        <nav class="mt-3">
+            <ul class="pagination justify-content-center mb-0">
+                {% if page > 1 %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page - 1 }}&action={{ current_action or '' }}&module={{ current_module or '' }}">
+                        <i class="bi bi-chevron-left"></i>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% set start = [1, page - 3]|max %}
+                {% set end = [total // per_page + 1, page + 3]|min %}
+
+                {% for p in range(start, end + 1) %}
+                <li class="page-item {% if p == page %}active{% endif %}">
+                    <a class="page-link" href="?page={{ p }}&action={{ current_action or '' }}&module={{ current_module or '' }}">{{ p }}</a>
+                </li>
+                {% endfor %}
+
+                {% if page < (total // per_page + 1) %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page + 1 }}&action={{ current_action or '' }}&module={{ current_module or '' }}">
+                        <i class="bi bi-chevron-right"></i>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+
+        {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-inbox fs-1 d-block mb-3 text-muted"></i>
+            <p class="text-muted mb-0">暂无日志记录</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- 提示信息 -->
+<div class="card mt-4 animate-fade-in">
+    <div class="card-header">
+        <h5 class="card-title mb-0">
+            <i class="bi bi-info-circle text-primary me-2"></i>说明
+        </h5>
+    </div>
+    <div class="card-body">
+        <ul class="mb-0">
+            <li>操作日志记录管理员的所有重要操作</li>
+            <li>默认保留 <strong>90天</strong> 的日志记录</li>
+            <li>日志类型包括：新增(create)、修改(update)、删除(delete)、登录(login)、登出(logout)</li>
+            <li>可以按操作类型、模块、时间等条件筛选</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+async function loadLogs() {
+    location.reload();
+}
+</script>
+{% endblock %}

@@ -80,6 +80,7 @@ class Post(BaseModel):
     seo_description = Column(Text, nullable=True, comment="SEO描述")
     seo_description_en = Column(Text, nullable=True, comment="英文SEO描述")
     published_at = Column(DateTime, nullable=True, comment="发布时间")
+    scheduled_at = Column(DateTime, nullable=True, comment="定时发布 scheduled时间")
     is_approved = Column(Integer, default=0, nullable=False, comment="是否已审核通过(0=待审核,1=已通过)")
     admin_reply = Column(Text, nullable=True, comment="管理员回复内容")
 
@@ -88,6 +89,9 @@ class Post(BaseModel):
     cover_media = relationship("MediaFile", foreign_keys=[cover_media_id])
     categories = relationship(
         "PostCategory", secondary="post_category_link", backref="posts"
+    )
+    tags = relationship(
+        "Tag", secondary="post_tag_link", back_populates="posts"
     )
 
     @property

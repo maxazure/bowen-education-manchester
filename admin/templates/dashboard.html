@@ -3,6 +3,14 @@
 {% block title %}仪表板 - 博文教育管理后台{% endblock %}
 
 {% block content %}
+<!-- 面包屑导航 -->
+<nav aria-label="breadcrumb" class="mb-3 animate-fade-in">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin"><i class="bi bi-house-door me-1"></i>首页</a></li>
+        <li class="breadcrumb-item active" aria-current="page">仪表板</li>
+    </ol>
+</nav>
+
 <!-- 页面标题区 -->
 <div class="page-header animate-fade-in">
     <div class="d-flex justify-content-between align-items-center">
@@ -13,7 +21,83 @@
             <p class="page-subtitle">欢迎回来，查看您的系统概览</p>
         </div>
         <div class="d-flex gap-2">
-            <button class="btn btn-outline" id="refreshStats">
+            <!-- 组件布局设置 -->
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" title="自定义布局">
+                    <i class="bi bi-grid-1x2"></i>
+                </button>
+                <div class="dropdown-menu dropdown-menu-end p-3" style="width: 280px;">
+                    <h6 class="dropdown-header"><i class="bi bi-grid-1x2 me-2"></i>自定义组件显示</h6>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="widgetTrend" checked onchange="toggleWidget('trend')">
+                        <label class="form-check-label" for="widgetTrend">内容增长趋势</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="widgetCategory" checked onchange="toggleWidget('category')">
+                        <label class="form-check-label" for="widgetCategory">内容分类分布</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="widgetTraffic" checked onchange="toggleWidget('traffic')">
+                        <label class="form-check-label" for="widgetTraffic">流量统计</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="widgetDistribution" checked onchange="toggleWidget('distribution')">
+                        <label class="form-check-label" for="widgetDistribution">状态与标签分布</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="widgetStats" checked onchange="toggleWidget('stats')">
+                        <label class="form-check-label" for="widgetStats">统计卡片</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="widgetHealth" checked onchange="toggleWidget('health')">
+                        <label class="form-check-label" for="widgetHealth">系统健康状态</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="widgetLog" checked onchange="toggleWidget('log')">
+                        <label class="form-check-label" for="widgetLog">操作日志</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="widgetActivities" checked onchange="toggleWidget('activities')">
+                        <label class="form-check-label" for="widgetActivities">最近活动</label>
+                    </div>
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="widgetPerformance" checked onchange="toggleWidget('performance')">
+                        <label class="form-check-label" for="widgetPerformance">性能概览</label>
+                    </div>
+                    <hr>
+                    <button class="btn btn-sm btn-primary w-100" onclick="resetWidgets()">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i>恢复默认布局
+                    </button>
+                </div>
+            </div>
+
+            <!-- 快捷跳转 -->
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="bi bi-compass me-1"></i>跳转
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><h6 class="dropdown-header">内容管理</h6></li>
+                    <li><a class="dropdown-item" href="/admin/posts"><i class="bi bi-file-earmark-text me-2"></i>文章管理</a></li>
+                    <li><a class="dropdown-item" href="/admin/products"><i class="bi bi-box-seam me-2"></i>产品管理</a></li>
+                    <li><a class="dropdown-item" href="/admin/galleries"><i class="bi bi-images me-2"></i>相册管理</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><h6 class="dropdown-header">系统设置</h6></li>
+                    <li><a class="dropdown-item" href="/admin/media"><i class="bi bi-cloud-upload me-2"></i>媒体库</a></li>
+                    <li><a class="dropdown-item" href="/admin/columns"><i class="bi bi-collection me-2"></i>栏目管理</a></li>
+                    <li><a class="dropdown-item" href="/admin/contacts"><i class="bi bi-envelope me-2"></i>留言管理</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/admin/heroes"><i class="bi bi-images me-2"></i>幻灯片管理</a></li>
+                    <li><a class="dropdown-item" href="/admin/single-pages"><i class="bi bi-file-earmark me-2"></i>单页管理</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/admin/posts/seo"><i class="bi bi-search me-2"></i>SEO 分析</a></li>
+                    <li><a class="dropdown-item" href="/admin/scheduler"><i class="bi bi-clock me-2"></i>定时任务</a></li>
+                    <li><a class="dropdown-item" href="/admin/analytics"><i class="bi bi-bar-chart me-2"></i>访问统计</a></li>
+                    <li><a class="dropdown-item" href="javascript:showBackupModal()"><i class="bi bi-database me-2"></i>数据备份</a></li>
+                    <li><a class="dropdown-item" href="javascript:showExportModal()"><i class="bi bi-download me-2"></i>数据导出</a></li>
+                </ul>
+            </div>
+            <button class="btn btn-outline" id="refreshStats" title="刷新数据">
                 <i class="bi bi-arrow-clockwise"></i>
             </button>
             <button class="btn btn-primary" onclick="location.href='/admin/posts/new'">
@@ -23,11 +107,247 @@
     </div>
 </div>
 
+<!-- 欢迎横幅 -->
+<div class="welcome-banner mb-4 animate-fade-in" style="animation-delay: 100ms;">
+    <div class="row align-items-center">
+        <div class="col-md-8">
+            <div class="d-flex align-items-center">
+                <div class="welcome-icon me-3">
+                    <i class="bi bi-gem"></i>
+                </div>
+                <div>
+                    <h4 class="mb-1">开始管理您的内容</h4>
+                    <p class="mb-0 text-muted">创建文章、上传图片、管理相册，一切尽在掌握</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <div class="d-flex gap-2 justify-content-md-end flex-wrap">
+                <a href="/admin/posts/new" class="btn btn-primary">
+                    <i class="bi bi-plus-lg me-1"></i>新建文章
+                </a>
+                <a href="/admin/media" class="btn btn-outline-primary">
+                    <i class="bi bi-cloud-upload me-1"></i>上传媒体
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 快捷操作工具栏 -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card bg-light border-0">
+            <div class="card-body py-3">
+                <div class="d-flex align-items-center flex-wrap gap-3">
+                    <span class="text-muted fw-medium">
+                        <i class="bi bi-lightning me-1"></i>快捷操作：
+                    </span>
+                    <a href="/admin/posts/new" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-file-earmark-text me-1"></i>写文章
+                    </a>
+                    <a href="/admin/products/new" class="btn btn-sm btn-outline-success">
+                        <i class="bi bi-box-seam me-1"></i>添加产品
+                    </a>
+                    <a href="/admin/media" class="btn btn-sm btn-outline-info">
+                        <i class="bi bi-cloud-upload me-1"></i>上传媒体
+                    </a>
+                    <a href="/admin/galleries/new" class="btn btn-sm btn-outline-warning">
+                        <i class="bi bi-images me-1"></i>创建相册
+                    </a>
+                    <a href="/admin/posts/trash" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-trash me-1"></i>回收站
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 趋势图表区 -->
+<div class="row mb-4 widget-section" id="widget-section-trend" data-widget="trend" data-position="0">
+    <div class="col-lg-8">
+        <div class="card animate-fade-in">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-graph-up text-primary me-2"></i>内容增长趋势
+                </h5>
+                <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-sm btn-outline-secondary widget-refresh" onclick="refreshWidget('trend')" title="刷新">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+                    <div class="btn-group btn-group-sm" id="trendTimeRange">
+                        <button class="btn btn-outline active" data-range="7">7天</button>
+                        <button class="btn btn-outline" data-range="14">14天</button>
+                        <button class="btn btn-outline" data-range="30">30天</button>
+                    </div>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="exportChartData('trend')" title="导出数据">
+                        <i class="bi bi-download"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div style="height: 280px;">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card animate-fade-in" style="animation-delay: 100ms">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-pie-chart text-success me-2"></i>内容分类分布
+                </h5>
+                <button class="btn btn-sm btn-outline-secondary widget-refresh" onclick="refreshWidget('category')" title="刷新">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+            <div class="card-body">
+                <div style="height: 200px;">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+                <div class="mt-3" id="categoryLegend">
+                    <!-- 图例将由 JS 动态生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 流量统计区 -->
+<div class="row mb-4 widget-section" id="widget-section-traffic" data-widget="traffic" data-position="1">
+    <div class="col-lg-4">
+        <div class="card animate-fade-in" style="animation-delay: 150ms">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-eye text-info me-2"></i>今日浏览量
+                </h5>
+                <button class="btn btn-sm btn-outline-secondary widget-refresh" onclick="refreshWidget('traffic')" title="刷新">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+            <div class="card-body text-center">
+                <div class="display-4 fw-bold text-info" id="todayViews">-</div>
+                <div class="text-muted small">
+                    <i class="bi bi-arrow-up text-success me-1"></i>
+                    <span id="viewsChange">较昨日</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card animate-fade-in" style="animation-delay: 200ms">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-people text-warning me-2"></i>今日访客
+                </h5>
+                <button class="btn btn-sm btn-outline-secondary widget-refresh" onclick="refreshWidget('traffic')" title="刷新">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+            <div class="card-body text-center">
+                <div class="display-4 fw-bold text-warning" id="todayVisitors">-</div>
+                <div class="text-muted small">
+                    <i class="bi bi-person-check me-1"></i>
+                    <span>独立访客</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card animate-fade-in" style="animation-delay: 250ms">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-envelope text-primary me-2"></i>待处理留言
+                </h5>
+                <button class="btn btn-sm btn-outline-secondary widget-refresh" onclick="refreshWidget('traffic')" title="刷新">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+            <div class="card-body text-center">
+                <div class="display-4 fw-bold text-primary" id="pendingContacts">-</div>
+                <div class="text-muted small">
+                    <a href="/admin/contacts" class="text-decoration-none">
+                        <i class="bi bi-arrow-right me-1"></i>查看详情
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 标签和状态分布区 -->
+<div class="row mb-4 widget-section" id="widget-section-distribution" data-widget="distribution" data-position="2">
+    <div class="col-lg-4">
+        <div class="card animate-fade-in" style="animation-delay: 300ms">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-pie-chart text-success me-2"></i>内容状态分布
+                </h5>
+                <button class="btn btn-sm btn-outline-secondary widget-refresh" onclick="refreshWidget('distribution')" title="刷新">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+            <div class="card-body">
+                <div style="height: 200px;">
+                    <canvas id="statusChart"></canvas>
+                </div>
+                <div class="mt-3" id="statusLegend">
+                    <!-- 图例由JS动态生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card animate-fade-in" style="animation-delay: 350ms">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-tags text-warning me-2"></i>热门标签
+                </h5>
+                <button class="btn btn-sm btn-outline-secondary widget-refresh" onclick="refreshWidget('tags')" title="刷新">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+            <div class="card-body">
+                <div id="topTagsList">
+                    <div class="text-center py-4 text-muted">
+                        <div class="spinner-border spinner-border-sm me-2" role="status">
+                            <span class="visually-hidden">加载中...</span>
+                        </div>
+                        加载中...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card animate-fade-in" style="animation-delay: 400ms">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-bar-chart-steps text-primary me-2"></i>月度增长对比
+                </h5>
+                <button class="btn btn-sm btn-outline-secondary widget-refresh" onclick="refreshWidget('monthly')" title="刷新">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+            <div class="card-body">
+                <div style="height: 200px;">
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- 统计卡片区 - Modern Bento Grid -->
-<div class="bento-grid mb-5" style="--stagger-delay: 0">
+<div class="bento-grid mb-5 widget-section" id="widget-section-stats" data-widget="stats" data-position="3" style="--stagger-delay: 0">
     <!-- 文章统计 -->
     <div class="bento-item-3">
         <div class="stat-card primary animate-fade-in" style="animation-delay: 0ms">
+            <button class="btn btn-sm btn-outline-light widget-refresh-btn" onclick="refreshWidget('stats')" title="刷新">
+                <i class="bi bi-arrow-clockwise"></i>
+            </button>
             <div class="stat-icon">
                 <i class="bi bi-newspaper"></i>
             </div>
@@ -45,6 +365,9 @@
     <!-- 产品统计 -->
     <div class="bento-item-3">
         <div class="stat-card success animate-fade-in" style="animation-delay: 50ms">
+            <button class="btn btn-sm btn-outline-light widget-refresh-btn" onclick="refreshWidget('stats')" title="刷新">
+                <i class="bi bi-arrow-clockwise"></i>
+            </button>
             <div class="stat-icon">
                 <i class="bi bi-box-seam"></i>
             </div>
@@ -62,6 +385,9 @@
     <!-- 相册统计 -->
     <div class="bento-item-3">
         <div class="stat-card info animate-fade-in" style="animation-delay: 100ms">
+            <button class="btn btn-sm btn-outline-light widget-refresh-btn" onclick="refreshWidget('stats')" title="刷新">
+                <i class="bi bi-arrow-clockwise"></i>
+            </button>
             <div class="stat-icon">
                 <i class="bi bi-collection"></i>
             </div>
@@ -79,6 +405,9 @@
     <!-- 留言统计 -->
     <div class="bento-item-3">
         <div class="stat-card warning animate-fade-in" style="animation-delay: 150ms">
+            <button class="btn btn-sm btn-outline-light widget-refresh-btn" onclick="refreshWidget('stats')" title="刷新">
+                <i class="bi bi-arrow-clockwise"></i>
+            </button>
             <div class="stat-icon">
                 <i class="bi bi-chat-dots"></i>
             </div>
@@ -156,6 +485,166 @@
                         正在加载最近活动...
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 数据备份模态框 -->
+<div class="modal fade" id="backupModal" tabindex="-1" aria-labelledby="backupModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="backupModalLabel">
+                    <i class="bi bi-database me-2"></i>数据备份与恢复
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- 备份列表 -->
+                <h6 class="text-muted mb-3">
+                    <i class="bi bi-list me-1"></i>可用备份
+                </h6>
+                <div class="list-group mb-4" id="backupList">
+                    <div class="text-center py-4 text-muted">
+                        <i class="bi bi-hourglass-split fs-3 d-block mb-2"></i>
+                        正在加载备份列表...
+                    </div>
+                </div>
+
+                <!-- 备份进度 -->
+                <div id="backupProgressContainer" style="display: none;">
+                    <div class="alert alert-info mb-2">
+                        <i class="bi bi-arrow-repeat me-2"></i>
+                        <span id="backupProgressText">正在创建备份...</span>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" id="backupProgressBar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- 备份选项 -->
+                <hr>
+                <h6 class="text-muted mb-3">
+                    <i class="bi bi-gear me-1"></i>创建新备份
+                </h6>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">备份内容</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="backupDatabase" checked>
+                            <label class="form-check-label" for="backupDatabase">数据库</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="backupUploads" checked>
+                            <label class="form-check-label" for="backupUploads">上传文件</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">备份标签（可选）</label>
+                        <input type="text" class="form-control" id="backupLabel" placeholder="如：更新前备份">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-outline-warning" onclick="clearOldBackups()">
+                    <i class="bi bi-trash me-1"></i>清理旧备份
+                </button>
+                <button type="button" class="btn btn-primary" onclick="createBackup()">
+                    <i class="bi bi-download me-1"></i>创建备份
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 数据导出模态框 -->
+<div class="modal fade" id="exportModal" tabindex="-1" aria-labelledby="exportModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exportModalLabel">
+                    <i class="bi bi-download me-2"></i>数据导出
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">选择导出内容</label>
+                    <select class="form-select" id="exportType" onchange="updateExportOptions()">
+                        <option value="posts">文章数据</option>
+                        <option value="products">产品数据</option>
+                        <option value="contacts">留言数据</option>
+                        <option value="media">媒体库统计</option>
+                        <option value="analytics">访问统计</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">选择导出格式</label>
+                    <div class="btn-group w-100" role="group">
+                        <input type="radio" class="btn-check" name="exportFormat" id="formatCsv" value="csv" checked>
+                        <label class="btn btn-outline-primary" for="formatCsv">
+                            <i class="bi bi-filetype-csv me-1"></i>CSV
+                        </label>
+                        <input type="radio" class="btn-check" name="exportFormat" id="formatJson" value="json">
+                        <label class="btn btn-outline-primary" for="formatJson">
+                            <i class="bi bi-filetype-json me-1"></i>JSON
+                        </label>
+                        <input type="radio" class="btn-check" name="exportFormat" id="formatExcel" value="excel">
+                        <label class="btn btn-outline-primary" for="formatExcel">
+                            <i class="bi bi-filetype-xlsx me-1"></i>Excel
+                        </label>
+                    </div>
+                </div>
+                <div class="mb-3" id="dateRangeOption">
+                    <label class="form-label">日期范围</label>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <input type="date" class="form-control" id="exportDateFrom">
+                        </div>
+                        <div class="col-6">
+                            <input type="date" class="form-control" id="exportDateTo">
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-info mb-0">
+                    <i class="bi bi-info-circle me-2"></i>
+                    导出文件将自动下载到您的设备
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="executeExport()">
+                    <i class="bi bi-download me-1"></i>开始导出
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 批量操作进度模态框 -->
+<div class="modal fade" id="batchProgressModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title">
+                    <i class="bi bi-hourglass-split me-2"></i>正在处理...
+                </h6>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-3">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <div class="mt-2" id="batchProgressText">正在处理 0/0</div>
+                </div>
+                <div class="progress" style="height: 10px;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" id="batchProgressBar" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="modal-footer" id="batchProgressFooter" style="display: none;">
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal">
+                    <i class="bi bi-check-lg me-1"></i>完成
+                </button>
             </div>
         </div>
     </div>
@@ -247,7 +736,7 @@
                         <div class="mt-2">
                             <div class="text-muted small">系统状态</div>
                             <div class="fw-bold fs-5">
-                                <span class="badge badge-success">正常</span>
+                                <span class="badge badge-success" id="systemStatus">正常</span>
                             </div>
                         </div>
                     </div>
@@ -257,14 +746,170 @@
     </div>
 </div>
 
+<!-- 系统健康状态 -->
+<div class="row mb-4 widget-section" id="widget-section-health" data-widget="health" data-position="4">
+    <div class="col-lg-6">
+        <div class="card animate-fade-in" style="animation-delay: 400ms">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-heart-pulse text-danger me-2"></i>系统健康状态
+                </h5>
+                <button class="btn btn-sm btn-outline-secondary widget-refresh" onclick="refreshWidget('health')" title="刷新">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-success-light text-success me-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+                                <i class="bi bi-cpu"></i>
+                            </div>
+                            <div>
+                                <div class="text-muted small">CPU 使用率</div>
+                                <div class="fw-bold" id="cpuUsage">-</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-primary-light text-primary me-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+                                <i class="bi bi-memory"></i>
+                            </div>
+                            <div>
+                                <div class="text-muted small">内存使用</div>
+                                <div class="fw-bold" id="memoryUsage">-</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-info-light text-info me-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+                                <i class="bi bi-hdd"></i>
+                            </div>
+                            <div>
+                                <div class="text-muted small">磁盘空间</div>
+                                <div class="fw-bold" id="diskUsage">-</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex align-items-center">
+                            <div class="stat-icon bg-warning-light text-warning me-3" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+                                <i class="bi bi-clock-history"></i>
+                            </div>
+                            <div>
+                                <div class="text-muted small">运行时间</div>
+                                <div class="fw-bold" id="uptime">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 性能概览雷达图 -->
+    <div class="col-lg-6 widget-section" id="widget-section-performance" data-widget="performance" data-position="4.5">
+        <div class="card animate-fade-in" style="animation-delay: 450ms">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-graph-up-arrow text-primary me-2"></i>性能概览
+                </h5>
+                <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-sm btn-outline-secondary widget-refresh" onclick="refreshWidget('performance')" title="刷新">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div style="height: 220px;">
+                    <canvas id="performanceRadarChart"></canvas>
+                </div>
+                <div class="mt-2 text-center">
+                    <small class="text-muted">
+                        <i class="bi bi-info-circle me-1"></i>
+                        实线: 当前周期 | 虚线: 上一周期
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row widget-section" id="widget-section-log" data-widget="log" data-position="5">
+    <div class="col-lg-12">
+        <div class="card animate-fade-in" style="animation-delay: 450ms">
+            <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-clock-history text-primary me-2"></i>最近操作日志
+                </h5>
+                <div class="d-flex align-items-center gap-2">
+                    <!-- 过滤操作类型 -->
+                    <select class="form-select form-select-sm" id="logFilter" onchange="filterLogs()" style="width: auto;">
+                        <option value="all">全部操作</option>
+                        <option value="create">创建</option>
+                        <option value="update">更新</option>
+                        <option value="delete">删除</option>
+                        <option value="publish">发布</option>
+                    </select>
+                    <button class="btn btn-sm btn-outline-secondary widget-refresh" onclick="loadOperationLog()" title="刷新">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+                    <span class="badge bg-light text-muted">实时</span>
+                </div>
+            </div>
+            <div class="card-body p-0" style="max-height: 300px; overflow-y: auto;">
+                <div class="list-group list-group-flush" id="operationLog">
+                    <div class="text-center py-4 text-muted">
+                        <div class="spinner-border spinner-border-sm me-2" role="status">
+                            <span class="visually-hidden">加载中...</span>
+                        </div>
+                        正在加载操作日志...
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent py-2">
+                <a href="/admin/operation-logs" class="btn btn-sm btn-link w-100">
+                    查看完整日志 <i class="bi bi-arrow-right ms-1"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- 数据加载和初始化脚本 -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // 初始化趋势图表
+    initTrendChart();
+
+    // 初始化分类分布图
+    initCategoryChart();
+
+    // 初始化状态分布图
+    initStatusChart();
+
+    // 初始化月度增长图
+    initMonthlyChart();
+
+    // 初始化性能雷达图
+    initPerformanceRadarChart();
+
     // 加载统计数据
     loadDashboardStats();
 
     // 加载最近活动
     loadRecentActivities();
+
+    // 加载系统健康状态
+    loadSystemHealth();
+
+    // 加载操作日志
+    loadOperationLog();
+
+    // 加载热门标签
+    loadTopTags();
 
     // 刷新按钮事件
     const refreshBtn = document.getElementById('refreshStats');
@@ -276,12 +921,197 @@ document.addEventListener('DOMContentLoaded', function() {
             // 重新加载数据
             loadDashboardStats();
             loadRecentActivities();
+            loadTrendData(7); // 刷新图表
+            loadStatusData();
+            loadMonthlyData();
+            loadTopTags();
         });
     }
+
+    // 趋势时间范围切换
+    document.querySelectorAll('#trendTimeRange .btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const range = parseInt(this.dataset.range);
+            document.querySelectorAll('#trendTimeRange .btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            loadTrendData(range);
+        });
+    });
 
     // 每30秒刷新一次数据
     setInterval(loadDashboardStats, 30000);
 });
+
+// 全局图表实例
+let trendChart = null;
+
+/**
+ * 初始化趋势图表 - 增强版
+ */
+function initTrendChart() {
+    const ctx = document.getElementById('trendChart');
+    if (!ctx) return;
+
+    // 创建渐变填充
+    const gradientPosts = ctx.getContext('2d').createLinearGradient(0, 0, 0, 280);
+    gradientPosts.addColorStop(0, 'rgba(99, 102, 241, 0.4)');
+    gradientPosts.addColorStop(1, 'rgba(99, 102, 241, 0.02)');
+
+    const gradientProducts = ctx.getContext('2d').createLinearGradient(0, 0, 0, 280);
+    gradientProducts.addColorStop(0, 'rgba(34, 197, 94, 0.4)');
+    gradientProducts.addColorStop(1, 'rgba(34, 197, 94, 0.02)');
+
+    const gradientGalleries = ctx.getContext('2d').createLinearGradient(0, 0, 0, 280);
+    gradientGalleries.addColorStop(0, 'rgba(59, 130, 246, 0.4)');
+    gradientGalleries.addColorStop(1, 'rgba(59, 130, 246, 0.02)');
+
+    trendChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [
+                {
+                    label: '文章',
+                    data: [],
+                    borderColor: '#6366f1',
+                    backgroundColor: gradientPosts,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointHoverRadius: 7,
+                    pointBackgroundColor: '#6366f1',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    borderWidth: 3
+                },
+                {
+                    label: '产品',
+                    data: [],
+                    borderColor: '#22c55e',
+                    backgroundColor: gradientProducts,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointHoverRadius: 7,
+                    pointBackgroundColor: '#22c55e',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    borderWidth: 3
+                },
+                {
+                    label: '相册',
+                    data: [],
+                    borderColor: '#3b82f6',
+                    backgroundColor: gradientGalleries,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 4,
+                    pointHoverRadius: 7,
+                    pointBackgroundColor: '#3b82f6',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    borderWidth: 3
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 20,
+                        font: { size: 12, weight: '500' }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(255, 255, 255, 0.98)',
+                    titleColor: '#1f2937',
+                    bodyColor: '#4b5563',
+                    borderColor: '#e5e7eb',
+                    borderWidth: 1,
+                    cornerRadius: 12,
+                    padding: 16,
+                    titleFont: { size: 14, weight: '600' },
+                    bodyFont: { size: 13 },
+                    displayColors: true,
+                    boxPadding: 6,
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            if (label) label += ': ';
+                            label += context.parsed.y + ' 个';
+                            // 添加环比变化
+                            const data = context.dataset.data;
+                            if (data.length > 1) {
+                                const prevIndex = context.dataIndex - 1;
+                                if (prevIndex >= 0) {
+                                    const diff = context.parsed.y - data[prevIndex];
+                                    if (diff > 0) {
+                                        label += ` <span class="text-success">(+${diff})</span>`;
+                                    } else if (diff < 0) {
+                                        label += ` <span class="text-danger">(${diff})</span>`;
+                                    }
+                                }
+                            }
+                            return label;
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: { font: { size: 11 } }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                    ticks: { font: { size: 11 } }
+                }
+            },
+            animation: {
+                duration: 1500,
+                easing: 'easeOutQuart'
+            }
+        }
+    });
+
+    // 加载默认7天数据
+    loadTrendData(7);
+}
+
+/**
+ * 加载趋势数据
+ */
+async function loadTrendData(days = 7) {
+    try {
+        const response = await fetch(`/admin/api/stats/trend?days=${days}`);
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error('获取趋势数据失败');
+        }
+
+        const data = result.data;
+
+        if (trendChart) {
+            trendChart.data.labels = data.labels;
+            trendChart.data.datasets[0].data = data.posts;
+            trendChart.data.datasets[1].data = data.products;
+            trendChart.data.datasets[2].data = data.galleries;
+            trendChart.update('active');
+        }
+    } catch (error) {
+        console.error('加载趋势数据失败:', error);
+    }
+}
 
 /**
  * 显示骨架屏加载状态
@@ -419,58 +1249,63 @@ function updateProgressBar(elementId, percentage) {
 }
 
 /**
- * 加载最近活动
+ * 加载最近活动（真实数据）
  */
 async function loadRecentActivities() {
     try {
-        // 这里应该调用实际的API接口
-        // 目前使用模拟数据
-        const activities = [
-            {
-                icon: 'bi-newspaper',
-                color: 'primary',
-                title: '新文章发布',
-                description: '发布了文章《博文教育2024年度总结》',
-                time: '2分钟前'
-            },
-            {
-                icon: 'bi-box-seam',
-                color: 'success',
-                title: '产品更新',
-                description: '更新了产品《雅思培训课程》的信息',
-                time: '15分钟前'
-            },
-            {
-                icon: 'bi-images',
-                color: 'info',
-                title: '上传媒体',
-                description: '上传了5张图片到媒体库',
-                time: '1小时前'
-            },
-            {
-                icon: 'bi-chat-dots',
-                color: 'warning',
-                title: '收到新留言',
-                description: '张先生咨询了雅思课程相关信息',
-                time: '2小时前'
-            },
-            {
-                icon: 'bi-collection',
-                color: 'info',
-                title: '相册创建',
-                description: '创建了新相册《2024毕业典礼》',
-                time: '3小时前'
-            }
-        ];
+        const response = await fetch('/admin/api/stats/recent-activities?limit=10');
+        const result = await response.json();
 
+        if (!result.success) {
+            throw new Error('获取活动数据失败');
+        }
+
+        const activities = result.data.activities;
         const container = document.getElementById('recentActivities');
         if (!container) return;
 
         // 清空加载状态
         container.innerHTML = '';
 
+        if (!activities || activities.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-5 text-muted">
+                    <i class="bi bi-inbox fs-3 mb-2"></i>
+                    <p class="mb-0">暂无最近活动</p>
+                </div>
+            `;
+            return;
+        }
+
         // 渲染活动列表
         activities.forEach((activity, index) => {
+            // 格式化时间
+            let timeText = '';
+            if (activity.time) {
+                try {
+                    const date = new Date(activity.time);
+                    const now = new Date();
+                    const diffMs = now - date;
+                    const diffMins = Math.floor(diffMs / 60000);
+                    const diffHours = Math.floor(diffMs / 3600000);
+                    const diffDays = Math.floor(diffMs / 86400000);
+
+                    if (diffMins < 1) {
+                        timeText = '刚刚';
+                    } else if (diffMins < 60) {
+                        timeText = `${diffMins}分钟前`;
+                    } else if (diffHours < 24) {
+                        timeText = `${diffHours}小时前`;
+                    } else if (diffDays < 7) {
+                        timeText = `${diffDays}天前`;
+                    } else {
+                        timeText = date.toLocaleDateString('zh-CN');
+                    }
+                } catch (e) {
+                    timeText = activity.time;
+                }
+            }
+
             const item = document.createElement('div');
             item.className = 'list-group-item list-group-item-action d-flex align-items-start border-0 py-3 fade-in';
             item.style.animationDelay = (index * 0.1) + 's';
@@ -483,11 +1318,18 @@ async function loadRecentActivities() {
                 <div class="flex-grow-1">
                     <div class="d-flex justify-content-between align-items-start mb-1">
                         <h6 class="mb-0">${activity.title}</h6>
-                        <small class="text-muted">${activity.time}</small>
+                        <small class="text-muted">${timeText}</small>
                     </div>
                     <p class="text-muted mb-0 small">${activity.description}</p>
                 </div>
             `;
+            // 点击跳转到对应页面
+            if (activity.url) {
+                item.style.cursor = 'pointer';
+                item.addEventListener('click', function() {
+                    window.location.href = activity.url;
+                });
+            }
             container.appendChild(item);
         });
 
@@ -504,6 +1346,1100 @@ async function loadRecentActivities() {
         }
     }
 }
+
+// 全局分类图表实例
+let categoryChart = null;
+
+/**
+ * 初始化分类分布图
+ */
+function initCategoryChart() {
+    const ctx = document.getElementById('categoryChart');
+    if (!ctx) return;
+
+    categoryChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: [],
+            datasets: [{
+                data: [],
+                backgroundColor: [
+                    '#6366f1', '#22c55e', '#3b82f6', '#f59e0b',
+                    '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6'
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '60%',
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+
+    // 加载分类数据
+    loadCategoryData();
+}
+
+/**
+ * 加载分类数据
+ */
+async function loadCategoryData() {
+    try {
+        const response = await fetch('/admin/api/stats/categories');
+        const result = await response.json();
+
+        if (!result.success) return;
+
+        const data = result.data;
+        if (categoryChart && data.labels) {
+            categoryChart.data.labels = data.labels;
+            categoryChart.data.datasets[0].data = data.counts;
+            categoryChart.update();
+
+            // 更新图例
+            const legendContainer = document.getElementById('categoryLegend');
+            if (legendContainer && data.labels) {
+                let legendHtml = '<div class="d-flex flex-wrap gap-2">';
+                data.labels.forEach((label, index) => {
+                    const color = categoryChart.data.datasets[0].backgroundColor[index];
+                    legendHtml += `
+                        <span class="badge" style="background-color: ${color}">
+                            ${label}: ${data.counts[index]}
+                        </span>
+                    `;
+                });
+                legendHtml += '</div>';
+                legendContainer.innerHTML = legendHtml;
+            }
+        }
+    } catch (error) {
+        console.error('加载分类数据失败:', error);
+    }
+}
+
+// 全局状态图表实例
+let statusChart = null;
+
+/**
+ * 初始化状态分布图
+ */
+function initStatusChart() {
+    const ctx = document.getElementById('statusChart');
+    if (!ctx) return;
+
+    statusChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['已发布', '草稿', '已下线'],
+            datasets: [{
+                data: [0, 0, 0],
+                backgroundColor: ['#22c55e', '#f59e0b', '#6b7280'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '60%',
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+
+    loadStatusData();
+}
+
+/**
+ * 加载状态分布数据
+ */
+async function loadStatusData() {
+    try {
+        const response = await fetch('/admin/api/stats/status');
+        const result = await response.json();
+
+        if (!result.success) return;
+
+        const data = result.data;
+        if (statusChart) {
+            statusChart.data.datasets[0].data = [data.published, data.draft, data.offline];
+            statusChart.update();
+
+            // 更新图例
+            const legendContainer = document.getElementById('statusLegend');
+            if (legendContainer) {
+                const colors = ['#22c55e', '#f59e0b', '#6b7280'];
+                const counts = [data.published, data.draft, data.offline];
+                const labels = ['已发布', '草稿', '已下线'];
+                let legendHtml = '<div class="d-flex justify-content-around">';
+                labels.forEach((label, index) => {
+                    legendHtml += `
+                        <div class="text-center">
+                            <div class="fw-bold">${counts[index]}</div>
+                            <small class="text-muted">
+                                <span class="badge" style="background-color: ${colors[index]}">${label}</span>
+                            </small>
+                        </div>
+                    `;
+                });
+                legendHtml += '</div>';
+                legendContainer.innerHTML = legendHtml;
+            }
+        }
+    } catch (error) {
+        console.error('加载状态数据失败:', error);
+    }
+}
+
+// 全局月度图表实例
+let monthlyChart = null;
+
+/**
+ * 初始化月度增长图
+ */
+function initMonthlyChart() {
+    const ctx = document.getElementById('monthlyChart');
+    if (!ctx) return;
+
+    monthlyChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [],
+            datasets: [
+                {
+                    label: '文章',
+                    data: [],
+                    backgroundColor: '#6366f1',
+                    borderRadius: 4
+                },
+                {
+                    label: '产品',
+                    data: [],
+                    backgroundColor: '#22c55e',
+                    borderRadius: 4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 10,
+                        font: { size: 10 }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { display: false }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: { color: 'rgba(0,0,0,0.05)' }
+                }
+            }
+        }
+    });
+
+    loadMonthlyData();
+}
+
+/**
+ * 加载月度增长数据
+ */
+async function loadMonthlyData() {
+    try {
+        const response = await fetch('/admin/api/stats/monthly');
+        const result = await response.json();
+
+        if (!result.success) return;
+
+        const data = result.data;
+        if (monthlyChart) {
+            monthlyChart.data.labels = data.labels;
+            monthlyChart.data.datasets[0].data = data.posts;
+            monthlyChart.data.datasets[1].data = data.products;
+            monthlyChart.update();
+        }
+    } catch (error) {
+        console.error('加载月度数据失败:', error);
+    }
+}
+
+/**
+ * 加载热门标签
+ */
+async function loadTopTags() {
+    const container = document.getElementById('topTagsList');
+    if (!container) return;
+
+    try {
+        const response = await fetch('/admin/api/tags?active_only=true');
+        const result = await response.json();
+
+        if (!result.success || !result.data || result.data.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-4 text-muted">
+                    <i class="bi bi-tags fs-3 mb-2 d-block"></i>
+                    <p class="mb-0 small">暂无标签</p>
+                </div>
+            `;
+            return;
+        }
+
+        // 获取标签使用统计（从后端获取）
+        const statsResponse = await fetch('/admin/api/stats/tag-usage');
+        const statsResult = await statsResponse.json();
+
+        let tagData = result.data.slice(0, 6);
+        if (statsResult.success && statsResult.data) {
+            // 按使用次数排序
+            const usageMap = {};
+            statsResult.data.forEach(item => {
+                usageMap[item.tag_id] = item.count;
+            });
+            tagData = tagData.map(tag => ({
+                ...tag,
+                usage: usageMap[tag.id] || 0
+            })).sort((a, b) => b.usage - a.usage).slice(0, 6);
+        }
+
+        let html = '<div class="d-flex flex-wrap gap-2">';
+        tagData.forEach((tag, index) => {
+            html += `
+                <span class="badge d-flex align-items-center"
+                      style="background-color: ${tag.color}; font-size: 12px; padding: 4px 8px;">
+                    <i class="bi bi-tag me-1"></i>
+                    ${tag.name}
+                    <span class="badge bg-light text-dark ms-1" style="font-size: 10px;">
+                        ${tag.usage || 0}
+                    </span>
+                </span>
+            `;
+        });
+        html += '</div>';
+        container.innerHTML = html;
+
+    } catch (error) {
+        console.error('加载热门标签失败:', error);
+        container.innerHTML = `
+            <div class="text-center py-4 text-danger">
+                <i class="bi bi-exclamation-circle fs-3 mb-2 d-block"></i>
+                <p class="mb-0 small">加载失败</p>
+            </div>
+        `;
+    }
+}
+
+/**
+ * 加载系统健康状态
+ */
+async function loadSystemHealth() {
+    try {
+        const response = await fetch('/admin/api/stats/health');
+        const result = await response.json();
+
+        if (!result.success) return;
+
+        const health = result.data;
+
+        // 更新系统状态
+        const statusEl = document.getElementById('systemStatus');
+        if (statusEl) {
+            if (health.status === 'healthy') {
+                statusEl.innerHTML = '<span class="badge badge-success">正常</span>';
+            } else if (health.status === 'warning') {
+                statusEl.innerHTML = '<span class="badge badge-warning">警告</span>';
+            } else {
+                statusEl.innerHTML = '<span class="badge badge-danger">异常</span>';
+            }
+        }
+
+        // 更新 CPU
+        const cpuEl = document.getElementById('cpuUsage');
+        if (cpuEl && health.cpu) {
+            cpuEl.textContent = health.cpu;
+            cpuEl.style.color = parseInt(health.cpu) > 80 ? '#dc3545' : '#198754';
+        }
+
+        // 更新内存
+        const memEl = document.getElementById('memoryUsage');
+        if (memEl && health.memory) {
+            memEl.textContent = health.memory;
+        }
+
+        // 更新磁盘
+        const diskEl = document.getElementById('diskUsage');
+        if (diskEl && health.disk) {
+            diskEl.textContent = health.disk;
+        }
+
+        // 更新运行时间
+        const uptimeEl = document.getElementById('uptime');
+        if (uptimeEl && health.uptime) {
+            uptimeEl.textContent = health.uptime;
+        }
+
+        // 更新流量统计
+        const viewsEl = document.getElementById('todayViews');
+        if (viewsEl && health.todayViews) {
+            viewsEl.textContent = health.todayViews;
+        }
+
+        const visitorsEl = document.getElementById('todayVisitors');
+        if (visitorsEl && health.todayVisitors) {
+            visitorsEl.textContent = health.todayVisitors;
+        }
+
+        const contactsEl = document.getElementById('pendingContacts');
+        if (contactsEl && health.pendingContacts !== undefined) {
+            contactsEl.textContent = health.pendingContacts;
+        }
+
+        const viewsChangeEl = document.getElementById('viewsChange');
+        if (viewsChangeEl && health.viewsChange) {
+            viewsChangeEl.textContent = health.viewsChange;
+        }
+
+    } catch (error) {
+        console.error('加载系统健康状态失败:', error);
+    }
+}
+
+/**
+ * 加载操作日志
+ */
+let allOperationLogs = [];
+
+async function loadOperationLog() {
+    try {
+        const response = await fetch('/admin/api/stats/operation-log?limit=20');
+        const result = await response.json();
+
+        const container = document.getElementById('operationLog');
+        if (!container) return;
+
+        if (!result.success || !result.data || result.data.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-4 text-muted">
+                    <i class="bi bi-check-circle fs-3 mb-2 d-block text-success"></i>
+                    <p class="mb-0 small">暂无操作记录</p>
+                </div>
+            `;
+            allOperationLogs = [];
+            return;
+        }
+
+        allOperationLogs = result.data;
+        renderOperationLogs(allOperationLogs.slice(0, 8));
+
+    } catch (error) {
+        console.error('加载操作日志失败:', error);
+    }
+}
+
+function renderOperationLogs(logs) {
+    const container = document.getElementById('operationLog');
+    if (!container) return;
+
+    if (logs.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-4 text-muted">
+                <i class="bi bi-funnel fs-3 mb-2 d-block"></i>
+                <p class="mb-0 small">没有符合条件的记录</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = '';
+
+    logs.forEach((log, index) => {
+        const item = document.createElement('div');
+        item.className = 'list-group-item border-0 py-2 px-3 fade-in';
+        item.style.animationDelay = (index * 0.05) + 's';
+        item.dataset.action = log.action;
+
+        const actionColors = {
+            'create': 'success',
+            'update': 'primary',
+            'delete': 'danger',
+            'publish': 'success',
+            'offline': 'warning',
+            'login': 'info'
+        };
+        const color = actionColors[log.action] || 'secondary';
+
+        const actionText = {
+            'create': '创建',
+            'update': '更新',
+            'delete': '删除',
+            'publish': '发布',
+            'offline': '下线',
+            'login': '登录'
+        };
+
+        item.innerHTML = `
+            <div class="d-flex align-items-center">
+                <div class="stat-icon bg-${color}-light text-${color} me-2" style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; font-size: 14px;">
+                    <i class="bi bi-${log.icon || 'gear'}"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="small">${actionText[log.action] || log.action} ${log.type || ''}</span>
+                        <span class="text-muted small">${log.time}</span>
+                    </div>
+                    <div class="text-muted small">${log.description}</div>
+                </div>
+            </div>
+        `;
+            container.appendChild(item);
+        });
+    } catch (error) {
+        console.error('渲染操作日志失败:', error);
+    }
+}
+
+/**
+ * 过滤操作日志
+ */
+function filterLogs() {
+    const filter = document.getElementById('logFilter').value;
+
+    if (!allOperationLogs || allOperationLogs.length === 0) return;
+
+    let filtered = allOperationLogs;
+    if (filter !== 'all') {
+        filtered = allOperationLogs.filter(log => log.action === filter);
+    }
+
+    renderOperationLogs(filtered.slice(0, 8));
+}
+
+// 每60秒刷新系统状态和操作日志
+setInterval(loadSystemHealth, 60000);
+setInterval(loadOperationLog, 30000);
+
+// ========== 图表导出功能 ==========
+window.exportChartData = function(chartType) {
+    let data = null;
+    let filename = '';
+
+    switch(chartType) {
+        case 'trend':
+            if (!trendChart) return;
+            data = trendChart.data.labels.map((label, i) => ({
+                日期: label,
+                文章: trendChart.data.datasets[0].data[i] || 0,
+                产品: trendChart.data.datasets[1].data[i] || 0,
+                相册: trendChart.data.datasets[2].data[i] || 0
+            }));
+            filename = '内容增长趋势.csv';
+            break;
+        case 'monthly':
+            if (!monthlyChart) return;
+            data = monthlyChart.data.labels.map((label, i) => ({
+                月份: label,
+                文章: monthlyChart.data.datasets[0].data[i] || 0,
+                产品: monthlyChart.data.datasets[1].data[i] || 0
+            }));
+            filename = '月度增长对比.csv';
+            break;
+        default:
+            showToast('warning', '该图表不支持导出', '提示');
+            return;
+    }
+
+    if (!data || data.length === 0) {
+        showToast('warning', '暂无数据可导出', '提示');
+        return;
+    }
+
+    // 转换为 CSV
+    const headers = Object.keys(data[0]);
+    const csvContent = [
+        headers.join(','),
+        ...data.map(row => headers.map(h => row[h]).join(','))
+    ].join('\n');
+
+    // 下载文件
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(link.href);
+
+    showToast('success', `已导出 ${filename}`, '成功');
+};
+
+// ========== 数据备份功能 ==========
+window.showBackupModal = function() {
+    // 重置表单
+    document.getElementById('backupLabel').value = '';
+    document.getElementById('backupDatabase').checked = true;
+    document.getElementById('backupUploads').checked = true;
+    document.getElementById('backupProgressContainer').style.display = 'none';
+
+    // 加载备份列表
+    loadBackupList();
+
+    // 打开模态框
+    const backupModal = new bootstrap.Modal(document.getElementById('backupModal'));
+    backupModal.show();
+};
+
+async function loadBackupList() {
+    const backupList = document.getElementById('backupList');
+
+    try {
+        const response = await fetch('/admin/api/backups');
+        const result = await response.json();
+
+        if (!result.success) {
+            backupList.innerHTML = `
+                <div class="text-center py-4 text-danger">
+                    <i class="bi bi-exclamation-circle fs-3 d-block mb-2"></i>
+                    加载失败
+                </div>
+            `;
+            return;
+        }
+
+        if (!result.data || result.data.length === 0) {
+            backupList.innerHTML = `
+                <div class="text-center py-4 text-muted">
+                    <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                    暂无备份
+                </div>
+            `;
+            return;
+        }
+
+        backupList.innerHTML = result.data.map(backup => `
+            <div class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-database text-primary me-2"></i>
+                        <strong>${backup.name}</strong>
+                        ${backup.label ? `<span class="badge bg-secondary ms-2">${backup.label}</span>` : ''}
+                    </div>
+                    <small class="text-muted">
+                        ${backup.size} | ${backup.time}
+                    </small>
+                </div>
+                <div class="btn-group btn-group-sm">
+                    <a href="${backup.download}" class="btn btn-outline-primary" download>
+                        <i class="bi bi-download"></i>
+                    </a>
+                    <button class="btn btn-outline-danger" onclick="deleteBackup('${backup.name}')">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('');
+
+    } catch (error) {
+        console.error('加载备份列表失败:', error);
+        backupList.innerHTML = `
+            <div class="text-center py-4 text-danger">
+                <i class="bi bi-exclamation-circle fs-3 d-block mb-2"></i>
+                加载失败，请重试
+            </div>
+        `;
+    }
+}
+
+window.createBackup = async function() {
+    const includeDb = document.getElementById('backupDatabase').checked;
+    const includeUploads = document.getElementById('backupUploads').checked;
+    const label = document.getElementById('backupLabel').value.trim();
+
+    if (!includeDb && !includeUploads) {
+        showToast('warning', '请选择至少一个备份内容', '提示');
+        return;
+    }
+
+    const progressContainer = document.getElementById('backupProgressContainer');
+    const progressBar = document.getElementById('backupProgressBar');
+    const progressText = document.getElementById('backupProgressText');
+
+    progressContainer.style.display = 'block';
+    progressBar.style.width = '30%';
+    progressText.textContent = '正在创建数据库备份...';
+
+    try {
+        // 创建备份
+        const response = await fetch('/admin/api/backups/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                include_database: includeDb,
+                include_uploads: includeUploads,
+                label: label
+            })
+        });
+
+        const result = await response.json();
+
+        progressBar.style.width = '90%';
+
+        if (result.success) {
+            progressText.textContent = '备份创建成功！';
+
+            setTimeout(() => {
+                progressContainer.style.display = 'none';
+                progressBar.style.width = '0%';
+                loadBackupList();
+                showToast('success', result.message, '成功');
+            }, 1000);
+        } else {
+            throw new Error(result.message);
+        }
+
+    } catch (error) {
+        progressContainer.style.display = 'none';
+        progressBar.style.width = '0%';
+        showToast('danger', '备份失败: ' + error.message, '错误');
+    }
+};
+
+window.deleteBackup = async function(backupName) {
+    confirmAction(
+        '确认删除',
+        `确定要删除备份 "${backupName}" 吗？此操作不可恢复。`,
+        async function() {
+            try {
+                const response = await fetch(`/admin/api/backups/${backupName}`, {
+                    method: 'DELETE'
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    showToast('success', '备份已删除', '成功');
+                    loadBackupList();
+                } else {
+                    showToast('danger', result.message, '错误');
+                }
+            } catch (error) {
+                showToast('danger', '删除失败: ' + error.message, '错误');
+            }
+        }
+    );
+};
+
+window.clearOldBackups = async function() {
+    confirmAction(
+        '清理旧备份',
+        '确定要删除 7 天前的所有备份吗？此操作不可恢复。',
+        async function() {
+            try {
+                const response = await fetch('/admin/api/backups/clear-old', {
+                    method: 'POST'
+                });
+                const result = await response.json();
+
+                if (result.success) {
+                    showToast('success', result.message, '成功');
+                    loadBackupList();
+                } else {
+                    showToast('danger', result.message, '错误');
+                }
+            } catch (error) {
+                showToast('danger', '清理失败: ' + error.message, '错误');
+            }
+        }
+    );
+};
+
+// ========== 数据导出功能 ==========
+window.showExportModal = function() {
+    // 重置表单
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('exportDateFrom').value = today;
+    document.getElementById('exportDateTo').value = today;
+    document.getElementById('formatCsv').checked = true;
+
+    // 打开模态框
+    const exportModal = new bootstrap.Modal(document.getElementById('exportModal'));
+    exportModal.show();
+};
+
+window.updateExportOptions = function() {
+    const type = document.getElementById('exportType').value;
+    const dateRangeOption = document.getElementById('dateRangeOption');
+
+    // 某些类型不需要日期范围
+    if (type === 'media') {
+        dateRangeOption.style.display = 'none';
+    } else {
+        dateRangeOption.style.display = 'block';
+    }
+};
+
+window.executeExport = async function() {
+    const type = document.getElementById('exportType').value;
+    const format = document.querySelector('input[name="exportFormat"]:checked').value;
+    const dateFrom = document.getElementById('exportDateFrom').value;
+    const dateTo = document.getElementById('exportDateTo').value;
+
+    try {
+        let url = `/admin/api/export/${type}?format=${format}`;
+        if (dateFrom) url += `&date_from=${dateFrom}`;
+        if (dateTo) url += `&date_to=${dateTo}`;
+
+        showToast('info', '正在生成导出文件...', '提示');
+
+        const response = await fetch(url);
+        const result = await response.json();
+
+        if (result.success) {
+            // 下载文件
+            if (result.data && result.data.url) {
+                window.open(result.data.url, '_blank');
+            } else if (result.data) {
+                downloadData(result.data, `${type}_export.${format}`);
+            }
+            showToast('success', '导出成功', '成功');
+        } else {
+            showToast('danger', result.message || '导出失败', '错误');
+        }
+    } catch (error) {
+        console.error('导出失败:', error);
+        showToast('danger', '导出失败: ' + error.message, '错误');
+    }
+};
+
+function downloadData(data, filename) {
+    let content, mimeType;
+
+    if (typeof data === 'string') {
+        content = data;
+        mimeType = 'text/plain';
+    } else {
+        content = JSON.stringify(data, null, 2);
+        mimeType = 'application/json';
+    }
+
+    const blob = new Blob([content], { type: mimeType });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = filename;
+    link.click();
+    URL.revokeObjectURL(link.href);
+}
+
+// ========== 批量操作进度 ==========
+let batchProgressTotal = 0;
+let batchProgressCurrent = 0;
+
+window.showBatchProgress = function(total) {
+    batchProgressTotal = total;
+    batchProgressCurrent = 0;
+    document.getElementById('batchProgressBar').style.width = '0%';
+    document.getElementById('batchProgressText').textContent = `正在处理 0/${total}`;
+    document.getElementById('batchProgressFooter').style.display = 'none';
+
+    return new bootstrap.Modal(document.getElementById('batchProgressModal'));
+};
+
+window.updateBatchProgress = function(current, message) {
+    batchProgressCurrent = current;
+    const percent = Math.round((current / batchProgressTotal) * 100);
+
+    document.getElementById('batchProgressBar').style.width = `${percent}%`;
+    document.getElementById('batchProgressText').textContent = message || `正在处理 ${current}/${batchProgressTotal}``;
+};
+
+window.completeBatchProgress = function(message = '处理完成') {
+    document.getElementById('batchProgressBar').style.width = '100%';
+    document.getElementById('batchProgressText').textContent = message;
+    document.getElementById('batchProgressFooter').style.display = 'block';
+};
+
+// ========== 性能雷达图 ==========
+let performanceRadarChart = null;
+
+function initPerformanceRadarChart() {
+    const ctx = document.getElementById('performanceRadarChart');
+    if (!ctx) return;
+
+    performanceRadarChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: ['内容更新', '系统性能', '用户活跃度', 'SEO 优化', '媒体管理'],
+            datasets: [{
+                label: '当前周期',
+                data: [0, 0, 0, 0, 0],
+                backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                borderColor: '#6366f1',
+                borderWidth: 2,
+                pointBackgroundColor: '#6366f1',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 5
+            }, {
+                label: '上一周期',
+                data: [0, 0, 0, 0, 0],
+                backgroundColor: 'rgba(156, 163, 175, 0.1)',
+                borderColor: '#9ca3af',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                pointBackgroundColor: '#9ca3af',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 15,
+                        font: { size: 11 }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(255, 255, 255, 0.98)',
+                    titleColor: '#1f2937',
+                    bodyColor: '#4b5563',
+                    borderColor: '#e5e7eb',
+                    borderWidth: 1,
+                    cornerRadius: 8,
+                    padding: 12
+                }
+            },
+            scales: {
+                r: {
+                    beginAtZero: true,
+                    max: 100,
+                    ticks: {
+                        stepSize: 20,
+                        font: { size: 10 },
+                        backdropColor: 'transparent'
+                    },
+                    pointLabels: {
+                        font: { size: 11, weight: '500' }
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.08)'
+                    },
+                    angleLines: {
+                        color: 'rgba(0, 0, 0, 0.08)'
+                    }
+                }
+            },
+            animation: {
+                duration: 1000
+            }
+        }
+    });
+
+    loadPerformanceData();
+}
+
+async function loadPerformanceData() {
+    try {
+        const response = await fetch('/admin/api/stats/performance');
+        const result = await response.json();
+
+        if (!result.success || !result.data) {
+            // 使用模拟数据
+            if (performanceRadarChart) {
+                performanceRadarChart.data.datasets[0].data = [75, 85, 60, 70, 80];
+                performanceRadarChart.data.datasets[1].data = [70, 80, 55, 65, 75];
+                performanceRadarChart.update();
+            }
+            return;
+        }
+
+        const data = result.data;
+        if (performanceRadarChart) {
+            performanceRadarChart.data.datasets[0].data = [
+                data.contentUpdate || 0,
+                data.systemPerformance || 0,
+                data.userActivity || 0,
+                data.seoOptimization || 0,
+                data.mediaManagement || 0
+            ];
+            performanceRadarChart.data.datasets[1].data = [
+                data.prevContentUpdate || 0,
+                data.prevSystemPerformance || 0,
+                data.prevUserActivity || 0,
+                data.prevSeoOptimization || 0,
+                data.prevMediaManagement || 0
+            ];
+            performanceRadarChart.update();
+        }
+    } catch (error) {
+        console.error('加载性能数据失败:', error);
+        // 使用默认数据
+        if (performanceRadarChart) {
+            performanceRadarChart.data.datasets[0].data = [75, 85, 60, 70, 80];
+            performanceRadarChart.data.datasets[1].data = [70, 80, 55, 65, 75];
+            performanceRadarChart.update();
+        }
+    }
+}
+
+// ========== 组件自定义布局 ==========
+const WIDGET_STORAGE_KEY = 'dashboard_widgets';
+
+// 加载组件状态
+function loadWidgetState() {
+    try {
+        const saved = localStorage.getItem(WIDGET_STORAGE_KEY);
+        if (saved) {
+            return JSON.parse(saved);
+        }
+    } catch (e) {
+        console.error('加载组件状态失败:', e);
+    }
+    return null;
+}
+
+// 保存组件状态
+function saveWidgetState(state) {
+    try {
+        localStorage.setItem(WIDGET_STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+        console.error('保存组件状态失败:', e);
+    }
+}
+
+// 切换组件显示
+window.toggleWidget = function(widgetName) {
+    const checkbox = document.getElementById('widget' + widgetName.charAt(0).toUpperCase() + widgetName.slice(1));
+    const section = document.getElementById('widget-section-' + widgetName);
+
+    if (!checkbox || !section) return;
+
+    const isVisible = checkbox.checked;
+    section.style.display = isVisible ? '' : 'none';
+
+    // 保存状态
+    const state = loadWidgetState() || {};
+    state[widgetName] = isVisible;
+    saveWidgetState(state);
+
+    // 显示提示
+    showToast('info', isVisible ? '已显示组件' : '已隐藏组件', '提示');
+};
+
+// 恢复默认布局
+window.resetWidgets = function() {
+    localStorage.removeItem(WIDGET_STORAGE_KEY);
+
+    // 重置所有 checkbox
+    const widgets = ['Trend', 'Category', 'Traffic', 'Distribution', 'Stats', 'Health', 'Log', 'Activities', 'Performance'];
+    widgets.forEach(w => {
+        const checkbox = document.getElementById('widget' + w);
+        if (checkbox) {
+            checkbox.checked = true;
+        }
+    });
+
+    // 显示所有组件
+    document.querySelectorAll('.widget-section').forEach(section => {
+        section.style.display = '';
+    });
+
+    showToast('success', '已恢复默认布局', '成功');
+};
+
+// 刷新单个组件
+window.refreshWidget = function(widgetName) {
+    const btn = event.target.closest('.widget-refresh, .widget-refresh-btn');
+    if (btn) {
+        btn.classList.add('spinning');
+        const icon = btn.querySelector('i');
+        if (icon) {
+            icon.classList.add('fa-spin');
+        }
+    }
+
+    switch(widgetName) {
+        case 'trend':
+            loadTrendData(7);
+            break;
+        case 'category':
+            loadCategoryData();
+            break;
+        case 'traffic':
+            loadSystemHealth();
+            break;
+        case 'distribution':
+            loadStatusData();
+            break;
+        case 'tags':
+            loadTopTags();
+            break;
+        case 'monthly':
+            loadMonthlyData();
+            break;
+        case 'stats':
+            loadDashboardStats();
+            break;
+        case 'health':
+            loadSystemHealth();
+            break;
+        case 'log':
+            loadOperationLog();
+            break;
+        case 'activities':
+            loadRecentActivities();
+            break;
+        case 'performance':
+            loadPerformanceData();
+            break;
+    }
+
+    setTimeout(() => {
+        if (btn) {
+            btn.classList.remove('spinning');
+            if (icon) {
+                icon.classList.remove('fa-spin');
+            }
+        }
+    }, 500);
+
+    showToast('info', '已刷新数据', '提示');
+};
+
+// 初始化组件状态
+function initWidgetState() {
+    const state = loadWidgetState();
+    if (!state) return;
+
+    Object.keys(state).forEach(widgetName => {
+        const checkbox = document.getElementById('widget' + widgetName.charAt(0).toUpperCase() + widgetName.slice(1));
+        const section = document.getElementById('widget-section-' + widgetName);
+
+        if (checkbox && section) {
+            checkbox.checked = state[widgetName];
+            section.style.display = state[widgetName] ? '' : 'none';
+        }
+    });
+}
+
+// 页面加载时初始化
+initWidgetState();
 </script>
 
 <style>
@@ -513,6 +2449,46 @@ async function loadRecentActivities() {
     align-items: center;
     justify-content: center;
     border-radius: 12px;
+}
+
+/* 组件刷新按钮 */
+.widget-refresh,
+.widget-refresh-btn {
+    opacity: 0.6;
+    transition: all 0.2s ease;
+}
+
+.widget-refresh:hover,
+.widget-refresh-btn:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.widget-refresh.spinning,
+.widget-refresh-btn.spinning {
+    pointer-events: none;
+}
+
+.widget-refresh.spinning i,
+.widget-refresh-btn.spinning i {
+    animation: spin 0.5s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* 统计卡片刷新按钮位置 */
+.stat-card {
+    position: relative;
+}
+
+.stat-card .widget-refresh-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
 }
 
 .hover-lift {
@@ -560,5 +2536,308 @@ async function loadRecentActivities() {
         margin: 0 0 12px 0 !important;
     }
 }
+
+/* ========== 欢迎横幅样式 ========== */
+.welcome-banner {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 16px;
+    padding: 24px;
+    color: white;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.welcome-banner h4 {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.welcome-banner p {
+    opacity: 0.9;
+    font-size: 14px;
+}
+
+.welcome-icon {
+    width: 56px;
+    height: 56px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    backdrop-filter: blur(10px);
+}
+
+.welcome-banner .btn-primary {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    color: white;
+}
+
+.welcome-banner .btn-primary:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: white;
+    color: white;
+}
+
+.welcome-banner .btn-outline-primary {
+    border-color: rgba(255, 255, 255, 0.5);
+    color: white;
+}
+
+.welcome-banner .btn-outline-primary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: white;
+    color: white;
+}
+
+/* 响应式调整 */
+@media (max-width: 767.98px) {
+    .welcome-banner {
+        padding: 20px;
+    }
+
+    .welcome-banner .text-md-end {
+        text-align: left !important;
+    }
+
+    .welcome-banner .d-flex.justify-content-md-end {
+        justify-content: flex-start !important;
+    }
+}
 </style>
+{% endblock %}
+
+{% block extra_modals %}
+<!-- 快捷键提示模态框 -->
+<div class="modal fade" id="shortcutsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-keyboard text-primary me-2"></i>键盘快捷键
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-primary mb-3">
+                            <i class="bi bi-compass me-1"></i>导航快捷键
+                        </h6>
+                        <table class="table table-sm table-hover">
+                            <tr>
+                                <td><kbd>?</kbd></td>
+                                <td>显示/隐藏快捷键提示</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>g</kbd> <kbd>h</kbd></td>
+                                <td>跳转到仪表板</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>g</kbd> <kbd>p</kbd></td>
+                                <td>跳转到文章列表</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>g</kbd> <kbd>P</kbd></td>
+                                <td>跳转到产品列表</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>g</kbd> <kbd>m</kbd></td>
+                                <td>跳转到媒体库</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>g</kbd> <kbd>s</kbd></td>
+                                <td>跳转到系统设置</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>g</kbd> <kbd>t</kbd></td>
+                                <td>跳转到标签管理</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>g</kbd> <kbd>c</kbd></td>
+                                <td>跳转到留言管理</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>g</kbd> <kbd>g</kbd></td>
+                                <td>跳转到相册管理</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Alt</kbd> <kbd>1-9</kbd></td>
+                                <td>顶部导航快速跳转</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-success mb-3">
+                            <i class="bi bi-lightning me-1"></i>操作快捷键
+                        </h6>
+                        <table class="table table-sm table-hover">
+                            <tr>
+                                <td><kbd>Ctrl</kbd> <kbd>/</kbd></td>
+                                <td>聚焦搜索框</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Ctrl</kbd> <kbd>n</kbd></td>
+                                <td>新建内容（智能判断类型）</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Ctrl</kbd> <kbd>s</kbd></td>
+                                <td>保存当前内容</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Esc</kbd></td>
+                                <td>关闭模态框/弹窗</td>
+                            </tr>
+                        </table>
+
+                        <h6 class="text-warning mt-4 mb-3">
+                            <i class="bi bi-pencil-square me-1"></i>列表页快捷键
+                        </h6>
+                        <table class="table table-sm table-hover">
+                            <tr>
+                                <td><kbd>Ctrl</kbd> <kbd>a</kbd></td>
+                                <td>全选项目</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Ctrl</kbd> <kbd>d</kbd></td>
+                                <td>批量复制选中项</td>
+                            </tr>
+                            <tr>
+                                <td><kbd>Delete</kbd></td>
+                                <td>删除选中项目</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <hr>
+                <div class="alert alert-info mb-0 small">
+                    <i class="bi bi-info-circle-fill me-2"></i>
+                    <strong>提示：</strong>按 <kbd>?</kbd> 键随时打开此面板。快捷键在输入框和编辑器中会自动禁用，不会冲突。
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 快捷操作工具栏 -->
+<div class="quick-toolbar" id="quickToolbar">
+    <div class="quick-toolbar-item" onclick="quickNewPost()" title="新建文章">
+        <i class="bi bi-file-earmark-plus"></i>
+    </div>
+    <div class="quick-toolbar-item" onclick="quickUploadMedia()" title="上传媒体">
+        <i class="bi bi-cloud-upload"></i>
+    </div>
+    <div class="quick-toolbar-item" onclick="quickBackup()" title="快速备份">
+        <i class="bi bi-hdd"></i>
+    </div>
+    <div class="quick-toolbar-item" onclick="quickAnalytics()" title="查看统计">
+        <i class="bi bi-bar-chart"></i>
+    </div>
+    <div class="quick-toolbar-item" onclick="toggleQuickToolbar()" title="收起">
+        <i class="bi bi-chevron-right"></i>
+    </div>
+</div>
+
+<style>
+/* 快捷操作工具栏 */
+.quick-toolbar {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px 0 0 8px;
+    padding: 8px 4px;
+    box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    transition: all 0.3s ease;
+}
+
+.quick-toolbar.collapsed {
+    transform: translateY(-50%) translateX(calc(100% - 30px));
+}
+
+.quick-toolbar.collapsed .quick-toolbar-item span {
+    display: none;
+}
+
+.quick-toolbar-item {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.quick-toolbar-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.quick-toolbar-item span {
+    position: absolute;
+    right: 100%;
+    background: #333;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    margin-right: 8px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+}
+
+.quick-toolbar-item:hover span {
+    opacity: 1;
+    visibility: visible;
+}
+
+.quick-toolbar.collapsed .quick-toolbar-item:last-child i {
+    transform: rotate(180deg);
+}
+</style>
+
+<script>
+// 快捷操作工具栏
+function toggleQuickToolbar() {
+    const toolbar = document.getElementById('quickToolbar');
+    toolbar.classList.toggle('collapsed');
+    localStorage.setItem('quickToolbarCollapsed', toolbar.classList.contains('collapsed'));
+}
+
+// 初始化工具栏状态
+document.addEventListener('DOMContentLoaded', function() {
+    const toolbar = document.getElementById('quickToolbar');
+    if (localStorage.getItem('quickToolbarCollapsed') === 'true') {
+        toolbar.classList.add('collapsed');
+    }
+});
+
+window.quickNewPost = function() {
+    window.location.href = '/admin/posts/new';
+};
+
+window.quickUploadMedia = function() {
+    window.location.href = '/admin/media/upload';
+};
+
+window.quickBackup = function() {
+    showBackupModal();
+};
+
+window.quickAnalytics = function() {
+    window.location.href = '/admin/analytics';
+};
+</script>
 {% endblock %}

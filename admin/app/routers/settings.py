@@ -14,7 +14,7 @@ from sqlalchemy.orm import Session
 from admin.app.database import get_db
 from app.services.site_settings_service import (get_all_settings, update_settings)
 
-router = APIRouter(prefix="/settings", tags=["settings"])
+router = APIRouter(tags=["settings"])
 templates = Jinja2Templates(directory="admin/templates")
 
 

@@ -9,7 +9,7 @@ from admin.app.services import layout_service
 from app.models.layout import LayoutScope
 
 
-router = APIRouter(prefix="/columns", tags=["columns-builder"])
+router = APIRouter(tags=["columns-builder"])
 templates = Jinja2Templates(directory="admin/templates")
 
 

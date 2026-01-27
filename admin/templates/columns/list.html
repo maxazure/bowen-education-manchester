@@ -2,6 +2,125 @@
 
 {% block title %}栏目管理 - 博文教育管理后台{% endblock %}
 
+{% block extra_css %}
+<style>
+/* 拖拽排序样式增强 */
+.drag-handle {
+    cursor: grab;
+    color: #adb5bd;
+    transition: all 0.2s;
+    user-select: none;
+}
+
+.drag-handle:hover {
+    color: #667eea;
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.column-row {
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.column-row.dragging {
+    opacity: 0.5;
+    background-color: #e3f2fd !important;
+    transform: scale(0.98);
+}
+
+.column-row.drag-over {
+    border-top: 3px solid #667eea !important;
+}
+
+.column-row.drag-over td:first-child {
+    position: relative;
+}
+
+.column-row.drag-over td:first-child::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -2px;
+    right: 0;
+    height: 3px;
+    background: #667eea;
+    animation: slideIndicator 0.3s ease;
+}
+
+@keyframes slideIndicator {
+    from {
+        width: 0;
+        left: 50%;
+    }
+    to {
+        width: 100%;
+        left: 0;
+    }
+}
+
+.drag-preview {
+    position: fixed;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.9;
+    transform: rotate(3deg);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.drop-zone-active {
+    background-color: rgba(102, 126, 234, 0.05);
+}
+
+/* 排序提示 */
+.sort-indicator {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #667eea;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    display: none;
+    z-index: 1000;
+    animation: fadeInUp 0.3s ease;
+}
+
+.sort-indicator.show {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 层级缩进指示线 */
+.level-indicator {
+    position: absolute;
+    left: -12px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e9ecef;
+}
+
+.level-indicator.active {
+    background: #667eea;
+}
+</style>
+{% endblock %}
+
 {% block content %}
 <!-- 页面头部 -->
 <div class="d-flex justify-content-between align-items-center mb-4">
@@ -626,5 +745,198 @@ function batchDelete() {
         }
     );
 }
+
+// ========== 拖拽排序功能 ==========
+let draggedElement = null;
+let dragPreview = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+    initDragAndDrop();
+});
+
+function initDragAndDrop() {
+    const handles = document.querySelectorAll('.drag-handle');
+    const rows = document.querySelectorAll('.column-row');
+
+    handles.forEach(handle => {
+        handle.addEventListener('mousedown', startDrag);
+    });
+
+    // 拖拽事件
+    document.addEventListener('dragover', handleDragOver);
+    document.addEventListener('drop', handleDrop);
+    document.addEventListener('dragend', handleDragEnd);
+}
+
+function startDrag(e) {
+    e.preventDefault();
+    const row = e.target.closest('.column-row');
+    if (!row) return;
+
+    draggedElement = row;
+    draggedElement.classList.add('dragging');
+
+    // 创建拖拽预览
+    createDragPreview(row, e);
+
+    // 显示排序提示
+    showSortIndicator();
+
+    // 设置拖拽数据
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', row.dataset.id);
+}
+
+function createDragPreview(row, e) {
+    const clone = row.cloneNode(true);
+    clone.style.width = row.offsetWidth + 'px';
+    clone.style.position = 'fixed';
+    clone.style.pointerEvents = 'none';
+    clone.style.zIndex = '9999';
+    clone.style.opacity = '0.9';
+    clone.style.transform = 'rotate(3deg)';
+    clone.style.boxShadow = '0 10px 30px rgba(0,0,0,0.2)';
+
+    document.body.appendChild(clone);
+    dragPreview = clone;
+
+    updateDragPreviewPosition(e);
+}
+
+function updateDragPreviewPosition(e) {
+    if (!dragPreview) return;
+
+    dragPreview.style.left = (e.clientX - dragPreview.offsetWidth / 2) + 'px';
+    dragPreview.style.top = (e.clientY - dragPreview.offsetHeight / 2) + 'px';
+}
+
+function handleDragOver(e) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+
+    const row = e.target.closest('.column-row');
+    if (!row || row === draggedElement) return;
+
+    // 移除其他行的 drag-over 状态
+    document.querySelectorAll('.column-row.drag-over').forEach(r => {
+        r.classList.remove('drag-over');
+    });
+
+    row.classList.add('drag-over');
+}
+
+function handleDrop(e) {
+    e.preventDefault();
+
+    const targetRow = e.target.closest('.column-row');
+    if (!targetRow || !draggedElement || targetRow === draggedElement) return;
+
+    const draggedId = parseInt(draggedElement.dataset.id);
+    const targetId = parseInt(targetRow.dataset.id);
+
+    // 获取当前排序顺序
+    const tbody = document.getElementById('columnsTableBody');
+    const rows = Array.from(tbody.querySelectorAll('.column-row'));
+
+    // 找到拖拽元素和目标元素的位置
+    const draggedIndex = rows.findIndex(r => r.dataset.id == draggedId);
+    const targetIndex = rows.findIndex(r => r.dataset.id == targetId);
+
+    if (draggedIndex === -1 || targetIndex === -1) return;
+
+    // 执行排序
+    if (draggedIndex < targetIndex) {
+        // 向下拖拽 - 插入到目标后面
+        targetRow.parentNode.insertBefore(draggedElement, targetRow.nextSibling);
+    } else {
+        // 向上拖拽 - 插入到目标前面
+        targetRow.parentNode.insertBefore(draggedElement, targetRow);
+    }
+
+    // 更新排序
+    updateSortOrder();
+}
+
+function handleDragEnd(e) {
+    if (draggedElement) {
+        draggedElement.classList.remove('dragging');
+        draggedElement = null;
+    }
+
+    // 移除拖拽预览
+    if (dragPreview) {
+        dragPreview.remove();
+        dragPreview = null;
+    }
+
+    // 移除所有 drag-over 状态
+    document.querySelectorAll('.column-row.drag-over').forEach(r => {
+        r.classList.remove('drag-over');
+    });
+
+    // 隐藏排序提示
+    hideSortIndicator();
+}
+
+function showSortIndicator() {
+    const indicator = document.getElementById('sortIndicator');
+    if (indicator) {
+        indicator.classList.add('show');
+    }
+}
+
+function hideSortIndicator() {
+    const indicator = document.getElementById('sortIndicator');
+    if (indicator) {
+        indicator.classList.remove('show');
+    }
+}
+
+function updateSortOrder() {
+    const tbody = document.getElementById('columnsTableBody');
+    const rows = Array.from(tbody.querySelectorAll('.column-row'));
+
+    const orders = rows.map((row, index) => ({
+        id: parseInt(row.dataset.id),
+        sort_order: index
+    }));
+
+    // 显示加载状态
+    showSortIndicator('正在保存排序...');
+
+    fetch('/columns/reorder', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ orders: orders })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showSortIndicator('排序已保存！');
+            setTimeout(() => hideSortIndicator(), 1500);
+        } else {
+            showToast('danger', data.message || '保存排序失败', '错误');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('danger', '保存排序失败，请稍后重试', '错误');
+    });
+}
+
+// 移动鼠标时更新预览位置
+document.addEventListener('mousemove', function(e) {
+    if (draggedElement) {
+        updateDragPreviewPosition(e);
+    }
+});
 </script>
+
+<!-- 排序状态提示 -->
+<div class="sort-indicator" id="sortIndicator">
+    <i class="bi bi-sort-down"></i>
+    <span id="sortIndicatorText">拖拽完成，松开保存</span>
+</div>
 {% endblock %}

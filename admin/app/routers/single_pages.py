@@ -17,7 +17,7 @@ from app.models.site import SinglePage, SiteColumn
 from app.services import single_page_service
 from admin.app.routers.static_pages import generate_static_task
 
-router = APIRouter(prefix="/pages", tags=["pages"])
+router = APIRouter(tags=["pages"])
 templates = Jinja2Templates(directory="admin/templates")
 
 
@@ -99,7 +99,7 @@ async def new_page_form(request: Request, db: Session = Depends(get_db)):
     )
 
 
-@router.post("")
+@router.post("/create")
 async def create_page(
     request: Request,
     background_tasks: BackgroundTasks,

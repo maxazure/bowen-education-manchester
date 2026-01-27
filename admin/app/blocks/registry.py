@@ -339,7 +339,7 @@ def render_contact_section(attrs: Dict[str, Any], db) -> str:
         "<div class=\"bg-light p-4 rounded mb-3\"><h4 class=\"h5 fw-bold mb-3\">Contact Information</h4>"
         + "<p class=\"mb-2\"><strong>📍 Address:</strong><br>Manchester, UK</p>"
         + "<p class=\"mb-2\"><strong>📞 Phone:</strong><br><span class=\"text-muted\">0161 xxx xxxx</span></p>"
-        + "<p class=\"mb-2\"><strong>📧 Email:</strong><br><span class=\"text-muted\">info@boweneducation.org</span></p>"
+        + "<p class=\"mb-2\"><strong>📧 Email:</strong><br><span class=\"text-muted\">info@boweneducation.co.uk</span></p>"
         + "<p class=\"mb-0\"><strong>🕐 Opening Hours:</strong><br>Saturday: 9:00 - 17:00<br>Sunday: 9:00 - 17:00</p>"
         + "</div>"
     )

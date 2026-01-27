@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+
+{% block title %}数据导入 - 博文教育管理后台{% endblock %}
+
+{% block content %}
+<!-- 面包屑导航 -->
+<nav aria-label="breadcrumb" class="mb-3 animate-fade-in">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/admin"><i class="bi bi-house-door me-1"></i>首页</a></li>
+        <li class="breadcrumb-item active" aria-current="page">数据导入</li>
+    </ol>
+</nav>
+
+<!-- 页面标题区 -->
+<div class="page-header animate-fade-in">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="page-title">
+                <i class="bi bi-upload text-primary me-2"></i>数据导入
+            </h1>
+            <p class="page-subtitle">从 CSV 文件批量导入文章和产品数据</p>
+        </div>
+    </div>
+</div>
+
+<!-- 导入选项 -->
+<div class="row g-4">
+    <!-- 文章导入 -->
+    <div class="col-lg-6">
+        <div class="card h-100 animate-fade-in">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-file-earmark-text text-primary me-2"></i>导入文章
+                </h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-3">从 CSV 文件批量导入文章数据</p>
+
+                <!-- 下载模板 -->
+                <div class="mb-3">
+                    <a href="/admin/import/template/posts" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-download me-1"></i>下载导入模板
+                    </a>
+                </div>
+
+                <form id="importPostsForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">目标栏目</label>
+                        <select name="column_id" class="form-select" required>
+                            <option value="">-- 选择栏目 --</option>
+                            {% for col in columns %}
+                            <option value="{{ col.id }}">{{ col.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">选择 CSV 文件</label>
+                        <input type="file" name="file" class="form-control" accept=".csv" required>
+                        <div class="form-text">支持 UTF-8 编码的 CSV 文件</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-upload me-2"></i>导入文章
+                    </button>
+                </form>
+
+                <div id="importPostsResult" class="mt-3" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 产品导入 -->
+    <div class="col-lg-6">
+        <div class="card h-100 animate-fade-in" style="animation-delay: 100ms">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-box-seam text-success me-2"></i>导入产品
+                </h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted mb-3">从 CSV 文件批量导入产品数据</p>
+
+                <!-- 下载模板 -->
+                <div class="mb-3">
+                    <a href="/admin/import/template/products" class="btn btn-sm btn-outline-success">
+                        <i class="bi bi-download me-1"></i>下载导入模板
+                    </a>
+                </div>
+
+                <form id="importProductsForm" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">目标分类（可选）</label>
+                        <select name="category_id" class="form-select">
+                            <option value="">-- 不指定分类 --</option>
+                            {% for cat in categories %}
+                            <option value="{{ cat.id }}">{{ cat.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">选择 CSV 文件</label>
+                        <input type="file" name="file" class="form-control" accept=".csv" required>
+                        <div class="form-text">支持 UTF-8 编码的 CSV 文件</div>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">
+                        <i class="bi bi-upload me-2"></i>导入产品
+                    </button>
+                </form>
+
+                <div id="importProductsResult" class="mt-3" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 导入说明 -->
+    <div class="col-12">
+        <div class="card animate-fade-in" style="animation-delay: 200ms">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="bi bi-info-circle text-info me-2"></i>导入说明
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-primary">CSV 格式要求</h6>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                文件编码必须为 UTF-8 或 UTF-8 with BOM
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                第一行必须为表头（字段名）
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                字段之间用逗号分隔
+                            </li>
+                            <li class="mb-2">
+                                <i class="bi bi-check-circle text-success me-2"></i>
+                                包含特殊字符的字段用双引号包裹
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-success">文章字段说明</h6>
+                        <ul class="list-unstyled">
+                            <li><strong>title</strong> - 文章标题（必填）</li>
+                            <li><strong>title_en</strong> - 英文标题（选填）</li>
+                            <li><strong>summary</strong> - 文章摘要（选填）</li>
+                            <li><strong>content</strong> - 文章内容（必填，HTML 格式）</li>
+                        </ul>
+                        <h6 class="text-success mt-3">产品字段说明</h6>
+                        <ul class="list-unstyled">
+                            <li><strong>name</strong> - 产品名称（必填）</li>
+                            <li><strong>name_en</strong> - 英文名称（选填）</li>
+                            <li><strong>description</strong> - 产品描述（必填）</li>
+                            <li><strong>price</strong> - 价格（选填，数字格式）</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// 导入文章
+document.getElementById('importPostsForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const resultDiv = document.getElementById('importPostsResult');
+
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = '<div class="alert alert-info"><i class="bi bi-hourglass-split me-2"></i>正在导入，请稍候...</div>';
+
+    try {
+        const response = await fetch('/admin/import/posts', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            let html = `<div class="alert alert-success">
+                <i class="bi bi-check-circle me-2"></i>${data.message}
+                <hr>
+                <small>成功导入 ${data.imported} 篇文章</small>
+            </div>`;
+
+            if (data.errors && data.errors.length > 0) {
+                html += `<div class="alert alert-warning mt-2">
+                    <strong>部分数据导入失败：</strong>
+                    <ul class="mb-0 mt-1">${data.errors.map(e => `<li>${e}</li>`).join('')}</ul>
+                    ${data.total_errors > 10 ? `<small>共 ${data.total_errors} 个错误</small>` : ''}
+                </div>`;
+            }
+
+            resultDiv.innerHTML = html;
+            this.reset();
+        } else {
+            resultDiv.innerHTML = `<div class="alert alert-danger"><i class="bi bi-x-circle me-2"></i>${data.message}</div>`;
+        }
+    } catch (error) {
+        resultDiv.innerHTML = `<div class="alert alert-danger"><i class="bi bi-x-circle me-2"></i>导入失败: ${error.message}</div>`;
+    }
+});
+
+// 导入产品
+document.getElementById('importProductsForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const resultDiv = document.getElementById('importProductsResult');
+
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = '<div class="alert alert-info"><i class="bi bi-hourglass-split me-2"></i>正在导入，请稍候...</div>';
+
+    try {
+        const response = await fetch('/admin/import/products', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+
+        if (data.success) {
+            let html = `<div class="alert alert-success">
+                <i class="bi bi-check-circle me-2"></i>${data.message}
+                <hr>
+                <small>成功导入 ${data.imported} 个产品</small>
+            </div>`;
+
+            if (data.errors && data.errors.length > 0) {
+                html += `<div class="alert alert-warning mt-2">
+                    <strong>部分数据导入失败：</strong>
+                    <ul class="mb-0 mt-1">${data.errors.map(e => `<li>${e}</li>`).join('')}</ul>
+                    ${data.total_errors > 10 ? `<small>共 ${data.total_errors} 个错误</small>` : ''}
+                </div>`;
+            }
+
+            resultDiv.innerHTML = html;
+            this.reset();
+        } else {
+            resultDiv.innerHTML = `<div class="alert alert-danger"><i class="bi bi-x-circle me-2"></i>${data.message}</div>`;
+        }
+    } catch (error) {
+        resultDiv.innerHTML = `<div class="alert alert-danger"><i class="bi bi-x-circle me-2"></i>导入失败: ${error.message}</div>`;
+    }
+});
+</script>
+{% endblock %}

@@ -3,6 +3,262 @@
 {% block title %}文章管理 - 博文教育管理后台{% endblock %}
 
 {% block content %}
+<style>
+/* ========== 空状态样式 ========== */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.empty-state-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 50%;
+    font-size: 36px;
+    color: #adb5bd;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.empty-state-title {
+    margin-bottom: 10px;
+    color: #495057;
+    font-weight: 600;
+}
+
+.empty-state-description {
+    color: #6c757d;
+    margin-bottom: 20px;
+}
+
+.empty-state-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.empty-state-tips {
+    padding-top: 15px;
+    border-top: 1px dashed #dee2e6;
+}
+
+/* ========== 加载状态样式 ========== */
+.loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #e9ecef;
+    border-top-color: #0d6efd;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-text {
+    margin-top: 15px;
+    color: #6c757d;
+    font-size: 14px;
+}
+
+/* 骨架屏样式 */
+.skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4px;
+}
+
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.skeleton-text {
+    height: 16px;
+    margin-bottom: 8px;
+}
+
+.skeleton-title {
+    height: 24px;
+    width: 60%;
+    margin-bottom: 12px;
+}
+
+.skeleton-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+/* 媒体选择样式 */
+.media-item {
+    position: relative;
+    cursor: pointer;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
+
+.media-item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.media-item.selected {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+}
+
+.media-item img {
+    width: 100%;
+    height: 80px;
+    object-fit: cover;
+}
+
+.media-item-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(13, 110, 253, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.media-item.selected .media-item-overlay {
+    opacity: 1;
+}
+
+.media-item-overlay i {
+    color: white;
+    font-size: 1.5rem;
+}
+
+.cover-preview-container {
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.cover-preview-container:hover {
+    border-color: #0d6efd !important;
+    background-color: #f8f9fa !important;
+}
+
+.media-grid-container {
+    background: #fafafa;
+}
+
+/* 表格排序样式 */
+th.sortable {
+    cursor: pointer;
+    user-select: none;
+    transition: color 0.2s;
+}
+
+th.sortable:hover {
+    color: #0d6efd;
+}
+
+th.sortable i {
+    font-size: 0.75rem;
+    margin-left: 4px;
+}
+
+th.sortable.asc i::before {
+    content: "\f12f";
+    /* bi-chevron-up */
+}
+
+th.sortable.desc i::before {
+    content: "\f151";
+    /* bi-chevron-down */
+}
+
+th.sortable.asc .bi-chevron-expand::before {
+    content: "\f145";
+    /* bi-chevron-up */
+}
+
+th.sortable.desc .bi-chevron-expand::before {
+    content: "\f148";
+    /* bi-chevron-down */
+}
+
+/* 快速预览样式 */
+.quick-view-content {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.quick-view-content h4 {
+    margin-bottom: 1rem;
+}
+
+.quick-view-content .summary {
+    color: #666;
+    font-style: italic;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.quick-view-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.quick-view-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    color: #666;
+}
+</style>
+
 <!-- 页面头部 -->
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
@@ -10,8 +266,23 @@
         <p class="page-subtitle mb-0">管理网站的所有文章内容和发布状态</p>
     </div>
     <div class="page-actions">
+        <a href="/admin/posts/pending-approval" class="btn btn-outline-warning me-1" title="待审核">
+            <i class="bi bi-clock me-1"></i>待审核
+        </a>
+        <a href="/admin/posts/scheduled" class="btn btn-outline-info me-1" title="定时发布">
+            <i class="bi bi-clock-history me-1"></i>定时发布
+        </a>
+        <a href="/admin/posts/trash" class="btn btn-outline-secondary me-1" title="回收站">
+            <i class="bi bi-trash me-1"></i>回收站
+        </a>
+        <button class="btn btn-outline-success me-1" onclick="showImportModal()" title="导入文章">
+            <i class="bi bi-upload me-1"></i>导入
+        </button>
+        <a href="/admin/posts/export" class="btn btn-outline-success me-1" target="_blank" title="导出文章列表">
+            <i class="bi bi-download me-1"></i>导出
+        </a>
         <a href="/admin/posts/new" class="btn btn-primary">
-            <i class="bi bi-plus-lg me-2"></i>新建文章
+            <i class="bi bi-plus-lg me-1"></i>新建文章
         </a>
     </div>
 </div>
@@ -40,7 +311,7 @@
                 </div>
                 <div>
                     <div class="stat-label">已发布</div>
-                    <div class="stat-value text-success">{{ posts|selectattr('status', 'equalto', 'published')|list|length }}</div>
+                    <div class="stat-value text-success">{{ published_count }}</div>
                 </div>
             </div>
         </div>
@@ -54,7 +325,7 @@
                 </div>
                 <div>
                     <div class="stat-label">草稿</div>
-                    <div class="stat-value text-warning">{{ posts|selectattr('status', 'equalto', 'draft')|list|length }}</div>
+                    <div class="stat-value text-warning">{{ draft_count }}</div>
                 </div>
             </div>
         </div>
@@ -68,11 +339,34 @@
                 </div>
                 <div>
                     <div class="stat-label">推荐文章</div>
-                    <div class="stat-value text-primary">{{ posts|selectattr('is_recommended', 'equalto', true)|list|length }}</div>
+                    <div class="stat-value text-primary">{{ recommended_count }}</div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<!-- 快速筛选 -->
+<div class="mb-3 d-flex flex-wrap gap-2 align-items-center">
+    <span class="text-muted small me-2">快速筛选:</span>
+    <button type="button" class="btn btn-sm btn-outline-primary quick-filter-btn active" data-filter="all">
+        全部 <span class="badge bg-primary ms-1">{{ total }}</span>
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-success quick-filter-btn" data-filter="published">
+        已发布 <span class="badge bg-success ms-1">{{ published_count }}</span>
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-warning quick-filter-btn" data-filter="draft">
+        草稿 <span class="badge bg-warning ms-1">{{ draft_count }}</span>
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-secondary quick-filter-btn" data-filter="offline">
+        已下线 <span class="badge bg-secondary ms-1">{{ offline_count }}</span>
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-info quick-filter-btn" data-filter="recommended">
+        <i class="bi bi-star-fill text-warning me-1"></i>推荐 <span class="badge bg-info ms-1">{{ recommended_count }}</span>
+    </button>
+    <button type="button" class="btn btn-sm btn-outline-dark quick-filter-btn" data-filter="pinned">
+        <i class="bi bi-pin-angle-fill text-danger me-1"></i>置顶 <span class="badge bg-dark ms-1">{{ pinned_count }}</span>
+    </button>
 </div>
 
 <!-- 筛选表单 -->
@@ -131,11 +425,23 @@
                 </div>
             </div>
 
+            <div class="col-md-3">
+                <label class="form-label">开始日期</label>
+                <input type="date" name="start_date" class="form-control"
+                       value="{{ start_date or '' }}">
+            </div>
+
+            <div class="col-md-3">
+                <label class="form-label">结束日期</label>
+                <input type="date" name="end_date" class="form-control"
+                       value="{{ end_date or '' }}">
+            </div>
+
             <div class="col-md-12">
                 <button type="submit" class="btn btn-primary">
                     <i class="bi bi-funnel me-1"></i>筛选
                 </button>
-                {% if current_column_id or current_status or current_keyword %}
+                {% if current_column_id or current_status or current_keyword or start_date or end_date %}
                 <a href="/admin/posts" class="btn btn-outline-secondary">
                     <i class="bi bi-x-circle me-1"></i>清除筛选
                 </a>
@@ -148,26 +454,96 @@
 <!-- 批量操作栏 -->
 <div class="batch-actions-bar" id="batchActionsBar" style="display: none;">
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-        <div>
+        <div class="d-flex align-items-center">
             <i class="bi bi-check-circle text-primary me-2"></i>
             已选择 <strong id="selectedCount">0</strong> 篇文章
+            <div class="ms-3 d-flex gap-1">
+                <button class="btn btn-sm btn-link text-success p-1" onclick="selectAllVisible()" title="全选当前页">
+                    <i class="bi bi-check-square"></i> 全选
+                </button>
+                <button class="btn btn-sm btn-link text-warning p-1" onclick="showSmartSelectModal()" title="智能选择">
+                    <i class="bi bi-magic"></i> 智能选择
+                </button>
+            </div>
         </div>
-        <div class="d-flex gap-2">
-            <button class="btn btn-sm btn-success" onclick="batchPublish()">
-                <i class="bi bi-check-circle me-1"></i>批量发布
+        <div class="d-flex gap-2 flex-wrap">
+            <!-- 操作模板下拉菜单 -->
+            <div class="btn-group">
+                <button class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" title="常用操作模板">
+                    <i class="bi bi-bookmark-star me-1"></i>模板
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" style="min-width: 200px;">
+                    <li><h6 class="dropdown-header"><i class="bi bi-bookmark me-1"></i>快速操作</h6></li>
+                    <li><a class="dropdown-item" href="javascript:batchPublish()"><i class="bi bi-check-circle text-success me-2"></i>批量发布</a></li>
+                    <li><a class="dropdown-item" href="javascript:batchRecommend()"><i class="bi bi-star-fill text-warning me-2"></i>批量推荐</a></li>
+                    <li><a class="dropdown-item" href="javascript:batchPin()"><i class="bi bi-pin-angle text-primary me-2"></i>批量置顶</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><h6 class="dropdown-header"><i class="bi bi-plus-circle me-1"></i>保存模板</h6></li>
+                    <li>
+                        <div class="px-3 py-1">
+                            <div class="input-group input-group-sm">
+                                <input type="text" class="form-control" id="templateNameInput" placeholder="模板名称">
+                                <button class="btn btn-outline-primary" type="button" onclick="saveOperationTemplate()">
+                                    <i class="bi bi-save"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </li>
+                    <li id="savedTemplatesList">
+                        <!-- 动态加载已保存的模板 -->
+                    </li>
+                </ul>
+            </div>
+
+            <!-- 批量操作按钮组 -->
+            <div class="btn-group">
+                <button class="btn btn-sm btn-success dropdown-toggle" data-bs-toggle="dropdown">
+                    <i class="bi bi-check-circle me-1"></i>状态
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="javascript:batchPublish()"><i class="bi bi-check-circle text-success me-2"></i>批量发布</a></li>
+                    <li><a class="dropdown-item" href="javascript:batchDraft()"><i class="bi bi-file-earmark text-secondary me-2"></i>批量草稿</a></li>
+                    <li><a class="dropdown-item" href="javascript:batchOffline()"><i class="bi bi-x-circle text-warning me-2"></i>批量下线</a></li>
+                </ul>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+                    <i class="bi bi-star me-1"></i>推荐/置顶
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="javascript:batchPin()"><i class="bi bi-pin-angle text-primary me-2"></i>批量置顶</a></li>
+                    <li><a class="dropdown-item" href="javascript:batchUnpin()"><i class="bi bi-pin-angle text-secondary me-2"></i>取消置顶</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="javascript:batchRecommend()"><i class="bi bi-star-fill text-warning me-2"></i>批量推荐</a></li>
+                    <li><a class="dropdown-item" href="javascript:batchUnrecommend()"><i class="bi bi-star text-secondary me-2"></i>取消推荐</a></li>
+                </ul>
+            </div>
+
+            <button class="btn btn-sm btn-info" onclick="showBatchColumnModal()">
+                <i class="bi bi-folder me-1"></i>修改栏目
             </button>
-            <button class="btn btn-sm btn-outline-secondary" onclick="batchDraft()">
-                <i class="bi bi-file-earmark me-1"></i>批量草稿
+
+            <button class="btn btn-sm btn-secondary" onclick="showBatchCoverModal()">
+                <i class="bi bi-image me-1"></i>设置封面
             </button>
-            <button class="btn btn-sm btn-warning" onclick="batchRecommend()">
-                <i class="bi bi-star me-1"></i>批量推荐
+
+            <button class="btn btn-sm btn-warning" onclick="showBatchEditModal()">
+                <i class="bi bi-pencil-square me-1"></i>批量编辑
             </button>
-            <button class="btn btn-sm btn-outline-warning" onclick="batchUnrecommend()">
-                <i class="bi bi-star me-1"></i>取消推荐
+
+            <button class="btn btn-sm btn-primary" onclick="batchDuplicate()">
+                <i class="bi bi-copy me-1"></i>批量复制
             </button>
+
+            <button class="btn btn-sm btn-dark" id="comparePostsBtn" onclick="compareSelectedPosts()" disabled>
+                <i class="bi bi-columns-gap me-1"></i>对比文章
+            </button>
+
             <button class="btn btn-sm btn-outline-danger" onclick="batchDelete()">
                 <i class="bi bi-trash me-1"></i>批量删除
             </button>
+
             <button class="btn btn-sm btn-outline-secondary" onclick="clearSelection()">
                 <i class="bi bi-x-circle me-1"></i>取消选择
             </button>
@@ -175,37 +551,613 @@
     </div>
 </div>
 
+<!-- 批量修改栏目模态框 -->
+<div class="modal fade" id="batchColumnModal" tabindex="-1" aria-labelledby="batchColumnModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="batchColumnModalLabel">
+                    <i class="bi bi-folder me-2"></i>批量修改栏目
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted mb-3">
+                    <i class="bi bi-info-circle me-1"></i>
+                    将选中的 <strong id="batchColumnCount">0</strong> 篇文章移动到以下栏目：
+                </p>
+                <div class="mb-3">
+                    <label class="form-label">选择目标栏目</label>
+                    <select class="form-select" id="targetColumnId">
+                        <option value="">-- 选择栏目 --</option>
+                        {% for col in columns %}
+                        <option value="{{ col.id }}">{{ col.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="batchChangeColumn()">
+                    <i class="bi bi-check me-1"></i>确认修改
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 批量设置封面模态框 -->
+<div class="modal fade" id="batchCoverModal" tabindex="-1" aria-labelledby="batchCoverModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="batchCoverModalLabel">
+                    <i class="bi bi-image me-2"></i>批量设置封面
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted mb-3">
+                    <i class="bi bi-info-circle me-1"></i>
+                    为选中的 <strong id="batchCoverCount">0</strong> 篇文章设置统一封面：
+                </p>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label class="form-label">选择封面图片</label>
+                            <div class="cover-preview-container text-center p-4 border rounded bg-light" id="coverPreviewContainer">
+                                <i class="bi bi-image fs-1 text-muted"></i>
+                                <p class="text-muted mt-2 mb-0">点击选择图片</p>
+                            </div>
+                            <input type="hidden" id="selectedCoverImage" value="">
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label">从媒体库选择</label>
+                        <div class="media-grid-container border rounded p-2" style="max-height: 300px; overflow-y: auto;">
+                            <div class="row g-2" id="mediaGrid">
+                                <div class="col-4 col-md-3">
+                                    <div class="media-item selected" data-src="/static/images/placeholder.png" onclick="selectCoverImage(this)">
+                                        <img src="/static/images/placeholder.png" alt="默认图片" class="img-fluid rounded">
+                                        <div class="media-item-overlay"><i class="bi bi-check"></i></div>
+                                    </div>
+                                </div>
+                                <!-- 媒体图片将通过 AJAX 加载 -->
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <button class="btn btn-sm btn-outline-primary" onclick="loadMediaForCover()">
+                                <i class="bi bi-arrow-clockwise me-1"></i>刷新媒体列表
+                            </button>
+                            <a href="/admin/media" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                <i class="bi bi-cloud-upload me-1"></i>上传新图片
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="batchSetCover()">
+                    <i class="bi bi-check me-1"></i>确认设置
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 批量编辑模态框 -->
+<div class="modal fade" id="batchEditModal" tabindex="-1" aria-labelledby="batchEditModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="batchEditModalLabel">
+                    <i class="bi bi-pencil-square me-2"></i>批量编辑
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted mb-3">
+                    <i class="bi bi-info-circle me-1"></i>
+                    批量编辑选中的 <strong id="batchEditCount">0</strong> 篇文章。勾选要修改的字段，留空则不修改该字段。
+                </p>
+
+                <div class="row g-3">
+                    <!-- 状态修改 -->
+                    <div class="col-md-6">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="editStatusEnabled" onchange="toggleEditField('editStatus', this.checked)">
+                                    <label class="form-check-label fw-bold" for="editStatusEnabled">修改状态</label>
+                                </div>
+                                <select class="form-select" id="editStatus" disabled>
+                                    <option value="">-- 选择状态 --</option>
+                                    <option value="draft">草稿</option>
+                                    <option value="published">已发布</option>
+                                    <option value="offline">已下线</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 栏目修改 -->
+                    <div class="col-md-6">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="editColumnEnabled" onchange="toggleEditField('editColumnId', this.checked)">
+                                    <label class="form-check-label fw-bold" for="editColumnEnabled">修改栏目</label>
+                                </div>
+                                <select class="form-select" id="editColumnId" disabled>
+                                    <option value="">-- 选择栏目 --</option>
+                                    {% for col in columns %}
+                                    <option value="{{ col.id }}">{{ col.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 推荐修改 -->
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="editRecommendedEnabled" onchange="toggleEditField('editRecommended', this.checked)">
+                                    <label class="form-check-label fw-bold" for="editRecommendedEnabled">修改推荐</label>
+                                </div>
+                                <select class="form-select" id="editRecommended" disabled>
+                                    <option value="">-- 选择 --</option>
+                                    <option value="true">设为推荐</option>
+                                    <option value="false">取消推荐</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 置顶修改 -->
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="editPinnedEnabled" onchange="toggleEditField('editPinned', this.checked)">
+                                    <label class="form-check-label fw-bold" for="editPinnedEnabled">修改置顶</label>
+                                </div>
+                                <select class="form-select" id="editPinned" disabled>
+                                    <option value="">-- 选择 --</option>
+                                    <option value="true">设为置顶</option>
+                                    <option value="false">取消置顶</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 浏览量重置 -->
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="editViewsEnabled" onchange="toggleEditField('resetViews', this.checked); document.getElementById('resetViews').disabled = !this.checked; document.getElementById('resetViews').parentElement.style.opacity = this.checked ? '1' : '0.5'">
+                                    <label class="form-check-label fw-bold" for="editViewsEnabled">重置浏览量</label>
+                                </div>
+                                <div style="opacity: 0.5;">
+                                    <input class="form-check-input" type="radio" name="editViews" id="resetViews" value="reset" checked disabled>
+                                    <label class="form-check-label" for="resetViews">重置为 0</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="executeBatchEdit()">
+                    <i class="bi bi-check me-1"></i>确认修改
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 智能选择模态框 -->
+<div class="modal fade" id="smartSelectModal" tabindex="-1" aria-labelledby="smartSelectModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="smartSelectModalLabel">
+                    <i class="bi bi-magic me-2"></i>智能选择
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted mb-3">
+                    <i class="bi bi-info-circle me-1"></i>
+                    根据条件自动选择符合条件的文章
+                </p>
+
+                <!-- 状态条件 -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">文章状态</label>
+                    <div class="d-flex flex-wrap gap-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="selectPublished" value="published">
+                            <label class="form-check-label" for="selectPublished">
+                                <span class="badge bg-success">已发布</span>
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="selectDraft" value="draft">
+                            <label class="form-check-label" for="selectDraft">
+                                <span class="badge bg-warning text-dark">草稿</span>
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="selectOffline" value="offline">
+                            <label class="form-check-label" for="selectOffline">
+                                <span class="badge bg-secondary">已下线</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 特性条件 -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">文章特性</label>
+                    <div class="d-flex flex-wrap gap-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="selectRecommended">
+                            <label class="form-check-label" for="selectRecommended">
+                                <i class="bi bi-star-fill text-warning"></i> 已推荐
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="selectPinned">
+                            <label class="form-check-label" for="selectPinned">
+                                <i class="bi bi-pin-angle-fill text-danger"></i> 已置顶
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="selectNoCover">
+                            <label class="form-check-label" for="selectNoCover">
+                                <i class="bi bi-image text-muted"></i> 无封面
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 日期条件 -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">发布日期</label>
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <input type="date" class="form-control form-control-sm" id="selectDateFrom" placeholder="开始日期">
+                        </div>
+                        <div class="col-6">
+                            <input type="date" class="form-control form-control-sm" id="selectDateTo" placeholder="结束日期">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 选择模式 -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">选择模式</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="selectMode" id="selectModeAdd" value="add" checked>
+                        <label class="form-check-label" for="selectModeAdd">
+                            添加到当前选择
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="selectMode" id="selectModeReplace" value="replace">
+                        <label class="form-check-label" for="selectModeReplace">
+                            替换当前选择
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="selectMode" id="selectModeIntersect" value="intersect">
+                        <label class="form-check-label" for="selectModeIntersect">
+                            与当前选择取交集
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 预览结果 -->
+                <div class="alert alert-info py-2 mb-0">
+                    <i class="bi bi-calculator me-1"></i>
+                    预计选中 <strong id="smartSelectPreview">0</strong> 篇文章
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" onclick="previewSmartSelect()">
+                    <i class="bi bi-eye me-1"></i>预览
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="executeSmartSelect()">
+                    <i class="bi bi-check me-1"></i>确认选择
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 文章对比模态框 -->
+<div class="modal fade" id="compareModal" tabindex="-1" aria-labelledby="compareModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="compareModalLabel">
+                    <i class="bi bi-columns-gap me-2"></i>文章对比
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="compareModalBody">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">加载中...</span>
+                    </div>
+                    <p class="mt-2 text-muted">正在加载文章数据...</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 文章导入模态框 -->
+<div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="importModalLabel">
+                    <i class="bi bi-upload me-2"></i>导入文章
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- 导入方式选择 -->
+                <ul class="nav nav-tabs mb-3" id="importTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="csv-tab" data-bs-toggle="tab" data-bs-target="#csv-content" type="button">
+                            <i class="bi bi-filetype-csv me-1"></i>CSV 导入
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="json-tab" data-bs-toggle="tab" data-bs-target="#json-content" type="button">
+                            <i class="bi bi-filetype-json me-1"></i>JSON 导入
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="markdown-tab" data-bs-toggle="tab" data-bs-target="#markdown-content" type="button">
+                            <i class="bi bi-markdown me-1"></i>Markdown 导入
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="importTabContent">
+                    <!-- CSV 导入 -->
+                    <div class="tab-pane fade show active" id="csv-content" role="tabpanel">
+                        <div class="alert alert-info mb-3">
+                            <i class="bi bi-info-circle me-2"></i>
+                            <strong>CSV 格式要求：</strong>第一行必须是表头，支持的列：<code>title, summary, content, column_slug, status, is_recommended</code>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">选择栏目</label>
+                            <select class="form-select" id="importColumnCsv">
+                                <option value="">-- 选择目标栏目 --</option>
+                                {% for col in columns %}
+                                <option value="{{ col.id }}">{{ col.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">上传 CSV 文件</label>
+                            <input type="file" class="form-control" id="csvFileInput" accept=".csv">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">或粘贴 CSV 内容</label>
+                            <textarea class="form-control" id="csvContentInput" rows="6" placeholder="title,summary,content,column_slug,status&#10;文章标题,摘要内容,文章内容,news,published&#10;第二篇文章,摘要,内容,draft"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- JSON 导入 -->
+                    <div class="tab-pane fade" id="json-content" role="tabpanel">
+                        <div class="alert alert-info mb-3">
+                            <i class="bi bi-info-circle me-2"></i>
+                            <strong>JSON 格式：</strong>数组对象，每个对象包含 <code>title, summary, content, column_id</code> 等字段
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">选择栏目</label>
+                            <select class="form-select" id="importColumnJson">
+                                <option value="">-- 选择目标栏目 --</option>
+                                {% for col in columns %}
+                                <option value="{{ col.id }}">{{ col.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">粘贴 JSON 数据</label>
+                            <textarea class="form-control" id="jsonContentInput" rows="10" placeholder='[
+  {
+    "title": "文章标题",
+    "summary": "文章摘要",
+    "content": "文章内容（支持 Markdown）",
+    "status": "draft",
+    "is_recommended": false
+  }
+]'></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Markdown 导入 -->
+                    <div class="tab-pane fade" id="markdown-content" role="tabpanel">
+                        <div class="alert alert-info mb-3">
+                            <i class="bi bi-info-circle me-2"></i>
+                            <strong>Markdown 格式：</strong>每篇文章以 <code># 标题</code> 开头，摘要使用 <code>---</code> 分隔
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">选择栏目</label>
+                            <select class="form-select" id="importColumnMd">
+                                <option value="">-- 选择目标栏目 --</option>
+                                {% for col in columns %}
+                                <option value="{{ col.id }}">{{ col.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">状态</label>
+                            <select class="form-select" id="importStatusMd">
+                                <option value="draft">草稿</option>
+                                <option value="published">直接发布</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">粘贴 Markdown 内容</label>
+                            <textarea class="form-control" id="mdContentInput" rows="12" placeholder="# 第一篇文章标题
+
+这是文章摘要...
+
+---
+
+文章正文内容...
+
+---
+
+# 第二篇文章标题
+
+第二篇摘要..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 导入进度 -->
+                <div id="importProgressContainer" style="display: none;">
+                    <div class="alert alert-info mb-2">
+                        <i class="bi bi-arrow-repeat me-2"></i>
+                        <span id="importProgressText">正在导入...</span>
+                    </div>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" id="importProgressBar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- 导入结果 -->
+                <div id="importResultContainer" style="display: none;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="executeImport()">
+                    <i class="bi bi-upload me-1"></i>开始导入
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- 文章列表卡片 -->
 <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div class="d-flex align-items-center gap-2">
+            <input type="checkbox" class="form-check-input" id="selectAll" onchange="toggleSelectAll()">
+            <span class="text-muted small">全选</span>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <!-- 列显示控制 -->
+            <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" title="选择显示的列">
+                    <i class="bi bi-layout-columns me-1"></i>列
+                </button>
+                <div class="dropdown-menu dropdown-menu-end p-2" style="width: 200px;">
+                    <h6 class="dropdown-header px-2">显示/隐藏列</h6>
+                    <div class="form-check form-switch px-3 py-1">
+                        <input class="form-check-input" type="checkbox" checked data-column="id" onchange="toggleColumn(this)">
+                        <label class="form-check-label">ID</label>
+                    </div>
+                    <div class="form-check form-switch px-3 py-1">
+                        <input class="form-check-input" type="checkbox" checked data-column="title" onchange="toggleColumn(this)">
+                        <label class="form-check-label">标题</label>
+                    </div>
+                    <div class="form-check form-switch px-3 py-1">
+                        <input class="form-check-input" type="checkbox" checked data-column="column" onchange="toggleColumn(this)">
+                        <label class="form-check-label">栏目</label>
+                    </div>
+                    <div class="form-check form-switch px-3 py-1">
+                        <input class="form-check-input" type="checkbox" checked data-column="status" onchange="toggleColumn(this)">
+                        <label class="form-check-label">状态</label>
+                    </div>
+                    <div class="form-check form-switch px-3 py-1">
+                        <input class="form-check-input" type="checkbox" checked data-column="recommended" onchange="toggleColumn(this)">
+                        <label class="form-check-label">推荐</label>
+                    </div>
+                    <div class="form-check form-switch px-3 py-1">
+                        <input class="form-check-input" type="checkbox" checked data-column="pinned" onchange="toggleColumn(this)">
+                        <label class="form-check-label">置顶</label>
+                    </div>
+                    <div class="form-check form-switch px-3 py-1">
+                        <input class="form-check-input" type="checkbox" checked data-column="views" onchange="toggleColumn(this)">
+                        <label class="form-check-label">浏览量</label>
+                    </div>
+                    <div class="form-check form-switch px-3 py-1">
+                        <input class="form-check-input" type="checkbox" checked data-column="updated" onchange="toggleColumn(this)">
+                        <label class="form-check-label">更新时间</label>
+                    </div>
+                    <hr class="my-2">
+                    <button class="btn btn-sm btn-outline-primary w-100" onclick="resetColumns()">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i>恢复默认
+                    </button>
+                </div>
+            </div>
+            <!-- 导出按钮 -->
+            <a href="/admin/posts/export" class="btn btn-sm btn-outline-success" target="_blank" title="导出文章">
+                <i class="bi bi-download me-1"></i>导出
+            </a>
+        </div>
+    </div>
     <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-hover mb-0">
-                <thead>
+        <div class="table-responsive table-scroll-container">
+            <table class="table table-hover mb-0" id="postsTable">
+                <thead class="table-light sticky-top">
                     <tr>
-                        <th style="width: 50px;">
+                        <th style="width: 50px;" class="sticky-col start-0">
                             <input type="checkbox" class="form-check-input" id="selectAll" onchange="toggleSelectAll()">
                         </th>
-                        <th style="width: 60px;">ID</th>
-                        <th>标题</th>
-                        <th style="width: 120px;">栏目</th>
-                        <th style="width: 100px;">状态</th>
-                        <th style="width: 80px;">推荐</th>
-                        <th style="width: 80px;">置顶</th>
-                        <th style="width: 90px;">浏览量</th>
-                        <th style="width: 150px;">更新时间</th>
-                        <th style="width: 180px;" class="text-center">操作</th>
+                        <th style="width: 60px;" class="sortable sticky-col start-1" data-sort="id" data-column="id">
+                            ID <i class="bi bi-chevron-expand"></i>
+                        </th>
+                        <th class="sortable" data-sort="title" data-column="title">
+                            标题 <i class="bi bi-chevron-expand"></i>
+                        </th>
+                        <th style="width: 120px;" data-column="column">栏目</th>
+                        <th style="width: 100px;" class="sortable" data-sort="status" data-column="status">
+                            状态 <i class="bi bi-chevron-expand"></i>
+                        </th>
+                        <th style="width: 80px;" class="sortable text-center" data-sort="recommended" data-column="recommended">
+                            推荐 <i class="bi bi-chevron-expand"></i>
+                        </th>
+                        <th style="width: 80px;" class="sortable text-center" data-sort="pinned" data-column="pinned">
+                            置顶 <i class="bi bi-chevron-expand"></i>
+                        </th>
+                        <th style="width: 90px;" class="sortable" data-sort="views" data-column="views">
+                            浏览量 <i class="bi bi-chevron-expand"></i>
+                        </th>
+                        <th style="width: 150px;" class="sortable" data-sort="updated" data-column="updated">
+                            更新时间 <i class="bi bi-chevron-expand"></i>
+                        </th>
+                        <th style="width: 180px;" class="text-center sticky-col end-0">操作</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% if posts %}
                     {% for post in posts %}
-                    <tr>
-                        <td>
+                    <tr data-id="{{ post.id }}">
+                        <td class="sticky-col start-0">
                             <input type="checkbox" class="form-check-input post-checkbox"
                                    value="{{ post.id }}" onchange="updateBatchActions()">
                         </td>
-                        <td>{{ post.id }}</td>
-                        <td>
+                        <td data-column="id">{{ post.id }}</td>
+                        <td data-column="title">
                             <a href="/admin/posts/{{ post.id }}/edit" class="text-decoration-none text-dark fw-medium">
                                 {{ post.title }}
                             </a>
@@ -213,12 +1165,12 @@
                             <i class="bi bi-pin-angle-fill text-primary ms-1" title="置顶文章"></i>
                             {% endif %}
                         </td>
-                        <td>
+                        <td data-column="column">
                             <span class="badge bg-secondary-light">
                                 {{ post.column.name if post.column else '未分类' }}
                             </span>
                         </td>
-                        <td>
+                        <td data-column="status">
                             {% if post.status == 'published' %}
                             <span class="badge bg-success">
                                 <i class="bi bi-check-circle me-1"></i>已发布
@@ -233,32 +1185,38 @@
                             </span>
                             {% endif %}
                         </td>
-                        <td class="text-center">
+                        <td data-column="recommended" class="text-center">
                             {% if post.is_recommended %}
                             <i class="bi bi-star-fill text-warning" title="推荐文章"></i>
                             {% else %}
                             <i class="bi bi-star text-muted" title="普通文章"></i>
                             {% endif %}
                         </td>
-                        <td class="text-center">
+                        <td data-column="pinned" class="text-center">
                             {% if post.is_pinned %}
                             <i class="bi bi-pin-angle-fill text-primary" title="已置顶"></i>
                             {% else %}
                             <i class="bi bi-pin-angle text-muted" title="未置顶"></i>
                             {% endif %}
                         </td>
-                        <td>
+                        <td data-column="views">
                             <span class="text-muted">
                                 <i class="bi bi-eye me-1"></i>{{ post.view_count or 0 }}
                             </span>
                         </td>
-                        <td>
+                        <td data-column="updated">
                             <small class="text-muted">
                                 {{ post.updated_at.strftime('%Y-%m-%d %H:%M') if post.updated_at else '-' }}
                             </small>
                         </td>
-                        <td>
+                        <td class="sticky-col end-0">
                             <div class="d-flex gap-1 justify-content-center">
+                                <button class="btn btn-sm btn-outline-primary"
+                                        onclick="quickViewPost({{ post.id }})"
+                                        data-bs-toggle="tooltip"
+                                        title="快速预览">
+                                    <i class="bi bi-eye"></i>
+                                </button>
                                 <a href="/admin/posts/{{ post.id }}/edit"
                                    class="btn btn-sm btn-primary"
                                    data-bs-toggle="tooltip"
@@ -309,12 +1267,24 @@
                     <tr>
                         <td colspan="10">
                             <div class="empty-state">
-                                <i class="bi bi-inbox"></i>
-                                <h3>暂无文章</h3>
-                                <p>当前没有符合条件的文章记录</p>
-                                <a href="/admin/posts/new" class="btn btn-primary">
-                                    <i class="bi bi-plus-lg me-2"></i>创建第一篇文章
-                                </a>
+                                <div class="empty-state-icon">
+                                    <i class="bi bi-inbox"></i>
+                                </div>
+                                <h3 class="empty-state-title">暂无文章</h3>
+                                <p class="empty-state-description">当前没有符合条件的文章记录</p>
+                                <div class="empty-state-actions">
+                                    <a href="/admin/posts/new" class="btn btn-primary">
+                                        <i class="bi bi-plus-lg me-2"></i>创建第一篇文章
+                                    </a>
+                                    <a href="/admin/posts" class="btn btn-outline-secondary">
+                                        <i class="bi bi-arrow-clockwise me-2"></i>刷新列表
+                                    </a>
+                                </div>
+                                <div class="empty-state-tips">
+                                    <small class="text-muted">
+                                        <i class="bi bi-lightbulb me-1"></i>提示：您可以导入现有文章或创建新文章
+                                    </small>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -327,76 +1297,119 @@
     <!-- 分页 -->
     {% if total_pages > 1 %}
     <div class="card-footer bg-light">
-        <div class="d-flex justify-content-between align-items-center">
-            <div class="text-muted">
-                <small>第 {{ page }} / {{ total_pages }} 页 (共 {{ total }} 篇)</small>
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div class="d-flex align-items-center gap-3">
+                <div class="text-muted">
+                    <small>第 {{ page }} / {{ total_pages }} 页 (共 {{ total }} 篇)</small>
+                </div>
+                <!-- 每页显示数量 -->
+                <div class="input-group input-group-sm" style="width: 140px;">
+                    <span class="input-group-text">每页</span>
+                    <select class="form-select form-select-sm" id="pageSizeSelect" onchange="changePageSize(this.value)">
+                        <option value="10" {% if page_size == 10 %}selected{% endif %}>10</option>
+                        <option value="20" {% if page_size == 20 %}selected{% endif %}>20</option>
+                        <option value="50" {% if page_size == 50 %}selected{% endif %}>50</option>
+                        <option value="100" {% if page_size == 100 %}selected{% endif %}>100</option>
+                    </select>
+                </div>
             </div>
-            <nav aria-label="文章分页">
-                <ul class="pagination mb-0">
-                    {% if page > 1 %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page - 1 }}{% if current_column_id %}&column_id={{ current_column_id }}{% endif %}{% if current_status %}&status_filter={{ current_status }}{% endif %}{% if current_keyword %}&keyword={{ current_keyword }}{% endif %}">
-                            <i class="bi bi-chevron-left"></i>
-                        </a>
-                    </li>
-                    {% else %}
-                    <li class="page-item disabled">
-                        <span class="page-link">
-                            <i class="bi bi-chevron-left"></i>
-                        </span>
-                    </li>
-                    {% endif %}
+            <div class="d-flex align-items-center gap-2">
+                <!-- 跳转页码 -->
+                <div class="input-group input-group-sm" style="width: 120px;">
+                    <span class="input-group-text"><i class="bi bi-jump-forward"></i></span>
+                    <input type="number" class="form-control form-control-sm" id="jumpPageInput"
+                           min="1" max="{{ total_pages }}" placeholder="跳转"
+                           onkeydown="if(event.key==='Enter')jumpToPage()">
+                    <button class="btn btn-outline-secondary" type="button" onclick="jumpToPage()">
+                        <i class="bi bi-caret-right"></i>
+                    </button>
+                </div>
+                <nav aria-label="文章分页">
+                    <ul class="pagination mb-0">
+                        {% if page > 1 %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ build_page_url(page - 1) }}">
+                                <i class="bi bi-chevron-left"></i>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link"><i class="bi bi-chevron-left"></i></span>
+                        </li>
+                        {% endif %}
 
-                    <!-- 显示页码 -->
-                    {% set start_page = [1, page - 2]|max %}
-                    {% set end_page = [total_pages, page + 2]|min %}
+                        <!-- 显示页码 -->
+                        {% set start_page = [1, page - 2]|max %}
+                        {% set end_page = [total_pages, page + 2]|min %}
 
-                    {% if start_page > 1 %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page=1{% if current_column_id %}&column_id={{ current_column_id }}{% endif %}{% if current_status %}&status_filter={{ current_status }}{% endif %}{% if current_keyword %}&keyword={{ current_keyword }}{% endif %}">1</a>
-                    </li>
-                    {% if start_page > 2 %}
-                    <li class="page-item disabled">
-                        <span class="page-link">...</span>
-                    </li>
-                    {% endif %}
-                    {% endif %}
+                        {% if start_page > 1 %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ build_page_url(1) }}">1</a>
+                        </li>
+                        {% if start_page > 2 %}
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                        {% endif %}
+                        {% endif %}
 
-                    {% for p in range(start_page, end_page + 1) %}
-                    <li class="page-item {% if p == page %}active{% endif %}">
-                        <a class="page-link" href="?page={{ p }}{% if current_column_id %}&column_id={{ current_column_id }}{% endif %}{% if current_status %}&status_filter={{ current_status }}{% endif %}{% if current_keyword %}&keyword={{ current_keyword }}{% endif %}">{{ p }}</a>
-                    </li>
-                    {% endfor %}
+                        {% for p in range(start_page, end_page + 1) %}
+                        <li class="page-item {% if p == page %}active{% endif %}">
+                            <a class="page-link" href="{{ build_page_url(p) }}">{{ p }}</a>
+                        </li>
+                        {% endfor %}
 
-                    {% if end_page < total_pages %}
-                    {% if end_page < total_pages - 1 %}
-                    <li class="page-item disabled">
-                        <span class="page-link">...</span>
-                    </li>
-                    {% endif %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ total_pages }}{% if current_column_id %}&column_id={{ current_column_id }}{% endif %}{% if current_status %}&status_filter={{ current_status }}{% endif %}{% if current_keyword %}&keyword={{ current_keyword }}{% endif %}">{{ total_pages }}</a>
-                    </li>
-                    {% endif %}
+                        {% if end_page < total_pages %}
+                        {% if end_page < total_pages - 1 %}
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                        {% endif %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ build_page_url(total_pages) }}">{{ total_pages }}</a>
+                        </li>
+                        {% endif %}
 
-                    {% if page < total_pages %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ page + 1 }}{% if current_column_id %}&column_id={{ current_column_id }}{% endif %}{% if current_status %}&status_filter={{ current_status }}{% endif %}{% if current_keyword %}&keyword={{ current_keyword }}{% endif %}">
-                            <i class="bi bi-chevron-right"></i>
-                        </a>
-                    </li>
-                    {% else %}
-                    <li class="page-item disabled">
-                        <span class="page-link">
-                            <i class="bi bi-chevron-right"></i>
-                        </span>
-                    </li>
-                    {% endif %}
-                </ul>
-            </nav>
+                        {% if page < total_pages %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ build_page_url(page + 1) }}">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link"><i class="bi bi-chevron-right"></i></span>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
         </div>
     </div>
     {% endif %}
+</div>
+
+<!-- 页码跳转模态框 -->
+<div class="modal fade" id="jumpPageModal" tabindex="-1" aria-labelledby="jumpPageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="jumpPageModalLabel">
+                    <i class="bi bi-jump-forward me-2"></i>跳转页码
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted mb-3">输入要跳转的页码 (1-{{ total_pages }})</p>
+                <input type="number" class="form-control" id="jumpPageModalInput"
+                       min="1" max="{{ total_pages }}" value="{{ page }}">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" onclick="confirmJumpPage()">跳转</button>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
@@ -406,7 +1419,293 @@
  * 文章管理前端交互脚本 - Bootstrap 5 版本
  */
 
-// 全选/取消全选
+// ========== 加载状态和Toast通知 ==========
+let toastContainer = null;
+
+function initToastContainer() {
+    if (!toastContainer) {
+        toastContainer = document.createElement('div');
+        toastContainer.id = 'toastContainer';
+        toastContainer.className = 'position-fixed top-0 end-0 p-3';
+        toastContainer.style.zIndex = '9999';
+        document.body.appendChild(toastContainer);
+    }
+    return toastContainer;
+}
+
+function showToast(message, type = 'success', duration = 3000) {
+    initToastContainer();
+    const toastId = 'toast_' + Date.now();
+    const bgClass = {
+        'success': 'bg-success',
+        'error': 'bg-danger',
+        'warning': 'bg-warning',
+        'info': 'bg-info'
+    }[type] || 'bg-secondary';
+
+    const icon = {
+        'success': 'bi-check-circle',
+        'error': 'bi-x-circle',
+        'warning': 'bi-exclamation-triangle',
+        'info': 'bi-info-circle'
+    }[type] || 'bi-bell';
+
+    const toastHtml = `
+        <div id="${toastId}" class="toast align-items-center ${bgClass} text-white border-0" role="alert">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="bi ${icon} me-2"></i>${message}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    `;
+
+    toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+    const toastEl = document.getElementById(toastId);
+    const toast = new bootstrap.Toast(toastEl, { delay: duration });
+    toast.show();
+
+    toastEl.addEventListener('hidden.bs.toast', () => toastEl.remove());
+}
+
+function showLoading(container, message = '加载中...') {
+    const overlay = document.createElement('div');
+    overlay.className = 'loading-overlay';
+    overlay.id = 'loadingOverlay';
+    overlay.innerHTML = `
+        <div class="loading-spinner"></div>
+        <div class="loading-text">${message}</div>
+    `;
+    container.style.position = 'relative';
+    container.appendChild(overlay);
+    return overlay;
+}
+
+function hideLoading() {
+    const overlay = document.getElementById('loadingOverlay');
+    if (overlay) {
+        overlay.remove();
+    }
+}
+
+function showConfirmDialog(title, message, onConfirm) {
+    const modalHtml = `
+        <div class="modal fade" id="confirmModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">${title}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">${message}</div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" id="confirmBtn">确认</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    const modalEl = document.getElementById('confirmModal');
+    const modal = new bootstrap.Modal(modalEl);
+
+    document.getElementById('confirmBtn').onclick = () => {
+        modal.hide();
+        onConfirm();
+    };
+
+    modalEl.addEventListener('hidden.bs.toast', () => modalEl.remove());
+    modal.show();
+}
+
+// ========== 搜索高亮功能 ==========
+const SEARCH_KEYWORD_STORAGE_KEY = 'posts_search_keyword';
+
+function highlightSearchKeyword() {
+    const keyword = '{{ current_keyword or "" }}'.trim();
+    if (!keyword) {
+        localStorage.removeItem(SEARCH_KEYWORD_STORAGE_KEY);
+        return;
+    }
+
+    // 保存搜索关键词
+    localStorage.setItem(SEARCH_KEYWORD_STORAGE_KEY, keyword);
+
+    // 高亮标题中的关键词
+    document.querySelectorAll('[data-column="title"] a').forEach(el => {
+        const text = el.textContent;
+        if (text.includes(keyword)) {
+            const regex = new RegExp(`(${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+            el.innerHTML = text.replace(regex, '<mark class="bg-warning">$1</mark>');
+        }
+    });
+
+    // 高亮摘要中的关键词
+    document.querySelectorAll('[data-column="title"] .text-muted.small').forEach(el => {
+        const text = el.textContent;
+        if (text.includes(keyword)) {
+            const regex = new RegExp(`(${keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+            el.innerHTML = text.replace(regex, '<mark class="bg-warning">$1</mark>');
+        }
+    });
+}
+
+// ========== 表格行点击选择 ==========
+document.addEventListener('DOMContentLoaded', function() {
+    // 初始化搜索高亮
+    highlightSearchKeyword();
+
+    // 表格行点击选择
+    document.querySelectorAll('#postsTable tbody tr[data-id]').forEach(row => {
+        row.addEventListener('click', function(e) {
+            // 忽略点击复选框和按钮
+            if (e.target.type === 'checkbox' || e.target.tagName === 'BUTTON' ||
+                e.target.closest('a') || e.target.closest('.btn')) {
+                return;
+            }
+
+            const checkbox = this.querySelector('.post-checkbox');
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+                updateRowStyle(this, checkbox.checked);
+                updateBatchActions();
+                updateSelectAllState();
+            }
+        });
+
+        // 双击快速预览
+        row.addEventListener('dblclick', function(e) {
+            if (e.target.type === 'checkbox' || e.target.tagName === 'BUTTON' ||
+                e.target.closest('a') || e.target.closest('.btn')) {
+                return;
+            }
+            const id = this.dataset.id;
+            if (id) {
+                quickViewPost(parseInt(id));
+            }
+        });
+    });
+});
+
+// 更新行样式
+function updateRowStyle(row, selected) {
+    row.classList.toggle('table-primary', selected);
+}
+
+// ========== 分页功能 ==========
+const PAGINATION_STORAGE_KEY = 'posts_page_size';
+
+// 构建分页URL
+function buildPageUrl(page) {
+    const params = new URLSearchParams();
+    {% if current_column_id %}
+    params.set('column_id', '{{ current_column_id }}');
+    {% endif %}
+    {% if current_status %}
+    params.set('status_filter', '{{ current_status }}');
+    {% endif %}
+    {% if current_keyword %}
+    params.set('keyword', '{{ current_keyword }}');
+    {% endif %}
+    params.set('page', page);
+    const queryString = params.toString();
+    return '/admin/posts' + (queryString ? '?' + queryString : '');
+}
+
+// 跳转到指定页码
+window.jumpToPage = function() {
+    const input = document.getElementById('jumpPageInput');
+    const page = parseInt(input.value);
+    const maxPage = parseInt('{{ total_pages }}');
+
+    if (page && page >= 1 && page <= maxPage) {
+        window.location.href = buildPageUrl(page);
+    } else {
+        showToast('warning', `请输入 1-${maxPage} 之间的页码`, '提示');
+        input.value = '';
+    }
+};
+
+// 确认跳转页码（模态框）
+window.confirmJumpPage = function() {
+    const input = document.getElementById('jumpPageModalInput');
+    const page = parseInt(input.value);
+    const maxPage = parseInt('{{ total_pages }}');
+
+    if (page && page >= 1 && page <= maxPage) {
+        // 关闭模态框
+        const modal = bootstrap.Modal.getInstance(document.getElementById('jumpPageModal'));
+        if (modal) modal.hide();
+        window.location.href = buildPageUrl(page);
+    } else {
+        showToast('warning', `请输入 1-${maxPage} 之间的页码`, '提示');
+    }
+};
+
+// 改变每页显示数量
+window.changePageSize = function(size) {
+    localStorage.setItem(PAGINATION_STORAGE_KEY, size);
+
+    const params = new URLSearchParams();
+    {% if current_column_id %}
+    params.set('column_id', '{{ current_column_id }}');
+    {% endif %}
+    {% if current_status %}
+    params.set('status_filter', '{{ current_status }}');
+    {% endif %}
+    {% if current_keyword %}
+    params.set('keyword', '{{ current_keyword }}');
+    {% endif %}
+    params.set('page_size', size);
+    const queryString = params.toString();
+    window.location.href = '/admin/posts' + (queryString ? '?' + queryString : '');
+};
+
+// 键盘快捷键支持分页
+document.addEventListener('keydown', function(e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+        // 如果在页码输入框中，按Enter直接跳转
+        if (e.target.id === 'jumpPageInput' && e.key === 'Enter') {
+            e.preventDefault();
+            jumpToPage();
+            return;
+        }
+        return;
+    }
+
+    // Ctrl + 左箭头：上一页
+    if ((e.ctrlKey || e.metaKey) && e.key === 'ArrowLeft') {
+        e.preventDefault();
+        {% if page > 1 %}
+        window.location.href = buildPageUrl({{ page - 1 }});
+        {% endif %}
+    }
+
+    // Ctrl + 右箭头：下一页
+    if ((e.ctrlKey || e.metaKey) && e.key === 'ArrowRight') {
+        e.preventDefault();
+        {% if page < total_pages %}
+        window.location.href = buildPageUrl({{ page + 1 }});
+        {% endif %}
+    }
+
+    // Home：首页
+    if (e.key === 'Home' && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        window.location.href = buildPageUrl(1);
+    }
+
+    // End：末页
+    if (e.key === 'End' && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        window.location.href = buildPageUrl({{ total_pages }});
+    }
+});
+
+// ========== 全选/取消全选 ==========
 function toggleSelectAll() {
     const selectAll = document.getElementById('selectAll');
     const checkboxes = document.querySelectorAll('.post-checkbox');
@@ -518,25 +1817,25 @@ function toggleRecommend(postId, recommend) {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    showToast('success', data.message, '成功');
+                    showToast(data.message, 'success');
                     setTimeout(() => location.reload(), 1000);
                 } else {
-                    showToast('danger', data.message, '错误');
+                    showToast(data.message, 'error');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                showToast('danger', `${action}失败，请稍后重试`, '错误');
+                showToast(`${action}失败，请稍后重试`, 'error');
             });
         }
     );
 }
 
-// 删除文章
+// 删除文章（移到回收站）
 function deletePost(postId) {
     confirmAction(
         '确认删除',
-        '确定要删除这篇文章吗？删除后无法恢复。',
+        '确定要将这篇文章移到回收站吗？可在回收站恢复。',
         function() {
             fetch(`/admin/posts/${postId}`, {
                 method: 'DELETE'
@@ -544,19 +1843,241 @@ function deletePost(postId) {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    showToast('success', data.message, '成功');
+                    showToast(data.message, 'success');
                     setTimeout(() => location.reload(), 1000);
                 } else {
-                    showToast('danger', data.message, '错误');
+                    showToast(data.message, 'error');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                showToast('danger', '删除失败，请稍后重试', '错误');
+                showToast('删除失败，请稍后重试', 'error');
             });
         }
     );
 }
+
+// ========== 智能选择功能 ==========
+function showSmartSelectModal() {
+    const modal = new bootstrap.Modal(document.getElementById('smartSelectModal'));
+    modal.show();
+    previewSmartSelect();
+}
+
+function previewSmartSelect() {
+    const conditions = getSmartSelectConditions();
+    const count = document.querySelectorAll('tbody tr[data-id]').filter(row => {
+        return matchesConditions(row, conditions);
+    }).length;
+    document.getElementById('smartSelectPreview').textContent = count;
+}
+
+function getSmartSelectConditions() {
+    const statuses = [];
+    if (document.getElementById('selectPublished').checked) statuses.push('published');
+    if (document.getElementById('selectDraft').checked) statuses.push('draft');
+    if (document.getElementById('selectOffline').checked) statuses.push('offline');
+
+    return {
+        statuses: statuses,
+        recommended: document.getElementById('selectRecommended').checked,
+        pinned: document.getElementById('selectPinned').checked,
+        noCover: document.getElementById('selectNoCover').checked,
+        dateFrom: document.getElementById('selectDateFrom').value,
+        dateTo: document.getElementById('selectDateTo').value
+    };
+}
+
+function matchesConditions(row, conditions) {
+    // 检查状态
+    if (conditions.statuses.length > 0) {
+        const statusCell = row.querySelector('.status-cell');
+        if (statusCell) {
+            const status = statusCell.dataset.status;
+            if (!conditions.statuses.includes(status)) return false;
+        }
+    }
+
+    // 检查推荐
+    if (conditions.recommended) {
+        if (!row.querySelector('.bi-star-fill')) return false;
+    }
+
+    // 检查置顶
+    if (conditions.pinned) {
+        if (!row.querySelector('.bi-pin-angle-fill')) return false;
+    }
+
+    // 检查无封面
+    if (conditions.noCover) {
+        const coverCell = row.querySelector('.cover-cell');
+        if (coverCell && coverCell.dataset.hasCover === 'true') return false;
+    }
+
+    // 检查日期
+    if (conditions.dateFrom || conditions.dateTo) {
+        const dateCell = row.querySelector('.date-cell');
+        if (dateCell && dateCell.dataset.date) {
+            const rowDate = new Date(dateCell.dataset.date);
+            if (conditions.dateFrom && rowDate < new Date(conditions.dateFrom)) return false;
+            if (conditions.dateTo && rowDate > new Date(conditions.dateTo + ' 23:59:59')) return false;
+        }
+    }
+
+    return true;
+}
+
+function executeSmartSelect() {
+    const conditions = getSmartSelectConditions();
+    const mode = document.querySelector('input[name="selectMode"]:checked').value;
+    const currentSelected = new Set(getSelectedPostIds());
+
+    const allRows = document.querySelectorAll('tbody tr[data-id]');
+    let newSelected = new Set();
+
+    if (mode === 'replace') {
+        // 替换当前选择
+        allRows.forEach(row => {
+            if (matchesConditions(row, conditions)) {
+                newSelected.add(parseInt(row.dataset.id));
+            }
+        });
+    } else if (mode === 'intersect') {
+        // 取交集
+        allRows.forEach(row => {
+            if (matchesConditions(row, conditions) && currentSelected.has(parseInt(row.dataset.id))) {
+                newSelected.add(parseInt(row.dataset.id));
+            }
+        });
+    } else {
+        // 添加到当前选择
+        allRows.forEach(row => {
+            if (matchesConditions(row, conditions)) {
+                newSelected.add(parseInt(row.dataset.id));
+            }
+        });
+        currentSelected.forEach(id => newSelected.add(id));
+    }
+
+    // 更新选择状态
+    clearSelection();
+    newSelected.forEach(id => {
+        const checkbox = document.querySelector(`#postsTable tbody tr[data-id="${id}"] .post-checkbox`);
+        if (checkbox) {
+            checkbox.checked = true;
+            checkbox.closest('tr').classList.add('table-primary');
+        }
+    });
+
+    updateBatchActions();
+    updateSelectAllState();
+
+    // 关闭模态框
+    const modal = bootstrap.Modal.getInstance(document.getElementById('smartSelectModal'));
+    if (modal) modal.hide();
+
+    showToast('success', `已选择 ${newSelected.size} 篇文章`, '完成');
+}
+
+// 全选当前可见
+function selectAllVisible() {
+    document.querySelectorAll('tbody tr[data-id]').forEach(row => {
+        if (row.style.display !== 'none') {
+            const checkbox = row.querySelector('.post-checkbox');
+            if (checkbox) {
+                checkbox.checked = true;
+                row.classList.add('table-primary');
+            }
+        }
+    });
+    updateBatchActions();
+    updateSelectAllState();
+}
+
+// ========== 操作模板功能 ==========
+function saveOperationTemplate() {
+    const name = document.getElementById('templateNameInput').value.trim();
+    if (!name) {
+        showToast('warning', '请输入模板名称', '提示');
+        return;
+    }
+
+    const selectedIds = getSelectedPostIds();
+    if (selectedIds.length === 0) {
+        showToast('warning', '请先选择文章', '提示');
+        return;
+    }
+
+    const templates = JSON.parse(localStorage.getItem('batchOperationTemplates') || '[]');
+    templates.push({
+        id: Date.now(),
+        name: name,
+        postIds: selectedIds,
+        createdAt: new Date().toISOString()
+    });
+    localStorage.setItem('batchOperationTemplates', JSON.stringify(templates));
+
+    document.getElementById('templateNameInput').value = '';
+    loadSavedTemplates();
+    showToast('success', '模板已保存', '成功');
+}
+
+function loadSavedTemplates() {
+    const templates = JSON.parse(localStorage.getItem('batchOperationTemplates') || '[]');
+    const container = document.getElementById('savedTemplatesList');
+
+    if (templates.length === 0) {
+        container.innerHTML = '<li><span class="text-muted px-3 small">暂无保存的模板</span></li>';
+        return;
+    }
+
+    container.innerHTML = templates.map(t => `
+        <li>
+            <a class="dropdown-item d-flex justify-content-between align-items-center" href="javascript:applyTemplate(${t.id})">
+                <span><i class="bi bi-bookmark me-2"></i>${t.name}</span>
+                <span class="badge bg-secondary rounded-pill">${t.postIds.length}</span>
+            </a>
+        </li>
+    `).join('');
+}
+
+function applyTemplate(templateId) {
+    const templates = JSON.parse(localStorage.getItem('batchOperationTemplates') || '[]');
+    const template = templates.find(t => t.id === templateId);
+
+    if (!template) {
+        showToast('danger', '模板不存在或已删除', '错误');
+        return;
+    }
+
+    // 清空当前选择并应用模板
+    clearSelection();
+    template.postIds.forEach(id => {
+        const checkbox = document.querySelector(`#postsTable tbody tr[data-id="${id}"] .post-checkbox`);
+        if (checkbox) {
+            checkbox.checked = true;
+            checkbox.closest('tr').classList.add('table-primary');
+        }
+    });
+
+    updateBatchActions();
+    updateSelectAllState();
+    showToast('success', `已应用模板「${template.name}」，选择 ${template.postIds.length} 篇文章`, '完成');
+}
+
+function deleteTemplate(templateId, event) {
+    event.stopPropagation();
+    const templates = JSON.parse(localStorage.getItem('batchOperationTemplates') || '[]');
+    const filtered = templates.filter(t => t.id !== templateId);
+    localStorage.setItem('batchOperationTemplates', JSON.stringify(filtered));
+    loadSavedTemplates();
+    showToast('success', '模板已删除', '完成');
+}
+
+// 初始化加载模板
+document.addEventListener('DOMContentLoaded', function() {
+    loadSavedTemplates();
+});
 
 // 批量发布
 function batchPublish() {
@@ -702,7 +2223,79 @@ function batchUnrecommend() {
     );
 }
 
-// 批量删除
+// 批量置顶
+function batchPin() {
+    const ids = getSelectedPostIds();
+    if (ids.length === 0) {
+        showToast('warning', '请先选择文章', '提示');
+        return;
+    }
+
+    confirmAction(
+        '批量置顶确认',
+        `确定要置顶选中的 ${ids.length} 篇文章吗？`,
+        function() {
+            fetch('/posts/batch/pin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ post_ids: ids, is_pinned: true })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('danger', '批量置顶失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+
+// 批量取消置顶
+function batchUnpin() {
+    const ids = getSelectedPostIds();
+    if (ids.length === 0) {
+        showToast('warning', '请先选择文章', '提示');
+        return;
+    }
+
+    confirmAction(
+        '批量取消置顶确认',
+        `确定要取消置顶选中的 ${ids.length} 篇文章吗？`,
+        function() {
+            fetch('/posts/batch/pin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ post_ids: ids, is_pinned: false })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('danger', '批量操作失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+
+// 批量删除（移到回收站）
 function batchDelete() {
     const ids = getSelectedPostIds();
     if (ids.length === 0) {
@@ -712,7 +2305,7 @@ function batchDelete() {
 
     confirmAction(
         '批量删除确认',
-        `确定要删除选中的 ${ids.length} 篇文章吗？删除后无法恢复。`,
+        `确定要将选中的 ${ids.length} 篇文章移到回收站吗？可在回收站恢复。`,
         function() {
             fetch('/posts/batch/delete', {
                 method: 'POST',
@@ -738,6 +2331,588 @@ function batchDelete() {
     );
 }
 
+// 批量下线
+function batchOffline() {
+    const ids = getSelectedPostIds();
+    if (ids.length === 0) {
+        showToast('warning', '请先选择文章', '提示');
+        return;
+    }
+
+    confirmAction(
+        '批量下线确认',
+        `确定要将选中的 ${ids.length} 篇文章下线吗？`,
+        function() {
+            fetch('/posts/batch/offline', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ post_ids: ids })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('danger', '批量下线失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+
+// 显示批量修改栏目模态框
+function showBatchColumnModal() {
+    const ids = getSelectedPostIds();
+    if (ids.length === 0) {
+        showToast('warning', '请先选择文章', '提示');
+        return;
+    }
+
+    document.getElementById('batchColumnCount').textContent = ids.length;
+    const modal = new bootstrap.Modal(document.getElementById('batchColumnModal'));
+    modal.show();
+}
+
+// 批量修改栏目
+function batchChangeColumn() {
+    const ids = getSelectedPostIds();
+    const columnId = document.getElementById('targetColumnId').value;
+
+    if (!columnId) {
+        showToast('warning', '请选择目标栏目', '提示');
+        return;
+    }
+
+    confirmAction(
+        '批量修改栏目确认',
+        `确定要将选中的 ${ids.length} 篇文章移动到所选栏目吗？`,
+        function() {
+            fetch('/posts/batch/column', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ post_ids: ids, column_id: parseInt(columnId) })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('danger', '批量修改失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+
+// 显示批量设置封面模态框
+function showBatchCoverModal() {
+    const ids = getSelectedPostIds();
+    if (ids.length === 0) {
+        showToast('warning', '请先选择文章', '提示');
+        return;
+    }
+
+    document.getElementById('batchCoverCount').textContent = ids.length;
+    // 重置选择
+    document.getElementById('selectedCoverImage').value = '';
+    updateCoverPreview('/static/images/placeholder.png');
+
+    // 加载媒体库
+    loadMediaForCover();
+
+    const modal = new bootstrap.Modal(document.getElementById('batchCoverModal'));
+    modal.show();
+}
+
+// 加载媒体库图片
+function loadMediaForCover() {
+    const mediaGrid = document.getElementById('mediaGrid');
+
+    fetch('/admin/media/api/list?limit=50')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.files) {
+                // 保留默认图片选项
+                let html = `
+                <div class="col-4 col-md-3">
+                    <div class="media-item ${!document.getElementById('selectedCoverImage').value ? 'selected' : ''}"
+                         data-src="/static/images/placeholder.png" onclick="selectCoverImage(this)">
+                        <img src="/static/images/placeholder.png" alt="默认图片" class="img-fluid rounded">
+                        <div class="media-item-overlay"><i class="bi bi-check"></i></div>
+                    </div>
+                </div>`;
+
+                data.files.forEach(file => {
+                    if (file.type === 'image') {
+                        const src = file.url || '/static/uploads/' + file.folder + '/' + file.filename;
+                        html += `
+                        <div class="col-4 col-md-3">
+                            <div class="media-item" data-src="${src}" onclick="selectCoverImage(this)">
+                                <img src="${src}" alt="${file.filename}" class="img-fluid rounded"
+                                     onerror="this.src='/static/images/placeholder.png'">
+                                <div class="media-item-overlay"><i class="bi bi-check"></i></div>
+                            </div>
+                        </div>`;
+                    }
+                });
+
+                mediaGrid.innerHTML = html;
+            }
+        })
+        .catch(error => {
+            console.error('Error loading media:', error);
+            showToast('danger', '加载媒体库失败', '错误');
+        });
+}
+
+// 选择封面图片
+function selectCoverImage(element) {
+    // 移除其他选中状态
+    document.querySelectorAll('.media-item').forEach(item => {
+        item.classList.remove('selected');
+    });
+
+    // 设置当前选中
+    element.classList.add('selected');
+    const src = element.getAttribute('data-src');
+    document.getElementById('selectedCoverImage').value = src;
+    updateCoverPreview(src);
+}
+
+// 更新封面预览
+function updateCoverPreview(src) {
+    const container = document.getElementById('coverPreviewContainer');
+    if (src && src !== '/static/images/placeholder.png') {
+        container.innerHTML = `<img src="${src}" alt="封面预览" class="img-fluid" style="max-height: 150px; object-fit: contain;">`;
+    } else {
+        container.innerHTML = `
+            <i class="bi bi-image fs-1 text-muted"></i>
+            <p class="text-muted mt-2 mb-0">点击选择图片</p>`;
+    }
+}
+
+// 批量设置封面
+function batchSetCover() {
+    const ids = getSelectedPostIds();
+    const coverImage = document.getElementById('selectedCoverImage').value;
+
+    if (!coverImage) {
+        showToast('warning', '请选择封面图片', '提示');
+        return;
+    }
+
+    confirmAction(
+        '批量设置封面确认',
+        `确定要为选中的 ${ids.length} 篇文章设置统一封面吗？`,
+        function() {
+            fetch('/admin/posts/batch/cover', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ post_ids: ids, cover_image: coverImage })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('danger', '批量设置封面失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+
+// 批量复制
+function batchDuplicate() {
+    const ids = getSelectedPostIds();
+    if (ids.length === 0) {
+        showToast('warning', '请先选择文章', '提示');
+        return;
+    }
+
+    confirmAction(
+        '批量复制确认',
+        `确定要复制选中的 ${ids.length} 篇文章吗？每篇文章将创建一份副本。`,
+        function() {
+            fetch('/posts/batch/duplicate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ post_ids: ids })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('danger', '批量复制失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+
+// 批量删除
+function batchDelete() {
+    const ids = getSelectedPostIds();
+    if (ids.length === 0) {
+        showToast('warning', '请先选择文章', '提示');
+        return;
+    }
+
+    confirmAction(
+        '批量删除确认',
+        `确定要将选中的 ${ids.length} 篇文章移至回收站吗？`,
+        function() {
+            fetch('/posts/batch/delete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ post_ids: ids })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('danger', '批量删除失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+
+// 全选/取消全选
+function toggleSelectAll() {
+    const checkboxes = document.querySelectorAll('.post-checkbox:not(:disabled)');
+    const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+
+    checkboxes.forEach(cb => {
+        cb.checked = !allChecked;
+        const row = cb.closest('tr');
+        if (row) {
+            row.classList.toggle('table-primary', cb.checked);
+        }
+    });
+
+    // 更新全选复选框状态
+    const masterCheckbox = document.getElementById('selectAll');
+    if (masterCheckbox) {
+        masterCheckbox.checked = !allChecked;
+        masterCheckbox.indeterminate = !allChecked && checkboxes.some(cb => cb.checked);
+    }
+
+    const count = getSelectedPostIds().length;
+    updateBatchActionsCount(count);
+}
+
+// 更新全选复选框状态
+function updateSelectAllState() {
+    const checkboxes = document.querySelectorAll('.post-checkbox:not(:disabled)');
+    const masterCheckbox = document.getElementById('selectAll');
+
+    if (!masterCheckbox || checkboxes.length === 0) return;
+
+    const checkedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+    masterCheckbox.checked = checkedCount === checkboxes.length;
+    masterCheckbox.indeterminate = checkedCount > 0 && checkedCount < checkboxes.length;
+}
+
+// 更新批量操作数量显示
+function updateBatchActionsCount(count) {
+    const batchActionsBar = document.getElementById('batchActionsBar');
+    const selectedCount = document.getElementById('selectedCount');
+
+    if (count > 0) {
+        batchActionsBar.style.display = 'block';
+        selectedCount.textContent = count;
+    } else {
+        batchActionsBar.style.display = 'none';
+    }
+}
+
+// ========== 批量操作进度指示器 ==========
+const BATCH_PROGRESS_STORAGE_KEY = 'batch_operation_progress';
+
+// 显示批量操作进度
+window.showBatchProgress = function(operation, total) {
+    const progressId = 'batchProgress_' + Date.now();
+    const progressHTML = `
+        <div class="batch-progress-container" id="${progressId}" style="
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 320px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            z-index: 9999;
+            overflow: hidden;
+        ">
+            <div class="p-3 border-bottom">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">
+                        <i class="bi bi-hourglass-split me-2"></i>${operation}
+                    </h6>
+                    <button class="btn btn-sm btn-link text-muted" onclick="closeBatchProgress('${progressId}')">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="p-3">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="small text-muted">处理进度</span>
+                    <span class="small fw-bold" id="${progressId}_count">0 / ${total}</span>
+                </div>
+                <div class="progress" style="height: 8px;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                         id="${progressId}_bar" role="progressbar" style="width: 0%"></div>
+                </div>
+                <div class="mt-2 d-flex justify-content-between align-items-center">
+                    <span class="small text-muted" id="${progressId}_status">准备中...</span>
+                    <span class="badge bg-primary" id="${progressId}_percent">0%</span>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.body.insertAdjacentHTML('beforeend', progressHTML);
+    return progressId;
+};
+
+// 更新批量操作进度
+window.updateBatchProgress = function(progressId, current, total, status) {
+    const element = document.getElementById(progressId);
+    if (!element) return;
+
+    const percent = Math.round((current / total) * 100);
+    const countEl = document.getElementById(progressId + '_count');
+    const barEl = document.getElementById(progressId + '_bar');
+    const statusEl = document.getElementById(progressId + '_status');
+    const percentEl = document.getElementById(progressId + '_percent');
+
+    if (countEl) countEl.textContent = `${current} / ${total}`;
+    if (barEl) barEl.style.width = percent + '%';
+    if (statusEl) statusEl.textContent = status || '处理中...';
+    if (percentEl) percentEl.textContent = percent + '%';
+
+    // 完成后自动关闭
+    if (current >= total) {
+        setTimeout(() => {
+            closeBatchProgress(progressId);
+            showToast('success', '操作完成！', '成功');
+        }, 1500);
+    }
+};
+
+// 关闭批量操作进度
+window.closeBatchProgress = function(progressId) {
+    const element = document.getElementById(progressId);
+    if (element) {
+        element.style.opacity = '0';
+        element.style.transform = 'translateX(100px)';
+        element.style.transition = 'all 0.3s ease';
+        setTimeout(() => element.remove(), 300);
+    }
+};
+
+// 模拟批量操作进度（实际使用中由真实进度更新）
+window.simulateBatchProgress = function(operation, ids, callback) {
+    const progressId = showBatchProgress(operation, ids.length);
+    let current = 0;
+
+    const interval = setInterval(() => {
+        current++;
+        const status = current < ids.length ? '处理中...' : '完成';
+        updateBatchProgress(progressId, current, ids.length, status);
+
+        if (current >= ids.length) {
+            clearInterval(interval);
+            if (callback) callback();
+        }
+    }, 200); // 每200ms处理一项
+
+    return progressId;
+};
+
+// 显示批量编辑模态框
+function showBatchEditModal() {
+    const ids = getSelectedPostIds();
+    if (ids.length === 0) {
+        showToast('warning', '请先选择文章', '提示');
+        return;
+    }
+
+    // 更新选中数量
+    document.getElementById('batchEditCount').textContent = ids.length;
+
+    // 重置所有勾选和禁用状态
+    resetBatchEditForm();
+
+    const modal = new bootstrap.Modal(document.getElementById('batchEditModal'));
+    modal.show();
+}
+
+// 重置批量编辑表单
+function resetBatchEditForm() {
+    // 重置所有checkbox
+    document.querySelectorAll('#batchEditModal input[type="checkbox"]').forEach(cb => {
+        cb.checked = false;
+    });
+
+    // 重置所有select并禁用
+    document.querySelectorAll('#batchEditModal select').forEach(select => {
+        select.value = '';
+        select.disabled = true;
+    });
+
+    // 重置浏览量重置选项
+    const resetViewsInput = document.getElementById('resetViews');
+    if (resetViewsInput) {
+        resetViewsInput.checked = true;
+        resetViewsInput.disabled = true;
+    }
+}
+
+// 切换编辑字段的启用状态
+function toggleEditField(fieldId, enabled) {
+    const field = document.getElementById(fieldId);
+    if (field) {
+        field.disabled = !enabled;
+    }
+
+    // 处理特殊字段
+    if (fieldId === 'editViews' && enabled) {
+        document.getElementById('resetViews').disabled = false;
+        document.querySelector('#editViewsEnabled').parentElement.nextElementSibling.style.opacity = '1';
+    } else if (fieldId === 'editViews' && !enabled) {
+        document.getElementById('resetViews').disabled = true;
+        document.querySelector('#editViewsEnabled').parentElement.nextElementSibling.style.opacity = '0.5';
+    }
+}
+
+// 执行批量编辑
+function executeBatchEdit() {
+    const ids = getSelectedPostIds();
+
+    // 收集要修改的字段
+    const updates = {};
+
+    // 状态修改
+    if (document.getElementById('editStatusEnabled').checked) {
+        const status = document.getElementById('editStatus').value;
+        if (!status) {
+            showToast('warning', '请选择状态', '提示');
+            return;
+        }
+        updates.status = status;
+    }
+
+    // 栏目修改
+    if (document.getElementById('editColumnEnabled').checked) {
+        const columnId = document.getElementById('editColumnId').value;
+        if (!columnId) {
+            showToast('warning', '请选择栏目', '提示');
+            return;
+        }
+        updates.column_id = parseInt(columnId);
+    }
+
+    // 推荐修改
+    if (document.getElementById('editRecommendedEnabled').checked) {
+        const recommended = document.getElementById('editRecommended').value;
+        if (!recommended) {
+            showToast('warning', '请选择推荐状态', '提示');
+            return;
+        }
+        updates.is_recommended = recommended === 'true';
+    }
+
+    // 置顶修改
+    if (document.getElementById('editPinnedEnabled').checked) {
+        const pinned = document.getElementById('editPinned').value;
+        if (!pinned) {
+            showToast('warning', '请选择置顶状态', '提示');
+            return;
+        }
+        updates.is_pinned = pinned === 'true';
+    }
+
+    // 浏览量重置
+    if (document.getElementById('editViewsEnabled').checked) {
+        updates.view_count = 0;
+    }
+
+    // 检查是否有要修改的字段
+    if (Object.keys(updates).length === 0) {
+        showToast('warning', '请至少选择一个要修改的字段', '提示');
+        return;
+    }
+
+    confirmAction(
+        '批量编辑确认',
+        `确定要批量修改选中的 ${ids.length} 篇文章吗？将修改以下字段：${Object.keys(updates).join(', ')}`,
+        function() {
+            fetch('/posts/batch/edit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    post_ids: ids,
+                    updates: updates
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('success', data.message, '成功');
+                    setTimeout(() => location.reload(), 1000);
+                } else {
+                    showToast('danger', data.message, '错误');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('danger', '批量编辑失败，请稍后重试', '错误');
+            });
+        }
+    );
+}
+
 // 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', function() {
     // 初始化所有 tooltips
@@ -745,6 +2920,947 @@ document.addEventListener('DOMContentLoaded', function() {
     tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl);
     });
+
+    // ========== 表格排序功能 ==========
+    let currentSort = { column: 'id', direction: 'desc' };
+
+    document.querySelectorAll('th.sortable').forEach(th => {
+        th.addEventListener('click', function() {
+            const sortColumn = this.dataset.sort;
+
+            // 如果点击同一列，切换排序方向
+            if (currentSort.column === sortColumn) {
+                currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSort.column = sortColumn;
+                currentSort.direction = 'desc';
+            }
+
+            // 更新表头样式
+            document.querySelectorAll('th.sortable').forEach(h => {
+                h.classList.remove('asc', 'desc');
+            });
+            this.classList.add(currentSort.direction);
+
+            // 排序表格行
+            sortTable(sortColumn, currentSort.direction);
+        });
+    });
+
+    function sortTable(column, direction) {
+        const tbody = document.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+
+        rows.sort((a, b) => {
+            let aVal, bVal;
+
+            switch(column) {
+                case 'id':
+                    aVal = parseInt(a.cells[1].textContent);
+                    bVal = parseInt(b.cells[1].textContent);
+                    break;
+                case 'title':
+                    aVal = a.cells[2].textContent.toLowerCase();
+                    bVal = b.cells[2].textContent.toLowerCase();
+                    break;
+                case 'status':
+                    aVal = a.cells[4].textContent.trim();
+                    bVal = b.cells[4].textContent.trim();
+                    break;
+                case 'recommended':
+                    aVal = a.cells[5].querySelector('.bi-star-fill') ? 1 : 0;
+                    bVal = b.cells[5].querySelector('.bi-star-fill') ? 1 : 0;
+                    break;
+                case 'pinned':
+                    aVal = a.cells[6].querySelector('.bi-pin-angle-fill') ? 1 : 0;
+                    bVal = b.cells[6].querySelector('.bi-pin-angle-fill') ? 1 : 0;
+                    break;
+                case 'views':
+                    aVal = parseInt(a.cells[7].textContent.replace(/\D/g, '')) || 0;
+                    bVal = parseInt(b.cells[7].textContent.replace(/\D/g, '')) || 0;
+                    break;
+                case 'updated':
+                    aVal = new Date(a.cells[8].textContent);
+                    bVal = new Date(b.cells[8].textContent);
+                    break;
+                default:
+                    return 0;
+            }
+
+            if (aVal < bVal) return direction === 'asc' ? -1 : 1;
+            if (aVal > bVal) return direction === 'asc' ? 1 : -1;
+            return 0;
+        });
+
+        rows.forEach(row => tbody.appendChild(row));
+    }
+
+    // ========== 快速筛选功能 ==========
+    document.querySelectorAll('.quick-filter-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const filter = this.dataset.filter;
+
+            // 更新按钮状态
+            document.querySelectorAll('.quick-filter-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            // 根据筛选类型更新URL参数
+            let url = '/admin/posts';
+            const params = new URLSearchParams();
+
+            if (filter === 'all') {
+                // 全部 - 不添加任何参数
+            } else if (filter === 'published') {
+                params.set('status_filter', 'published');
+            } else if (filter === 'draft') {
+                params.set('status_filter', 'draft');
+            } else if (filter === 'offline') {
+                params.set('status_filter', 'offline');
+            } else if (filter === 'recommended') {
+                params.set('is_recommended', 'true');
+            } else if (filter === 'pinned') {
+                params.set('is_pinned', 'true');
+            }
+
+            // 保留其他现有参数
+            const currentParams = new URLSearchParams(window.location.search);
+            if (currentParams.get('column_id')) {
+                params.set('column_id', currentParams.get('column_id'));
+            }
+            if (currentParams.get('keyword')) {
+                params.set('keyword', currentParams.get('keyword'));
+            }
+
+            // 跳转到筛选页面
+            const queryString = params.toString();
+            window.location.href = url + (queryString ? '?' + queryString : '');
+        });
+    });
+
+    // ========== 键盘快捷键 ==========
+    document.addEventListener('keydown', function(e) {
+        // 防止在输入框中触发
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+            return;
+        }
+
+        const selectedIds = getSelectedPostIds();
+
+        // Ctrl + A 全选
+        if ((e.ctrlKey || e.metaKey) && e.key === 'a') {
+            e.preventDefault();
+            toggleSelectAll();
+        }
+
+        // Ctrl + D 批量复制
+        if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+            e.preventDefault();
+            if (selectedIds.length > 0) {
+                batchDuplicate();
+            }
+        }
+
+        // Delete 删除选中
+        if (e.key === 'Delete') {
+            if (selectedIds.length > 0) {
+                e.preventDefault();
+                batchDelete();
+            }
+        }
+
+        // N 新建文章
+        if (e.key === 'n' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            if (!window._gKeyMode) {
+                e.preventDefault();
+                window.location.href = '/admin/posts/new';
+            }
+        }
+
+        // Enter 查看选中的第一篇文章
+        if (e.key === 'Enter' && selectedIds.length > 0) {
+            e.preventDefault();
+            const firstId = selectedIds[0];
+            window.location.href = `/admin/posts/${firstId}/edit`;
+        }
+
+        // E 批量编辑
+        if (e.key.toLowerCase() === 'e' && !e.ctrlKey && !e.metaKey && !e.altKey) {
+            if (!window._gKeyMode && selectedIds.length > 0) {
+                e.preventDefault();
+                showBatchEditModal();
+            }
+        }
+    });
 });
 </script>
+
+<!-- 快速预览模态框 -->
+<div class="modal fade" id="quickViewModal" tabindex="-1" aria-labelledby="quickViewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="quickViewModalLabel">
+                    <i class="bi bi-eye me-2"></i>文章预览
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="quickViewContent">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">加载中...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                <a href="#" id="quickViewEditLink" class="btn btn-primary">
+                    <i class="bi bi-pencil me-1"></i>编辑文章
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ========== 快速预览功能 ==========
+window.quickViewPost = function(postId) {
+    const modal = new bootstrap.Modal(document.getElementById('quickViewModal'));
+    modal.show();
+
+    document.getElementById('quickViewContent').innerHTML = `
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">加载中...</span>
+            </div>
+        </div>
+    `;
+
+    // 获取文章数据
+    fetch(`/admin/posts/${postId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.post) {
+                const post = data.post;
+                const statusBadge = {
+                    'published': '<span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>已发布</span>',
+                    'draft': '<span class="badge bg-warning text-dark"><i class="bi bi-file-earmark me-1"></i>草稿</span>',
+                    'offline': '<span class="badge bg-secondary"><i class="bi bi-x-circle me-1"></i>已下线</span>'
+                };
+
+                document.getElementById('quickViewContent').innerHTML = `
+                    <div class="quick-view-content">
+                        <h4 class="mb-3">${post.title || '无标题'}</h4>
+
+                        <div class="quick-view-meta">
+                            <div class="quick-view-meta-item">
+                                <i class="bi bi-folder"></i>
+                                <span>${post.column_name || '未分类'}</span>
+                            </div>
+                            <div class="quick-view-meta-item">
+                                ${statusBadge[post.status] || statusBadge['draft']}
+                            </div>
+                            <div class="quick-view-meta-item">
+                                <i class="bi bi-eye"></i>
+                                <span>${post.view_count || 0} 次浏览</span>
+                            </div>
+                            <div class="quick-view-meta-item">
+                                <i class="bi bi-calendar"></i>
+                                <span>更新于 ${post.updated_at || '-'}</span>
+                            </div>
+                        </div>
+
+                        ${post.summary ? `<div class="summary">${post.summary}</div>` : ''}
+
+                        <div class="mb-3">
+                            <h6 class="text-muted mb-2">内容预览</h6>
+                            <div class="bg-light p-3 rounded" style="max-height: 200px; overflow: hidden;">
+                                ${post.content_html ? post.content_html.substring(0, 500) + '...' : '<em class="text-muted">暂无内容</em>'}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-muted mb-2">SEO 标题</h6>
+                                <p class="mb-0">${post.seo_title || '<em class="text-muted">未设置</em>'}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-muted mb-2">SEO 描述</h6>
+                                <p class="mb-0 text-muted small">${post.seo_description || '<em class="text-muted">未设置</em>'}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                document.getElementById('quickViewEditLink').href = `/admin/posts/${postId}/edit`;
+            } else {
+                document.getElementById('quickViewContent').innerHTML = `
+                    <div class="text-center py-5 text-danger">
+                        <i class="bi bi-x-circle fs-1 d-block mb-3"></i>
+                        <p>加载失败</p>
+                    </div>
+                `;
+            }
+        })
+        .catch(error => {
+            console.error('加载文章失败:', error);
+            document.getElementById('quickViewContent').innerHTML = `
+                <div class="text-center py-5 text-danger">
+                    <i class="bi bi-x-circle fs-1 d-block mb-3"></i>
+                    <p>加载失败，请稍后重试</p>
+                </div>
+            `;
+        });
+};
+</script>
+
+<script>
+// ========== 表格列显示控制 ==========
+const COLUMN_STORAGE_KEY = 'posts_table_columns';
+let currentSort = { column: null, direction: 'asc' };
+
+// 切换列显示
+window.toggleColumn = function(checkbox) {
+    const column = checkbox.dataset.column;
+    const isVisible = checkbox.checked;
+
+    // 保存到 localStorage
+    saveColumnState(column, isVisible);
+
+    // 更新表格显示
+    updateTableColumns();
+};
+
+// 保存列状态
+function saveColumnState(column, visible) {
+    let state = getColumnState();
+    state[column] = visible;
+    localStorage.setItem(COLUMN_STORAGE_KEY, JSON.stringify(state));
+}
+
+// 获取列状态
+function getColumnState() {
+    try {
+        return JSON.parse(localStorage.getItem(COLUMN_STORAGE_KEY)) || {};
+    } catch (e) {
+        return {};
+    }
+}
+
+// 更新表格列显示
+function updateTableColumns() {
+    const state = getColumnState();
+
+    // 更新表头
+    document.querySelectorAll('thead th[data-column]').forEach(th => {
+        const column = th.dataset.column;
+        const isVisible = state[column] !== false;
+        th.style.display = isVisible ? '' : 'none';
+    });
+
+    // 更新表格单元格
+    document.querySelectorAll('tbody td[data-column]').forEach(td => {
+        const column = td.dataset.column;
+        const isVisible = state[column] !== false;
+        td.style.display = isVisible ? '' : 'none';
+    });
+}
+
+// 恢复默认列显示
+window.resetColumns = function() {
+    localStorage.removeItem(COLUMN_STORAGE_KEY);
+
+    // 重置所有checkbox
+    document.querySelectorAll('.dropdown-menu input[data-column]').forEach(cb => {
+        cb.checked = true;
+    });
+
+    // 显示所有列
+    document.querySelectorAll('thead th[data-column], tbody td[data-column]').forEach(el => {
+        el.style.display = '';
+    });
+
+    showToast('success', '已恢复默认列显示', '提示');
+};
+
+// ========== 表格排序功能 ==========
+document.querySelectorAll('th.sortable').forEach(th => {
+    th.addEventListener('click', function() {
+        const column = this.dataset.sort;
+
+        // 确定排序方向
+        if (currentSort.column === column) {
+            currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+        } else {
+            currentSort.column = column;
+            currentSort.direction = 'asc';
+        }
+
+        // 更新表头图标
+        document.querySelectorAll('th.sortable i').forEach(icon => {
+            icon.className = 'bi bi-chevron-expand';
+        });
+        this.querySelector('i').className = `bi bi-chevron-${currentSort.direction === 'asc' ? 'up' : 'down'}`;
+
+        // 执行排序
+        sortTable(column, currentSort.direction);
+    });
+});
+
+// 排序表格
+function sortTable(column, direction) {
+    const tbody = document.querySelector('#postsTable tbody');
+    const rows = Array.from(tbody.querySelectorAll('tr[data-id]'));
+
+    rows.sort((a, b) => {
+        let aVal, bVal;
+
+        switch (column) {
+            case 'id':
+                aVal = parseInt(a.dataset.id);
+                bVal = parseInt(b.dataset.id);
+                break;
+            case 'title':
+                aVal = a.querySelector('[data-column="title"]').textContent.trim().toLowerCase();
+                bVal = b.querySelector('[data-column="title"]').textContent.trim().toLowerCase();
+                break;
+            case 'status':
+                aVal = a.querySelector('[data-column="status"]').textContent.trim();
+                bVal = b.querySelector('[data-column="status"]').textContent.trim();
+                break;
+            case 'recommended':
+                aVal = a.querySelector('[data-column="recommended"] i').classList.contains('bi-star-fill') ? 1 : 0;
+                bVal = b.querySelector('[data-column="recommended"] i').classList.contains('bi-star-fill') ? 1 : 0;
+                break;
+            case 'pinned':
+                aVal = a.querySelector('[data-column="pinned"] i').classList.contains('bi-pin-angle-fill') ? 1 : 0;
+                bVal = b.querySelector('[data-column="pinned"] i').classList.contains('bi-pin-angle-fill') ? 1 : 0;
+                break;
+            case 'views':
+                aVal = parseInt(a.querySelector('[data-column="views"]').textContent.replace(/\D/g, '')) || 0;
+                bVal = parseInt(b.querySelector('[data-column="views"]').textContent.replace(/\D/g, '')) || 0;
+                break;
+            case 'updated':
+                aVal = a.querySelector('[data-column="updated"]').textContent.trim();
+                bVal = b.querySelector('[data-column="updated"]').textContent.trim();
+                break;
+            default:
+                return 0;
+        }
+
+        if (aVal < bVal) return direction === 'asc' ? -1 : 1;
+        if (aVal > bVal) return direction === 'asc' ? 1 : -1;
+        return 0;
+    });
+
+    // 重新插入排序后的行
+    rows.forEach(row => tbody.appendChild(row));
+}
+
+// 初始化列状态
+document.addEventListener('DOMContentLoaded', function() {
+    updateTableColumns();
+});
+
+// ========== 文章对比功能 ==========
+let selectedForCompare = [];
+
+// 更新对比按钮状态
+function updateCompareButton() {
+    const btn = document.getElementById('comparePostsBtn');
+    if (btn) {
+        btn.disabled = selectedForCompare.length !== 2;
+        btn.title = selectedForCompare.length === 2
+            ? '点击对比选中的两篇文章'
+            : selectedForCompare.length < 2
+                ? '请选择两篇文章进行对比'
+                : '已选择太多文章（最多两篇）';
+    }
+}
+
+// 获取选中的文章 ID
+function getSelectedIds() {
+    const checkboxes = document.querySelectorAll('.post-checkbox:checked');
+    return Array.from(checkboxes).map(cb => parseInt(cb.value));
+}
+
+// 对比选中的文章
+window.compareSelectedPosts = function() {
+    const selectedIds = getSelectedIds();
+
+    if (selectedIds.length !== 2) {
+        showToast('warning', '请 exactly 选择两篇文章进行对比', '提示');
+        return;
+    }
+
+    // 打开对比模态框
+    const compareModal = new bootstrap.Modal(document.getElementById('compareModal'));
+    compareModal.show();
+
+    // 加载文章数据
+    loadPostsForCompare(selectedIds);
+};
+
+// 加载文章数据进行对比
+async function loadPostsForCompare(ids) {
+    const modalBody = document.getElementById('compareModalBody');
+
+    try {
+        const responses = await Promise.all(
+            ids.map(id => fetch(`/admin/posts/${id}/quick-view`))
+        );
+
+        const results = await Promise.all(responses.map(r => r.json()));
+
+        if (!results.every(r => r.success)) {
+            throw new Error('获取文章数据失败');
+        }
+
+        const post1 = results[0].data;
+        const post2 = results[1].data;
+
+        // 渲染对比内容
+        modalBody.innerHTML = renderCompareContent(post1, post2);
+
+    } catch (error) {
+        console.error('加载对比数据失败:', error);
+        modalBody.innerHTML = `
+            <div class="text-center py-5 text-danger">
+                <i class="bi bi-exclamation-circle fs-1 mb-3 d-block"></i>
+                <p>加载失败，请重试</p>
+                <button class="btn btn-primary" onclick="loadPostsForCompare([${ids.join(',')}])">
+                    <i class="bi bi-arrow-clockwise me-1"></i>重新加载
+                </button>
+            </div>
+        `;
+    }
+}
+
+// 渲染对比内容
+function renderCompareContent(post1, post2) {
+    const statusLabels = {
+        'published': { text: '已发布', class: 'bg-success' },
+        'draft': { text: '草稿', class: 'bg-warning text-dark' },
+        'offline': { text: '已下线', class: 'bg-secondary' }
+    };
+
+    function renderPost(post, side) {
+        const status = statusLabels[post.status] || { text: post.status, class: 'bg-secondary' };
+        const isLeft = side === 'left';
+
+        return `
+            <div class="col-md-6">
+                <div class="card h-100 ${isLeft ? 'border-primary' : 'border-warning'}">
+                    <div class="card-header ${isLeft ? 'bg-primary text-white' : 'bg-warning text-dark'} d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="bi ${isLeft ? 'bi-file-text' : 'bi-file-earmark-text'} me-2"></i>
+                            ${post.title || '无标题'}
+                        </h5>
+                        <a href="/admin/posts/${post.id}/edit" class="btn btn-sm btn-light" target="_blank">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <!-- 基本信息 -->
+                        <h6 class="text-muted mb-3">
+                            <i class="bi bi-info-circle me-1"></i>基本信息
+                        </h6>
+                        <table class="table table-bordered table-sm">
+                            <tr>
+                                <th style="width: 80px;">ID</th>
+                                <td>${post.id}</td>
+                            </tr>
+                            <tr>
+                                <th>状态</th>
+                                <td><span class="badge ${status.class}">${status.text}</span></td>
+                            </tr>
+                            <tr>
+                                <th>栏目</th>
+                                <td>${post.column_name || '未分类'}</td>
+                            </tr>
+                            <tr>
+                                <th>推荐</th>
+                                <td>${post.is_recommended ? '<i class="bi bi-star-fill text-warning"></i> 是' : '否'}</td>
+                            </tr>
+                            <tr>
+                                <th>置顶</th>
+                                <td>${post.is_pinned ? '<i class="bi bi-pin-angle-fill text-primary"></i> 是' : '否'}</td>
+                            </tr>
+                            <tr>
+                                <th>浏览量</th>
+                                <td>${post.view_count || 0}</td>
+                            </tr>
+                            <tr>
+                                <th>创建时间</th>
+                                <td>${post.created_at || '-'}</td>
+                            </tr>
+                            <tr>
+                                <th>更新时间</th>
+                                <td>${post.updated_at || '-'}</td>
+                            </tr>
+                        </table>
+
+                        <!-- 摘要 -->
+                        <h6 class="text-muted mt-4 mb-2">
+                            <i class="bi bi-text-paragraph me-1"></i>摘要
+                        </h6>
+                        <div class="p-2 bg-light rounded small">
+                            ${post.summary || '<span class="text-muted">暂无摘要</span>'}
+                        </div>
+
+                        <!-- 内容预览 -->
+                        <h6 class="text-muted mt-4 mb-2">
+                            <i class="bi bi-file-text me-1"></i>内容预览
+                        </h6>
+                        <div class="p-2 bg-light rounded" style="max-height: 200px; overflow-y: auto;">
+                            ${post.content_html ? post.content_html.substring(0, 500) + '...' : '<span class="text-muted">暂无内容</span>'}
+                        </div>
+
+                        <!-- SEO 信息 -->
+                        <h6 class="text-muted mt-4 mb-2">
+                            <i class="bi bi-search me-1"></i>SEO 信息
+                        </h6>
+                        <table class="table table-bordered table-sm">
+                            <tr>
+                                <th style="width: 80px;">SEO 标题</th>
+                                <td>${post.seo_title || '-'}</td>
+                            </tr>
+                            <tr>
+                                <th>SEO 描述</th>
+                                <td>${post.seo_description ? post.seo_description.substring(0, 100) + '...' : '-'}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    return `
+        <div class="row">
+            ${renderPost(post1, 'left')}
+            ${renderPost(post2, 'right')}
+        </div>
+
+        <!-- 差异高亮提示 -->
+        <div class="alert alert-info mt-3 mb-0">
+            <i class="bi bi-info-circle me-2"></i>
+            <strong>提示：</strong>左右两侧分别显示两篇文章的详细信息。点击右侧的编辑按钮可快速跳转到对应文章进行修改。
+        </div>
+    `;
+}
+
+// 覆盖 updateBatchActions 函数以包含对比按钮更新
+const originalUpdateBatchActions = window.updateBatchActions;
+window.updateBatchActions = function() {
+    if (originalUpdateBatchActions) originalUpdateBatchActions();
+    updateCompareButton();
+};
+
+// ========== 文章导入功能 ==========
+window.showImportModal = function() {
+    // 重置表单
+    document.getElementById('csvContentInput').value = '';
+    document.getElementById('jsonContentInput').value = '';
+    document.getElementById('mdContentInput').value = '';
+    document.getElementById('csvFileInput').value = '';
+    document.getElementById('importProgressContainer').style.display = 'none';
+    document.getElementById('importResultContainer').style.display = 'none';
+
+    // 打开模态框
+    const importModal = new bootstrap.Modal(document.getElementById('importModal'));
+    importModal.show();
+};
+
+window.executeImport = async function() {
+    const activeTab = document.querySelector('#importTabs .nav-link.active').id;
+    let data = null;
+    let columnId = null;
+    let status = 'draft';
+
+    // 获取栏目 ID
+    if (activeTab === 'csv-tab') {
+        columnId = document.getElementById('importColumnCsv').value;
+    } else if (activeTab === 'json-tab') {
+        columnId = document.getElementById('importColumnJson').value;
+    } else {
+        columnId = document.getElementById('importColumnMd').value;
+        status = document.getElementById('importStatusMd').value;
+    }
+
+    if (!columnId) {
+        showToast('warning', '请选择目标栏目', '提示');
+        return;
+    }
+
+    // 获取数据
+    try {
+        if (activeTab === 'csv-tab') {
+            // 首先检查是否有文件上传
+            const fileInput = document.getElementById('csvFileInput');
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const text = await file.text();
+                data = parseCSV(text);
+            } else {
+                const content = document.getElementById('csvContentInput').value.trim();
+                if (!content) {
+                    showToast('warning', '请输入或上传 CSV 内容', '提示');
+                    return;
+                }
+                data = parseCSV(content);
+            }
+        } else if (activeTab === 'json-tab') {
+            const content = document.getElementById('jsonContentInput').value.trim();
+            if (!content) {
+                showToast('warning', '请输入 JSON 数据', '提示');
+                return;
+            }
+            data = JSON.parse(content);
+            if (!Array.isArray(data)) {
+                data = [data];
+            }
+        } else {
+            const content = document.getElementById('mdContentInput').value.trim();
+            if (!content) {
+                showToast('warning', '请输入 Markdown 内容', '提示');
+                return;
+            }
+            data = parseMarkdown(content);
+        }
+    } catch (error) {
+        showToast('danger', '解析数据失败: ' + error.message, '错误');
+        return;
+    }
+
+    if (!data || data.length === 0) {
+        showToast('warning', '没有可导入的文章数据', '提示');
+        return;
+    }
+
+    // 显示进度
+    const progressContainer = document.getElementById('importProgressContainer');
+    const progressBar = document.getElementById('importProgressBar');
+    const progressText = document.getElementById('importProgressText');
+    progressContainer.style.display = 'block';
+
+    // 发送到后端
+    try {
+        const response = await fetch('/admin/posts/import', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                data: data,
+                column_id: parseInt(columnId),
+                status: status,
+                type: activeTab === 'csv-tab' ? 'csv' : activeTab === 'json-tab' ? 'json' : 'markdown'
+            })
+        });
+
+        const result = await response.json();
+
+        progressContainer.style.display = 'none';
+
+        if (result.success) {
+            const resultContainer = document.getElementById('importResultContainer');
+            resultContainer.style.display = 'block';
+            resultContainer.innerHTML = `
+                <div class="alert ${result.success ? 'alert-success' : 'alert-danger'}">
+                    <i class="bi bi-${result.success ? 'check-circle' : 'x-circle'} me-2"></i>
+                    <strong>${result.message}</strong>
+                    <ul class="mb-0 mt-2">
+                        <li>成功导入: ${result.data.imported} 篇</li>
+                        ${result.data.skipped > 0 ? `<li>跳过: ${result.data.skipped} 篇</li>` : ''}
+                        ${result.data.errors && result.data.errors.length > 0 ? `<li>错误: ${result.data.errors.length} 个</li>` : ''}
+                    </ul>
+                    ${result.data.errors && result.data.errors.length > 0 ? `
+                        <details class="mt-2">
+                            <summary class="text-danger">查看错误详情</summary>
+                            <ul class="small">
+                                ${result.data.errors.map(e => `<li>${e}</li>`).join('')}
+                            </ul>
+                        </details>
+                    ` : ''}
+                </div>
+            `;
+            showToast('success', `成功导入 ${result.data.imported} 篇文章`, '成功');
+        } else {
+            showToast('danger', result.message, '错误');
+        }
+    } catch (error) {
+        progressContainer.style.display = 'none';
+        showToast('danger', '导入失败: ' + error.message, '错误');
+    }
+};
+
+// 解析 CSV
+function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    if (lines.length < 2) return [];
+
+    // 解析表头
+    const headers = parseCSVLine(lines[0]).map(h => h.toLowerCase().trim());
+    const results = [];
+
+    for (let i = 1; i < lines.length; i++) {
+        if (!lines[i].trim()) continue;
+
+        const values = parseCSVLine(lines[i]);
+        const obj = {};
+
+        headers.forEach((header, index) => {
+            obj[header] = values[index] ? values[index].trim() : '';
+        });
+
+        if (obj.title) {
+            results.push(obj);
+        }
+    }
+
+    return results;
+}
+
+// 解析 CSV 单行（处理引号）
+function parseCSVLine(line) {
+    const result = [];
+    let current = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+
+        if (char === '"') {
+            inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+            result.push(current);
+            current = '';
+        } else {
+            current += char;
+        }
+    }
+    result.push(current);
+
+    return result;
+}
+
+// 解析 Markdown
+function parseMarkdown(text) {
+    const articles = [];
+    const parts = text.split(/^#\s+/gm);
+
+    for (const part of parts) {
+        if (!part.trim()) continue;
+
+        const lines = part.split('\n');
+        const title = lines[0].trim();
+
+        if (!title) continue;
+
+        let summary = '';
+        let content = '';
+
+        // 查找 --- 分隔符
+        const separatorIndex = lines.findIndex((l, i) => i > 0 && l.trim() === '---');
+
+        if (separatorIndex > 0) {
+            summary = lines.slice(1, separatorIndex).join('\n').trim();
+            content = lines.slice(separatorIndex + 1).join('\n').trim();
+        } else {
+            // 没有分隔符，前两行作为摘要
+            if (lines.length > 1) {
+                summary = lines[1].trim();
+                content = lines.slice(1).join('\n').trim();
+            } else {
+                content = lines.join('\n').trim();
+            }
+        }
+
+        articles.push({
+            title: title,
+            summary: summary,
+            content: content
+        });
+    }
+
+    return articles;
+}
+</script>
+
+<style>
+/* 表格固定列样式 */
+.table-scroll-container {
+    max-height: calc(100vh - 350px);
+    overflow: auto;
+}
+
+.sticky-col {
+    position: sticky;
+    background: #fff;
+    z-index: 1;
+}
+
+.sticky-col.start-0 {
+    left: 0;
+}
+
+.sticky-col.start-1 {
+    left: 50px;
+}
+
+.sticky-col.end-0 {
+    right: 0;
+    background: #f8f9fa;
+}
+
+/* 表头固定 */
+thead.sticky-top {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+/* 表格排序样式 */
+th.sortable {
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+}
+
+th.sortable:hover {
+    background-color: #e9ecef;
+}
+
+th.sortable i {
+    font-size: 0.75rem;
+    margin-left: 4px;
+    opacity: 0.5;
+}
+
+th.sortable:hover i {
+    opacity: 1;
+}
+
+/* 表格斑马纹 */
+.table tbody tr:nth-of-type(odd) {
+    --bs-table-accent-bg: transparent;
+}
+
+.table tbody tr:nth-of-type(even) {
+    --bs-table-accent-bg: rgba(0, 0, 0, 0.02);
+}
+
+/* 悬停效果增强 */
+.table tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.05) !important;
+}
+
+/* 复选框样式优化 */
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+</style>
 {% endblock %}

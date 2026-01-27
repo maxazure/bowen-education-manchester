@@ -16,7 +16,7 @@ from admin.app.database import get_db
 from app.models.static_generation import StaticGenerationLog, StaticGenerationDetail
 from app.services.static_generator import StaticPageGenerator
 
-router = APIRouter(prefix="/static-pages", tags=["static-pages"])
+router = APIRouter(tags=["static-pages"])
 
 templates = Jinja2Templates(directory="admin/templates")
 

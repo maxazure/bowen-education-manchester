@@ -82,6 +82,10 @@ class SiteColumn(BaseModel):
         Integer, ForeignKey("gallery.id"), nullable=True, comment="关联的Gallery ID"
     )
 
+    # 页面内容（用于相册模块等内容展示）
+    content_html = Column(Text, nullable=True, comment="页面内容HTML")
+    content_html_en = Column(Text, nullable=True, comment="页面英文内容HTML")
+
     # 关系
     parent = relationship("SiteColumn", remote_side="SiteColumn.id", backref="children")
     hero_media = relationship("MediaFile", foreign_keys=[hero_media_id])

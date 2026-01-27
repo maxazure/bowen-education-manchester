@@ -62,8 +62,11 @@ class Product(BaseModel):
     slug = Column(String(200), nullable=False, comment="产品Slug")
     summary = Column(Text, nullable=True, comment="产品卖点/简述")
     summary_en = Column(Text, nullable=True, comment="产品英文简述")
-    description_html = Column(Text, nullable=False, comment="详细说明HTML")
+    description_html = Column(Text, nullable=False, default="", comment="详细说明HTML")
     description_html_en = Column(Text, nullable=True, comment="英文详细说明HTML")
+    # Markdown 源内容（用于编辑时显示）
+    description_markdown = Column(Text, nullable=True, comment="详细说明Markdown源")
+    description_markdown_en = Column(Text, nullable=True, comment="英文详细说明Markdown源")
     cover_media_id = Column(
         Integer, ForeignKey("media_file.id"), nullable=True, comment="封面图ID"
     )
